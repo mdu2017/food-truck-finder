@@ -1,0 +1,172 @@
+buildscript {
+	dependencies {
+		classpath "com.moowork.gradle:gradle-node-plugin:1.1.1"
+	}
+	repositories {
+		mavenCentral()
+		maven {
+			url "https://plugins.gradle.org/m2/"
+		}
+	}
+}
+
+plugins {
+	id 'io.spring.dependency-management' version '1.0.0.RC2'
+	id 'com.moowork.node' version '1.1.1'
+}
+
+group 'petfinder'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+apply plugin: 'io.spring.dependency-management'
+apply plugin: 'war'
+apply plugin: 'com.moowork.node'
+
+sourceCompatibility = 1.8
+
+repositories {
+	mavenLocal()
+
+	mavenCentral()
+
+	maven {
+		url "https://repo.spring.io/libs-milestone"
+	}
+}
+
+dependencyManagement {
+	imports {
+		mavenBom 'io.spring.platform:platform-bom:Brussels-SR4'
+		mavenBom 'org.apache.logging.log4j:log4j-bom:2.7'
+	}
+}
+
+dependencies {
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-web'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-actuator'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-security'
+	compile group: 'org.springframework.boot', name: 'spring-boot-starter-thymeleaf'
+
+	compile group: 'org.apache.logging.log4j', name: 'log4j-api'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-core'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-jcl'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-jul'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-slf4j-impl'
+	compile group: 'org.apache.logging.log4j', name: 'log4j-1.2-api'
+
+	compile group: 'org.elasticsearch.client', name: 'transport', version: '5.1.1'
+
+	testCompile group: 'junit', name: 'junit'
+}
+
+configurations.all {
+	exclude group: "log4j", module: "log4j"
+	exclude group: "org.slf4j", module: "slf4j-log4j12"
+	exclude group: "org.slf4j", module: "jcl-over-slf4j"
+	exclude group: "org.slf4j", module: "jul-to-slf4j"
+	exclude group: "org.slf4j", module: "log4j-over-slf4j"
+	exclude group: "junit", module: "junit-dep"
+	exclude group: 'ch.qos.logback'
+}
+
+task buildTests(type: Jar, dependsOn: 'test') {
+	from sourceSets.test.output
+	baseName "${baseName}-test"
+}
+
+configurations {
+	tests {
+		extendsFrom testRuntime
+	}
+}
+
+artifacts {
+	tests buildTests
+}
+
+tasks.build.dependsOn buildTests
+
+test {
+	exclude '**/test/integration/**'
+	exclude '**/test/functional/**'
+	exclude '**/test/harness/**'
+}
+
+task integrationTest(type: Test, dependsOn: 'testClasses') {
+	testClassesDir = sourceSets.test.output.classesDir
+	classpath = sourceSets.test.runtimeClasspath
+	jvmArgs = ["-Druntime.environment=integrationdev"]
+
+	exclude "**/test/unit/**"
+	exclude "**/test/functional/**"
+	exclude "**/test/harness/**"
+}
+
+task functionalTest(type: Test, dependsOn: 'build') {
+	testClassesDir = sourceSets.test.output.classesDir
+	classpath = sourceSets.test.runtimeClasspath
+
+	// set the browser driver if given
+	if (project.hasProperty("anda.test.driver")) {
+		jvmArgs "-Danda.test.driver=" + project.getProperty("anda.test.driver")
+	}
+
+	// set the target environment if given
+	if (project.hasProperty("anda.test.target")) {
+		jvmArgs "-Danda.test.target=" + project.getProperty("anda.test.target")
+	}
+
+	exclude "**/test/unit/**"
+	exclude "**/test/integration/**"
+	exclude "**/test/harness/**"
+}
+
+def isNpmInstalled() {
+	try {
+		exec {
+			commandLine "npm", "--version"
+		}
+	} catch (Exception e) {
+		return false
+	}
+
+	return true
+}
+
+node {
+	if (isNpmInstalled()) {
+		download = false
+	} else {
+		version = '7.7.3'
+		npmVersion = '4.1.2'
+		download = true
+	}
+}
+
+task andaInstall(type: NpmTask) {
+	args = ['run', 'anda-install']
+}
+
+task webpack(type: NpmTask, dependsOn: 'andaInstall') {
+	if (project.hasProperty("release")) {
+		args = ['run', 'build-release']
+	} else {
+		args = ['run', 'build']
+	}
+}
+
+task testJs(type: NpmTask) {
+	args = ['test']
+}
+
+war {
+	from('build/statics') {
+		include '*.*'
+		exclude 'index.html'
+		into('WEB-INF/classes/public/statics')
+	}
+}
+
+tasks.war.dependsOn webpack
+tasks.test.dependsOn testJs

@@ -108,13 +108,13 @@ task functionalTest(type: Test, dependsOn: 'build') {
 	classpath = sourceSets.test.runtimeClasspath
 
 	// set the browser driver if given
-	if (project.hasProperty("anda.test.driver")) {
-		jvmArgs "-Danda.test.driver=" + project.getProperty("anda.test.driver")
+	if (project.hasProperty("pet.test.driver")) {
+		jvmArgs "-pet.test.driver=" + project.getProperty("pet.test.driver")
 	}
 
 	// set the target environment if given
-	if (project.hasProperty("anda.test.target")) {
-		jvmArgs "-Danda.test.target=" + project.getProperty("anda.test.target")
+	if (project.hasProperty("pet.test.target")) {
+		jvmArgs "-pet.test.target=" + project.getProperty("pet.test.target")
 	}
 
 	exclude "**/test/unit/**"
@@ -144,11 +144,11 @@ node {
 	}
 }
 
-task andaInstall(type: NpmTask) {
-	args = ['run', 'anda-install']
+task petInstall(type: NpmTask) {
+	args = ['install']
 }
 
-task webpack(type: NpmTask, dependsOn: 'andaInstall') {
+task webpack(type: NpmTask, dependsOn: 'petInstall') {
 	if (project.hasProperty("release")) {
 		args = ['run', 'build-release']
 	} else {
@@ -169,4 +169,4 @@ war {
 }
 
 tasks.war.dependsOn webpack
-tasks.test.dependsOn testJs
+// tasks.test.dependsOn testJs

@@ -1,5 +1,9 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import axios from 'axios';
+
+axios.defaults.headers.post['Content-Type'] = 'application/json';
+axios.defaults.headers.put['Content-Type'] = 'application/json';
 
 export class Home extends React.Component {
 	render() {
@@ -22,6 +26,9 @@ export class Page1 extends React.Component {
 		return (
 			<div className="container padded">
 				This is page 1.
+
+				<button onClick={() => axios.post('/api/login', {username: 'admin', password: 'admin'})}>Login</button>
+				<button onClick={() => axios.get('/api/owner/1')}>Click</button>
 			</div>
 		);
 	}

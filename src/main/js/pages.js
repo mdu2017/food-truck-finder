@@ -1,9 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import axios from 'axios';
-
-axios.defaults.headers.post['Content-Type'] = 'application/json';
-axios.defaults.headers.put['Content-Type'] = 'application/json';
+import { connect } from 'react-redux';
+import * as Users from 'users'
 
 export class Home extends React.Component {
 	render() {
@@ -21,18 +19,32 @@ export class Home extends React.Component {
 	}
 }
 
-export class Page1 extends React.Component {
+class Page1 extends React.Component {
 	render() {
 		return (
 			<div className="container padded">
 				This is page 1.
 
-				<button onClick={() => axios.post('/api/login', {username: 'admin', password: 'admin'})}>Login</button>
-				<button onClick={() => axios.get('/api/owner/1')}>Click</button>
+				{ _.isDefined(this.props.user) &&
+					<div>Welcome, {this.props.user.name}!</div>
+				}
+
+				<button onClick={() => this.authenticate('user', 'password')}>Login as User</button>
 			</div>
 		);
 	}
 }
+
+Page1 = connect(
+	state => ({
+		user: Users.State.getUser(state)
+	}),
+	dispatch => ({
+		authenticate: (username, password) => dispatch(Users.Actions.authenticate(username, password))
+	})
+)(Page1);
+
+export { Page1 };
 
 export class Page2 extends React.Component {
 	render() {

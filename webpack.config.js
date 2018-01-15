@@ -5,10 +5,10 @@ const path = require('path');
 const env  = require('yargs').argv.env;
 const glob = require('glob');
 
-const root      = path.resolve(__dirname);
-const src       = path.join(root, 'src/main');
-const test      = path.join(root, 'src/test');
-const dest      = path.join(root, 'build');
+const root = path.resolve(__dirname);
+const src = path.join(root, 'src/main');
+const test = path.join(root, 'src/test');
+const dest = path.join(root, 'build');
 
 let main = 'js/app.js';
 let libraryName = 'petfinder-site';

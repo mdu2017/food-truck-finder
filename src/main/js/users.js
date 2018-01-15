@@ -1,13 +1,21 @@
 import axios from 'axios';
 
 export function authenticate(username, password) {
-	return axios.post('/oauth/token', {
-		params: {
-			'grant_type': 'app_access',
-			username,
-			password
+	return axios(
+		{
+			method: 'post',
+			url: '/oauth/token',
+			params: {
+				'grant_type': 'password',
+				username,
+				password
+			},
+			auth: {
+				username: 'petfinder-app',
+				password: 'petfinder-app-secret'
+			}
 		}
-	});
+	);
 }
 
 export function getUserDetails() {
@@ -21,7 +29,7 @@ State.getAuthentication = state => {
 };
 
 State.getUser = state => {
-
+	return state.user;
 };
 
 export { State };
@@ -35,11 +43,11 @@ Actions.Types = {
 
 Actions.authenticate = (username, password) => {
 	return (dispatch) => {
-		return this.authenticate(username, password).then(
+		return authenticate(username, password).then(
 			authentication => {
 				dispatch(Actions.setAuthentication(authentication));
 
-				return this.getUserDetails().then(user => {
+				return getUserDetails().then(user => {
 					dispatch(Actions.setUser(user));
 				});
 			}
@@ -59,27 +67,26 @@ export { Actions };
 
 let Reducers = {};
 
-Reducers.authentication = {
-	authentication: (authentication = null, action) => {
-		switch (action.type) {
-			case Actions.Types.SET_AUTHENTICATION: {
-				return authentication;
-			}
-			default: {
-				return authentication;
-			}
+Reducers.authentication = (authentication = null, action) => {
+	switch (action.type) {
+		case Actions.Types.SET_AUTHENTICATION: {
+			return action.authentication;
 		}
-	},
-	user: (user = null, action) => {
-		switch (action.type) {
-			case Actions.Types.SET_USER: {
-				return user;
-			}
-			default: {
-				return user;
-			}
+		default: {
+			return authentication;
 		}
-	},
+	}
+};
+
+Reducers.user = (user = null, action) => {
+	switch (action.type) {
+		case Actions.Types.SET_USER: {
+			return action.user;
+		}
+		default: {
+			return user;
+		}
+	}
 };
 
 export { Reducers };

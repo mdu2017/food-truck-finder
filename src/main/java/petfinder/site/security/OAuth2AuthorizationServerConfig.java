@@ -41,21 +41,21 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 	public void configure(AuthorizationServerSecurityConfigurer oauthServer) throws Exception {
 		oauthServer
 				// we're allowing access to the token only for clients with 'ROLE_TRUSTED_CLIENT' authority
-				.tokenKeyAccess("hasAuthority('PETFINDER_CLIENT')")
-				.checkTokenAccess("hasAuthority('PETFINDER_CLIENT')");
+				.tokenKeyAccess("hasAuthority('ROLE_TRUSTED_CLIENT')")
+				.checkTokenAccess("hasAuthority('ROLE_TRUSTED_CLIENT')");
 	}
 
 	@Override
 	public void configure(ClientDetailsServiceConfigurer clients) throws Exception {
 		clients.inMemory()
 				.withClient("petfinder-app")
-				.secret("petfinder-app-secret")
-				.authorizedGrantTypes("client_credentials", "refresh_token", "app_access")
-				.authorities("PETFINDER_CLIENT")
-				.scopes("read", "write")
-				.resourceIds(resourceId)
-				.accessTokenValiditySeconds(accessTokenValiditySeconds)
-				.refreshTokenValiditySeconds(refreshTokenValiditySeconds);
+					.secret("petfinder-app-secret")
+					.authorizedGrantTypes("client_credentials", "refresh_token", "password")
+					.authorities("ROLE_TRUSTED_CLIENT")
+					.scopes("read", "write")
+					.resourceIds(resourceId)
+					.accessTokenValiditySeconds(accessTokenValiditySeconds)
+					.refreshTokenValiditySeconds(refreshTokenValiditySeconds);
 	}
 
 	@Bean

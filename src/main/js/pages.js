@@ -1,7 +1,9 @@
+import _ from 'lodash';
+
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as Users from 'users'
+import * as Users from 'js/users';
 
 export class Home extends React.Component {
 	render() {
@@ -25,11 +27,15 @@ class Page1 extends React.Component {
 			<div className="container padded">
 				This is page 1.
 
-				{ _.isDefined(this.props.user) &&
-					<div>Welcome, {this.props.user.name}!</div>
+				{ _.isDefined(this.props.authentication) &&
+				<div>{this.props.authentication['access_token']}</div>
 				}
 
-				<button onClick={() => this.authenticate('user', 'password')}>Login as User</button>
+				{ _.isDefined(this.props.user) &&
+					<div>Welcome, {this.props.user.principal}!</div>
+				}
+
+				<button onClick={() => this.props.authenticate('user', 'password')}>Login as User</button>
 			</div>
 		);
 	}
@@ -37,6 +43,7 @@ class Page1 extends React.Component {
 
 Page1 = connect(
 	state => ({
+		authentication: Users.State.getAuthentication(state),
 		user: Users.State.getUser(state)
 	}),
 	dispatch => ({

@@ -73,9 +73,6 @@ export function combineReducers(rawReducers, initialState = {}) {
 		_.merge(reducerMap, reducer);
 	}
 
-	reducerMap.entities = Redux.combineReducers(reducerMap.entities);
-	reducerMap.ui = Redux.combineReducers(reducerMap.ui);
-
 	for (let key of _.keys(initialState)) {
 		if (_.isNil(reducerMap[key])) {
 			reducerMap[key] = (state = {}) => state;

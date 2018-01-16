@@ -65,6 +65,11 @@ let promiseContext = () => {
 
 _.mixin({ defaultList, defaultMap, defaultString, isDefined, isBlank, valueAt, valuate, promiseContext });
 
+export function extendComponent(field, additionalProps) {
+	let props = {...field.props, ...additionalProps};
+	return {...field, props};
+}
+
 export function combineReducers(rawReducers, initialState = {}) {
 	let reducers = _.map(rawReducers, reducer => _.pickBy(reducer, (value, key) => 'initialize' !== key));
 	let reducerMap = {};

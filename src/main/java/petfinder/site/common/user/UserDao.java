@@ -1,27 +1,38 @@
 package petfinder.site.common.user;
 
-import java.util.Map;
 import java.util.Optional;
 
+import org.elasticsearch.index.query.QueryBuilders;
+import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
-import com.google.common.collect.ImmutableMap;
+import petfinder.site.elasticsearch.UserElasticSearchRepository;
 
 /**
  * Created by jlutteringer on 8/23/17.
  */
 @Repository
 public class UserDao {
-	private final Map<Long, UserDto> users =
-			ImmutableMap.<Long, UserDto> builder()
-					.put(1L, new UserDto(1L, "John"))
-					.put(2L, new UserDto(2L, "Bob"))
-					.put(3L, new UserDto(3L, "Sarah"))
-					.put(4L, new UserDto(4L, "Rachel"))
-					.put(5L, new UserDto(5L, "Steve"))
-					.build();
+	@Autowired
+	private UserElasticSearchRepository repository;
 
-	public Optional<UserDto> findUser(Long id) {
-		return Optional.ofNullable(users.get(id));
+	// JOHN
+	public Optional<UserAuthenticationDto> findUser(String id) {
+//		return repository.find(id, UserAuthenticationDto.class);
+		return null;
+	}
+
+	public Optional<UserAuthenticationDto> findUserByPrincipal(String principal) {
+		SearchSourceBuilder searchSourceBuilder = new SearchSourceBuilder();
+
+		String queryString = String.format("user.principal=\"%s\"", principal.replace("\"", ""));
+		searchSourceBuilder.query(QueryBuilders.queryStringQuery(queryString));
+
+		return repository.searchStream(searchSourceBuilder).findFirst();
+	}
+
+	public void save(UserAuthenticationDto userAuthentication) {
+		repository.save(userAuthentication);
 	}
 }

@@ -1,6 +1,9 @@
 # Readme
 This is the petfinder sample application.
 
+## Elastic Search
+This application uses elastic search as a data backend. To run the app you will have to either install elastic search locally or point to a remote elastic search instance. Configuration options are provided in `application.yml`.
+
 ## Development
 In development there are two components to the running application. A Java app server, which runs your backend code and a webpack development server which serves up the frontend resources and does hot reloading.
 

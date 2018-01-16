@@ -10,7 +10,7 @@ import axios from 'axios';
 
 import Index from 'js/index';
 import * as Users from 'js/users';
-import * as Utils from 'js/utils';
+import * as Utils from 'js/alloy/utils/core-utils';
 
 import 'styles/main.scss';
 

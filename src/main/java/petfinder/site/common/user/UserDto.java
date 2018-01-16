@@ -1,22 +1,48 @@
 package petfinder.site.common.user;
 
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.UUID;
+
+import org.codehaus.jackson.annotate.JsonIgnore;
+
+import alloy.util.Identifiable;
+import alloy.util.Momento;
+
 /**
  * Created by jlutteringer on 8/23/17.
  */
-public class UserDto {
-	private Long id;
+public class UserDto implements Momento<String> {
 	private String principal;
+	private List<String> roles;
+	private Map<String, Object> attributes;
 
-	public UserDto(Long id, String principal) {
-		this.id = id;
-		this.principal = principal;
+	private UserDto() {
+
 	}
 
-	public Long getId() {
-		return id;
+	public UserDto(String principal, List<String> roles, Map<String, Object> attributes) {
+		this.principal = principal;
+		this.roles = roles;
+		this.attributes = attributes;
 	}
 
 	public String getPrincipal() {
+		return principal;
+	}
+
+	public List<String> getRoles() {
+		return roles;
+	}
+
+	public Map<String, Object> getAttributes() {
+		return attributes;
+	}
+
+	@JsonIgnore
+	@Override
+	public String getMomento() {
 		return principal;
 	}
 }

@@ -1,5 +1,9 @@
 import axios from 'axios';
 
+export function register(user) {
+	return axios.post('/api/user/register', user);
+}
+
 export function authenticate(username, password) {
 	return axios(
 		{
@@ -41,6 +45,14 @@ Actions.Types = {
 	SET_USER: 'SET_USER'
 };
 
+Actions.register = user => {
+	return (dispatch) => {
+		return register(user).then(() => {
+			return dispatch(Actions.authenticate(user.principal, user.password));
+		});
+	};
+};
+
 Actions.authenticate = (username, password) => {
 	return (dispatch) => {
 		return authenticate(username, password).then(
@@ -52,6 +64,13 @@ Actions.authenticate = (username, password) => {
 				});
 			}
 		);
+	};
+};
+
+Actions.logout = () => {
+	return (dispatch) => {
+		dispatch(Actions.setAuthentication(null));
+		dispatch(Actions.setUser(null));
 	};
 };
 

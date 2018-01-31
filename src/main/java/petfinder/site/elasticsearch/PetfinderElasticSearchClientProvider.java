@@ -35,7 +35,7 @@ public class PetfinderElasticSearchClientProvider implements ElasticSearchClient
 	@Value("${elastic-search.user-name}")
 	private String elasticSearchUserName;
 
-	@Value("elastic-search.password")
+	@Value("${elastic-search.password}")
 	private String elasticSearchPassword;
 
 	@PostConstruct

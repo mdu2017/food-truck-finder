@@ -1,9 +1,11 @@
 package petfinder.site.common.pet;
 
+import alloy.util.Identifiable;
+
 /**
  * Created by jlutteringer on 8/23/17.
  */
-public class PetDto {
+public class PetDto implements Identifiable {
 	private Long id;
 	private String name;
 	private String type;

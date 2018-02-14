@@ -16,13 +16,14 @@ import alloy.util.Momento;
 public class UserDto implements Momento<String> {
 	private String principal;
 	private List<String> roles;
+	private UserType type;
 	private Map<String, Object> attributes;
 
 	private UserDto() {
 
 	}
 
-	public UserDto(String principal, List<String> roles, Map<String, Object> attributes) {
+	public UserDto(String principal, List<String> roles, UserType type, Map<String, Object> attributes) {
 		this.principal = principal;
 		this.roles = roles;
 		this.attributes = attributes;
@@ -40,9 +41,17 @@ public class UserDto implements Momento<String> {
 		return attributes;
 	}
 
+	public UserType getType() {
+		return type;
+	}
+
 	@JsonIgnore
 	@Override
 	public String getMomento() {
 		return principal;
+	}
+
+	public enum UserType {
+		OWNER, SITTER
 	}
 }

@@ -33,6 +33,7 @@ public class UserDao {
 	}
 
 	public void save(UserAuthenticationDto userAuthentication) {
+
 		repository.save(userAuthentication);
 	}
 }

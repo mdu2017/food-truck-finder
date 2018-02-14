@@ -64,7 +64,7 @@ class RegistrationForm extends React.Component {
 	}
 }
 
-RegistrationForm = ReduxForm.reduxForm({form: 'login'})(RegistrationForm);
+RegistrationForm = ReduxForm.reduxForm({form: 'register'})(RegistrationForm);
 
 RegistrationForm = connect(
 	state => ({

@@ -16,4 +16,8 @@ public class PetService {
 	public Optional<PetDto> findPet(Long id) {
 		return petDao.findPet(id);
 	}
+
+	public void save(PetDto pet) {
+		petDao.save(pet);
+	}
 }

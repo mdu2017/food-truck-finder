@@ -12,6 +12,7 @@ import alloy.util.AlloyAuthentication;
 import alloy.util.Wait;
 import alloy.util._Lists;
 import alloy.util._Maps;
+import petfinder.site.common.user.UserDto.UserType;
 
 /**
  * Created by jlutteringer on 8/23/17.
@@ -68,7 +69,7 @@ public class UserService {
 
 	public UserDto register(RegistrationRequest request) {
 		UserAuthenticationDto userAuthentication = new UserAuthenticationDto(
-				new UserDto(request.getPrincipal(), _Lists.list("ROLE_USER"), request.getAttributes()), passwordEncoder.encode(request.getPassword()));
+				new UserDto(request.getPrincipal(), _Lists.list("ROLE_USER"), UserType.OWNER, request.getAttributes()), passwordEncoder.encode(request.getPassword()));
 
 		userDao.save(userAuthentication);
 		return userAuthentication.getUser();

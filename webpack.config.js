@@ -19,7 +19,7 @@ const config = {
 	context: src,
 	output: {
 		path: path.resolve(dest, 'statics'),
-		publicPath: 'https://localhost:' + port + '/'
+		publicPath: 'http://localhost:' + port + '/'
 	},
 	module: {
 		rules: [{
@@ -48,19 +48,19 @@ if(env === 'dev') {
 	config.devServer = {
 		hot: true,
 		port: port,
-		https: true,
+		https: false,
 		contentBase: dest,
-		publicPath: 'https://localhost:' + port + '/',
+		publicPath: 'http://localhost:' + port + '/',
 		headers: {
 			'access-control-allow-origin': '*'
 		}
 	};
 
 	config.entry = [
-		'react-hot-loader/patch',
-		'webpack-dev-server/client?https://localhost:' + port + '/',
-		'webpack/hot/only-dev-server',
 		'babel-polyfill',
+		'react-hot-loader/patch',
+		'webpack-dev-server/client?http://localhost:' + port + '/',
+		'webpack/hot/only-dev-server',
 		path.resolve(src, main)
 	];
 

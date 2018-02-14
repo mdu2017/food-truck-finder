@@ -56,7 +56,8 @@ class RegistrationForm extends React.Component {
 				                validators={[Validation.requiredValidator, Validation.emailValidator]} />
 
 				<Bessemer.Field name="password" friendlyName="Password"
-				                validators={[Validation.requiredValidator, Validation.passwordValidator]} />
+				                validators={[Validation.requiredValidator, Validation.passwordValidator]}
+				                field={<input className="form-control" type="password" />} />
 
 				<Bessemer.Button loading={submitting}>Register</Bessemer.Button>
 			</form>

@@ -13,7 +13,7 @@ spring:
 
 web:
   statics:
-    js-bundle-location: https://localhost:3000/petfinder-site.js
+    js-bundle-location: http://localhost:3000/petfinder-site.js
 
 elastic-search:
   host: localhost

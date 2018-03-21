@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import * as ReactSelect from 'react-select';
+import ReactSelect from 'react-select';
 import * as ReduxForm from 'redux-form';
 
 import * as Utils from 'js/alloy/utils/core-utils';
@@ -46,7 +46,7 @@ export class Select extends React.Component {
 			clearAllowed = clearable;
 		}
 
-		return <ReactSelect.Select
+		return <ReactSelect
 			clearable={clearAllowed}
 			className={props.className}
 			value={internalValue} // because react-select doesn't like the initial value of undefined

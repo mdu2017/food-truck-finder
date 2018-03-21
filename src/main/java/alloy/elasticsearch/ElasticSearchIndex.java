@@ -7,12 +7,14 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Stream;
 
+import org.elasticsearch.action.delete.DeleteRequest;
 import org.elasticsearch.action.get.GetRequest;
 import org.elasticsearch.action.get.GetResponse;
 import org.elasticsearch.action.index.IndexRequest;
 import org.elasticsearch.action.search.SearchRequest;
 import org.elasticsearch.action.support.WriteRequest.RefreshPolicy;
 import org.elasticsearch.common.xcontent.XContentType;
+import org.elasticsearch.index.engine.Engine.Delete;
 import org.elasticsearch.search.SearchHit;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -41,10 +43,14 @@ public class ElasticSearchIndex {
 		this.indexName = indexName;
 	}
 
-	public <T extends Momento<I>, I> Optional<T> find(I key, Class<T> type) {
+	public <T> Optional<T> find(Object key, Serializer<T> serializer) {
 		GetRequest request = new GetRequest(indexName, "doc", key.toString());
 		GetResponse response = _Exceptions.propagate(() -> elasticSearchClientProvider.getClient().get(request));
-		return Optional.of(Json.unMarshall(response.getSourceAsString(), type));
+		if (!response.isExists()) {
+			return Optional.empty();
+		}
+
+		return Optional.of(serializer.deserialize(response.getSourceAsMap()));
 	}
 
 	public <T> void save(T document, Serializer<T> serializer, Momentizer<T, String> momentizer) {
@@ -76,5 +82,10 @@ public class ElasticSearchIndex {
 		}
 
 		return results.stream();
+	}
+
+	public void delete(Object key) {
+		DeleteRequest request = new DeleteRequest(indexName, "doc", key.toString());
+		_Exceptions.propagate(() -> elasticSearchClientProvider.getClient().delete(request));
 	}
 }

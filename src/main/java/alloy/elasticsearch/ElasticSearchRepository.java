@@ -29,7 +29,7 @@ public class ElasticSearchRepository<T, I> implements Repository<T, I>  {
 
 	@Override
 	public Optional<T> find(I id) {
-		return null;
+		return index.find(id, serializer);
 	}
 
 	@Override
@@ -37,6 +37,10 @@ public class ElasticSearchRepository<T, I> implements Repository<T, I>  {
 		// FUTURE we shouldn't assume you can just toString the id of the element
 		index.save(item, serializer, Momento.stringMomentizer(momentizer));
 		return item;
+	}
+
+	public void delete(I id) {
+		index.delete(id);
 	}
 
 	public Stream<T> searchStream(SearchSourceBuilder searchSource) {

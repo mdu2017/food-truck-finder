@@ -71,7 +71,7 @@ public class ElasticSearchIndex {
 		});
 	}
 
-	public <T> Stream<T> searchStream(SearchSourceBuilder searchSource, Serializer<T> serializer) {
+	public <T> List<T> search(SearchSourceBuilder searchSource, Serializer<T> serializer) {
 		SearchRequest searchRequest = new SearchRequest(indexName);
 		searchRequest.types("doc");
 		searchRequest.source(searchSource);
@@ -81,7 +81,7 @@ public class ElasticSearchIndex {
 			results.add(serializer.deserialize(hit.getSourceAsMap()));
 		}
 
-		return results.stream();
+		return results;
 	}
 
 	public void delete(Object key) {

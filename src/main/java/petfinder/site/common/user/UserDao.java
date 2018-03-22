@@ -29,7 +29,7 @@ public class UserDao {
 		String queryString = String.format("user.principal=\"%s\"", principal.replace("\"", ""));
 		searchSourceBuilder.query(QueryBuilders.queryStringQuery(queryString));
 
-		return repository.searchStream(searchSourceBuilder).findFirst();
+		return repository.search(searchSourceBuilder).stream().findFirst();
 	}
 
 	public void save(UserAuthenticationDto userAuthentication) {

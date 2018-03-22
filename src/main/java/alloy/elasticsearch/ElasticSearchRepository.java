@@ -1,10 +1,13 @@
 package alloy.elasticsearch;
 
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.DoubleStream;
 import java.util.stream.Stream;
 
 import org.elasticsearch.search.builder.SearchSourceBuilder;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.client.RestTemplate;
 
 import alloy.util.Momento;
 import alloy.util.Momento.Momentizer;
@@ -20,6 +23,9 @@ public class ElasticSearchRepository<T, I> implements Repository<T, I>  {
 	private ElasticSearchIndex index;
 	private Serializer<T> serializer;
 	private Momentizer<T, I> momentizer;
+
+	@Autowired
+	private RestTemplate restTemplate;
 
 	public ElasticSearchRepository(ElasticSearchIndex index, Serializer<T> serializer, Momentizer<T, I> momentizer) {
 		this.index = index;
@@ -43,8 +49,8 @@ public class ElasticSearchRepository<T, I> implements Repository<T, I>  {
 		index.delete(id);
 	}
 
-	public Stream<T> searchStream(SearchSourceBuilder searchSource) {
-		return index.searchStream(searchSource, serializer);
+	public List<T> search(SearchSourceBuilder searchSource) {
+		return index.search(searchSource, serializer);
 	}
 
 	public static class ElasticSearchMomentoRepository<T extends Momento<I>, I> extends ElasticSearchRepository<T, I> {

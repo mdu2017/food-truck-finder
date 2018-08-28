@@ -24,9 +24,6 @@ public class ElasticSearchRepository<T, I> implements Repository<T, I>  {
 	private Serializer<T> serializer;
 	private Momentizer<T, I> momentizer;
 
-	@Autowired
-	private RestTemplate restTemplate;
-
 	public ElasticSearchRepository(ElasticSearchIndex index, Serializer<T> serializer, Momentizer<T, I> momentizer) {
 		this.index = index;
 		this.serializer = serializer;

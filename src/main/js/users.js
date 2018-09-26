@@ -1,6 +1,7 @@
 import axios from 'axios';
 
 export function register(user) {
+	user.myNewField = 'Hello World!';
 	return axios.post('/api/user/register', user);
 }
 

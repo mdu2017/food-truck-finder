@@ -9,6 +9,7 @@ import org.codehaus.jackson.annotate.JsonIgnore;
 
 import alloy.util.Identifiable;
 import alloy.util.Momento;
+import petfinder.site.common.pet.PetDto;
 
 /**
  * Created by jlutteringer on 8/23/17.
@@ -18,6 +19,7 @@ public class UserDto implements Momento<String> {
 	private List<String> roles;
 	private UserType type;
 	private Map<String, Object> attributes;
+	private String myNewField;
 
 	private UserDto() {
 
@@ -43,6 +45,14 @@ public class UserDto implements Momento<String> {
 
 	public UserType getType() {
 		return type;
+	}
+
+	public String getMyNewField() {
+		return myNewField;
+	}
+
+	public void setMyNewField(String myNewField) {
+		this.myNewField = myNewField;
 	}
 
 	@JsonIgnore

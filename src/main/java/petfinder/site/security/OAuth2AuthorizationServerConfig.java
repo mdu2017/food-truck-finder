@@ -5,9 +5,12 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Primary;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.authentication.AuthenticationManager;
+import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.oauth2.config.annotation.configurers.ClientDetailsServiceConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerConfigurerAdapter;
+import org.springframework.security.oauth2.config.annotation.web.configuration.AuthorizationServerSecurityConfiguration;
 import org.springframework.security.oauth2.config.annotation.web.configuration.EnableAuthorizationServer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerEndpointsConfigurer;
 import org.springframework.security.oauth2.config.annotation.web.configurers.AuthorizationServerSecurityConfigurer;
@@ -15,6 +18,8 @@ import org.springframework.security.oauth2.provider.token.DefaultTokenServices;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.security.oauth2.provider.token.store.JwtAccessTokenConverter;
 import org.springframework.security.oauth2.provider.token.store.JwtTokenStore;
+import org.springframework.security.web.access.channel.ChannelProcessingFilter;
+import org.springframework.web.cors.CorsConfigurationSource;
 
 @Configuration
 @EnableAuthorizationServer
@@ -78,5 +83,18 @@ public class OAuth2AuthorizationServerConfig extends AuthorizationServerConfigur
 		defaultTokenServices.setSupportRefreshToken(true);
 		defaultTokenServices.setTokenEnhancer(accessTokenConverter());
 		return defaultTokenServices;
+	}
+
+	@Order(-1)
+	@Configuration
+	public static class OAuth2AuthorizationServerSecurityConfig extends AuthorizationServerSecurityConfiguration {
+		@Autowired
+		private CorsConfigurationSource corsConfigurationSource;
+
+		@Override
+		protected void configure(HttpSecurity http) throws Exception {
+			super.configure(http);
+			http.cors().configurationSource(corsConfigurationSource);
+		}
 	}
 }

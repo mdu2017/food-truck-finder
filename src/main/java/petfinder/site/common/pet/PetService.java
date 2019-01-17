@@ -6,14 +6,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
- * Created by jlutteringer on 8/23/17.
+ * If this is your first time looking at Spring Services, check out the detailed explanation in UserService first.
+ *
+ * This is the service responsible for saving and retrieving pets which are in Elasticsearch.
  */
 @Service
 public class PetService {
 	@Autowired
 	private PetDao petDao;
 
-	public Optional<PetDto> findPet(Long id) {
+	public Optional<PetDto> findPet(String id) {
 		return petDao.findPet(id);
 	}
 

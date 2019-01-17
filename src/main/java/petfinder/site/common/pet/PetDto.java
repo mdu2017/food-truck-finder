@@ -3,25 +3,26 @@ package petfinder.site.common.pet;
 import java.util.UUID;
 
 import alloy.util.Identifiable;
+import alloy.util.Momento;
 
 /**
  * Created by jlutteringer on 8/23/17.
  */
-public class PetDto implements Identifiable {
-	private Long id;
+public class PetDto implements Momento<String> {
+	private String id;
 	private String name;
 	private String type;
 
 	public PetDto() {
-		this.id = UUID.randomUUID().getMostSignificantBits();
+		// Randomly generate an id when constructing a pet object.
+		this.id = UUID.randomUUID().toString();
 	}
 
-	@Override
-	public Long getId() {
+	public String getId() {
 		return id;
 	}
 
-	public void setId(Long id) {
+	public void setId(String id) {
 		this.id = id;
 	}
 
@@ -39,5 +40,10 @@ public class PetDto implements Identifiable {
 
 	public void setType(String type) {
 		this.type = type;
+	}
+
+	@Override
+	public String getMomento() {
+		return id;
 	}
 }

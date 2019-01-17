@@ -17,19 +17,22 @@ import petfinder.site.common.pet.PetService;
 import petfinder.site.common.user.UserDto;
 
 /**
- * Created by jlutteringer on 8/23/17.
+ * If this is your first time looking through this project, see the more in-depth overview of controllers in UserEndpoint.
  */
 @RestController
 @RequestMapping("/api/pets")
 public class PetEndpoint {
+	// PetService contains our business logic for dealing with pets as well as saving/reading them
 	@Autowired
 	private PetService petService;
 
+	// Take an id, and look up the corresponding pet
 	@GetMapping(value = "/{id}", produces = "application/json")
-	public Optional<PetDto> getPet(@PathVariable("id") Long id) {
+	public Optional<PetDto> getPet(@PathVariable("id") String id) {
 		return petService.findPet(id);
 	}
 
+	// Take a JSON representation of a Pet and save it to Elasticsearch
 	@PostMapping(produces = "application/json")
 	public PetDto savePet(@RequestBody PetDto pet) {
 		petService.save(pet);

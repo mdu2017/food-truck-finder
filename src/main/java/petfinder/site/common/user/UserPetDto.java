@@ -7,7 +7,7 @@ import alloy.util.Identifiable;
 public class UserPetDto implements Identifiable {
 	private Long id = UUID.randomUUID().getMostSignificantBits();
 	private String userPrincipal;
-	private Long petId;
+	private String petId;
 
 	public Long getId() {
 		return id;
@@ -25,11 +25,11 @@ public class UserPetDto implements Identifiable {
 		this.userPrincipal = userPrincipal;
 	}
 
-	public Long getPetId() {
+	public String getPetId() {
 		return petId;
 	}
 
-	public void setPetId(Long petId) {
+	public void setPetId(String petId) {
 		this.petId = petId;
 	}
 }

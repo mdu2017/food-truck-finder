@@ -17,7 +17,7 @@ import petfinder.site.common.pet.PetDto;
 import petfinder.site.common.user.UserDto.UserType;
 
 /**
- * Created by jlutteringer on 8/23/17.
+ * Services are Spring concepts for classes which manage the application's buisness logic.
  */
 @Service
 public class UserService {
@@ -38,7 +38,6 @@ public class UserService {
 	public static class RegistrationRequest {
 		private String principal;
 		private String password;
-		private String myNewField;
 		private Map<String, Object> attributes;
 
 		public String getPrincipal() {
@@ -63,14 +62,6 @@ public class UserService {
 
 		public void setAttributes(Map<String, Object> attributes) {
 			this.attributes = attributes;
-		}
-
-		public String getMyNewField() {
-			return myNewField;
-		}
-
-		public void setMyNewField(String myNewField) {
-			this.myNewField = myNewField;
 		}
 	}
 

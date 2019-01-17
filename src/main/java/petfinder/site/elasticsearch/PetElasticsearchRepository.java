@@ -12,7 +12,7 @@ import petfinder.site.common.user.UserAuthenticationDto;
  * Created by jlutteringer on 2/7/18.
  */
 @Service
-public class PetElasticsearchRepository extends ElasticSearchJsonRepository<PetDto, Long> {
+public class PetElasticsearchRepository extends ElasticSearchJsonRepository<PetDto, String> {
 	public PetElasticsearchRepository(ElasticSearchClientProvider provider) {
 		super(new ElasticSearchIndex(provider, "petfinder-pets"), PetDto.class);
 	}

@@ -25,7 +25,7 @@ public class PetDao {
 	@Autowired
 	private ElasticSearchClientProvider elasticSearchClientProvider;
 
-	public Optional<PetDto> findPet(Long id) {
+	public Optional<PetDto> findPet(String id) {
 		return petElasticsearchRepository.find(id);
 	}
 

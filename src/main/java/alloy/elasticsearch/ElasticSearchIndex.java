@@ -61,7 +61,7 @@ public class ElasticSearchIndex {
 		documents.forEach(document -> {
 			IndexRequest request = new IndexRequest(indexName, "doc", momentizer.getMomento(document));
 			// JOHN this should be configurable somehow
-			request.setRefreshPolicy(RefreshPolicy.WAIT_UNTIL);
+			request.setRefreshPolicy(RefreshPolicy.IMMEDIATE);
 
 			Map<String, Object> serializedDocument = serializer.serialize(document);
 			String stringifiedDocument = Json.marshall(serializedDocument);

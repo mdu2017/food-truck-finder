@@ -33,7 +33,7 @@ In development there are three components to the running application. A Java app
 ### QA/Heroku/Running as QA Locally
 In qa there is just a single executable jar which contains the static resources produced from webpack.
 
-1) To build run `gradle install`
+1) To build run `./gradlew build`
 1) Build output can be found in `<Root Project Dir>/build/libs/petfinder-site-1.0-SNAPSHOT.jar`
 1) This jar is all you need to run the application, to run locally use the following command: `java -jar build/libs/petfinder-site-1.0-SNAPSHOT.jar --spring.profiles.active=qa`
 

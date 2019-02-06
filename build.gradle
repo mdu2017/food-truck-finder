@@ -157,8 +157,8 @@ node {
 	if (isNpmInstalled()) {
 		download = false
 	} else {
-		version = '7.7.3'
-		npmVersion = '4.1.2'
+		version = '11.1.0'
+		npmVersion = '6.4.1'
 		download = true
 	}
 }

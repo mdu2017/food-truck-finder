@@ -25,7 +25,7 @@ const config = {
 		rules: [{
 				test: /\.js$/,
 				use: [ 'babel-loader' ],
-				exclude: /node_modules/
+				exclude: [/node_modules/, /nodejs/]
 			}, {
 				test: /.(png|jpg|jpeg|gif|svg|woff|woff2|ttf|ico|eot)$/,
 				use: "url-loader?limit=100000"
@@ -68,6 +68,7 @@ if(env === 'dev') {
 
 	config.module.rules.push({
 		test: /\.scss$/,
+		exclude: [/node_modules/, /nodejs/],
 		use: [{
 			loader: "style-loader" // creates style nodes from JS strings
 		}, {
@@ -108,7 +109,7 @@ else {
 			fallback: "style-loader",
 			use: ['css-loader', 'sass-loader']
 		}),
-		exclude: /node_modules/
+		exclude: [/node_modules/, /nodejs/]
 	});
 
 	config.entry = [path.resolve(src, main)];
@@ -117,5 +118,5 @@ else {
 }
 config.output.filename = outputFile;
 
-config.module.rules.push({ test: /\.js?$/, loader: 'eslint-loader', exclude: /node_modules/ });
+config.module.rules.push({ test: /\.js?$/, loader: 'eslint-loader', exclude: [/node_modules/, /nodejs/] });
 module.exports = config;

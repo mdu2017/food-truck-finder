@@ -154,13 +154,9 @@ def isNpmInstalled() {
 }
 
 node {
-	if (isNpmInstalled()) {
-		download = false
-	} else {
-		version = '11.1.0'
-		npmVersion = '6.4.1'
-		download = true
-	}
+	version = '11.1.0'
+	npmVersion = '6.4.1'
+	download = true
 }
 
 task petInstall(type: NpmTask) {

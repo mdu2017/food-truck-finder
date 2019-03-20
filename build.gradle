@@ -141,22 +141,13 @@ task functionalTest(type: Test, dependsOn: 'build') {
 	exclude "**/test/harness/**"
 }
 
-def isNpmInstalled() {
-	try {
-		exec {
-			commandLine "npm", "--version"
-		}
-	} catch (Exception e) {
-		return false
-	}
-
-	return true
-}
-
 node {
 	version = '11.1.0'
 	npmVersion = '6.4.1'
 	download = true
+	nodeModulesDir = file("${project.projectDir}") // Set the work directory where node_modules should be located
+	workDir = file("${project.projectDir}/.moowork/nodejs")
+	npmWorkDir = file("${project.projectDir}/.moowork/npm")
 }
 
 task petInstall(type: NpmTask) {

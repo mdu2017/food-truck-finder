@@ -1,5 +1,5 @@
 {
-  "name": "petfinder-site",
+  "name": "food-truck-finder",
   "version": "1.0.0",
   "description": "template project for react",
   "main": "webpack.config.js",

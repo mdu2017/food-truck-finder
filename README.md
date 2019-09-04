@@ -1,5 +1,5 @@
 # Readme
-This is the petfinder sample application.
+This is the food truck finder sample application.
 
 ## Running The Project
 ### Elastic Search
@@ -12,9 +12,9 @@ In development there are three components to the running application. A Java app
 1) Install Java, Gradle, IntelliJ if you don't already have them
 1) Install and start elasticsearch
 1) Import the project into IntelliJ
-1) Run `petfinder.site.PetfinderApplication.main` with VM args `-Dspring.profiles.active=development`
-    * Open PetfinderApplication.java, right click, and Run PetfinderApplication.main(), which should fail
-    * Up near the top left you should see a dropdown that now says Petfinder application, click it and select Edit configurations
+1) Run `FoodTruckFinderApplication.main` with VM args `-Dspring.profiles.active=development`
+    * Open FoodTruckFinderApplication.java, right click, and Run FoodTruckFinderApplication.main(), which should fail
+    * Up near the top left you should see a dropdown that now says Food truck finder application, click it and select Edit configurations
     * In the menu, you should see a VM Options box, enter `-Dspring.profiles.active=development`, click OK
     * Run the application again, and it should start correctly
 1) Go to `http://localhost:8080/` and verify the application is running (you may see a blank page if the frontend isn't running yet, but if it doesn't 404 you are good)
@@ -34,8 +34,8 @@ In development there are three components to the running application. A Java app
 In qa there is just a single executable jar which contains the static resources produced from webpack.
 
 1) To build run `./gradlew build`
-1) Build output can be found in `<Root Project Dir>/build/libs/petfinder-site-1.0-SNAPSHOT.jar`
-1) This jar is all you need to run the application, to run locally use the following command: `java -jar build/libs/petfinder-site-1.0-SNAPSHOT.jar --spring.profiles.active=qa`
+1) Build output can be found in `<Root Project Dir>/build/libs/food-truck-finder-site-1.0-SNAPSHOT.jar`
+1) This jar is all you need to run the application, to run locally use the following command: `java -jar build/libs/food-truck-finder-site-1.0-SNAPSHOT.jar --spring.profiles.active=qa`
 
 ## Project Overview
 

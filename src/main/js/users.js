@@ -15,8 +15,8 @@ export function authenticate(username, password) {
 				password
 			},
 			auth: {
-				username: 'petfinder-app',
-				password: 'petfinder-app-secret'
+				username: 'food-truck-finder-app',
+				password: 'food-truck-finder-app-secret'
 			}
 		}
 	);
@@ -54,6 +54,8 @@ Actions.register = user => {
 };
 
 Actions.authenticate = (username, password) => {
+	console.log(`Calling authenticate with username: ${username} and password: ${password}`);
+
 	return (dispatch) => {
 		return authenticate(username, password).then(
 			authentication => {

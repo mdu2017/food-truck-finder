@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<databaseChangeLog
+        xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+        xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
+        xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
+         http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
+
+    <changeSet author="jlutteringer" id="create initial tables">
+        <sql>
+            CREATE TABLE USER
+            (
+            USER_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            PRINCIPAL VARCHAR(255),
+            PASSWORD VARCHAR(255)
+            );
+
+            CREATE TABLE FOOD_TRUCK
+            (
+            FOOD_TRUCK_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
+            NAME VARCHAR(255),
+            TYPE VARCHAR(255)
+            );
+        </sql>
+    </changeSet>
+</databaseChangeLog>

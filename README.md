@@ -2,15 +2,15 @@
 This is the food truck finder sample application.
 
 ## Running The Project
-### Elastic Search
-This application uses elastic search as a data backend. To run the app you will have to either install elastic search locally or point to a remote elastic search instance. Configuration options are provided in `application.yml`.
+### MySql
+This application uses MySql search as a data backend. To run the app you will have to either install MySql search locally or point to a remote MySql search instance. Configuration options are provided in `application.yml`.
 
 ### Development
-In development there are three components to the running application. A Java app server, which runs your backend code, elasticsearch, which is the data store, and a webpack development server which serves up the frontend resources and does hot reloading.
+In development there are three components to the running application. A Java app server, which runs your backend code, mysql which is the data store, and a webpack development server which serves up the frontend resources and does hot reloading.
 
 #### Running the Backend in IntelliJ
 1) Install Java, Gradle, IntelliJ if you don't already have them
-1) Install and start elasticsearch
+1) Install and start MySql
 1) Import the project into IntelliJ
 1) Run `FoodTruckFinderApplication.main` with VM args `-Dspring.profiles.active=development`
     * Open FoodTruckFinderApplication.java, right click, and Run FoodTruckFinderApplication.main(), which should fail
@@ -19,9 +19,10 @@ In development there are three components to the running application. A Java app
     * Run the application again, and it should start correctly
 1) Go to `http://localhost:8080/` and verify the application is running (you may see a blank page if the frontend isn't running yet, but if it doesn't 404 you are good)
 
-#### Running elasticsearch
-1) Install elasticsearch 6.0.1 https://www.elastic.co/downloads/past-releases/elasticsearch-6-0-1
-2) Run `elasticsearch` and confirm it started with `curl -XGET 'localhost:9200'`
+#### Running MySql
+1) Install MySql 8.0.17 https://dev.mysql.com/downloads/installer/
+2) Create a new Database named `food-truck-finder` (make sure you're using the default utf-8 encoding)
+3) Update `application.yml` with your db username/password (root with no password as default might work)
 
 #### Running the Frontend
 1) Install node if you don't already have it

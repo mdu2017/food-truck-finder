@@ -10,7 +10,7 @@ In development there are three components to the running application. A Java app
 
 #### Running the Backend in IntelliJ
 1) Install Java, Gradle, IntelliJ if you don't already have them
-1) Install and start MySql
+1) Install and start MySql (see below for instructions)
 1) Import the project into IntelliJ
 1) Run `FoodTruckFinderApplication.main` with VM args `-Dspring.profiles.active=development`
     * Open FoodTruckFinderApplication.java, right click, and Run FoodTruckFinderApplication.main(), which should fail
@@ -21,6 +21,9 @@ In development there are three components to the running application. A Java app
 
 #### Running MySql
 1) Install MySql 8.0.17 https://dev.mysql.com/downloads/installer/
+    * Mac install guide: https://dev.mysql.com/doc/refman/5.7/en/osx-installation-pkg.html
+    * Windows install guide: https://dev.mysql.com/doc/refman/5.7/en/windows-installation.html
+    * If prompted to choose password encryption type, choose "use legacy password"
 2) Create a new Database named `food-truck-finder` (make sure you're using the default utf-8 encoding)
 3) Update `application.yml` with your db username/password (root with no password as default might work)
 

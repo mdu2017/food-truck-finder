@@ -11,6 +11,15 @@ export default class Index extends React.Component {
 					<Route exact path="/" component={Pages.Home} />
 					<Route exact path="/register" component={Pages.RegisterPage} />
 					<Route exact path="/login" component={Pages.LoginPage} />
+					<Route exact path="/events" component={Pages.EventsPage} />
+					<Route exact path="/help" component={Pages.HelpPage} />
+					<Route exact path="/forgot-password" component={Pages.ForgotPasswordPage} />
+					<Route exect path="/view-profile" component={Pages.ViewProfilePage} />
+					<Route exect path="/api/user/edit-user" component={Pages.EditUserPage} />
+					<Route exact path="/search-trucks" component={Pages.SearchTrucksPage} />
+					<Route exact path="/search-users" component={Pages.SearchUsersPage} />
+					<Route exact path="/notifications" component={Pages.NotificationsPage} />
+					<Route exact path="/about-free-tank-top" component={Pages.AboutUsPage} />
 					<Route exact path="/page-1" component={Pages.Page1} />
 					<Route exact path="/page-2" component={Pages.Page2} />
 					<Route exact path="/page-3" component={Pages.Page3} />

@@ -20,12 +20,6 @@ public class DatabaseConfiguration {
 	@Value("${database.url}")
 	private String url;
 
-	@Value("${database.username}")
-	private String username;
-
-	@Value("${database.password}")
-	private String password;
-
 	@Value("${database.driverClassName}")
 	private String driverClassName;
 
@@ -97,8 +91,6 @@ public class DatabaseConfiguration {
 	public DataSource buildDataSource() {
 		BasicDataSource dataSource = new BasicDataSource();
 		dataSource.setUrl(url);
-		dataSource.setUsername(username);
-		dataSource.setPassword(password);
 		dataSource.setDriverClassName(driverClassName);
 
 		dataSource.setInitialSize(initialSize);

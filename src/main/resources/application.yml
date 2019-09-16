@@ -1,7 +1,7 @@
 database:
   name: food-truck-finder
   connectionParams: useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&autoReconnect=true&useDynamicCharsetInfo=false&relaxAutoCommit=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-  url: jdbc:mysql://${database.host}:${database.port}/${database.name}?${database.connectionParams}
+  url: jdbc:mysql://${database.username}:${database.password}@${database.host}:${database.port}/${database.name}?${database.connectionParams}
   driverClassName: com.mysql.jdbc.Driver
   globalDialect: org.hibernate.dialect.MySQL5InnoDBDialect
   initialSize: 10

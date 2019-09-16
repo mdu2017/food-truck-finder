@@ -54,6 +54,7 @@ class RegistrationForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {principal: null, password: null};
+
 	}
 
 	setPrincipal = (principal) => this.setState({principal});

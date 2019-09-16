@@ -162,3 +162,9 @@ processResources {
 }
 
 tasks.processResources.dependsOn webpack
+
+task stage() {
+	dependsOn clean, build
+}
+
+build.mustRunAfter clean

@@ -1,18 +1,13 @@
 package foodtruckfinder.site.common.user;
 
-import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-
-//import javax.jws.soap.SOAPBinding.Use;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import alloy.util._Lists;
-import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
-import foodtruckfinder.site.common.user.UserDto.UserType;
 
 /**
  * Services are Spring concepts for classes which manage the application's buisness logic.

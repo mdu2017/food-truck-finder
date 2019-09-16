@@ -40,7 +40,7 @@ class LoginForm extends React.Component {
 }
 
 LoginForm = connect(
-	state => ({
+	() => ({
 
 	}),
 	dispatch => ({
@@ -87,7 +87,7 @@ class RegistrationForm extends React.Component {
 }
 
 RegistrationForm = connect(
-	state => ({
+	() => ({
 
 	}),
 	dispatch => ({

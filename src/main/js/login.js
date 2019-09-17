@@ -2,6 +2,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import * as Users from 'js/users';
+import {Link} from "react-router-dom";
 
 class LoginForm extends React.Component {
 	constructor(props) {
@@ -33,7 +34,9 @@ class LoginForm extends React.Component {
 					       onChange={e => this.setPassword(e.target.value)} />
 				</div>
 
-				<button type="submit" className="btn btn-primary">Submit</button>
+				<Link to="/"><button type="submit" className="btn btn-primary">Submit</button></Link>
+
+
 			</form>
 		);
 	}

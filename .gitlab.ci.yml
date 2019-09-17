@@ -1,5 +1,5 @@
 image: java:11
-deploy:
+trigger_build:
   stage: deploy
   image: ruby:2.3
   script:

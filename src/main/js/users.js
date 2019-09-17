@@ -54,8 +54,6 @@ Actions.register = user => {
 };
 
 Actions.authenticate = (username, password) => {
-	console.log(`Calling authenticate with username: ${username} and password: ${password}`);
-
 	return (dispatch) => {
 		return authenticate(username, password).then(
 			authentication => {

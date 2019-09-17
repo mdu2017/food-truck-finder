@@ -3,6 +3,8 @@ package foodtruckfinder.site.common.user;
 import java.util.Map;
 import java.util.Optional;
 
+// import javax.jws.soap.SOAPBinding.Use;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -10,7 +12,7 @@ import org.springframework.stereotype.Service;
 import alloy.util._Lists;
 
 /**
- * Services are Spring concepts for classes which manage the application's buisness logic.
+ * Services are Spring concepts for classes which manage the application's business logic.
  */
 @Service
 public class UserService {

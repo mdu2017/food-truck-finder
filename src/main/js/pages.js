@@ -40,7 +40,7 @@ export class Home extends React.Component {
 				<ul>
 					<li><Link to="/register">Create Account</Link></li>
 					<li><Link to="/login">Login</Link></li>
-					<li><Link to="/help">Help</Link></li>
+					<li><Link to="/help">Help!!!</Link></li>
 					<li><Link to="/events">Events</Link></li>
 					<li><Link to="/view-profile">View Profile</Link></li>
 					<li><Link to="/search-trucks">Search Food Trucks</Link></li>

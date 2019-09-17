@@ -1,4 +1,4 @@
-image: java:10
+image: java:11
 deploy:
   stage: deploy
   image: ruby:2.3

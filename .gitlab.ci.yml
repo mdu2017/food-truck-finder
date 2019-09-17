@@ -1,30 +1,11 @@
-stages:
-- build
-- deploy
-
-build:
-  stage: build
-  image: node:8
-  script:
-  - npm install --progress=false
-  - npm run build
-  artifacts: 
-    paths: 
-    - dist/
-  
-
+image: java:11
 deploy:
   stage: deploy
-  image: "ruby:2.5"
+  image: ruby:2.3
   script:
-  # install dpl:
   - apt-get update -qy
-  - apt-get install rubygems ruby-dev -y
+  - apt-get install -y ruby-dev
   - gem install dpl
-  # deploy to heroku:
-  - dpl --provider=heroku --app=$HEROKU_APP_NAME --api-key=$HEROKU_API_KEY --skip_cleanup
-environment:
-    name: develop
-    url: https://$HEROKU_APP_NAME.herokuapp.com
+  - dpl --provider=heroku --app=$APP_NAME --api-key=$API_KEY
   only:
-  - develop
+    - master

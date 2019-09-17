@@ -4,5 +4,5 @@ build
 node_modules
 out
 .moowork
-src/main/resources/application.yml
 .eslintrc
+application.yml

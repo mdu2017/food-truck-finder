@@ -6,9 +6,34 @@ import { connect } from 'react-redux';
 import * as Users from 'js/users';
 import * as Login from 'js/login';
 
+import { createStore, applyMiddleware, compose} from "redux";
+import { persistStore, autoRehydrate } from 'redux-persist';
+import { AsyncStorage } from 'react-native';
+import {logger} from "redux-logger/src";
+
+export default function configureStore(){
+
+	const store = createStore(reducers, getInitialState(), compose(
+		applyMiddleware([
+			thunk,
+			localStorageMiddleware,
+			logger
+		]),
+		autoRehydrate()
+		)
+	);
+
+	persistStore(store, { storage: AsyncStorage });
+
+	return store;
+};
+
+
+
 export class Home extends React.Component {
 	render() {
 		return (
+
 			<div className="container padded">
 				This is the home page.
 

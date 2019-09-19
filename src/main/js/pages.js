@@ -5,6 +5,7 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/users';
 import * as Login from 'js/login';
+import axios from 'axios';
 
 // import { createStore, applyMiddleware, compose} from "redux";
 // import { persistStore, autoRehydrate } from 'redux-persist';
@@ -51,6 +52,7 @@ export class Home extends React.Component {
 					<li><Link to="/page-1">Page 1</Link></li>
 					<li><Link to="/page-2">Page 2</Link></li>
 					<li><Link to="/page-3">Page 3</Link></li>
+					<li><Link to="/hello">Example Endpoint</Link></li>
 				</ul>
 			</div>
 		);
@@ -427,3 +429,62 @@ export class Page3 extends React.Component {
 		);
 	}
 }
+
+export class HelloSend extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {name: 'hello', message: 'hello'};
+
+		this.handleChangeName = this.handleChangeName.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	handleChangeName(event) {
+		this.setState({name: event.target.value});
+	}
+
+	handleSubmit(event) {
+		event.preventDefault();
+		if(this.state.name === '') {
+			this.setState({message: 'Must Include a Name'});
+			return;
+		}
+		fetch('/example/hello-receive', {
+			method: 'POST',
+			headers: {
+				Accept: 'application/json',
+				'Content-Type' : 'application/json',
+			},
+			body: JSON.stringify({
+				name: this.state.name,
+			}),
+		}).then(
+			(response) => response.json()
+		).then(
+			(responseJson) => {
+				this.setState({message: responseJson.name});
+			}
+		).catch((error) => {
+			alert(error);
+		});
+	}
+
+	render() {
+		return (
+			<div>
+				<form onSubmit={this.handleSubmit}>
+					<div className="form-group">
+						<label htmlFor="principalInput">Type Your Name!</label>
+						<input type="text" onChange={this.handleChangeName} />
+					</div>
+
+					<input type="submit" value="Post" />
+				</form>
+				<br />
+				<label>{this.state.message}</label>
+			</div>
+		);
+	}
+}
+
+

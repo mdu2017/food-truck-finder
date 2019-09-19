@@ -49,12 +49,12 @@ public class UserEndpoint {
 
 	/**
 	 * This @GetMapping annotation binds the below function to a GET HTTP request. Whenever the /api/user url is hit, the below function will be invoked. This is because
-	 * the method level @GetMapping annotation inherits a root path from the class level @ReuestMapping annotation on UserEndpoint. The return type of UserDto will be
+	 * the method level @GetMapping annotation inherits a root path from the class level @RequestMapping annotation on UserEndpoint. The return type of UserDto will be
 	 * serialized to a JSON representation via Jackson, a Java JSON marshalling library that Spring uses under the covers. You can hit this endpoint yourself in Postman, but
 	 * will need to pass an authentication header as well. You can see how this is done by the application by opening up the network tab in the browser when you log in.
 	 *
-	 * Note: If you're wondering about what Optional is here, this is a Java utility for null saftey in that it forces the programmer to check the nullability of a value before
-	 * accessing that value itself in an attempt to prevent occurence of NullPointerExceptions. In this case, it is possible that the user we want to get the details of does not exist.
+	 * Note: If you're wondering about what Optional is here, this is a Java utility for null safety in that it forces the programmer to check the nullability of a value before
+	 * accessing that value itself in an attempt to prevent occurrence of NullPointerExceptions. In this case, it is possible that the user we want to get the details of does not exist.
 	 * In this case, we would return Optional.empty() to signify that it is a null result. If you want to read more about Optional, see: https://www.baeldung.com/java-optional
 	 */
 	@GetMapping(value = "", produces = "application/json")
@@ -69,7 +69,7 @@ public class UserEndpoint {
 
 	/**
 	 * The @PostMapping annotation is very similar to the @GetMapping annotation except that it expects HTTP POST requests instead of GET request. Because of this, a post can
-	 * accept a payload of data in its post body. You can almost think of a GET call as a function which takes no parameters, while a POST call is a function that takes a paramter
+	 * accept a payload of data in its post body. You can almost think of a GET call as a function which takes no parameters, while a POST call is a function that takes a parameter
 	 * via the POST body. In this case, the body of the request is JSON that is serialized via Jackson into a RegistrationRequest Java object. The application calls this when you
 	 * register as a new user.
 	 *

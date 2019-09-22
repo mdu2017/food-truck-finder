@@ -6,5 +6,3 @@ out
 .moowork
 .eslintrc
 application.yml
-package.json
-package-lock.json

@@ -12,7 +12,7 @@ public class ExampleEndpoint {
     private String hello = "unset";
 
     @RequestMapping(value = "/example/hello-receive", method = RequestMethod.POST)
-    @CrossOrigin(origins = "http://localhost:3000")
+    //@CrossOrigin(origins = "http://localhost:3000")
     public String helloReceive(@RequestBody String request) {
         System.out.println("Received: " + request);
         this.hello = request;

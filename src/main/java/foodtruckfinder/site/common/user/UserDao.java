@@ -54,9 +54,9 @@ public class UserDao {
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.map(
-					"principal", userAuthentication.getUser().getId(),
-					"password", userAuthentication.getUser().getPrincipal(),
-					"userId", userAuthentication.getPassword());
+					"principal", userAuthentication.getUser().getPrincipal(),
+					"password", userAuthentication.getPassword(),
+					"userId", userAuthentication.getUser().getId());
 
 			jdbcTemplate.update(sql, parameters);
 			return userAuthentication;

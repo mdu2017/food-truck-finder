@@ -394,7 +394,7 @@ class Page1 extends React.Component {
 				}
 
 				{ _.isDefined(this.props.user) &&
-				<div>Welcome, {this.props.user.username}!</div>
+				<div>Welcome, {this.props.user.principal}!</div>
 				}
 			</div>
 		);

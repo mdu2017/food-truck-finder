@@ -34,7 +34,7 @@ class LoginForm extends React.Component {
 					       onChange={e => this.setPassword(e.target.value)} />
 				</div>
 
-				<Link to="/"><button type="submit" className="btn btn-primary">Submit</button></Link>
+				<button type="submit" className="btn btn-primary">Submit</button>
 
 
 			</form>

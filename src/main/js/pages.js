@@ -390,11 +390,11 @@ class Page1 extends React.Component {
 				This is page 1.
 
 				{ _.isDefined(this.props.authentication) &&
-				<div>{this.props.authentication['access_token']}</div>
+				<div>{this.props.authentication}</div>
 				}
 
 				{ _.isDefined(this.props.user) &&
-				<div>Welcome, {this.props.user.principal}!</div>
+				<div>Welcome, {this.props.user}!</div>
 				}
 			</div>
 		);
@@ -403,8 +403,8 @@ class Page1 extends React.Component {
 
 Page1 = connect(
 	state => ({
-		authentication: Users.State.getAuthentication(state),
-		user: Users.State.getUser(state)
+		authentication: Users.getCookie('authentication'),
+		user: Users.getCookie('user')
 	})
 )(Page1);
 

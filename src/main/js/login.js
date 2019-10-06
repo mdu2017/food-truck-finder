@@ -36,7 +36,6 @@ class LoginForm extends React.Component {
 
 				<button type="submit" className="btn btn-primary">Submit</button>
 
-
 			</form>
 		);
 	}

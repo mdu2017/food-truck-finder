@@ -384,6 +384,12 @@ export class CreateSpecialPage extends React.Component {
 }
 
 class Page1 extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	logout = () => this.props.logout();
+
 	render() {
 		return (
 			<div className="container padded">
@@ -396,15 +402,19 @@ class Page1 extends React.Component {
 				{ _.isDefined(this.props.user) &&
 				<div>Welcome, {this.props.user}!</div>
 				}
+
+				<br/>
+				<button onClick={this.logout} className="btn btn-primary">Logout</button>
 			</div>
 		);
 	}
 }
 
 Page1 = connect(
-	state => ({
+	() => ({
 		authentication: Users.getCookie('authentication'),
-		user: Users.getCookie('user')
+		user: Users.getCookie('user'),
+		logout: Users.Actions.logout()
 	})
 )(Page1);
 

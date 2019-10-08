@@ -72,6 +72,8 @@ Actions.authenticate = (username, password) => {
 
 				return getUserDetails().then(user => {
 					dispatch(Actions.setUser(user));
+					window.alert(document.cookie);
+					window.location.href = '/';
 				});
 			}
 		);
@@ -79,20 +81,27 @@ Actions.authenticate = (username, password) => {
 };
 
 Actions.logout = () => {
-	return (dispatch) => {
-		dispatch(Actions.setAuthentication(null));
-		dispatch(Actions.setUser(null));
+	return () => {
+		Actions.setAuthentication(null);
+		Actions.setUser(null);
+		document.cookie = 'authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		document.cookie = 'user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		window.alert(document.cookie);
+		window.location.href = '/';
 	};
 };
 
 Actions.setAuthentication = authentication => {
-	document.cookie = 'authentication=' + authentication['access_token'] + '; path=/';
+	if(authentication) {
+		document.cookie = 'authentication=' + authentication['access_token'] + '; path=/';
+	}
 	return {type: Actions.Types.SET_AUTHENTICATION, authentication};
 };
 
 Actions.setUser = user => {
-	document.cookie = 'user=' + user['principal'] + ';  path=/';
-	window.alert(document.cookie);
+	if(user) {
+		document.cookie = 'user=' + user['principal'] + ';  path=/';
+	}
 	return {type: Actions.Types.SET_USER, user};
 };
 

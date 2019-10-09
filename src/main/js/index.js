@@ -8,6 +8,7 @@ export default class Index extends React.Component {
 		return (
 			<HashRouter>
 				<div>
+					{/* <Route exact path="/landing" component={Landing.Example} /> */}
 					<Route exact path="/" component={Pages.Home} />
 					<Route exact path="/user" component={Pages.HomeUser} />
 					<Route exact path="/register" component={Pages.RegisterPage} />
@@ -26,8 +27,7 @@ export default class Index extends React.Component {
 					<Route exact path="/owner" component={Pages.HomeOwner} />
 					<Route exact path="/owner/create-remove-food-truck" component={Pages.CreateRemoveFoodTruckPage} />
 					<Route exact path="/owner/edit-food-truck" component={Pages.EditFoodTruckPage} />
-					<Route exact path="/owner/edit-food-truck/edit-route-schedule"
-						   component={Pages.EditRouteSchedulePage} />
+					<Route exact path="/owner/edit-food-truck/edit-route-schedule" component={Pages.EditRouteSchedulePage} />
 					<Route exact path="/owner/create-event" component={Pages.CreateEventPage} />
 					<Route exact path="/owner/create-special" component={Pages.CreateSpecialPage} />
 					<Route exact path="/page-1" component={Pages.Page1} />

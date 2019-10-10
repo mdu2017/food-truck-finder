@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-// import Logo from "./foodtruck.png";
+import Logo from './foodtruck.png';
 import {
 	Collapse,
 	Navbar,
@@ -47,7 +47,7 @@ class CustomNavBar extends React.Component {
 			<div>
 				<Navbar color="light" light expand="md">
 					<NavbarBrand href="/">Food Truck Finder</NavbarBrand>
-					{/* <img src={Logo} width={30} height={30} mode="fit" /> */}
+					<img src={Logo} width={30} height={30} mode="fit" />
 					<NavbarToggler onClick={this.toggleProfile} />
 					<Collapse isOpen={this.state.ProfileOpen} navbar>
 						<Nav className="ml-auto" navbar>

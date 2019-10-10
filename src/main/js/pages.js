@@ -38,13 +38,9 @@ export class Home extends React.Component {
 				<div className="container padded">
 					This is the home page.
 					<ul>
-						{/* <li><Link to="/register">Create Account</Link></li> */}
-						{/* <li><Link to="/login">Login</Link></li> */}
-						{/* <li><Link to="/help">Help!!!</Link></li> */}
 						<li>
 							<Link to="/events">Events</Link>
 						</li>
-						{/* <li><Link to="/view-profile">View Profile</Link></li> */}
 						<li>
 							<Link to="/search-trucks">Search Food Trucks</Link>
 						</li>
@@ -57,7 +53,6 @@ export class Home extends React.Component {
 						<li>
 							<Link to="/about-free-tank-top">About Us</Link>
 						</li>
-						{/* <li><Link to="/">Home</Link></li> */}
 						<li>
 							<Link to="/page-1">Page 1</Link>
 						</li>

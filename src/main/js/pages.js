@@ -3,8 +3,8 @@ import _ from 'lodash';
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
-import * as Users from 'js/users';
-import * as Login from 'js/login';
+import * as Users from 'js/backend';
+import * as Login from 'js/forms';
 import axios from 'axios';
 import CustomNavBar from 'js/navBar';
 
@@ -65,93 +65,6 @@ export class Home extends React.Component {
 						{/* <li><Link to="/hello">Example Endpoint</Link></li> */}
 					</ul>
 				</div>
-			</div>
-		);
-	}
-}
-
-export class HomeUser extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is a user's home page.
-				<ul>
-					<li>
-						<Link to="/help">Help</Link>
-					</li>
-					<li>
-						<Link to="/events">Events</Link>
-					</li>
-					<li>
-						<Link to="/view-profile">View Profile</Link>
-					</li>
-					<li>
-						<Link to="/search-trucks">Search Food Trucks</Link>
-					</li>
-					<li>
-						<Link to="/search-users">Search Users</Link>
-					</li>
-					<li>
-						<Link to="/user/notifications">Notifications</Link>
-					</li>
-					<li>
-						<Link to="/about-free-tank-top">About Us</Link>
-					</li>
-					<li>
-						<Link to="/user">Home</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class HomeOwner extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is a owner's home page.
-				<ul>
-					<li>
-						<Link to="/help">Help</Link>
-					</li>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-					<li>
-						<Link to="/events">Events</Link>
-					</li>
-					<li>
-						<Link to="/owner/create-event">Create Event</Link>
-					</li>
-					<li>
-						<Link to="/owner/create-special">Create Special</Link>
-					</li>
-					<li>
-						<Link to="/owner/edit-food-truck">Edit Food Truck</Link>
-					</li>
-					<li>
-						<Link to="/owner/create-event">Create Event</Link>
-					</li>
-					<li>
-						<Link to="/owner/create-special">Create Special</Link>
-					</li>
-					<li>
-						<Link to="/view-profile">View Profile</Link>
-					</li>
-					<li>
-						<Link to="/search-trucks">Search Food Trucks</Link>
-					</li>
-					<li>
-						<Link to="/search-users">Search Users</Link>
-					</li>
-					<li>
-						<Link to="/user/notifications">Notifications</Link>
-					</li>
-					<li>
-						<Link to="/about-free-tank-top">About Us</Link>
-					</li>
-				</ul>
 			</div>
 		);
 	}
@@ -269,45 +182,6 @@ export class ForgotPasswordPage extends React.Component {
 	}
 }
 
-export class ViewProfilePage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the profile view page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-					<li>
-						<Link to="/user/edit-user">Edit User</Link>
-					</li>
-					<li>
-						<Link to="/login">Login</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class EditUserPage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the edit profile page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-					<li>
-						<Link to="/view-profile">View Profile</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
 export class SearchTrucksPage extends React.Component {
 	render() {
 		return (
@@ -382,89 +256,6 @@ export class ViewFoodTruckDetailsPage extends React.Component {
 					</li>
 					<li>
 						<Link to="/search-trucks">New Search</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class CreateRemoveFoodTruckPage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the create or remove food truck page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class EditFoodTruckPage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the edit food truck details page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-					<li>
-						<Link to="/owner/edit-food-truck/edit-route-schedule">
-							Edit Route/Schedule
-						</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class EditRouteSchedulePage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the edit food truck route and schedule page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-					<li>
-						<Link to="/owner/edit-food-truck">Edit Food Truck</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class CreateEventPage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the create event page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-				</ul>
-			</div>
-		);
-	}
-}
-
-export class CreateSpecialPage extends React.Component {
-	render() {
-		return (
-			<div className="container padded">
-				This is the create special page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
 					</li>
 				</ul>
 			</div>

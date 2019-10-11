@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from './foodtruck.png';
+import Logo from './images/foodtruck.png';
 import {
 	Collapse,
 	Navbar,
@@ -51,15 +51,21 @@ class CustomNavBar extends React.Component {
 					<NavbarToggler onClick={this.toggleProfile} />
 					<Collapse isOpen={this.state.ProfileOpen} navbar>
 						<Nav className="ml-auto" navbar>
-							<UncontrolledDropdown nav inNavbar>
+							<UncontrolledDropdown nav innavbar="true">
 								<DropdownToggle nav caret>
 									View Profile
 								</DropdownToggle>
 								<DropdownMenu right>
-									<DropdownItem tag={Link} to="/view-profile">
+									<DropdownItem
+										tag={Link}
+										to="/user/view-profile">
 										View Profile
 									</DropdownItem>
-									<DropdownItem>Manage Account</DropdownItem>
+									<DropdownItem
+										tag={Link}
+										to="/user/edit-user">
+										Manage Account
+									</DropdownItem>
 									<DropdownItem divider />
 									{/* Insert Logout Functionality */}
 									<DropdownItem>Logout</DropdownItem>

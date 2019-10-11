@@ -1,7 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 
-import * as Users from 'js/users';
+import * as Users from 'js/backend';
 import { Link } from 'react-router-dom';
 
 class LoginForm extends React.Component {
@@ -11,7 +11,6 @@ class LoginForm extends React.Component {
 	}
 
 	setPrincipal = principal => this.setState({ principal });
-
 	setPassword = password => this.setState({ password });
 
 	handleSubmit = event => {
@@ -69,9 +68,7 @@ class RegistrationForm extends React.Component {
 	}
 
 	setPrincipal = principal => this.setState({ principal });
-
 	setPassword = password => this.setState({ password });
-
 	setUsername = username => this.setState({ username });
 
 	handleSubmit = event => {

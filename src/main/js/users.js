@@ -33,7 +33,7 @@ export class HomeUser extends React.Component {
 							<Link to="/events">Events</Link>
 						</li>
 						<li>
-							<Link to="/view-profile">View Profile</Link>
+							<Link to="/user/view-profile">View Profile</Link>
 						</li>
 						<li>
 							<Link to="/search-trucks">Search Food Trucks</Link>
@@ -60,19 +60,22 @@ export class HomeUser extends React.Component {
 export class ViewUserProfilePage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the user's profile view page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-					<li>
-						<Link to="/user/edit-user">Edit User</Link>
-					</li>
-					<li>
-						<Link to="/login">Login</Link>
-					</li>
-				</ul>
+			<div>
+				<CustomNavBar />
+				<div className="container padded">
+					This is the user's profile view page.
+					<ul>
+						<li>
+							<Link to="/">Home</Link>
+						</li>
+						<li>
+							<Link to="/user/edit-user">Edit User</Link>
+						</li>
+						<li>
+							<Link to="/login">Login</Link>
+						</li>
+					</ul>
+				</div>
 			</div>
 		);
 	}

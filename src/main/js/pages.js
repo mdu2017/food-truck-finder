@@ -74,7 +74,7 @@ export class RegisterPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar isLoginPage={true} />
+				<CustomNavBar />
 				<div>
 					<div className="row">
 						<div className="col-6 offset-md-3">
@@ -94,7 +94,7 @@ export class LoginPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar isLoginPage={true} />
+				<CustomNavBar />
 				<div className="row">
 					<div className="col-6 offset-md-3">
 						<h2>Login</h2>

@@ -20,13 +20,13 @@ class CustomNavBar extends React.Component {
 		super(props);
 		this.toggleProfile = this.toggleProfile.bind(this);
 		this.state = {
-			ProfileOpen: false,
-			isLoginPage: props.isLoginPage
+			viewProfileDrop: props.viewProfileDrop,
+			isLoggedIn: props.isLoggedIn
 		};
 	}
 
 	displayLoginButton() {
-		if (!this.state.isLoginPage) {
+		if (!this.state.isLoggedIn) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
@@ -36,9 +36,33 @@ class CustomNavBar extends React.Component {
 		return null;
 	}
 
+	displayViewProfile() {
+		if (this.state.isLoggedIn) {
+			return (
+				<div>
+					<DropdownToggle nav caret>
+						View Profile
+					</DropdownToggle>
+					<DropdownMenu right>
+						<DropdownItem tag={Link} to="/user/view-profile">
+							View Profile
+						</DropdownItem>
+						<DropdownItem tag={Link} to="/user/edit-user">
+							Manage Account
+						</DropdownItem>
+						<DropdownItem divider />
+						{/* Insert Logout Functionality */}
+						<DropdownItem>Logout</DropdownItem>
+					</DropdownMenu>
+				</div>
+			);
+		}
+		return null;
+	}
+
 	toggleProfile() {
 		this.setState({
-			ProfileOpen: !this.state.ProfileOpen
+			viewProfileDrop: !this.state.viewProfileDrop
 		});
 	}
 
@@ -49,27 +73,10 @@ class CustomNavBar extends React.Component {
 					<NavbarBrand href="/">Food Truck Finder</NavbarBrand>
 					<img src={Logo} width={30} height={30} mode="fit" />
 					<NavbarToggler onClick={this.toggleProfile} />
-					<Collapse isOpen={this.state.ProfileOpen} navbar>
+					<Collapse isOpen={this.state.viewProfileDrop} navbar>
 						<Nav className="ml-auto" navbar>
 							<UncontrolledDropdown nav innavbar="true">
-								<DropdownToggle nav caret>
-									View Profile
-								</DropdownToggle>
-								<DropdownMenu right>
-									<DropdownItem
-										tag={Link}
-										to="/user/view-profile">
-										View Profile
-									</DropdownItem>
-									<DropdownItem
-										tag={Link}
-										to="/user/edit-user">
-										Manage Account
-									</DropdownItem>
-									<DropdownItem divider />
-									{/* Insert Logout Functionality */}
-									<DropdownItem>Logout</DropdownItem>
-								</DropdownMenu>
+								{this.displayViewProfile()}
 							</UncontrolledDropdown>
 							<NavItem>{this.displayLoginButton()}</NavItem>
 						</Nav>

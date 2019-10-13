@@ -6,3 +6,4 @@ out
 .moowork
 .eslintrc
 application.yml
+src/main/resources/application.yml

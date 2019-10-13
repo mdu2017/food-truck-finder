@@ -64,18 +64,20 @@ export { LoginForm };
 class RegistrationForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { principal: null, password: null, username: null };
+		this.state = { principal: null, password: null, username: null, owner: null };
 	}
 
 	setPrincipal = principal => this.setState({ principal });
 	setPassword = password => this.setState({ password });
 	setUsername = username => this.setState({ username });
+	setOwner = owner => this.setOwner({ owner });
 
 	handleSubmit = event => {
 		this.props.register({
 			principal: this.state.principal,
 			password: this.state.password,
-			username: this.state.username
+			username: this.state.username,
+			owner: this.state.owner
 		}); // Add registration
 		event.preventDefault();
 	};
@@ -115,6 +117,13 @@ class RegistrationForm extends React.Component {
 						onChange={e => this.setPassword(e.target.value)}
 					/>
 				</div>
+
+				<input type="checkbox"
+					   name="owner"
+					   className="form-control"
+					   id="owner"/> Owner?
+
+				<br/>
 
 				{/* <div className="form-group">
 					<label htmlFor="passwordInput">Retype Password</label>

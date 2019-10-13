@@ -60,14 +60,16 @@ public class UserDao {
 			String sql = "UPDATE USER SET " +
 					"PRINCIPAL = :principal, " +
 					"PASSWORD = :password, " +
-					"Username = :username " +
+					"Username = :username, " +
+					"isOwner = :owner " +
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),
 					"username", userAuthentication.getUser().getUsername(),
 					"password", userAuthentication.getPassword(),
-					"userId", userAuthentication.getUser().getId());
+					"userId", userAuthentication.getUser().getId(),
+					"owner", userAuthentication.getUser().getIsOwner());
 
 			jdbcTemplate.update(sql, parameters);
 			return userAuthentication;

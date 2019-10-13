@@ -43,7 +43,9 @@ public class UserDao {
 			userDto.setPrincipal(rs.getString("PRINCIPAL"));
 			userDto.setUsername(rs.getString("USERNAME"));
 			userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
-			return userAuthenticationDto;
+            //Need this for stuffy stuff
+			userDto.setRoles(_Lists.list("ROLE_USER"));
+            return userAuthenticationDto;
 		});
 
 		return Optional.ofNullable(result);

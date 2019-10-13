@@ -32,15 +32,6 @@
             UNIQUE KEY `USER_ID_UNIQUE` (`USER_ID`)
             );
 
-            CREATE TABLE `ATTENDING_EVENT` (
-            `TRUCK_ID` int(11) NOT NULL,
-            `EVENT_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`EVENT_ID`),
-            KEY `HOSTED_BY_idx` (`EVENT_ID`),
-            CONSTRAINT `ATTENDED_BY` FOREIGN KEY (`TRUCK_ID`) REFERENCES `FOOD_TRUCK` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
-            CONSTRAINT `HOSTED_BY` FOREIGN KEY (`EVENT_ID`) REFERENCES `EVENT` (`EVENT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
-            );
-
             CREATE TABLE `FOOD_TRUCK` (
             `FOOD_TRUCK_ID` int(11) NOT NULL AUTO_INCREMENT,
             `NAME` varchar(45) NOT NULL,
@@ -61,15 +52,6 @@
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
             PRIMARY KEY (`TRUCK_ID`)
-            );
-
-            CREATE TABLE `EVENT` (
-            `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT,
-            `DESCRIPTION` varchar(300) NOT NULL,
-            `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`EVENT_ID`),
-            KEY `Stop_idx` (`STOP_ID`),
-            CONSTRAINT `Stop` FOREIGN KEY (`STOP_ID`) REFERENCES `TRUCK_STOP` (`STOP_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `FOOD_TYPE` (
@@ -121,6 +103,24 @@
             `END` datetime NOT NULL,
             `LOCATION` double NOT NULL,
             PRIMARY KEY (`STOP_ID`)
+            );
+
+            CREATE TABLE `EVENT` (
+            `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `DESCRIPTION` varchar(300) NOT NULL,
+            `STOP_ID` int(11) NOT NULL,
+            PRIMARY KEY (`EVENT_ID`),
+            KEY `Stop_idx` (`STOP_ID`),
+            CONSTRAINT `Stop` FOREIGN KEY (`STOP_ID`) REFERENCES `TRUCK_STOP` (`STOP_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            );
+
+            CREATE TABLE `ATTENDING_EVENT` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `EVENT_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`EVENT_ID`),
+            KEY `HOSTED_BY_idx` (`EVENT_ID`),
+            CONSTRAINT `ATTENDED_BY` FOREIGN KEY (`TRUCK_ID`) REFERENCES `FOOD_TRUCK` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+            CONSTRAINT `HOSTED_BY` FOREIGN KEY (`EVENT_ID`) REFERENCES `EVENT` (`EVENT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
         </sql>
     </changeSet>

@@ -12,6 +12,7 @@ import alloy.util.Momento;
  */
 public class UserDto implements Momento<String> {
 	private Long id;
+	private List<String> roles;
 	private String principal;
 	private String username;
 	private boolean isOwner;
@@ -19,6 +20,10 @@ public class UserDto implements Momento<String> {
 	public Long getId() {
 		return id;
 	}
+
+	public List<String> getRoles() { return roles; }
+
+	public void setRoles(List<String> roles) { this.roles = roles; }
 
 	public void setId(Long id) {
 		this.id = id;

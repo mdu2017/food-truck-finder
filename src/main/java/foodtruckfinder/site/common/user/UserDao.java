@@ -41,10 +41,34 @@ public class UserDao {
 			userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
 			userDto.setId(rs.getLong("USER_ID"));
 			userDto.setPrincipal(rs.getString("PRINCIPAL"));
+			userDto.setUsername(rs.getString("USERNAME"));
+			userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
 			return userAuthenticationDto;
 		});
 
 		return Optional.ofNullable(result);
+	}
+
+	/*Same as findUserByPrincipal but searches by Username*/
+	public Optional<UserAuthenticationDto> findUserByUsername(String username) { // == get user
+		String sql = "SELECT * FROM `USER` WHERE USERNAME = :username";
+		Map<String, ?> parameters = _Maps.map("username", username);
+
+		UserAuthenticationDto results = jdbcTemplate.query(sql, parameters, rs -> {
+			rs.next();
+
+			UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
+			UserDto userDto = new UserDto();
+			userAuthenticationDto.setUser(userDto);
+			userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
+			userDto.setId(rs.getLong("USER_ID"));
+			userDto.setPrincipal(rs.getString("PRINCIPAL"));
+			userDto.setUsername(rs.getString("USERNAME"));
+			userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
+			return userAuthenticationDto;
+		});
+
+		return Optional.ofNullable(results);
 	}
 
 	/**

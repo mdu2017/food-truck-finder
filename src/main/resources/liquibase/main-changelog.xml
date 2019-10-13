@@ -101,7 +101,8 @@
             `STOP_ID` int(11) NOT NULL,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
-            `LOCATION` double NOT NULL,
+            `LATITUDE` double NOT NULL,
+            `LONGITUDE` double NOT NULL,
             PRIMARY KEY (`STOP_ID`)
             );
 

@@ -14,9 +14,7 @@ public class UserDto implements Momento<String> {
 	private Long id;
 	private String principal;
 	private String username;
-	private List<String> roles;
-	private UserType type;
-	private Map<String, Object> attributes;
+	private boolean isOwner;
 
 	public Long getId() {
 		return id;
@@ -30,49 +28,23 @@ public class UserDto implements Momento<String> {
 		this.principal = principal;
 	}
 
-	public void setUsername(String username) {
-		this.username = username;
-	}
-
-	public void setRoles(List<String> roles) {
-		this.roles = roles;
-	}
-
-	public void setType(UserType type) {
-		this.type = type;
-	}
-
-	public void setAttributes(Map<String, Object> attributes) {
-		this.attributes = attributes;
-	}
-
 	public String getPrincipal() {
 		return principal;
 	}
 
-	public String getUsername() {
-		return username;
-	}
+	public String getUsername() { return username; }
 
-	public List<String> getRoles() {
-		return roles;
-	}
+	public void setUsername(String username) { this.username = username; }
 
-	public Map<String, Object> getAttributes() {
-		return attributes;
-	}
+	public void setIsOwner(boolean value) { this.isOwner = value; }
 
-	public UserType getType() {
-		return type;
-	}
+	public boolean getIsOwner() { return isOwner; }
 
+	/*What even is this*/
 	@JsonIgnore
 	@Override
 	public String getMomento() {
 		return principal;
 	}
 
-	public enum UserType {
-		OWNER, SITTER
-	}
 }

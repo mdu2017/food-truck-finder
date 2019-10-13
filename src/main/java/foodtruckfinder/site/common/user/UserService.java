@@ -33,6 +33,7 @@ public class UserService {
 	public static class RegistrationRequest {
 		private String principal;
 		private String password;
+		private String username;
 		private Map<String, Object> attributes;
 
 		public String getPrincipal() {
@@ -41,6 +42,14 @@ public class UserService {
 
 		public void setPrincipal(String principal) {
 			this.principal = principal;
+		}
+
+		public String getUsername() {
+			return username;
+		}
+
+		public void setUsername(String username) {
+			this.username = username;
 		}
 
 		public String getPassword() {
@@ -63,6 +72,7 @@ public class UserService {
 	public UserDto register(RegistrationRequest request) {
 		UserDto userDto = new UserDto();
 		userDto.setPrincipal(request.getPrincipal());
+		userDto.setUsername(request.getUsername());
 		userDto.setRoles(_Lists.list("ROLE_USER"));
 
 		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();

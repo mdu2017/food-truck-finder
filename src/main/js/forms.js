@@ -74,7 +74,8 @@ class RegistrationForm extends React.Component {
 	handleSubmit = event => {
 		this.props.register({
 			principal: this.state.principal,
-			password: this.state.password
+			password: this.state.password,
+			username: this.state.username
 		}); // Add registration
 		event.preventDefault();
 	};

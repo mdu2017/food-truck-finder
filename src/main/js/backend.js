@@ -72,8 +72,7 @@ Actions.authenticate = (username, password) => {
 
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
-				window.alert(document.cookie);
-				window.location.href = '/';
+
 			});
 		});
 	};

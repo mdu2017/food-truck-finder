@@ -50,11 +50,13 @@ public class UserDao {
 		if(userAuthentication.getUser().getId() != null) {
 			String sql = "UPDATE USER SET " +
 					"PRINCIPAL = :principal, " +
-					"PASSWORD = :password " +
+					"PASSWORD = :password, " +
+					"Username = :username " +
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),
+					"username", userAuthentication.getUser().getUsername(),
 					"password", userAuthentication.getPassword(),
 					"userId", userAuthentication.getUser().getId());
 
@@ -66,7 +68,9 @@ public class UserDao {
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),
-					"password", userAuthentication.getPassword());
+					"password", userAuthentication.getPassword(),
+					"username", userAuthentication.getUser().getUsername(),
+					"isOwner", userAuthentication.getUser().getIsOwner());
 
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 

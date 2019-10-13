@@ -7,7 +7,9 @@ import * as Users from 'js/backend';
 import * as Login from 'js/forms';
 import axios from 'axios';
 import CustomNavBar from 'js/navBar';
-import { Progress, Container, Row, Col, Button, Media } from 'reactstrap';
+import { Progress, Container, Row, Col, Button,
+	Media, ListGroup, ListGroupItem, ListGroupItemHeading,
+	ListGroupItemText } from 'reactstrap';
 import SampleMenu from './images/MenuSample.png';
 
 export class Home extends React.Component {
@@ -189,6 +191,9 @@ export class SearchUsersPage extends React.Component {
 					<li>
 						<Link to="/">Home</Link>
 					</li>
+					<li>
+						<Link to="/customer-details">View Customer Details</Link>
+					</li>
 				</ul>
 			</div>
 		);
@@ -320,6 +325,44 @@ export class ViewFoodTruckDetailsPage extends React.Component {
 	}
 }
 
+//Template customer detail page
+export class viewCustomerDetailsPage extends React.Component{
+	constructor(props) {
+		super(props);
+	}
+
+	render(){
+		return(
+			<ListGroup>
+				<ListGroupItem>
+					<h2><text style={{color: 'green'}}> -- Reviews by baylorbear --</text></h2>
+				</ListGroupItem>
+				<ListGroupItem>
+					<ListGroupItemHeading>I Love this food truck!</ListGroupItemHeading>
+					<ListGroupItemText>
+						Food was great, tasted good, service was fast.
+					</ListGroupItemText>
+				</ListGroupItem>
+				<ListGroupItem>
+					<ListGroupItemHeading>Ok food truck.</ListGroupItemHeading>
+					<ListGroupItemText>
+						Mediocre food and average experience.
+					</ListGroupItemText>
+				</ListGroupItem>
+				<ListGroupItem>
+					<ListGroupItemHeading>Bad food truck.</ListGroupItemHeading>
+					<ListGroupItemText>
+						Bad food, stay away.
+					</ListGroupItemText>
+				</ListGroupItem>
+			</ListGroup>
+
+
+		);
+	}
+}
+
+//Test logout page
 class Page1 extends React.Component {
 	constructor(props) {
 		super(props);

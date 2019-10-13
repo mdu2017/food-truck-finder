@@ -57,6 +57,11 @@ export default class Index extends React.Component {
 					/>
 					<Route
 						exact
+						path="/customer-details"
+						component={Pages.viewCustomerDetailsPage}
+					/>
+					<Route
+						exact
 						path="/user/notifications"
 						component={Pages.NotificationsPage}
 					/>

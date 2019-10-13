@@ -26,7 +26,7 @@ public class UserDao {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
-	public Optional<UserAuthenticationDto> findUserByPrincipal(String principal) {
+	public Optional<UserAuthenticationDto> findUserByPrincipal(String principal) { // == get user
 		String sql = "SELECT * FROM `USER` WHERE PRINCIPAL = :principal";
 		Map<String, ?> parameters = _Maps.map("principal", principal);
 
@@ -46,7 +46,14 @@ public class UserDao {
 		return Optional.ofNullable(result);
 	}
 
-	public UserAuthenticationDto save(UserAuthenticationDto userAuthentication) {
+	/**
+	 * This function saves a user to the database, and if it doesn't have an id, it creates one and inserts it into the database.
+	 *
+	 * This needs to check that email is unique**
+	 * @param userAuthentication the authenticated user
+	 * @return the updated authenticated user
+	 */
+	public UserAuthenticationDto save(UserAuthenticationDto userAuthentication) { // == register/update user
 		if(userAuthentication.getUser().getId() != null) {
 			String sql = "UPDATE USER SET " +
 					"PRINCIPAL = :principal, " +

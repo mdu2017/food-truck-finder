@@ -72,7 +72,7 @@ public class UserDao {
 			return userAuthentication;
 		}
 		else {
-			String sql = "INSERT INTO USER (PRINCIPAL, PASSWORD) VALUES (:principal, :password)";
+			String sql = "INSERT INTO USER (PRINCIPAL, Username, PASSWORD, isOwner) VALUES (:principal, :username, :password, :isOwner)";
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),

@@ -9,6 +9,7 @@ import java.util.stream.Collectors;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Primary;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -23,6 +24,7 @@ import alloy.util._Maps;
  */
 @Repository
 public class UserDao {
+
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -39,7 +41,6 @@ public class UserDao {
 			userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
 			userDto.setId(rs.getLong("USER_ID"));
 			userDto.setPrincipal(rs.getString("PRINCIPAL"));
-			userDto.setRoles(_Lists.list("ROLE_USER"));
 			return userAuthenticationDto;
 		});
 

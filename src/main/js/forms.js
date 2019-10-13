@@ -4,6 +4,7 @@ import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import { Link } from 'react-router-dom';
 
+//Form for logging in
 class LoginForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -61,6 +62,7 @@ LoginForm = connect(
 
 export { LoginForm };
 
+//Form for creating a new account
 class RegistrationForm extends React.Component {
 	constructor(props) {
 		super(props);

@@ -17,6 +17,7 @@ export function authenticate(username, password) {
 			username: 'food-truck-finder-app',
 			password: 'food-truck-finder-app-secret'
 		}
+
 	});
 }
 
@@ -55,6 +56,7 @@ Actions.Types = {
 	SET_USER: 'SET_USER'
 };
 
+//Registers user when creating an account
 Actions.register = user => {
 	return dispatch => {
 		return register(user).then(() => {
@@ -65,20 +67,23 @@ Actions.register = user => {
 	};
 };
 
+//Authenticates the user when logging in
 Actions.authenticate = (username, password) => {
 	return dispatch => {
 		return authenticate(username, password).then(authentication => {
 			dispatch(Actions.setAuthentication(authentication));
 
+
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
-				window.alert(document.cookie);
+				// window.alert(document.cookie);
 				window.location.href = '/';
 			});
 		});
 	};
 };
 
+//Logs the user out (clears cookies)
 Actions.logout = () => {
 	return () => {
 		Actions.setAuthentication(null);
@@ -86,7 +91,7 @@ Actions.logout = () => {
 		document.cookie =
 			'authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-		window.alert(document.cookie);
+		// window.alert(document.cookie);
 		window.location.href = '/';
 	};
 };

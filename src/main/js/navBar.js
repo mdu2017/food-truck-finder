@@ -14,6 +14,8 @@ import {
 	DropdownMenu,
 	DropdownItem
 } from 'reactstrap';
+import {connect} from 'react-redux';
+import * as Users from 'js/backend';
 
 class CustomNavBar extends React.Component {
 	constructor(props) {
@@ -25,17 +27,21 @@ class CustomNavBar extends React.Component {
 		};
 	}
 
+	//Display login button if not currently logged in
 	displayLoginButton() {
-		if (!this.state.isLoggedIn) {
+		if(!this.state.isLoggedIn) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
 				</NavLink>
 			);
 		}
-		return null;
 	}
 
+	//Logout functionality
+	logout = () => this.props.logout();
+
+	//Dropdown menu for viewing profile (on user/owner homepage)
 	displayViewProfile() {
 		if (this.state.isLoggedIn) {
 			return (
@@ -51,8 +57,8 @@ class CustomNavBar extends React.Component {
 							Manage Account
 						</DropdownItem>
 						<DropdownItem divider />
-						{/* Insert Logout Functionality */}
-						<DropdownItem>Logout</DropdownItem>
+						{/* Insert Logout Functionality (works, but not sure if it's the best way)*/}
+						<DropdownItem onClick={this.logout}>Logout</DropdownItem>
 					</DropdownMenu>
 				</div>
 			);
@@ -60,12 +66,14 @@ class CustomNavBar extends React.Component {
 		return null;
 	}
 
+	//Set state for profile
 	toggleProfile() {
 		this.setState({
 			viewProfileDrop: !this.state.viewProfileDrop
 		});
 	}
 
+	//Displays the navbar with dropdown menu; login button
 	render() {
 		return (
 			<div>
@@ -86,5 +94,12 @@ class CustomNavBar extends React.Component {
 		);
 	}
 }
+
+//Connect to cause logout
+CustomNavBar = connect(() => ({
+	authentication: Users.getCookie('authentication'),
+	user: Users.getCookie('user'),
+	logout: Users.Actions.logout()
+}))(CustomNavBar);
 
 export default CustomNavBar;

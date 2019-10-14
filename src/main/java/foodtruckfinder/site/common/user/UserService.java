@@ -34,7 +34,7 @@ public class UserService {
 		private String principal;
 		private String password;
 		private String username;
-		private boolean isOwner;
+		private boolean owner;
 		private Map<String, Object> attributes;
 
 		public String getPrincipal() {
@@ -53,12 +53,12 @@ public class UserService {
 			this.username = username;
 		}
 
-		public boolean getIsOwner() {
-			return isOwner;
+		public boolean getOwner() {
+			return owner;
 		}
 
-		public void setIsOwner(boolean isOwner) {
-			this.isOwner = isOwner;
+		public void setOwner(boolean owner) {
+			this.owner = owner;
 		}
 
 		public String getPassword() {
@@ -82,7 +82,7 @@ public class UserService {
 		UserDto userDto = new UserDto();
 		userDto.setPrincipal(request.getPrincipal());
 		userDto.setUsername(request.getUsername());
-		userDto.setIsOwner(request.getIsOwner());
+		userDto.setIsOwner(request.getOwner());
 		userDto.setRoles(_Lists.list("ROLE_USER"));
 
 		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();

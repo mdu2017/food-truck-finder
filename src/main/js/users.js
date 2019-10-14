@@ -61,7 +61,7 @@ export class ViewUserProfilePage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<CustomNavBar isLoggedIn={true} />
 				<div className="container padded">
 					This is the user's profile view page.
 					<ul>

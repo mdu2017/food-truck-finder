@@ -73,6 +73,11 @@ Actions.authenticate = (username, password) => {
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
 
+				if(getCookie('owner')) {
+					window.location.href = '/#/owner';
+				}else {
+					window.location.href = '/#/user';
+				}
 			});
 		});
 	};
@@ -85,6 +90,9 @@ Actions.logout = () => {
 		document.cookie =
 			'authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		document.cookie = 'userid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		document.cookie = 'username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		document.cookie = 'owner= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		window.alert(document.cookie);
 		window.location.href = '/';
 	};
@@ -100,7 +108,9 @@ Actions.setAuthentication = authentication => {
 
 Actions.setUser = user => {
 	if (user) {
-		document.cookie = 'user=' + user['principal'] + ';  path=/';
+		document.cookie = 'user=' + user['username'] + ';  path=/';
+		document.cookie = 'userid=' + user['id'] + '; path=/';
+		document.cookie = 'owner=' + String(user['isOwner']) + '; path=/';
 	}
 	return { type: Actions.Types.SET_USER, user };
 };

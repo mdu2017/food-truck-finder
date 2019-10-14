@@ -44,6 +44,10 @@ public interface _Maps {
 		return ImmutableMap.of(k1, v1, k2, v2, k3, v3);
 	}
 
+	static <T, N> ImmutableMap<T, N> map(T k1, N v1, T k2, N v2, T k3, N v3, T k4, N v4) {
+		return ImmutableMap.of(k1, v1, k2, v2, k3, v3, k4, v4);
+	}
+
 	@SafeVarargs
 	static <T, N> ImmutableMap<T, N> mapPairs(Pair<T, N>... elements) {
 		ImmutableMap.Builder<T, N> builder = ImmutableMap.builder();

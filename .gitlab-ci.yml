@@ -11,7 +11,7 @@ test:
     - gradle test
   artifacts:
     reports:
-      junit: build/test-results/test/**/*.xml
+      junit:
 
 deploy:
   stage: deploy

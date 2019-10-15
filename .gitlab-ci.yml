@@ -1,4 +1,4 @@
-image: java:11
+
 
 stages:
   - test
@@ -11,6 +11,8 @@ java:
   artifacts:
     reports:
       junit: build/test-results/test/**/TEST-*.xml
+
+image: java:11
 
 deploy:
   stage: deploy

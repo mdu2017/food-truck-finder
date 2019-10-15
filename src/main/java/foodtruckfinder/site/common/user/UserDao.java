@@ -25,6 +25,7 @@ import alloy.util._Maps;
 @Repository
 public class UserDao {
 
+	@SuppressWarnings("SpringJavaInjectionPointsAutowiringInspection")
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
@@ -112,5 +113,16 @@ public class UserDao {
 			userAuthentication.getUser().setId(key.longValue());
 			return userAuthentication;
 		}
+	}
+
+	public List<String> getSubscriptions(Long user_id){
+		//todo:: fix this because name is not necessarily unique
+		//is that actually a problem though?  Yes duplicates will show up but so what?
+		//One user is subscribed to multiple "Torchy's Tacos"
+		String sql = "SELECT name FROM SUBSCRIPTIONS, FOOD_TRUCK WHERE " +
+				"SUBSCRIPTIONS.TRUCK_ID = FOOD_TRUCK.TRUCK_ID AND USER_ID = :user_id";
+
+		Map<String, ?> params = _Maps.map("user_id", user_id);
+        return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("name"));
 	}
 }

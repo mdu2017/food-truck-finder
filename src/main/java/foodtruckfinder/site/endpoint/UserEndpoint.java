@@ -90,4 +90,9 @@ public class UserEndpoint {
 	public UserDto update(@RequestBody UpdateRequest request) {
 		return userService.update(request);
 	}
+
+	@PostMapping(value = "/owner/getFoodTrucks")
+	public Optional<List<Long>> getOwnedFoodTrucks(){
+		return userService.getOwnedFoodTrucks(SecurityContextHolder.getContext().getAuthentication().getName());
+	}
 }

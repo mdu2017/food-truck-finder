@@ -138,4 +138,12 @@ public class UserDao {
 		Map<String, ?> params = _Maps.map("user_id", user_id);
         return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("name"));
 	}
+
+	public Optional<List<Long>> getOwnedFoodTrucks(Long owner_id){
+		String sql = "SELECT FOOD_TRUCK_ID FROM FOOD_TRUCK WHERE " +
+				"OWNER_ID = :owner_id";
+
+		Map<String, ?> params = _Maps.map("owner_id", owner_id);
+		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID")));
+	}
 }

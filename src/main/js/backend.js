@@ -99,7 +99,6 @@ Actions.logout = () => {
 		document.cookie = 'userid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'owner= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-		window.alert(document.cookie);
 		window.location.href = '/';
 	};
 };

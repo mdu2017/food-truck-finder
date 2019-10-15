@@ -86,12 +86,12 @@ public class UserEndpoint {
 	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
 	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
 
-	@PostMapping(value = "/update")
+	@PostMapping(value = "/update", produces = "application/json")
 	public UserDto update(@RequestBody UpdateRequest request) {
 		return userService.update(request);
 	}
 
-	@PostMapping(value = "/owner/getFoodTrucks")
+	@PostMapping(value = "/owner/getFoodTrucks", produces = "application/json")
 	public Optional<List<Long>> getOwnedFoodTrucks(){
 		return userService.getOwnedFoodTrucks(SecurityContextHolder.getContext().getAuthentication().getName());
 	}

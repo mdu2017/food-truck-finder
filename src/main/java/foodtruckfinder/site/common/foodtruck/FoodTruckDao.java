@@ -114,22 +114,24 @@ public class FoodTruckDao {
 			//Add the menu to the database
 			String menusql = "";
 			List<Pair<Long, Triple<String, String, Double>>> menu = foodTruck.getMenu();
-            for (Pair<Long, Triple<String, String, Double>> objects : menu) {
-                //add each item to the database
-                menusql = "UPDATE MENU SET " +
-                        "NAME = :name" +
-                        "DESCRIPTION = :description " +
-                        "PRICE = :price " +
-                        "WHERE ITEM_ID = :itemID AND TRUCK_ID = :foodTruckId";
+			if(menu != null){
+                for (Pair<Long, Triple<String, String, Double>> objects : menu) {
+                    //add each item to the database
+                    menusql = "UPDATE MENU SET " +
+                            "NAME = :name" +
+                            "DESCRIPTION = :description " +
+                            "PRICE = :price " +
+                            "WHERE ITEM_ID = :itemID AND TRUCK_ID = :foodTruckId";
 
-                Map<String, ?> menuparams = _Maps.map(
-                        "foodTruckId", foodTruck.getId(),
-                        "name", objects.getSecond().getFirst(),
-                        "description", objects.getSecond().getSecond(),
-                        "price", objects.getSecond().getThird(),
-                        "itemID", objects.getFirst());
+                    Map<String, ?> menuparams = _Maps.map(
+                            "foodTruckId", foodTruck.getId(),
+                            "name", objects.getSecond().getFirst(),
+                            "description", objects.getSecond().getSecond(),
+                            "price", objects.getSecond().getThird(),
+                            "itemID", objects.getFirst());
 
-                jdbcTemplate.update(menusql, menuparams);
+                    jdbcTemplate.update(menusql, menuparams);
+                }
             }
 
 			//Update schedule in database

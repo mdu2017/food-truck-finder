@@ -4,13 +4,14 @@ stages:
   - test
   - deploy
 
-java:
+test:
   stage: test
+  image: java:11
   script:
     - gradle test
   artifacts:
     reports:
-      junit: build/test-results/test/**/TEST-*.xml
+      junit: build/test-results/test/**/*.xml
 
 deploy:
   stage: deploy

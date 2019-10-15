@@ -123,9 +123,9 @@ tasks.build.dependsOn buildTests
 
 test {
 	useJUnitPlatform()
-	exclude '**/test/integration/**'
-	exclude '**/test/functional/**'
-	exclude '**/test/harness/**'
+	//exclude '**/test/integration/**'
+	//exclude '**/test/functional/**'
+	//exclude '**/test/harness/**'
 }
 
 task integrationTest(type: Test, dependsOn: 'testClasses') {

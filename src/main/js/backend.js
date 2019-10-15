@@ -4,6 +4,10 @@ export function register(user) {
 	return axios.post('/api/user/register', user);
 }
 
+export function updateUser(user) {
+	return axios.post('/api/user/update', user);
+}
+
 export function authenticate(username, password) {
 	return axios({
 		method: 'post',
@@ -65,6 +69,16 @@ Actions.register = user => {
 	};
 };
 
+Actions.update = user => {
+	return dispatch => {
+		return updateUser(user).then(() => {
+			return dispatch(
+				Actions.authenticate(user.principal, user.password)
+			);
+		});
+	};
+};
+
 Actions.authenticate = (username, password) => {
 	return dispatch => {
 		return authenticate(username, password).then(authentication => {
@@ -73,8 +87,8 @@ Actions.authenticate = (username, password) => {
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
 
-				if(getCookie('user') != null) {
-					if(getCookie('owner') === 'true') {
+				if (getCookie('user') != null) {
+					if (getCookie('owner') === 'true') {
 						window.location.href = '/#/owner';
 					} else {
 						window.location.href = '/#/user';

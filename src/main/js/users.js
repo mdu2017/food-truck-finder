@@ -17,6 +17,7 @@ import {
 	Input,
 	FormText
 } from 'reactstrap';
+import { State } from './backend';
 
 export class HomeUser extends React.Component {
 	render() {
@@ -84,7 +85,28 @@ export class ViewUserProfilePage extends React.Component {
 export class EditUserPage extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner'),
+			id: Users.getCookie('userid')
+		};
 	}
+
+	setPrincipal = principal => this.setState({ principal });
+	setPassword = password => this.setState({ password });
+
+	handleSubmit = event => {
+		this.props.updateUser({
+			principal: this.state.principal,
+			password: this.state.password,
+			username: this.state.username,
+			owner: this.state.owner.toString(),
+			id: this.state.id
+		}); // Add registration
+		event.preventDefault();
+	};
 
 	render() {
 		return (
@@ -128,6 +150,9 @@ export class EditUserPage extends React.Component {
 								name="email"
 								id="newEmail"
 								placeholder=""
+								onChange={e =>
+									this.setPrincipal(e.target.value)
+								}
 							/>
 						</FormGroup>
 						<br />
@@ -147,6 +172,7 @@ export class EditUserPage extends React.Component {
 								name="newpassword"
 								id="newPassword"
 								placeholder=""
+								onChange={e => this.setPassword(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup>
@@ -160,7 +186,7 @@ export class EditUserPage extends React.Component {
 								placeholder=""
 							/>
 						</FormGroup>
-						<Button>Submit</Button>
+						<Button onClick={this.handleSubmit}>Submit</Button>
 					</Form>
 				</div>
 			</div>
@@ -168,8 +194,13 @@ export class EditUserPage extends React.Component {
 	}
 }
 
-EditUserPage = connect(() => ({
-	authentication: Users.getCookie('authentication'),
-	user: Users.getCookie('user'),
-	email: Users.getCookie('email')
-}))(EditUserPage);
+EditUserPage = connect(
+	() => ({
+		authentication: Users.getCookie('authentication'),
+		user: Users.getCookie('user'),
+		email: Users.getCookie('email')
+	}),
+	dispatch => ({
+		updateUser: user => dispatch(Users.Actions.update(user))
+	})
+)(EditUserPage);

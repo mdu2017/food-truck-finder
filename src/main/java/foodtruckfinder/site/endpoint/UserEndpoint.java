@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
+import foodtruckfinder.site.common.user.UserService.UpdateRequest;
 import foodtruckfinder.site.common.user.UserDto;
 
 /**
@@ -79,5 +80,10 @@ public class UserEndpoint {
 	@PostMapping(value = "/register")
 	public UserDto register(@RequestBody RegistrationRequest request) {
 		return userService.register(request);
+	}
+
+	@PostMapping(value = "/update")
+	public UserDto update(@RequestBody UpdateRequest request) {
+		return userService.update(request);
 	}
 }

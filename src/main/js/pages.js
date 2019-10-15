@@ -365,7 +365,8 @@ export class Page1 extends React.Component {
 Page1 = connect(() => ({
 	authentication: Users.getCookie('authentication'),
 	user: Users.getCookie('user'),
-	logout: Users.Actions.logout()
+	logout: Users.Actions.logout(),
+	id: Users.getCookie('userid')
 }))(Page1);
 
 export class HelloSend extends React.Component {

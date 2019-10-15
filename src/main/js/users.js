@@ -98,7 +98,7 @@ export class EditUserPage extends React.Component {
 	setPassword = password => this.setState({ password });
 
 	handleSubmit = event => {
-		this.props.updateUser({
+		this.props.update({
 			principal: this.state.principal,
 			password: this.state.password,
 			username: this.state.username,
@@ -201,6 +201,6 @@ EditUserPage = connect(
 		email: Users.getCookie('email')
 	}),
 	dispatch => ({
-		updateUser: user => dispatch(Users.Actions.update(user))
+		update: user => dispatch(Users.Actions.update(user))
 	})
 )(EditUserPage);

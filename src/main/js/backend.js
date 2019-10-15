@@ -4,7 +4,7 @@ export function register(user) {
 	return axios.post('/api/user/register', user);
 }
 
-export function updateUser(user) {
+export function update(user) {
 	return axios.post('/api/user/update', user);
 }
 
@@ -71,7 +71,7 @@ Actions.register = user => {
 
 Actions.update = user => {
 	return dispatch => {
-		return updateUser(user).then(() => {
+		return update(user).then(() => {
 			return dispatch(
 				Actions.authenticate(user.principal, user.password)
 			);

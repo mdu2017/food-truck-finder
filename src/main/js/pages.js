@@ -5,7 +5,6 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import * as Forms from 'js/forms';
-import axios from 'axios';
 import CustomNavBar from 'js/navBar';
 import {
 	Progress,
@@ -80,39 +79,39 @@ export class Home extends React.Component {
 								<hr />
 								<Nav vertical>
 									<NavItem>
-										<NavLink href="/">Dashboard</NavLink>
+										<NavLink href="/#/">Dashboard</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink href="/events">Events</NavLink>
+										<NavLink href="/#/events">Events</NavLink>
 									</NavItem>
 									<NavItem>
 										<NavLink
 											disabled={
-												!this.state.authentication
+												!this.state.username
 											}
-											href="/user/notifications">
+											href="/#/user/notifications">
 											Notifications
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink disabled href="/search-trucks">
+										<NavLink disabled href="/#/search-trucks">
 											Search Food Trucks
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink disabled href="/search-users">
+										<NavLink disabled href="/#/search-users">
 											Search Users
 										</NavLink>
 									</NavItem>
 									<NavItem>
 										<NavLink
 											disabled
-											href="/about-free-tank-top">
+											href="/#/about-free-tank-top">
 											About Us
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink href="/page-1">Page 1</NavLink>
+										<NavLink href="/#/page-1">Page 1</NavLink>
 									</NavItem>
 								</Nav>
 							</Col>

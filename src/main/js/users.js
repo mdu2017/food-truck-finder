@@ -4,8 +4,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
-import * as Login from 'js/forms';
-import axios from 'axios';
 import CustomNavBar from 'js/navBar';
 import {
 	UncontrolledTooltip,
@@ -15,14 +13,12 @@ import {
 	FormGroup,
 	Label,
 	Input,
-	FormText,
 	Row,
 	Nav,
 	NavItem,
 	NavLink,
 	Container
 } from 'reactstrap';
-import { State } from './backend';
 
 export class HomeUser extends React.Component {
 	render() {
@@ -95,39 +91,39 @@ export class ViewUserProfilePage extends React.Component {
 								<hr />
 								<Nav vertical>
 									<NavItem>
-										<NavLink href="/">Dashboard</NavLink>
+										<NavLink href="/#/">Dashboard</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink href="/events">Events</NavLink>
+										<NavLink href="/#/events">Events</NavLink>
 									</NavItem>
 									<NavItem>
 										<NavLink
 											disabled={
 												!this.state.authentication
 											}
-											href="/user/notifications">
+											href="/#/user/notifications">
 											Notifications
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink disabled href="/search-trucks">
+										<NavLink disabled href="/#/search-trucks">
 											Search Food Trucks
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink disabled href="/search-users">
+										<NavLink disabled href="/#/search-users">
 											Search Users
 										</NavLink>
 									</NavItem>
 									<NavItem>
 										<NavLink
 											disabled
-											href="/about-free-tank-top">
+											href="/#/about-free-tank-top">
 											About Us
 										</NavLink>
 									</NavItem>
 									<NavItem>
-										<NavLink href="/page-1">Page 1</NavLink>
+										<NavLink href="/#/page-1">Page 1</NavLink>
 									</NavItem>
 								</Nav>
 							</Col>
@@ -173,12 +169,12 @@ export class EditUserPage extends React.Component {
 					<h1>Manage Account</h1>
 					<br />{' '}
 					<span
-						style={
-							{
-								// textDecoration: 'underline',
-								// color: 'blue'
-							}
-						}
+						// style={
+						// 	{
+						// 		// textDecoration: 'underline',
+						// 		// color: 'blue'
+						// 	}
+						// }
 						href="#"
 						id="UncontrolledTooltipExample">
 						Username

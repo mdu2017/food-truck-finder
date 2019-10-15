@@ -1,14 +1,7 @@
-import _ from 'lodash';
-
 import React from 'react';
 import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
-import * as Users from 'js/backend';
-import * as Login from 'js/forms';
-import axios from 'axios';
 import CustomNavBar from 'js/navBar';
 import {
-	Col,
 	Button,
 	Form,
 	FormGroup,

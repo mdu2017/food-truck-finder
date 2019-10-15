@@ -11,7 +11,10 @@ import {
 	Input,
 	FormText,
 	ListGroup,
-	ListGroupItem
+	ListGroupItem,
+	Container,
+	Col,
+	Row
 } from 'reactstrap';
 
 export class CreateFoodTruckPage extends React.Component {
@@ -19,7 +22,6 @@ export class CreateFoodTruckPage extends React.Component {
 		super(props);
 		this.state = {
 			name: null,
-			route: null,
 			menu: null,
 			schedule: null,
 			price: null,
@@ -28,7 +30,6 @@ export class CreateFoodTruckPage extends React.Component {
 	}
 
 	setName = name => this.setState({ name });
-	setRoute = route => this.setState({ route });
 	setMenu = menu => this.setState({ menu });
 	setSchedule = schedule => this.setState({ schedule });
 	setPrice = price => this.setState({ price });
@@ -37,7 +38,6 @@ export class CreateFoodTruckPage extends React.Component {
 	handleSubmit = event => {
 		this.props.createFT({
 			name: this.state.name,
-			route: this.state.route,
 			menu: this.state.menu,
 			schedule: this.state.schedule,
 			price: this.state.price,
@@ -49,17 +49,55 @@ export class CreateFoodTruckPage extends React.Component {
 	displayDayOfTheWeek(dayofTheWeek) {
 		return (
 			<div>
-				<Form inline>
-					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-						<Input type="checkbox" />
-						{dayofTheWeek}
-					</FormGroup>
-					<FormGroup>
-						<Input type="time" name="time" id="StartTime" />
-						<Label for="EndTime"> - </Label>
-						<Input type="time" name="time" id="EndTime" />
-					</FormGroup>
-				</Form>
+				<Container>
+					<Row>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input type="checkbox" />
+									{dayofTheWeek}
+								</FormGroup>
+								<FormGroup>
+									<Input
+										type="time"
+										name="time"
+										id="StartTime"
+									/>
+									<Label for="EndTime"> - </Label>
+									<Input
+										type="time"
+										name="time"
+										id="EndTime"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+						<Col>
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="latitude"
+										id="latitude"
+										placeholder="latitude"
+										step="0.01"
+									/>
+								</FormGroup>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="longitude"
+										id="longitude"
+										placeholder="longitude"
+										step="0.01"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+					</Row>
+				</Container>
 			</div>
 		);
 	}
@@ -83,15 +121,6 @@ export class CreateFoodTruckPage extends React.Component {
 							/>
 						</FormGroup>
 						<FormGroup>
-							<Label for="ftRoute">Route</Label>
-							<Input
-								type="text"
-								name="route"
-								id="ftRoute"
-								placeholder="route placeholder"
-							/>
-						</FormGroup>
-						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
 							<Input type="select" name="status" id="ftStatus"
 								   onChange={e => this.setStatus(e.target.value)}>
@@ -111,15 +140,27 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<Form inline>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftPrice" className="mr-sm-2">
-									Average Price
+								<Label for="ftLowPrice" className="mr-sm-2">
+									Price Low
 								</Label>
 								<Input
 									type="number"
 									min={0}
 									name="price"
-									id="ftPrice"
-									placeholder="Whole Numbers Only"
+									id="ftLowPrice"
+									step="0.01"
+								/>
+							</FormGroup>
+							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+								<Label for="ftHighPrice" className="mr-sm-2">
+									Price High
+								</Label>
+								<Input
+									type="number"
+									min={0}
+									name="price"
+									id="ftHighPrice"
+									step="0.01"
 								/>
 							</FormGroup>
 						</Form>
@@ -154,7 +195,11 @@ export class CreateFoodTruckPage extends React.Component {
 							{this.displayDayOfTheWeek('Friday')}
 							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
+<<<<<<< HEAD
 						<Button onClick={this.handleSubmit}>Submit</Button>
+=======
+						<Button>Create</Button>
+>>>>>>> 847d5f932f0aa6f4b0c8bdd2a3a3aa6ea805fddf
 					</Form>
 				</div>
 			</div>
@@ -207,7 +252,6 @@ export class EditFoodTruck extends React.Component {
 		super(props);
 		this.state = {
 			name: null,
-			route: null,
 			menu: null,
 			schedule: null,
 			price: null,
@@ -216,7 +260,6 @@ export class EditFoodTruck extends React.Component {
 	}
 
 	setName = name => this.setState({ name });
-	setRoute = route => this.setState({ route });
 	setMenu = menu => this.setState({ menu });
 	setSchedule = schedule => this.setState({ schedule });
 	setPrice = price => this.setState({ price });
@@ -225,17 +268,55 @@ export class EditFoodTruck extends React.Component {
 	displayDayOfTheWeek(dayofTheWeek) {
 		return (
 			<div>
-				<Form inline>
-					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-						<Input type="checkbox" />
-						{dayofTheWeek}
-					</FormGroup>
-					<FormGroup>
-						<Input type="time" name="time" id="StartTime" />
-						<Label for="EndTime"> - </Label>
-						<Input type="time" name="time" id="EndTime" />
-					</FormGroup>
-				</Form>
+				<Container>
+					<Row>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input type="checkbox" />
+									{dayofTheWeek}
+								</FormGroup>
+								<FormGroup>
+									<Input
+										type="time"
+										name="time"
+										id="StartTime"
+									/>
+									<Label for="EndTime"> - </Label>
+									<Input
+										type="time"
+										name="time"
+										id="EndTime"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+						<Col>
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="latitude"
+										id="latitude"
+										placeholder="latitude"
+										step="0.01"
+									/>
+								</FormGroup>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="longitude"
+										id="longitude"
+										placeholder="longitude"
+										step="0.01"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+					</Row>
+				</Container>
 			</div>
 		);
 	}
@@ -243,7 +324,6 @@ export class EditFoodTruck extends React.Component {
 	handleSubmit = event => {
 		this.props.register({
 			name: this.state.name,
-			route: this.state.route,
 			menu: this.state.menu,
 			schedule: this.state.schedule,
 			price: this.state.price,
@@ -270,15 +350,6 @@ export class EditFoodTruck extends React.Component {
 							/>
 						</FormGroup>
 						<FormGroup>
-							<Label for="ftRoute">Route</Label>
-							<Input
-								type="text"
-								name="route"
-								id="ftRoute"
-								placeholder="route placeholder"
-							/>
-						</FormGroup>
-						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
 							<Input type="select" name="status" id="ftStatus">
 								<option>Open</option>
@@ -297,15 +368,27 @@ export class EditFoodTruck extends React.Component {
 						</FormGroup>
 						<Form inline>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftPrice" className="mr-sm-2">
-									Average Price
+								<Label for="ftLowPrice" className="mr-sm-2">
+									Price Low
 								</Label>
 								<Input
 									type="number"
 									min={0}
 									name="price"
-									id="ftPrice"
-									placeholder="Whole Numbers Only"
+									id="ftLowPrice"
+									step="0.01"
+								/>
+							</FormGroup>
+							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+								<Label for="ftHighPrice" className="mr-sm-2">
+									Price High
+								</Label>
+								<Input
+									type="number"
+									min={0}
+									name="price"
+									id="ftHighPrice"
+									step="0.01"
 								/>
 							</FormGroup>
 						</Form>
@@ -331,7 +414,7 @@ export class EditFoodTruck extends React.Component {
 							</FormText>
 						</FormGroup>
 						<FormGroup tag="fieldset">
-							<legend>Schedule</legend>
+							<legend>Schedule / Route</legend>
 							{this.displayDayOfTheWeek('Sunday')}
 							{this.displayDayOfTheWeek('Monday')}
 							{this.displayDayOfTheWeek('Tuesday')}

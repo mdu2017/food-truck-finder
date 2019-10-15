@@ -174,4 +174,5 @@ public class UserService {
 
 	public List<String> getSubscriptions(String id) { return userDao.getSubscriptions(Long.parseLong(id)); }
 
+	public Optional<List<Long>> getOwnedFoodTrucks(String id) { return userDao.getOwnedFoodTrucks(Long.parseLong(id)); }
 }

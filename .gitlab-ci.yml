@@ -7,7 +7,6 @@ stages:
 
 test:
   stage: test
-  image: java:11
   script:
     - gradle test
   artifacts:

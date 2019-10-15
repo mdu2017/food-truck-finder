@@ -73,11 +73,16 @@ Actions.authenticate = (username, password) => {
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
 
-				if(getCookie('owner')) {
-					window.location.href = '/#/owner';
-				}else {
-					window.location.href = '/#/user';
+				if(getCookie('user') != null) {
+					if(getCookie('owner')) {
+						window.location.href = '/#/owner';
+					}else {
+						window.location.href = '/#/user';
+					}
+				} else {
+					window.alert('This email and password combination is not valid, please try again');
 				}
+
 			});
 		});
 	};

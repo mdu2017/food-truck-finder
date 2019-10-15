@@ -33,18 +33,22 @@ public class UserDao {
 		Map<String, ?> parameters = _Maps.map("principal", principal);
 
 		UserAuthenticationDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			rs.next();
+			if(!rs.isLast()) {
+				rs.next();
 
-			UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
-			UserDto userDto = new UserDto();
-			userAuthenticationDto.setUser(userDto);
-			userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
-			userDto.setId(rs.getLong("USER_ID"));
-			userDto.setPrincipal(rs.getString("PRINCIPAL"));
-			userDto.setUsername(rs.getString("Username"));
-			userDto.setIsOwner(rs.getBoolean("isOwner"));
-			userDto.setRoles(_Lists.list("ROLE_USER"));
-			return userAuthenticationDto;
+				UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
+				UserDto userDto = new UserDto();
+				userAuthenticationDto.setUser(userDto);
+				userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
+				userDto.setId(rs.getLong("USER_ID"));
+				userDto.setPrincipal(rs.getString("PRINCIPAL"));
+				userDto.setUsername(rs.getString("Username"));
+				userDto.setIsOwner(rs.getBoolean("isOwner"));
+				userDto.setRoles(_Lists.list("ROLE_USER"));
+				return userAuthenticationDto;
+			} else {
+				return null;
+			}
 		});
 
 		return Optional.ofNullable(result);

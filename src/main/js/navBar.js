@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './images/foodtruck.png';
+import * as Users from 'js/backend';
 import {
 	Collapse,
 	Navbar,
@@ -26,7 +27,7 @@ class CustomNavBar extends React.Component {
 	}
 
 	displayLoginButton() {
-		if (!this.state.isLoggedIn) {
+		if (!Users.getCookie('owner')) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
@@ -37,7 +38,7 @@ class CustomNavBar extends React.Component {
 	}
 
 	displayViewProfile() {
-		if (this.state.isLoggedIn) {
+		if (Users.getCookie('owner')) {
 			return (
 				<div>
 					<DropdownToggle nav caret>

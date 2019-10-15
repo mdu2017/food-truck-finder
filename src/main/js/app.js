@@ -19,7 +19,7 @@ const reducers = [{ form: formReducer }, Users.Reducers];
 const reducer = Utils.combineReducers(reducers);
 const store = createStore(
 	reducer,
-	{ authentication: null, user: null },
+	{ authentication: Users.getCookie('authentication'), user: Users.getCookie('email')},
 	applyMiddleware(thunkMiddleware, createLogger())
 );
 

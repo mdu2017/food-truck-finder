@@ -54,6 +54,26 @@ public class UserDao {
 		return Optional.ofNullable(result);
 	}
 
+	public Optional<UserDto> findUserByUsername(String username) {
+		String sql = "SELECT * FROM `USER` WHERE Username = :username";
+		Map<String, ?> parameters = _Maps.map("principal", username);
+
+		UserDto result = jdbcTemplate.query(sql, parameters, rs -> {
+			if(!rs.isLast()) {
+				rs.next();
+
+				UserDto userDto = new UserDto();
+				userDto.setUsername(rs.getString("Username"));
+
+				return userDto;
+			} else {
+				return null;
+			}
+		});
+
+		return Optional.ofNullable(result);
+	}
+
 	/**
 	 * This function saves a user to the database, and if it doesn't have an id, it creates one and inserts it into the database.
 	 *

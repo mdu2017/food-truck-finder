@@ -5,11 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
@@ -66,6 +62,11 @@ public class UserEndpoint {
 
 		// Then, we simply look up that user by their email address in Elasticsearch
 		return userService.findUserByPrincipal(principal);
+	}
+
+	@GetMapping(value = "/{username}", produces = "application/json")
+	public Optional<UserDto> viewUser(@PathVariable String username) {
+		return userService.findUserByUsername(username);
 	}
 
 	/**

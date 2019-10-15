@@ -30,6 +30,10 @@ public class UserService {
 		return userDao.findUserByPrincipal(principal);
 	}
 
+	public Optional<UserDto> findUserByUsername(String username) {
+		return userDao.findUserByUsername(username);
+	}
+
 	public static class RegistrationRequest {
 		private String principal;
 		private String password;
@@ -98,8 +102,9 @@ public class UserService {
 		private String password;
 		private String username;
 		private boolean owner;
+		private long id;
 		private Map<String, Object> attributes;
-		private int id;
+
 
 		public String getPrincipal() {
 			return principal;
@@ -141,13 +146,13 @@ public class UserService {
 			this.attributes = attributes;
 		}
 
-		public int getID() {
-			return this.id;
+		public long getId() {
+			return id;
 		}
 
-		public void setID(int id) {
+		public void setId(long id) {
 			this.id = id;
-		} 
+		}
 	}
 
 	public UserDto update(UpdateRequest request) {
@@ -156,7 +161,7 @@ public class UserService {
 		userDto.setUsername(request.getUsername());
 		userDto.setIsOwner(request.getOwner());
 		userDto.setRoles(_Lists.list("ROLE_USER"));
-		userDto.setId((long)request.getID());
+		userDto.setId(request.getId());
 
 		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
 		userAuthenticationDto.setUser(userDto);

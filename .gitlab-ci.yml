@@ -3,8 +3,19 @@
 image: gradle:alpine
 
 stages:
+#  - build
   - test
   - deploy
+
+#build:
+#  stage: build
+#  script: ./gradlew --build-cache assemble
+#  cache:
+#    key: "$CI_COMMIT_REF_NAME"
+#    policy: push
+#    paths:
+#      - build
+#      - .gradle
 
 test:
   stage: test
@@ -12,7 +23,7 @@ test:
     - gradle test
   artifacts:
     reports:
-      junit: build/test-results/test/**/TEST-*.xml
+      junit: build/test-results/test/TEST-*.xml
 
 #java:
 #  stage: test

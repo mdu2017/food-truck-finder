@@ -5,11 +5,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
@@ -80,4 +76,7 @@ public class UserEndpoint {
 	public UserDto register(@RequestBody RegistrationRequest request) {
 		return userService.register(request);
 	}
+
+	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
+	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
 }

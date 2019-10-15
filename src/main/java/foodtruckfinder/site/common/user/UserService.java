@@ -1,5 +1,6 @@
 package foodtruckfinder.site.common.user;
 
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
@@ -72,4 +73,7 @@ public class UserService {
 		userAuthenticationDto = userDao.save(userAuthenticationDto);
 		return userAuthenticationDto.getUser();
 	}
+
+	public List<String> getSubscriptions(String id) { return userDao.getSubscriptions(Long.parseLong(id)); }
+
 }

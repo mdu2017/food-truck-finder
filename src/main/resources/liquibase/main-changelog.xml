@@ -7,7 +7,7 @@
 
     <changeSet author="jlutteringer" id="create initial tables">
         <sql>
-            CREATE TABLE USER
+            <!--CREATE TABLE USER
             (
             USER_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             PRINCIPAL VARCHAR(255),
@@ -19,6 +19,107 @@
             FOOD_TRUCK_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
             NAME VARCHAR(255),
             TYPE VARCHAR(255)
+            );-->
+
+            CREATE TABLE `USER` (
+            `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `Username` varchar(12) NOT NULL,
+            `PRINCIPAL` varchar(255) NOT NULL,
+            `PASSWORD` varchar(255) NOT NULL,
+            `isOwner` tinyint(4) NOT NULL,
+            PRIMARY KEY (`USER_ID`),
+            UNIQUE KEY `PRINCIPAL_UNIQUE` (`PRINCIPAL`),
+            UNIQUE KEY `USER_ID_UNIQUE` (`USER_ID`)
+            );
+
+            CREATE TABLE `FOOD_TRUCK` (
+            `FOOD_TRUCK_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `NAME` varchar(45) NOT NULL,
+            `TYPE` int(11) NOT NULL,
+            `TRUCK_IMAGE` blob,
+            `PRICE_LOW` double NOT NULL,
+            `PRICE_HIGH` double NOT NULL,
+            `STATUS` varchar(12) NOT NULL,
+            PRIMARY KEY (`FOOD_TRUCK_ID`),
+            UNIQUE KEY `FOOD_TRUCK_ID_UNIQUE` (`FOOD_TRUCK_ID`)
+            );
+
+            CREATE TABLE `DEAL` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `MESSAGE` varchar(300) DEFAULT NULL,
+            `START` datetime NOT NULL,
+            `END` datetime NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`)
+            );
+
+            CREATE TABLE `FOOD_TYPE` (
+            `TYPE_ID` int(11) NOT NULL,
+            `TYPE` varchar(30) NOT NULL,
+            PRIMARY KEY (`TYPE_ID`)
+            );
+
+            CREATE TABLE `MENU` (
+            `ITEM_ID` int(11) NOT NULL,
+            `TRUCK_ID` int(11) NOT NULL,
+            `NAME` varchar(45) NOT NULL,
+            `DESCRIPTION` varchar(300) DEFAULT NULL,
+            `PRICE` double NOT NULL,
+            PRIMARY KEY (`ITEM_ID`)
+            );
+
+            CREATE TABLE `NOTIFICATION` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `USER_ID` int(11) NOT NULL,
+            `MESSAGE` varchar(300) NOT NULL,
+            `SENT` datetime NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            );
+
+            CREATE TABLE `REVIEW` (
+            `USER_ID` int(11) NOT NULL,
+            `MESSAGE` varchar(300) NOT NULL,
+            `RATING` int(11) NOT NULL,
+            `DATE` datetime NOT NULL,
+            PRIMARY KEY (`USER_ID`)
+            );
+            CREATE TABLE `SCHEDULE` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `DAY` varchar(45) NOT NULL,
+            `STOP_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`DAY`)
+            );
+
+            CREATE TABLE `SUBSCRIPTIONS` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `USER_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            );
+
+            CREATE TABLE `TRUCK_STOP` (
+            `STOP_ID` int(11) NOT NULL,
+            `START` datetime NOT NULL,
+            `END` datetime NOT NULL,
+            `LATITUDE` double NOT NULL,
+            `LONGITUDE` double NOT NULL,
+            PRIMARY KEY (`STOP_ID`)
+            );
+
+            CREATE TABLE `EVENT` (
+            `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `DESCRIPTION` varchar(300) NOT NULL,
+            `STOP_ID` int(11) NOT NULL,
+            PRIMARY KEY (`EVENT_ID`),
+            KEY `Stop_idx` (`STOP_ID`),
+            CONSTRAINT `Stop` FOREIGN KEY (`STOP_ID`) REFERENCES `TRUCK_STOP` (`STOP_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
+            );
+
+            CREATE TABLE `ATTENDING_EVENT` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `EVENT_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`EVENT_ID`),
+            KEY `HOSTED_BY_idx` (`EVENT_ID`),
+            CONSTRAINT `ATTENDED_BY` FOREIGN KEY (`TRUCK_ID`) REFERENCES `FOOD_TRUCK` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+            CONSTRAINT `HOSTED_BY` FOREIGN KEY (`EVENT_ID`) REFERENCES `EVENT` (`EVENT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
         </sql>
     </changeSet>

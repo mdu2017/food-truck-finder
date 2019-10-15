@@ -1,5 +1,6 @@
 package foodtruckfinder.site.endpoint;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -35,4 +36,13 @@ public class FoodTruckEndpoint {
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;
 	}
+
+	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
+	public List<String> getSubscribers(@PathVariable("id") String id) { return foodTruckService.getSubscribers(id); }
+
+	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
+	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
+		foodTruckService.subscribe(ftid, userid);
+	}
+
 }

@@ -64,13 +64,18 @@ export { LoginForm };
 class RegistrationForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { principal: null, password: null, username: null, owner: false };
+		this.state = {
+			principal: null,
+			password: null,
+			username: null,
+			owner: false
+		};
 	}
 
 	setPrincipal = principal => this.setState({ principal });
 	setPassword = password => this.setState({ password });
 	setUsername = username => this.setState({ username });
-	setOwner = () => this.setState({ owner: !this.state.owner }) ;
+	setOwner = () => this.setState({ owner: !this.state.owner });
 
 	handleSubmit = event => {
 		this.props.register({
@@ -118,14 +123,18 @@ class RegistrationForm extends React.Component {
 					/>
 				</div>
 
-				<div className="form-group">
-					<label> Owner Account:
-						<input name="owner"
-							   type="checkbox"
-							   className="form-control"
-							   id="owner"
-							   value={this.state.owner}
-							   onChange={this.setOwner} /></label>
+				<div className="form-group form-check">
+					<input
+						name="owner"
+						type="checkbox"
+						class="form-check-input"
+						id="owner"
+						value={this.state.owner}
+						onChange={this.setOwner}
+					/>
+					<label class="form-check-label" for="owner">
+						Owner Account?
+					</label>
 				</div>
 
 				{/* <div className="form-group">

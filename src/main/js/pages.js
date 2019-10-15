@@ -101,9 +101,9 @@ export class LoginPage extends React.Component {
 						<Link to="/forgot-password">Forgot Password?</Link>
 					</div>
 				</div>
-				<Link to="/owner">Login Owner Success</Link>
+				{/* <Link to="/owner">Login Owner Success</Link>
 				<br />
-				<Link to="/user">Login User Success</Link>
+				<Link to="/user">Login User Success</Link> */}
 			</div>
 		);
 	}

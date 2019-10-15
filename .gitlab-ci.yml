@@ -1,4 +1,3 @@
-#image: java:11
 image: openjdk:11
 
 stages:
@@ -10,8 +9,8 @@ test:
   script:
     - gradle test
   artifacts:
-    reports:
-      junit: build/test-results/test/binary/TEST-*.xml
+    reports: build/test-results/test/binary/TEST-*.xml
+      junit:
 
 deploy:
   stage: deploy

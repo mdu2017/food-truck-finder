@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import * as Login from 'js/forms';
 import axios from 'axios';
-import CustomNavBar from 'js/navBar';
+import * as NavBars from 'js/navBar';
 import {
 	UncontrolledTooltip,
 	Col,
@@ -23,45 +23,6 @@ import {
 	Container
 } from 'reactstrap';
 import { State } from './backend';
-
-export class HomeUser extends React.Component {
-	render() {
-		return (
-			<div>
-				<CustomNavBar />
-				<div className="container padded">
-					This is a user's home page.
-					<ul>
-						<li>
-							<Link to="/help">Help</Link>
-						</li>
-						<li>
-							<Link to="/events">Events</Link>
-						</li>
-						<li>
-							<Link to="/user/view-profile">View Profile</Link>
-						</li>
-						<li>
-							<Link to="/search-trucks">Search Food Trucks</Link>
-						</li>
-						<li>
-							<Link to="/search-users">Search Users</Link>
-						</li>
-						<li>
-							<Link to="/user/notifications">Notifications</Link>
-						</li>
-						<li>
-							<Link to="/about-free-tank-top">About Us</Link>
-						</li>
-						<li>
-							<Link to="/user">Home</Link>
-						</li>
-					</ul>
-				</div>
-			</div>
-		);
-	}
-}
 
 export class ViewUserProfilePage extends React.Component {
 	constructor(props) {
@@ -85,54 +46,10 @@ export class ViewUserProfilePage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>View Profile</h1>
-					<Container>
-						<Row>
-							<Col xs="3">
-								<p>Quick Links</p>
-								<hr />
-								<Nav vertical>
-									<NavItem>
-										<NavLink href="/">Dashboard</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink href="/events">Events</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink
-											disabled={
-												!this.state.authentication
-											}
-											href="/user/notifications">
-											Notifications
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink disabled href="/search-trucks">
-											Search Food Trucks
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink disabled href="/search-users">
-											Search Users
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink
-											disabled
-											href="/about-free-tank-top">
-											About Us
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink href="/page-1">Page 1</NavLink>
-									</NavItem>
-								</Nav>
-							</Col>
-						</Row>
-					</Container>
+					<NavBars.SidebarNav />
 				</div>
 			</div>
 		);
@@ -168,7 +85,7 @@ export class EditUserPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Manage Account</h1>
 					<br />{' '}

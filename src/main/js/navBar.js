@@ -13,11 +13,14 @@ import {
 	UncontrolledDropdown,
 	DropdownToggle,
 	DropdownMenu,
-	DropdownItem
+	DropdownItem,
+	Container,
+	Row,
+	Col
 } from 'reactstrap';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
-class CustomNavBar extends React.Component {
+export class CustomNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.toggleProfile = this.toggleProfile.bind(this);
@@ -54,8 +57,16 @@ class CustomNavBar extends React.Component {
 						<DropdownItem tag={Link} to="/user/edit-user">
 							Manage Account
 						</DropdownItem>
+						<DropdownItem
+							tag={Link}
+							to="/owner/edit-food-truck"
+							hidden={!(Users.getCookie('owner') == 'true')}>
+							Edit Food Trucks
+						</DropdownItem>
 						<DropdownItem divider />
-						<DropdownItem onClick={this.logout}>Logout</DropdownItem>
+						<DropdownItem onClick={this.logout}>
+							Logout
+						</DropdownItem>
 					</DropdownMenu>
 				</div>
 			);
@@ -94,4 +105,61 @@ CustomNavBar = connect(() => ({
 	logout: Users.Actions.logout()
 }))(CustomNavBar);
 
-export default CustomNavBar;
+export class SidebarNav extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner')
+		};
+	}
+
+	render() {
+		return (
+			<div>
+				<Container>
+					<Row>
+						<Col xs="3">
+							<p>Quick Links</p>
+							<hr />
+							<Nav vertical>
+								<NavItem>
+									<NavLink href="#/">Dashboard</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink href="#/events">Events</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink
+										hidden={!this.state.authentication}
+										href="#/user/notifications">
+										Notifications
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink disabled href="#/search-trucks">
+										Search Food Trucks
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink disabled href="#/search-users">
+										Search Users
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink href="#/about">About Us</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink href="#/page-1">Page 1</NavLink>
+								</NavItem>
+							</Nav>
+						</Col>
+					</Row>
+				</Container>
+			</div>
+		);
+	}
+}

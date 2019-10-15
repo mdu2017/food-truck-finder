@@ -89,9 +89,9 @@ Actions.authenticate = (username, password) => {
 
 				if (getCookie('user') != null) {
 					if (getCookie('owner') === 'true') {
-						window.location.href = '/#/owner';
+						window.location.href = '/#/';
 					} else {
-						window.location.href = '/#/user';
+						window.location.href = '/#/';
 					}
 				} else {
 					window.alert(

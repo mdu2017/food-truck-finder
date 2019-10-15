@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import * as Forms from 'js/forms';
 import axios from 'axios';
-import CustomNavBar from 'js/navBar';
+import * as NavBars from 'js/navBar';
 import {
 	Progress,
 	Container,
@@ -70,57 +70,13 @@ export class Home extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>{this.displayCustomWelcome()}</h1>
-					<Container>
-						<Row>
-							<Col xs="3">
-								<p>Quick Links</p>
-								<hr />
-								<Nav vertical>
-									<NavItem>
-										<NavLink href="/">Dashboard</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink href="/events">Events</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink
-											disabled={
-												!this.state.authentication
-											}
-											href="/user/notifications">
-											Notifications
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink disabled href="/search-trucks">
-											Search Food Trucks
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink disabled href="/search-users">
-											Search Users
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink
-											disabled
-											href="/about-free-tank-top">
-											About Us
-										</NavLink>
-									</NavItem>
-									<NavItem>
-										<NavLink href="/page-1">Page 1</NavLink>
-									</NavItem>
-								</Nav>
-							</Col>
-						</Row>
-					</Container>
-					<ul>
-						{/* <li><Link to="/hello">Example Endpoint</Link></li> */}
-					</ul>
+					<NavBars.SidebarNav />
+					{/* <ul> */}
+					{/* <li><Link to="/hello">Example Endpoint</Link></li> */}
+					{/* </ul> */}
 				</div>
 			</div>
 		);
@@ -131,7 +87,7 @@ export class RegisterPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div>
 					<div className="row">
 						<div className="col-6 offset-md-3">
@@ -151,7 +107,7 @@ export class LoginPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="row">
 					<div className="col-6 offset-md-3">
 						<h2>Login</h2>
@@ -225,7 +181,7 @@ export class ForgotPasswordPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="row">
 					<div className="col-6 offset-md-3">
 						<h2>Forgot Password?</h2>
@@ -290,13 +246,11 @@ export class NotificationsPage extends React.Component {
 export class AboutUsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the about us page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>About Us</h1>
+				</div>
 			</div>
 		);
 	}
@@ -306,7 +260,7 @@ export class ViewFoodTruckDetailsPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Torchy's Details Page</h1>
 					<br />
@@ -404,6 +358,13 @@ export class Page1 extends React.Component {
 
 	logout = () => this.props.logout();
 
+	displayIsOwner() {
+		if (this.props.isOwner == 'true') {
+			return <text>Yes!</text>;
+		}
+		return <text>No!</text>;
+	}
+
 	render() {
 		return (
 			<div className="container padded">
@@ -413,6 +374,9 @@ export class Page1 extends React.Component {
 				)}
 				{_.isDefined(this.props.user) && (
 					<div>Welcome, {this.props.user}!</div>
+				)}
+				{_.isDefined(this.props.isOwner) && (
+					<div>Owner? {this.displayIsOwner()}</div>
 				)}
 				<br />
 				<button onClick={this.logout} className="btn btn-primary">
@@ -427,7 +391,8 @@ Page1 = connect(() => ({
 	authentication: Users.getCookie('authentication'),
 	user: Users.getCookie('user'),
 	logout: Users.Actions.logout(),
-	id: Users.getCookie('userid')
+	id: Users.getCookie('userid'),
+	isOwner: Users.getCookie('owner')
 }))(Page1);
 
 export class HelloSend extends React.Component {

@@ -11,7 +11,6 @@ export default class Index extends React.Component {
 			<HashRouter>
 				<div>
 					<Route exact path="/" component={Pages.Home} />
-					<Route exact path="/user" component={User.HomeUser} />
 					<Route
 						exact
 						path="/register"
@@ -60,17 +59,7 @@ export default class Index extends React.Component {
 						path="/user/notifications"
 						component={Pages.NotificationsPage}
 					/>
-					<Route
-						exact
-						path="/about-free-tank-top"
-						component={Pages.AboutUsPage}
-					/>
-					<Route exact path="/owner" component={Owner.Dashboard} />
-					<Route
-						exect
-						path="/owner/view-profile"
-						component={Owner.ViewOwnerProfilePage}
-					/>
+					<Route exact path="/about" component={Pages.AboutUsPage} />
 					<Route
 						exact
 						path="/owner/create-food-truck"

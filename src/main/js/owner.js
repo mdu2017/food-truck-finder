@@ -195,11 +195,7 @@ export class CreateFoodTruckPage extends React.Component {
 							{this.displayDayOfTheWeek('Friday')}
 							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
-<<<<<<< HEAD
 						<Button onClick={this.handleSubmit}>Submit</Button>
-=======
-						<Button>Create</Button>
->>>>>>> 847d5f932f0aa6f4b0c8bdd2a3a3aa6ea805fddf
 					</Form>
 				</div>
 			</div>

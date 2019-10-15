@@ -31,7 +31,7 @@ public class FoodTruckEndpoint {
 	}
 
 	// Take a JSON representation of a food truck and save it to the database
-	@PostMapping(produces = "application/json")
+	@PostMapping(value = "/save", produces = "application/json")
 	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) {
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;

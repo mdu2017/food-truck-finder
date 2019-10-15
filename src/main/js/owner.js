@@ -2,8 +2,6 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
-import * as Login from 'js/forms';
-import axios from 'axios';
 import * as NavBars from 'js/navBar';
 import {
 	Button,
@@ -37,7 +35,7 @@ export class CreateFoodTruckPage extends React.Component {
 	setStatus = status => this.setState({ status });
 
 	handleSubmit = event => {
-		this.props.register({
+		this.props.createFT({
 			name: this.state.name,
 			route: this.state.route,
 			menu: this.state.menu,
@@ -81,6 +79,7 @@ export class CreateFoodTruckPage extends React.Component {
 								name="name"
 								id="ftName"
 								placeholder="Name of Food Truck"
+								onChange={e => this.setName(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup>
@@ -94,7 +93,8 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
-							<Input type="select" name="status" id="ftStatus">
+							<Input type="select" name="status" id="ftStatus"
+								   onChange={e => this.setStatus(e.target.value)}>
 								<option>Open</option>
 								<option>Closed</option>
 								<option>Closed (Maintenance)</option>
@@ -154,13 +154,19 @@ export class CreateFoodTruckPage extends React.Component {
 							{this.displayDayOfTheWeek('Friday')}
 							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
-						<Button>Submit</Button>
+						<Button onClick={this.handleSubmit}>Submit</Button>
 					</Form>
 				</div>
 			</div>
 		);
 	}
 }
+CreateFoodTruckPage = connect(
+	() => ({}),
+	dispatch => ({
+		createFT: foodTruck => dispatch(Users.Actions.createFT(foodTruck))
+	})
+)(CreateFoodTruckPage);
 
 export class ListFoodTrucks extends React.Component {
 	constructor(props) {

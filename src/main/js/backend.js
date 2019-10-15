@@ -8,6 +8,27 @@ export function update(user) {
 	return axios.post('/api/user/update', user);
 }
 
+//Calls the food truck Endpoint to save it to the database
+export function createFoodTruck(foodTruck){
+	return axios.post('/api/food-truck/save', foodTruck);
+}
+
+// export function makeFT(name, status) {
+// 	return axios({
+// 		method: 'post',
+// 		url: '/oauth/token',
+// 		params: {
+// 			grant_type: 'password',
+// 			name,
+// 			status
+// 		},
+// 		auth: {
+// 			username: 'food-truck-finder-app',
+// 			password: 'food-truck-finder-app-secret'
+// 		}
+// 	});
+// }
+
 export function authenticate(username, password) {
 	return axios({
 		method: 'post',
@@ -24,8 +45,14 @@ export function authenticate(username, password) {
 	});
 }
 
+//Grab user details
 export function getUserDetails() {
 	return axios.get('/api/user');
+}
+
+//Grab FOOD TRUCK details
+export function getFoodTruckDetails() {
+	return axios.get('/api/food-truck');
 }
 
 export function getCookie(name) {
@@ -56,7 +83,8 @@ let Actions = {};
 
 Actions.Types = {
 	SET_AUTHENTICATION: 'SET_AUTHENTICATION',
-	SET_USER: 'SET_USER'
+	SET_USER: 'SET_USER',
+	SET_FOOD_TRUCK: 'SET_FOOD_TRUCK'
 };
 
 Actions.register = user => {
@@ -68,6 +96,14 @@ Actions.register = user => {
 		});
 	};
 };
+
+//Create food truck
+Actions.createFT = foodTruck => {
+	return () => {
+		return createFoodTruck(foodTruck);
+	};
+};
+
 
 Actions.update = user => {
 	return dispatch => {
@@ -123,6 +159,12 @@ Actions.setAuthentication = authentication => {
 			'authentication=' + authentication['access_token'] + '; path=/';
 	}
 	return { type: Actions.Types.SET_AUTHENTICATION, authentication };
+};
+
+//Set food truck
+Actions.setFoodTruck = foodTruck => {
+
+	return{type: Actions.Types.SET_FOOD_TRUCK, foodTruck};
 };
 
 Actions.setUser = user => {

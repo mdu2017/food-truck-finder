@@ -15,6 +15,8 @@ import {
 	DropdownMenu,
 	DropdownItem
 } from 'reactstrap';
+import {connect} from 'react-redux';
+import {Page1} from 'js/pages';
 
 class CustomNavBar extends React.Component {
 	constructor(props) {
@@ -26,8 +28,10 @@ class CustomNavBar extends React.Component {
 		};
 	}
 
+	logout = () => this.props.logout();
+
 	displayLoginButton() {
-		if (!Users.getCookie('owner')) {
+		if (!Users.getCookie('user')) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
@@ -38,7 +42,7 @@ class CustomNavBar extends React.Component {
 	}
 
 	displayViewProfile() {
-		if (Users.getCookie('owner')) {
+		if (Users.getCookie('user')) {
 			return (
 				<div>
 					<DropdownToggle nav caret>
@@ -52,8 +56,7 @@ class CustomNavBar extends React.Component {
 							Manage Account
 						</DropdownItem>
 						<DropdownItem divider />
-						{/* Insert Logout Functionality */}
-						<DropdownItem>Logout</DropdownItem>
+						<DropdownItem onClick={this.logout}>Logout</DropdownItem>
 					</DropdownMenu>
 				</div>
 			);
@@ -87,5 +90,9 @@ class CustomNavBar extends React.Component {
 		);
 	}
 }
+
+CustomNavBar = connect(() => ({
+	logout: Users.Actions.logout()
+}))(CustomNavBar);
 
 export default CustomNavBar;

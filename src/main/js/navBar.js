@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './images/foodtruck.png';
+import * as Users from 'js/backend';
 import {
 	Collapse,
 	Navbar,
@@ -14,6 +15,8 @@ import {
 	DropdownMenu,
 	DropdownItem
 } from 'reactstrap';
+import {connect} from 'react-redux';
+import {Page1} from 'js/pages';
 
 class CustomNavBar extends React.Component {
 	constructor(props) {
@@ -25,8 +28,10 @@ class CustomNavBar extends React.Component {
 		};
 	}
 
+	logout = () => this.props.logout();
+
 	displayLoginButton() {
-		if (!this.state.isLoggedIn) {
+		if (!Users.getCookie('user')) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
@@ -37,7 +42,7 @@ class CustomNavBar extends React.Component {
 	}
 
 	displayViewProfile() {
-		if (this.state.isLoggedIn) {
+		if (Users.getCookie('user')) {
 			return (
 				<div>
 					<DropdownToggle nav caret>
@@ -51,8 +56,7 @@ class CustomNavBar extends React.Component {
 							Manage Account
 						</DropdownItem>
 						<DropdownItem divider />
-						{/* Insert Logout Functionality */}
-						<DropdownItem>Logout</DropdownItem>
+						<DropdownItem onClick={this.logout}>Logout</DropdownItem>
 					</DropdownMenu>
 				</div>
 			);
@@ -86,5 +90,9 @@ class CustomNavBar extends React.Component {
 		);
 	}
 }
+
+CustomNavBar = connect(() => ({
+	logout: Users.Actions.logout()
+}))(CustomNavBar);
 
 export default CustomNavBar;

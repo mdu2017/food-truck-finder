@@ -4,7 +4,7 @@ import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import { Link } from 'react-router-dom';
 
-class LoginForm extends React.Component {
+export class LoginForm extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = { principal: null, password: null };
@@ -59,22 +59,28 @@ LoginForm = connect(
 	})
 )(LoginForm);
 
-export { LoginForm };
-
-class RegistrationForm extends React.Component {
+export class RegistrationForm extends React.Component {
 	constructor(props) {
 		super(props);
-		this.state = { principal: null, password: null, username: null };
+		this.state = {
+			principal: null,
+			password: null,
+			username: null,
+			owner: false
+		};
 	}
 
 	setPrincipal = principal => this.setState({ principal });
 	setPassword = password => this.setState({ password });
 	setUsername = username => this.setState({ username });
+	setOwner = () => this.setState({ owner: !this.state.owner });
 
 	handleSubmit = event => {
 		this.props.register({
 			principal: this.state.principal,
-			password: this.state.password
+			password: this.state.password,
+			username: this.state.username,
+			owner: this.state.owner.toString()
 		}); // Add registration
 		event.preventDefault();
 	};
@@ -114,8 +120,7 @@ class RegistrationForm extends React.Component {
 						onChange={e => this.setPassword(e.target.value)}
 					/>
 				</div>
-
-				{/* <div className="form-group">
+				<div className="form-group">
 					<label htmlFor="passwordInput">Retype Password</label>
 					<input
 						type="password"
@@ -124,8 +129,20 @@ class RegistrationForm extends React.Component {
 						placeholder="Re-type Password"
 						onChange={e => this.setPassword(e.target.value)}
 					/>
-				</div> */}
-
+				</div>
+				<div className="form-group form-check">
+					<input
+						name="owner"
+						type="checkbox"
+						class="form-check-input"
+						id="owner"
+						value={this.state.owner}
+						onChange={this.setOwner}
+					/>
+					<label class="form-check-label" for="owner">
+						Owner Account?
+					</label>
+				</div>
 				<button type="submit" className="btn btn-primary">
 					Submit
 				</button>
@@ -141,4 +158,40 @@ RegistrationForm = connect(
 	})
 )(RegistrationForm);
 
-export { RegistrationForm };
+export class ForgotPasswordForm extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			principal: null
+		};
+	}
+
+	setPrincipal = principal => this.setState({ principal });
+
+	handleSubmit = event => {
+		this.props.register({
+			principal: this.state.principal
+		});
+		event.preventDefault();
+	};
+
+	render() {
+		return (
+			<form name="form" onSubmit={this.handleSubmit}>
+				<div className="form-group">
+					<label htmlFor="principalInput">Email Address</label>
+					<input
+						type="email"
+						className="form-control"
+						id="principalInput"
+						placeholder="Email Address"
+						onChange={e => this.setPrincipal(e.target.value)}
+					/>
+				</div>
+				<button type="submit" className="btn btn-primary">
+					Submit
+				</button>
+			</form>
+		);
+	}
+}

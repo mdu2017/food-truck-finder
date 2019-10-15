@@ -15,8 +15,14 @@ import {
 	FormGroup,
 	Label,
 	Input,
-	FormText
+	FormText,
+	Row,
+	Nav,
+	NavItem,
+	NavLink,
+	Container
 } from 'reactstrap';
+import { State } from './backend';
 
 export class HomeUser extends React.Component {
 	render() {
@@ -58,23 +64,75 @@ export class HomeUser extends React.Component {
 }
 
 export class ViewUserProfilePage extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner')
+		};
+	}
+
+	displayUsername() {
+		if (this.state.authentication) {
+			return this.state.username;
+		}
+		return null;
+	}
+
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<CustomNavBar isLoggedIn={true} />
 				<div className="container padded">
-					This is the user's profile view page.
-					<ul>
-						<li>
-							<Link to="/">Home</Link>
-						</li>
-						<li>
-							<Link to="/user/edit-user">Edit User</Link>
-						</li>
-						<li>
-							<Link to="/login">Login</Link>
-						</li>
-					</ul>
+					<h1>View Profile</h1>
+					<Container>
+						<Row>
+							<Col xs="3">
+								<p>Quick Links</p>
+								<hr />
+								<Nav vertical>
+									<NavItem>
+										<NavLink href="/">Dashboard</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink href="/events">Events</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink
+											disabled={
+												!this.state.authentication
+											}
+											href="/user/notifications">
+											Notifications
+										</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink disabled href="/search-trucks">
+											Search Food Trucks
+										</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink disabled href="/search-users">
+											Search Users
+										</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink
+											disabled
+											href="/about-free-tank-top">
+											About Us
+										</NavLink>
+									</NavItem>
+									<NavItem>
+										<NavLink href="/page-1">Page 1</NavLink>
+									</NavItem>
+								</Nav>
+							</Col>
+						</Row>
+					</Container>
 				</div>
 			</div>
 		);
@@ -82,6 +140,31 @@ export class ViewUserProfilePage extends React.Component {
 }
 
 export class EditUserPage extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner'),
+			id: Users.getCookie('userid')
+		};
+	}
+
+	setPrincipal = principal => this.setState({ principal });
+	setPassword = password => this.setState({ password });
+
+	handleSubmit = event => {
+		this.props.update({
+			principal: this.state.principal,
+			password: this.state.password,
+			username: this.state.username,
+			owner: this.state.owner.toString(),
+			id: this.state.id
+		}); // Add registration
+		event.preventDefault();
+	};
+
 	render() {
 		return (
 			<div>
@@ -100,14 +183,20 @@ export class EditUserPage extends React.Component {
 						id="UncontrolledTooltipExample">
 						Username
 					</span>
-					: Destroyer123
+					:{' '}
+					{_.isDefined(this.props.user) && (
+						<text>{this.props.user}</text>
+					)}
 					<UncontrolledTooltip
 						placement="right"
 						target="UncontrolledTooltipExample">
 						This cannot be changed!
 					</UncontrolledTooltip>
 					<br />
-					Email: andrew_case1@baylor.edu
+					Email:{' '}
+					{_.isDefined(this.props.email) && (
+						<text>{this.props.email}</text>
+					)}
 					<br />
 					<br />
 					<Form>
@@ -118,6 +207,9 @@ export class EditUserPage extends React.Component {
 								name="email"
 								id="newEmail"
 								placeholder=""
+								onChange={e =>
+									this.setPrincipal(e.target.value)
+								}
 							/>
 						</FormGroup>
 						<br />
@@ -137,6 +229,7 @@ export class EditUserPage extends React.Component {
 								name="newpassword"
 								id="newPassword"
 								placeholder=""
+								onChange={e => this.setPassword(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup>
@@ -150,10 +243,21 @@ export class EditUserPage extends React.Component {
 								placeholder=""
 							/>
 						</FormGroup>
-						<Button>Submit</Button>
+						<Button onClick={this.handleSubmit}>Submit</Button>
 					</Form>
 				</div>
 			</div>
 		);
 	}
 }
+
+EditUserPage = connect(
+	() => ({
+		authentication: Users.getCookie('authentication'),
+		user: Users.getCookie('user'),
+		email: Users.getCookie('email')
+	}),
+	dispatch => ({
+		update: user => dispatch(Users.Actions.update(user))
+	})
+)(EditUserPage);

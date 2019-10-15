@@ -158,7 +158,9 @@ export class SidebarNav extends React.Component {
 									</NavLink>
 								</NavItem>
 								<NavItem>
-									<NavLink href="#/about">About Us</NavLink>
+									<NavLink disabled href="#/about">
+										About Us
+									</NavLink>
 								</NavItem>
 								<NavItem>
 									<NavLink href="#/page-1">Page 1</NavLink>

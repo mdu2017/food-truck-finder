@@ -34,11 +34,11 @@ export class ViewUserProfilePage extends React.Component {
 		};
 	}
 
-	displayUsername() {
-		if (this.state.authentication) {
-			return this.state.username;
+	isOwner() {
+		if (this.state.owner == 'true') {
+			return 'Owner';
 		}
-		return null;
+		return 'Customer';
 	}
 
 	render() {
@@ -47,7 +47,19 @@ export class ViewUserProfilePage extends React.Component {
 				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>View Profile</h1>
-					<NavBars.SidebarNav />
+					<Container>
+						<Row>
+							<Col>
+								<h2>Account Details</h2>
+								<h6>Username: {this.state.username}</h6>
+								<h6>Email: {this.state.principal}</h6>
+								<h6>Account Type: {this.isOwner()}</h6>
+							</Col>
+							<Col>
+								<h2>Ratings {'&'} Reviews</h2>
+							</Col>
+						</Row>
+					</Container>
 				</div>
 			</div>
 		);

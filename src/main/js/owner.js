@@ -140,14 +140,26 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<Form inline>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftPrice" className="mr-sm-2">
-									Average Price $
+								<Label for="ftLowPrice" className="mr-sm-2">
+									Price Low
 								</Label>
 								<Input
 									type="number"
 									min={0}
 									name="price"
-									id="ftPrice"
+									id="ftLowPrice"
+									step="0.01"
+								/>
+							</FormGroup>
+							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+								<Label for="ftHighPrice" className="mr-sm-2">
+									Price High
+								</Label>
+								<Input
+									type="number"
+									min={0}
+									name="price"
+									id="ftHighPrice"
 									step="0.01"
 								/>
 							</FormGroup>
@@ -183,7 +195,7 @@ export class CreateFoodTruckPage extends React.Component {
 							{this.displayDayOfTheWeek('Friday')}
 							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
-						<Button>Submit</Button>
+						<Button>Create</Button>
 					</Form>
 				</div>
 			</div>
@@ -346,14 +358,26 @@ export class EditFoodTruck extends React.Component {
 						</FormGroup>
 						<Form inline>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftPrice" className="mr-sm-2">
-									Average Price $
+								<Label for="ftLowPrice" className="mr-sm-2">
+									Price Low
 								</Label>
 								<Input
 									type="number"
 									min={0}
 									name="price"
-									id="ftPrice"
+									id="ftLowPrice"
+									step="0.01"
+								/>
+							</FormGroup>
+							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+								<Label for="ftHighPrice" className="mr-sm-2">
+									Price High
+								</Label>
+								<Input
+									type="number"
+									min={0}
+									name="price"
+									id="ftHighPrice"
 									step="0.01"
 								/>
 							</FormGroup>

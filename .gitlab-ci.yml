@@ -10,7 +10,7 @@ test:
   script:
     - gradle test
   artifacts:
-    reports:
+    reports: build/test-results/test/**/TEST-*.xml
 
 deploy:
   stage: deploy

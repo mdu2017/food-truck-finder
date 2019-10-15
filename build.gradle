@@ -129,7 +129,8 @@ test {
 }
 
 task integrationTest(type: Test, dependsOn: 'testClasses') {
-	testClassesDir = sourceSets.test.output.classesDir
+//	testClassesDir = sourceSets.test.output.classesDir
+//	classesDir = sourceSets.test.output.classesDir
 	classpath = sourceSets.test.runtimeClasspath
 	jvmArgs = ["-Druntime.environment=integrationdev"]
 

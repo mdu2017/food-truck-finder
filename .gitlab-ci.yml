@@ -1,5 +1,5 @@
 #image: java:11
-image: openjdk:11-jre-slim
+image: openjdk:11
 
 stages:
   - test

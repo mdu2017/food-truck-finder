@@ -79,4 +79,9 @@ public class UserEndpoint {
 
 	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
 	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
+
+	@PostMapping(value = "/owner/getFoodTrucks")
+	public List<String> getOwnedFoodTrucks(){
+		return userService.getSubscriptions(SecurityContextHolder.getContext().getAuthentication().getName());
+	}
 }

@@ -22,7 +22,9 @@ test:
   stage: test
   script:
     - gradle test
-  artifacts:reports:junit: build/test-results/test/TEST-*.xml
+  artifacts:
+    reports:
+      junit: build/test-results/test/TEST-*.xml
 
 #java:
 #  stage: test

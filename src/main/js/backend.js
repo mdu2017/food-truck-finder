@@ -74,7 +74,7 @@ Actions.authenticate = (username, password) => {
 				dispatch(Actions.setUser(user));
 
 				if(getCookie('user') != null) {
-					if(getCookie('owner')) {
+					if(getCookie('owner') === 'true') {
 						window.location.href = '/#/owner';
 					}else {
 						window.location.href = '/#/user';

@@ -1,5 +1,6 @@
 #image: java:11
-image: openjdk:11
+#image: openjdk:11
+image: gradle:alpine
 
 stages:
   - test

@@ -1,4 +1,12 @@
 image: java:11
+java:
+  stage: test
+  script:
+    - gradle test
+  artifacts:
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+
 deploy:
   stage: deploy
   image: ruby:2.3

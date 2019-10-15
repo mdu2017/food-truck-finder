@@ -1,4 +1,5 @@
-
+#image: java:11
+image: openjdk:11-jre-slim
 
 stages:
   - test
@@ -11,8 +12,6 @@ java:
   artifacts:
     reports:
       junit: build/test-results/test/**/TEST-*.xml
-
-image: java:11
 
 deploy:
   stage: deploy

@@ -15,14 +15,12 @@ import {
 	FormGroup,
 	Label,
 	Input,
-	FormText,
 	Row,
 	Nav,
 	NavItem,
 	NavLink,
 	Container
 } from 'reactstrap';
-import { State } from './backend';
 
 export class ViewUserProfilePage extends React.Component {
 	constructor(props) {
@@ -90,12 +88,12 @@ export class EditUserPage extends React.Component {
 					<h1>Manage Account</h1>
 					<br />{' '}
 					<span
-						style={
-							{
-								// textDecoration: 'underline',
-								// color: 'blue'
-							}
-						}
+						// style={
+						// 	{
+						// 		// textDecoration: 'underline',
+						// 		// color: 'blue'
+						// 	}
+						// }
 						href="#"
 						id="UncontrolledTooltipExample">
 						Username

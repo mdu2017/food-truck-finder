@@ -1,4 +1,6 @@
-image: openjdk:11
+#image: java:11
+#image: openjdk:11
+image: gradle:alpine
 
 stages:
   - test
@@ -9,8 +11,17 @@ test:
   script:
     - gradle test
   artifacts:
-    reports: build/test-results/test/binary/TEST-*.xml
-      junit:
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+
+#java:
+#  stage: test
+#  script:
+#    - gradle test
+#  artifacts:
+#    reports:
+#      junit: build/test-results/test/**/TEST-*.xml
+
 
 deploy:
   stage: deploy

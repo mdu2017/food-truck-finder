@@ -10,7 +10,17 @@ test:
   script:
     - gradle test
   artifacts:
-    reports: build/test-results/test/**/TEST-*.xml
+    reports:
+      junit: build/test-results/test/**/TEST-*.xml
+
+#java:
+#  stage: test
+#  script:
+#    - gradle test
+#  artifacts:
+#    reports:
+#      junit: build/test-results/test/**/TEST-*.xml
+
 
 deploy:
   stage: deploy

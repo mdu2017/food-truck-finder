@@ -58,12 +58,6 @@ export class Home extends React.Component {
 						<li>
 							<Link to="/page-1">Page 1</Link>
 						</li>
-						<li>
-							<Link to="/page-2">Page 2</Link>
-						</li>
-						<li>
-							<Link to="/page-3">Page 3</Link>
-						</li>
 						{/* <li><Link to="/hello">Example Endpoint</Link></li> */}
 					</ul>
 				</div>
@@ -342,7 +336,7 @@ export class ViewFoodTruckDetailsPage extends React.Component {
 	}
 }
 
-class Page1 extends React.Component {
+export class Page1 extends React.Component {
 	constructor(props) {
 		super(props);
 	}
@@ -373,20 +367,6 @@ Page1 = connect(() => ({
 	user: Users.getCookie('user'),
 	logout: Users.Actions.logout()
 }))(Page1);
-
-export { Page1 };
-
-export class Page2 extends React.Component {
-	render() {
-		return <div className="container padded">This is page 2.</div>;
-	}
-}
-
-export class Page3 extends React.Component {
-	render() {
-		return <div className="container padded">This is page 3.</div>;
-	}
-}
 
 export class HelloSend extends React.Component {
 	constructor(props) {

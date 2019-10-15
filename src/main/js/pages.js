@@ -231,13 +231,16 @@ export class SearchUsersPage extends React.Component {
 export class NotificationsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the notifications page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					This is the notifications page.
+					<ul>
+						<li>
+							<Link to="/">Home</Link>
+						</li>
+					</ul>
+				</div>
 			</div>
 		);
 	}

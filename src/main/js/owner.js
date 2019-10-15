@@ -5,7 +5,16 @@ import * as Users from 'js/backend';
 import * as Login from 'js/forms';
 import axios from 'axios';
 import * as NavBars from 'js/navBar';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import {
+	Button,
+	Form,
+	FormGroup,
+	Label,
+	Input,
+	FormText,
+	ListGroup,
+	ListGroupItem
+} from 'reactstrap';
 
 export class CreateFoodTruckPage extends React.Component {
 	constructor(props) {
@@ -38,6 +47,24 @@ export class CreateFoodTruckPage extends React.Component {
 		}); // Add registration
 		event.preventDefault();
 	};
+
+	displayDayOfTheWeek(dayofTheWeek) {
+		return (
+			<div>
+				<Form inline>
+					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+						<Input type="checkbox" />
+						{dayofTheWeek}
+					</FormGroup>
+					<FormGroup>
+						<Input type="time" name="time" id="StartTime" />
+						<Label for="EndTime"> - </Label>
+						<Input type="time" name="time" id="EndTime" />
+					</FormGroup>
+				</Form>
+			</div>
+		);
+	}
 
 	render() {
 		return (
@@ -119,29 +146,13 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup tag="fieldset">
 							<legend>Schedule</legend>
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
-									Sunday
-								</FormGroup>
-								<FormGroup>
-									<Label for="ftSunday" hidden>
-										StartTime
-									</Label>
-									<Input
-										type="time"
-										name="time"
-										id="ftSunday"
-									/>
-									<Label for="exampleTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="exampleTime"
-										placeholder="time placeholder"
-									/>
-								</FormGroup>
-							</Form>
+							{this.displayDayOfTheWeek('Sunday')}
+							{this.displayDayOfTheWeek('Monday')}
+							{this.displayDayOfTheWeek('Tuesday')}
+							{this.displayDayOfTheWeek('Wednesday')}
+							{this.displayDayOfTheWeek('Thursday')}
+							{this.displayDayOfTheWeek('Friday')}
+							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
 						<Button>Submit</Button>
 					</Form>
@@ -151,7 +162,41 @@ export class CreateFoodTruckPage extends React.Component {
 	}
 }
 
-export class EditFoodTruckPage extends React.Component {
+export class ListFoodTrucks extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
+	render() {
+		return (
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>Your Food Trucks</h1>
+					<ListGroup>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 1
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 2
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 3
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 4
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 5
+						</ListGroupItem>
+					</ListGroup>
+				</div>
+			</div>
+		);
+	}
+}
+
+export class EditFoodTruck extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
@@ -170,6 +215,24 @@ export class EditFoodTruckPage extends React.Component {
 	setSchedule = schedule => this.setState({ schedule });
 	setPrice = price => this.setState({ price });
 	setStatus = status => this.setState({ status });
+
+	displayDayOfTheWeek(dayofTheWeek) {
+		return (
+			<div>
+				<Form inline>
+					<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+						<Input type="checkbox" />
+						{dayofTheWeek}
+					</FormGroup>
+					<FormGroup>
+						<Input type="time" name="time" id="StartTime" />
+						<Label for="EndTime"> - </Label>
+						<Input type="time" name="time" id="EndTime" />
+					</FormGroup>
+				</Form>
+			</div>
+		);
+	}
 
 	handleSubmit = event => {
 		this.props.register({
@@ -263,29 +326,13 @@ export class EditFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup tag="fieldset">
 							<legend>Schedule</legend>
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
-									Sunday
-								</FormGroup>
-								<FormGroup>
-									<Label for="ftSunday" hidden>
-										StartTime
-									</Label>
-									<Input
-										type="time"
-										name="time"
-										id="ftSunday"
-									/>
-									<Label for="exampleTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="exampleTime"
-										placeholder="time placeholder"
-									/>
-								</FormGroup>
-							</Form>
+							{this.displayDayOfTheWeek('Sunday')}
+							{this.displayDayOfTheWeek('Monday')}
+							{this.displayDayOfTheWeek('Tuesday')}
+							{this.displayDayOfTheWeek('Wednesday')}
+							{this.displayDayOfTheWeek('Thursday')}
+							{this.displayDayOfTheWeek('Friday')}
+							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
 						<Button>Submit</Button>{' '}
 						<Button color="danger">Delete Food Truck</Button>
@@ -303,10 +350,7 @@ export class EditRouteSchedulePage extends React.Component {
 				This is the edit food truck route and schedule page.
 				<ul>
 					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-					<li>
-						<Link to="/owner/edit-food-truck">Edit Food Truck</Link>
+						<Link to="/edit-food-truck">Edit Food Truck</Link>
 					</li>
 				</ul>
 			</div>
@@ -319,11 +363,6 @@ export class CreateEventPage extends React.Component {
 		return (
 			<div className="container padded">
 				This is the create event page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-				</ul>
 			</div>
 		);
 	}
@@ -334,11 +373,6 @@ export class CreateSpecialPage extends React.Component {
 		return (
 			<div className="container padded">
 				This is the create special page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-				</ul>
 			</div>
 		);
 	}

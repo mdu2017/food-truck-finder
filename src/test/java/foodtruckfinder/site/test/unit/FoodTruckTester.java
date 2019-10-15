@@ -10,6 +10,7 @@ public class FoodTruckTester {
     String truckName = "Name of Truck";
     double lowVal = 1.5;
     double highVal = 3.0;
+    double delta = 0.001;
 
     @Test
     public void testTruckName(){
@@ -20,12 +21,12 @@ public class FoodTruckTester {
     @Test
     public void testLowPrice(){
         foodTruckDto.setPrice_low(lowVal);
-        assertEquals(java.util.Optional.ofNullable(foodTruckDto.getPrice_low()), 1.5);
+        assertEquals(foodTruckDto.getPrice_low(), 1.5, delta);
     }
 
     @Test
     public void testHighPrice(){
         foodTruckDto.setPrice_high(highVal);
-        assertEquals(java.util.Optional.ofNullable(foodTruckDto.getPrice_high()), 3.0);
+        assertEquals(foodTruckDto.getPrice_high(), 3.0, delta);
     }
 }

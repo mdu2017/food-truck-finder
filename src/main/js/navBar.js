@@ -16,7 +16,6 @@ import {
 	DropdownItem
 } from 'reactstrap';
 import {connect} from 'react-redux';
-import {Page1} from 'js/pages';
 
 class CustomNavBar extends React.Component {
 	constructor(props) {

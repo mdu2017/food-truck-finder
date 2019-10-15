@@ -2,7 +2,6 @@ import React from 'react';
 import { connect } from 'react-redux';
 
 import * as Users from 'js/backend';
-import { Link } from 'react-router-dom';
 
 export class LoginForm extends React.Component {
 	constructor(props) {

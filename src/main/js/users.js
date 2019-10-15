@@ -28,7 +28,7 @@ export class HomeUser extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar isLoggedIn={true} />
+				<CustomNavBar />
 				<div className="container padded">
 					This is a user's home page.
 					<ul>
@@ -85,7 +85,7 @@ export class ViewUserProfilePage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar isLoggedIn={true} />
+				<CustomNavBar />
 				<div className="container padded">
 					<h1>View Profile</h1>
 					<Container>

@@ -36,7 +36,7 @@
             `FOOD_TRUCK_ID` int(11) NOT NULL AUTO_INCREMENT,
             `NAME` varchar(45) NOT NULL,
             `TYPE` int(11) NOT NULL,
-            `TRUCK_IMAGE` blob NULL,
+            `TRUCK_IMAGE` blob,
             `PRICE_LOW` double NOT NULL,
             `PRICE_HIGH` double NOT NULL,
             `STATUS` varchar(12) NOT NULL,
@@ -59,12 +59,12 @@
             );
 
             CREATE TABLE `MENU` (
+            `ITEM_ID` int(11) NOT NULL,
             `TRUCK_ID` int(11) NOT NULL,
             `NAME` varchar(45) NOT NULL,
             `DESCRIPTION` varchar(300) DEFAULT NULL,
             `PRICE` double NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`),
-            UNIQUE KEY `TRUCK_ID_UNIQUE` (`TRUCK_ID`)
+            PRIMARY KEY (`ITEM_ID`)
             );
 
             CREATE TABLE `NOTIFICATION` (
@@ -86,7 +86,7 @@
             `TRUCK_ID` int(11) NOT NULL,
             `DAY` varchar(45) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`)
+            PRIMARY KEY (`TRUCK_ID`,`DAY`)
             );
 
             CREATE TABLE `SUBSCRIPTIONS` (

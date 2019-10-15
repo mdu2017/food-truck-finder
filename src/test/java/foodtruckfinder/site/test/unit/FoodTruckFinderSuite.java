@@ -7,5 +7,4 @@ import org.junit.runners.Suite.SuiteClasses;
 @RunWith(Suite.class)
 @SuiteClasses({FoodTruckTester.class, UserTester.class, StopTester.class})
 public class FoodTruckFinderSuite {
-
 }

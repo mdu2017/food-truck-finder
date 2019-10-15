@@ -1,9 +1,9 @@
 package foodtruckfinder.site.test.unit;
 
 import foodtruckfinder.site.common.user.UserDto;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
 
 public class UserTester {

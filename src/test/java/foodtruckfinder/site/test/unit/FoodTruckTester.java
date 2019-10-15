@@ -1,9 +1,9 @@
 package foodtruckfinder.site.test.unit;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
-import org.junit.jupiter.api.Test;
+import org.junit.Test;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.Assert.assertEquals;
 
 public class FoodTruckTester {
     FoodTruckDto foodTruckDto = new FoodTruckDto();
@@ -20,12 +20,12 @@ public class FoodTruckTester {
     @Test
     public void testLowPrice(){
         foodTruckDto.setPrice_low(lowVal);
-        assertEquals(foodTruckDto.getPrice_low(), 1.5);
+        assertEquals(java.util.Optional.ofNullable(foodTruckDto.getPrice_low()), 1.5);
     }
 
     @Test
     public void testHighPrice(){
         foodTruckDto.setPrice_high(highVal);
-        assertEquals(foodTruckDto.getPrice_high(), 3.0);
+        assertEquals(java.util.Optional.ofNullable(foodTruckDto.getPrice_high()), 3.0);
     }
 }

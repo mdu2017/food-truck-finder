@@ -76,13 +76,14 @@ Actions.authenticate = (username, password) => {
 				if(getCookie('user') != null) {
 					if(getCookie('owner') === 'true') {
 						window.location.href = '/#/owner';
-					}else {
+					} else {
 						window.location.href = '/#/user';
 					}
 				} else {
-					window.alert('This email and password combination is not valid, please try again');
+					window.alert(
+						'This email and password combination is not valid, please try again'
+					);
 				}
-
 			});
 		});
 	};
@@ -112,9 +113,10 @@ Actions.setAuthentication = authentication => {
 
 Actions.setUser = user => {
 	if (user) {
-		document.cookie = 'user=' + user['username'] + ';  path=/';
+		document.cookie = 'user=' + user['username'] + '; path=/';
 		document.cookie = 'userid=' + user['id'] + '; path=/';
 		document.cookie = 'owner=' + String(user['isOwner']) + '; path=/';
+		document.cookie = 'email=' + user['principal'] + '; path=/';
 	}
 	return { type: Actions.Types.SET_USER, user };
 };

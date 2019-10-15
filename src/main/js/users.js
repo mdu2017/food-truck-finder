@@ -82,6 +82,10 @@ export class ViewUserProfilePage extends React.Component {
 }
 
 export class EditUserPage extends React.Component {
+	constructor(props) {
+		super(props);
+	}
+
 	render() {
 		return (
 			<div>
@@ -100,14 +104,20 @@ export class EditUserPage extends React.Component {
 						id="UncontrolledTooltipExample">
 						Username
 					</span>
-					: Destroyer123
+					:{' '}
+					{_.isDefined(this.props.user) && (
+						<text>{this.props.user}</text>
+					)}
 					<UncontrolledTooltip
 						placement="right"
 						target="UncontrolledTooltipExample">
 						This cannot be changed!
 					</UncontrolledTooltip>
 					<br />
-					Email: andrew_case1@baylor.edu
+					Email:{' '}
+					{_.isDefined(this.props.email) && (
+						<text>{this.props.email}</text>
+					)}
 					<br />
 					<br />
 					<Form>
@@ -157,3 +167,9 @@ export class EditUserPage extends React.Component {
 		);
 	}
 }
+
+EditUserPage = connect(() => ({
+	authentication: Users.getCookie('authentication'),
+	user: Users.getCookie('user'),
+	email: Users.getCookie('email')
+}))(EditUserPage);

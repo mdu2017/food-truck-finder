@@ -11,7 +11,7 @@ import java.util.Map;
  * Created by jlutteringer on 8/23/17.
  */
 public class FoodTruckDto implements Momento<Long> {
-	private Long id;
+	private Long id, ownerId;
 	private String name;
 	private FoodType type;
 	private List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu;
@@ -30,8 +30,9 @@ public class FoodTruckDto implements Momento<Long> {
     public double getPrice_low() { return price_low; }
     public double getPrice_high() { return price_high; }
     public FTStatus getStatus() { return status; }
+	public Long getOwnerId() { return ownerId; }
 
-    //Setters
+	//Setters
     public void setId(Long id) { this.id = id; }
     public void setName(String name) { this.name = name; }
     public void setType(FoodType type) { this.type = type; }
@@ -43,6 +44,7 @@ public class FoodTruckDto implements Momento<Long> {
 	public void setPrice_high(Double price_high) { this.price_high = price_high; }
 	public void setStatus(FTStatus status) { this.status = status; }
 	public void setStatus(String status){ this.status = FTStatus.valueOf(status); }
+	public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
 
 	@Override
 	public Long getMomento() {

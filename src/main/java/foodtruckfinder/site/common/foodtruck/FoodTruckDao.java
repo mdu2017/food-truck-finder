@@ -48,6 +48,8 @@ public class FoodTruckDao {
 			foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
 			foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
 			foodTruckDto.setStatus(rs.getString("STATUS"));
+			foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
+
 			//need to get menu, schedule, truck_image, and type
 			//For menu, get a list
 			String menusql = "SELECT ITEM_ID, name, description, price FROM MENU WHERE TRUCK_ID = :foodTruckId";
@@ -233,10 +235,11 @@ public class FoodTruckDao {
 
 
 			String sql = "INSERT INTO FOOD_TRUCK " +
-					"(NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-					"(:name, :type, :price_low, :price_high, :status)";
+					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
+					"(:owner_id, :name, :type, :price_low, :price_high, :status)";
 
 			Map<String, ?> parameters = _Maps.mapPairs(
+					new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
 					new Tuple.Tuple2<>("name", foodTruck.getName()),
 					new Tuple.Tuple2<>("type", foodTruck.getType().toString()),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),

@@ -60,6 +60,11 @@ export function getOwnerFoodTruckIDs(id) {
 	return axios.get('/api/user/owner/getFoodTrucks', id);
 }
 
+//
+export function getFoodTrucksByOwner(owner_id) {
+	return axios.get('/api/food-truck/getFoodTrucksByOwner', owner_id);
+}
+
 export function getCookie(name) {
 	var nameEQ = name + '=';
 	var ca = document.cookie.split(';');
@@ -112,6 +117,12 @@ Actions.createFT = foodTruck => {
 Actions.getOwnerFoodTruckIDs = id => {
 	return () => {
 		return getOwnerFoodTruckIDs(id);
+	};
+};
+
+Actions.getFoodTrucksByOwner = owner_id => {
+	return () => {
+		return getFoodTrucksByOwner(owner_id);
 	};
 };
 

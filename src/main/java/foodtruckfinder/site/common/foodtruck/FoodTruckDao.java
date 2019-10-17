@@ -86,8 +86,8 @@ public class FoodTruckDao {
 			foodTruckDto.setTruck_image(null);
 
 			//type
-			String typesql = "SELECT type FROM food_type, food_truck " +
-							 "WHERE food_truck_id = :foodTruckId AND food_truck.type = type.type_id";
+			String typesql = "SELECT food_type.type FROM food_type, food_truck " +
+							 "WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
 			String type = jdbcTemplate.query(typesql, parameters, typers -> {
 				typers.next();
 				return typers.getString("type");
@@ -337,7 +337,7 @@ public class FoodTruckDao {
 				for(Long ft : ids){
 					//get each food truck
 					Optional<FoodTruckDto> temp = this.find(ft + "");
-					if(!temp.isPresent()){
+					if(temp.isPresent()){
 						trucks.add(temp.get());
 					}
 				}

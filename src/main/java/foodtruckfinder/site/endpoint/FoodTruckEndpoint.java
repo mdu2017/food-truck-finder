@@ -45,4 +45,13 @@ public class FoodTruckEndpoint {
 		foodTruckService.subscribe(ftid, userid);
 	}
 
+	/**
+	 * This function returns a list of food trucks based on an owner id
+	 * @param owner_id the owner to retrieve food trucks for
+	 * @return A list of food trucks
+	 */
+	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
+	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
+		return foodTruckService.getFoodTrucksByOwner(owner_id);
+	}
 }

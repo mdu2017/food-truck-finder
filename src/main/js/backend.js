@@ -1,11 +1,16 @@
 import axios from 'axios';
 
+
 export function register(user) {
 	return axios.post('/api/user/register', user);
 }
 
 export function update(user) {
 	return axios.post('/api/user/update', user);
+}
+
+export function user(username) {
+	return axios.get('/api/user/' + username);
 }
 
 export function authenticate(username, password) {
@@ -83,16 +88,20 @@ Actions.authenticate = (username, password) => {
 	return dispatch => {
 		return authenticate(username, password).then(authentication => {
 			dispatch(Actions.setAuthentication(authentication));
+			document.cookie =
+				'authentication=' + JSON.stringify(authentication) + '; path=/';
+
 
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
+				document.cookie = 'user=' + JSON.stringify(user) + '; path=/';
+				document.cookie = 'username=' + user['username'] + '; path=/';
+				document.cookie = 'userid=' + user['id'] + '; path=/';
+				document.cookie = 'owner=' + String(user['isOwner']) + '; path=/';
+				document.cookie = 'email=' + user['principal'] + '; path=/';
 
-				if (getCookie('user') != null) {
-					if (getCookie('owner') === 'true') {
-						window.location.href = '/#/';
-					} else {
-						window.location.href = '/#/';
-					}
+				if (getCookie('userid') != null) {
+					window.location.href = '/#/';
 				} else {
 					window.alert(
 						'This email and password combination is not valid, please try again'
@@ -118,20 +127,10 @@ Actions.logout = () => {
 };
 
 Actions.setAuthentication = authentication => {
-	if (authentication) {
-		document.cookie =
-			'authentication=' + authentication['access_token'] + '; path=/';
-	}
 	return { type: Actions.Types.SET_AUTHENTICATION, authentication };
 };
 
 Actions.setUser = user => {
-	if (user) {
-		document.cookie = 'user=' + user['username'] + '; path=/';
-		document.cookie = 'userid=' + user['id'] + '; path=/';
-		document.cookie = 'owner=' + String(user['isOwner']) + '; path=/';
-		document.cookie = 'email=' + user['principal'] + '; path=/';
-	}
 	return { type: Actions.Types.SET_USER, user };
 };
 

@@ -51,3 +51,10 @@ ReactDOM.render(
 	</Provider>,
 	mountNode
 );
+
+let token = Users.getCookie('authentication');
+let uToken = Users.getCookie('user');
+if(_.isDefined(token) && _.isDefined(uToken)) {
+	store.dispatch(Users.Actions.setAuthentication(JSON.parse(token)));
+	store.dispatch(Users.Actions.setUser(JSON.parse(uToken)));
+}

@@ -129,16 +129,11 @@ export class LoginPage extends React.Component {
 export class EventsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the events list page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-					<li>
-						<Link to="/events/event">Event Details</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>Events</h1>
+				</div>
 			</div>
 		);
 	}
@@ -231,13 +226,11 @@ export class SearchUsersPage extends React.Component {
 export class NotificationsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the notifications page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>Notifications</h1>
+				</div>
 			</div>
 		);
 	}

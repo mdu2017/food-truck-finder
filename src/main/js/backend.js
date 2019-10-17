@@ -1,6 +1,5 @@
 import axios from 'axios';
 
-
 export function register(user) {
 	return axios.post('/api/user/register', user);
 }
@@ -9,9 +8,26 @@ export function update(user) {
 	return axios.post('/api/user/update', user);
 }
 
-export function user(username) {
-	return axios.get('/api/user/' + username);
+//Calls the food truck Endpoint to save it to the database
+export function createFoodTruck(foodTruck) {
+	return axios.post('/api/food-truck/save', foodTruck);
 }
+
+// export function makeFT(name, status) {
+// 	return axios({
+// 		method: 'post',
+// 		url: '/oauth/token',
+// 		params: {
+// 			grant_type: 'password',
+// 			name,
+// 			status
+// 		},
+// 		auth: {
+// 			username: 'food-truck-finder-app',
+// 			password: 'food-truck-finder-app-secret'
+// 		}
+// 	});
+// }
 
 export function authenticate(username, password) {
 	return axios({
@@ -29,8 +45,24 @@ export function authenticate(username, password) {
 	});
 }
 
+//Grab user details
 export function getUserDetails() {
 	return axios.get('/api/user');
+}
+
+//Grab FOOD TRUCK details
+export function getFoodTruckDetails() {
+	return axios.get('/api/food-truck');
+}
+
+// Get list of Food Trucks
+export function getOwnerFoodTruckIDs(id) {
+	return axios.get('/api/user/owner/getFoodTrucks', id);
+}
+
+//
+export function getFoodTrucksByOwner(owner_id) {
+	return axios.get('/api/food-truck/getFoodTrucksByOwner', owner_id);
 }
 
 export function getCookie(name) {
@@ -61,7 +93,8 @@ let Actions = {};
 
 Actions.Types = {
 	SET_AUTHENTICATION: 'SET_AUTHENTICATION',
-	SET_USER: 'SET_USER'
+	SET_USER: 'SET_USER',
+	SET_FOOD_TRUCK: 'SET_FOOD_TRUCK'
 };
 
 Actions.register = user => {
@@ -71,6 +104,25 @@ Actions.register = user => {
 				Actions.authenticate(user.principal, user.password)
 			);
 		});
+	};
+};
+
+//Create food truck
+Actions.createFT = foodTruck => {
+	return () => {
+		return createFoodTruck(foodTruck);
+	};
+};
+
+Actions.getOwnerFoodTruckIDs = id => {
+	return () => {
+		return getOwnerFoodTruckIDs(id);
+	};
+};
+
+Actions.getFoodTrucksByOwner = owner_id => {
+	return () => {
+		return getFoodTrucksByOwner(owner_id);
 	};
 };
 
@@ -128,6 +180,11 @@ Actions.logout = () => {
 
 Actions.setAuthentication = authentication => {
 	return { type: Actions.Types.SET_AUTHENTICATION, authentication };
+};
+
+//Set food truck
+Actions.setFoodTruck = foodTruck => {
+	return { type: Actions.Types.SET_FOOD_TRUCK, foodTruck };
 };
 
 Actions.setUser = user => {

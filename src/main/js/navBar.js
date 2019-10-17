@@ -16,7 +16,8 @@ import {
 	DropdownItem,
 	Container,
 	Row,
-	Col
+	Col,
+	Badge
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -51,17 +52,23 @@ export class CustomNavBar extends React.Component {
 						View Profile
 					</DropdownToggle>
 					<DropdownMenu right>
-						<DropdownItem tag={Link} to="/user/view-profile">
+						<DropdownItem tag={Link} to="/view-profile">
 							View Profile
 						</DropdownItem>
-						<DropdownItem tag={Link} to="/user/edit-user">
+						<DropdownItem tag={Link} to="/edit-user">
 							Manage Account
 						</DropdownItem>
 						<DropdownItem
 							tag={Link}
-							to="/owner/edit-food-truck"
+							to="/list-food-trucks"
 							hidden={!(Users.getCookie('owner') == 'true')}>
 							Edit Food Trucks
+						</DropdownItem>
+						<DropdownItem
+							tag={Link}
+							to="/create-food-truck"
+							hidden={!(Users.getCookie('owner') == 'true')}>
+							Add Food Truck
 						</DropdownItem>
 						<DropdownItem divider />
 						<DropdownItem onClick={this.logout}>
@@ -135,8 +142,9 @@ export class SidebarNav extends React.Component {
 								<NavItem>
 									<NavLink
 										hidden={!this.state.authentication}
-										href="#/user/notifications">
-										Notifications
+										href="#/notifications">
+										Notifications{' '}
+										<Badge color="secondary">4</Badge>
 									</NavLink>
 								</NavItem>
 								<NavItem>
@@ -150,7 +158,9 @@ export class SidebarNav extends React.Component {
 									</NavLink>
 								</NavItem>
 								<NavItem>
-									<NavLink href="#/about">About Us</NavLink>
+									<NavLink disabled href="#/about">
+										About Us
+									</NavLink>
 								</NavItem>
 								<NavItem>
 									<NavLink href="#/page-1">Page 1</NavLink>

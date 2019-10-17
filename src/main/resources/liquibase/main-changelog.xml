@@ -34,14 +34,19 @@
 
             CREATE TABLE `FOOD_TRUCK` (
             `FOOD_TRUCK_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `OWNER_ID` int(11) NOT NULL,
             `NAME` varchar(45) NOT NULL,
             `TYPE` int(11) NOT NULL,
+            `MENU` int(11) NOT NULL,
             `TRUCK_IMAGE` blob,
+            `SCHEDULE` int(11) NOT NULL,
             `PRICE_LOW` double NOT NULL,
             `PRICE_HIGH` double NOT NULL,
             `STATUS` varchar(12) NOT NULL,
             PRIMARY KEY (`FOOD_TRUCK_ID`),
-            UNIQUE KEY `FOOD_TRUCK_ID_UNIQUE` (`FOOD_TRUCK_ID`)
+            UNIQUE KEY `FOOD_TRUCK_ID_UNIQUE` (`FOOD_TRUCK_ID`),
+            KEY `owned_by_idx` (`OWNER_ID`),
+            CONSTRAINT `OWNED_BY` FOREIGN KEY (`OWNER_ID`) REFERENCES `USER` (`USER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `DEAL` (

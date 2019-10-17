@@ -123,13 +123,14 @@ tasks.build.dependsOn buildTests
 
 test {
 	useJUnitPlatform()
-	exclude '**/test/integration/**'
-	exclude '**/test/functional/**'
-	exclude '**/test/harness/**'
+	//exclude '**/test/integration/**'
+	//exclude '**/test/functional/**'
+	//exclude '**/test/harness/**'
 }
 
 task integrationTest(type: Test, dependsOn: 'testClasses') {
-	testClassesDir = sourceSets.test.output.classesDir
+//	testClassesDir = sourceSets.test.output.classesDir
+//	classesDir = sourceSets.test.output.classesDir
 	classpath = sourceSets.test.runtimeClasspath
 	jvmArgs = ["-Druntime.environment=integrationdev"]
 

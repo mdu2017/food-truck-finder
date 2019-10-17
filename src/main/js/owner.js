@@ -2,17 +2,26 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
-import * as Login from 'js/forms';
-import axios from 'axios';
 import * as NavBars from 'js/navBar';
-import { Button, Form, FormGroup, Label, Input, FormText } from 'reactstrap';
+import {
+	Button,
+	Form,
+	FormGroup,
+	Label,
+	Input,
+	FormText,
+	ListGroup,
+	ListGroupItem,
+	Container,
+	Col,
+	Row
+} from 'reactstrap';
 
 export class CreateFoodTruckPage extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			name: null,
-			route: null,
 			menu: null,
 			schedule: null,
 			price: null,
@@ -21,16 +30,14 @@ export class CreateFoodTruckPage extends React.Component {
 	}
 
 	setName = name => this.setState({ name });
-	setRoute = route => this.setState({ route });
 	setMenu = menu => this.setState({ menu });
 	setSchedule = schedule => this.setState({ schedule });
 	setPrice = price => this.setState({ price });
 	setStatus = status => this.setState({ status });
 
 	handleSubmit = event => {
-		this.props.register({
+		this.props.createFT({
 			name: this.state.name,
-			route: this.state.route,
 			menu: this.state.menu,
 			schedule: this.state.schedule,
 			price: this.state.price,
@@ -38,6 +45,62 @@ export class CreateFoodTruckPage extends React.Component {
 		}); // Add registration
 		event.preventDefault();
 	};
+
+	displayDayOfTheWeek(dayofTheWeek) {
+		return (
+			<div>
+				<Container>
+					<Row>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input type="checkbox" />
+									{dayofTheWeek}
+								</FormGroup>
+								<FormGroup>
+									<Input
+										type="time"
+										name="time"
+										id="StartTime"
+									/>
+									<Label for="EndTime"> - </Label>
+									<Input
+										type="time"
+										name="time"
+										id="EndTime"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+						<Col>
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="latitude"
+										id="latitude"
+										placeholder="latitude"
+										step="0.01"
+									/>
+								</FormGroup>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="longitude"
+										id="longitude"
+										placeholder="longitude"
+										step="0.01"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+					</Row>
+				</Container>
+			</div>
+		);
+	}
 
 	render() {
 		return (
@@ -54,20 +117,16 @@ export class CreateFoodTruckPage extends React.Component {
 								name="name"
 								id="ftName"
 								placeholder="Name of Food Truck"
-							/>
-						</FormGroup>
-						<FormGroup>
-							<Label for="ftRoute">Route</Label>
-							<Input
-								type="text"
-								name="route"
-								id="ftRoute"
-								placeholder="route placeholder"
+								onChange={e => this.setName(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
-							<Input type="select" name="status" id="ftStatus">
+							<Input
+								type="select"
+								name="status"
+								id="ftStatus"
+								onChange={e => this.setStatus(e.target.value)}>
 								<option>Open</option>
 								<option>Closed</option>
 								<option>Closed (Maintenance)</option>
@@ -84,15 +143,27 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<Form inline>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftPrice" className="mr-sm-2">
-									Average Price
+								<Label for="ftLowPrice" className="mr-sm-2">
+									Price Low
 								</Label>
 								<Input
 									type="number"
 									min={0}
 									name="price"
-									id="ftPrice"
-									placeholder="Whole Numbers Only"
+									id="ftLowPrice"
+									step="0.01"
+								/>
+							</FormGroup>
+							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+								<Label for="ftHighPrice" className="mr-sm-2">
+									Price High
+								</Label>
+								<Input
+									type="number"
+									min={0}
+									name="price"
+									id="ftHighPrice"
+									step="0.01"
 								/>
 							</FormGroup>
 						</Form>
@@ -119,44 +190,88 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup tag="fieldset">
 							<legend>Schedule</legend>
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
-									Sunday
-								</FormGroup>
-								<FormGroup>
-									<Label for="ftSunday" hidden>
-										StartTime
-									</Label>
-									<Input
-										type="time"
-										name="time"
-										id="ftSunday"
-									/>
-									<Label for="exampleTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="exampleTime"
-										placeholder="time placeholder"
-									/>
-								</FormGroup>
-							</Form>
+							{this.displayDayOfTheWeek('Sunday')}
+							{this.displayDayOfTheWeek('Monday')}
+							{this.displayDayOfTheWeek('Tuesday')}
+							{this.displayDayOfTheWeek('Wednesday')}
+							{this.displayDayOfTheWeek('Thursday')}
+							{this.displayDayOfTheWeek('Friday')}
+							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
-						<Button>Submit</Button>
+						<Button onClick={this.handleSubmit}>Submit</Button>
 					</Form>
 				</div>
 			</div>
 		);
 	}
 }
+CreateFoodTruckPage = connect(
+	() => ({}),
+	dispatch => ({
+		createFT: foodTruck => dispatch(Users.Actions.createFT(foodTruck))
+	})
+)(CreateFoodTruckPage);
 
-export class EditFoodTruckPage extends React.Component {
+export class ListFoodTrucks extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			user: Users.getCookie('user'),
+			logout: Users.Actions.logout(),
+			id: Users.getCookie('userid'),
+			isOwner: Users.getCookie('owner')
+		};
+	}
+
+	handleSubmit = event => {
+		this.props.getTrucks(this.state.id);
+		event.preventDefault();
+	};
+
+	render() {
+		return (
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>Your Food Trucks</h1>
+					<text>{this.props.getTrucks}</text>
+					<button onClick={this.handleSubmit}>Click</button>
+					<ListGroup>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 1
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 2
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 3
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 4
+						</ListGroupItem>
+						<ListGroupItem tag="a" href="#/edit-food-truck">
+							Food Truck 5
+						</ListGroupItem>
+					</ListGroup>
+				</div>
+			</div>
+		);
+	}
+}
+
+ListFoodTrucks = connect(
+	() => {},
+	dispatch => ({
+		getTrucks: id => dispatch(Users.Actions.getOwnerFoodTruckIDs(id))
+	})
+)(ListFoodTrucks);
+
+export class EditFoodTruck extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			name: null,
-			route: null,
 			menu: null,
 			schedule: null,
 			price: null,
@@ -165,16 +280,70 @@ export class EditFoodTruckPage extends React.Component {
 	}
 
 	setName = name => this.setState({ name });
-	setRoute = route => this.setState({ route });
 	setMenu = menu => this.setState({ menu });
 	setSchedule = schedule => this.setState({ schedule });
 	setPrice = price => this.setState({ price });
 	setStatus = status => this.setState({ status });
 
+	displayDayOfTheWeek(dayofTheWeek) {
+		return (
+			<div>
+				<Container>
+					<Row>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input type="checkbox" />
+									{dayofTheWeek}
+								</FormGroup>
+								<FormGroup>
+									<Input
+										type="time"
+										name="time"
+										id="StartTime"
+									/>
+									<Label for="EndTime"> - </Label>
+									<Input
+										type="time"
+										name="time"
+										id="EndTime"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+						<Col>
+							<Form inline>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="latitude"
+										id="latitude"
+										placeholder="latitude"
+										step="0.01"
+									/>
+								</FormGroup>
+								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+									<Input
+										type="number"
+										min={0}
+										name="longitude"
+										id="longitude"
+										placeholder="longitude"
+										step="0.01"
+									/>
+								</FormGroup>
+							</Form>
+						</Col>
+					</Row>
+				</Container>
+			</div>
+		);
+	}
+
 	handleSubmit = event => {
 		this.props.register({
 			name: this.state.name,
-			route: this.state.route,
 			menu: this.state.menu,
 			schedule: this.state.schedule,
 			price: this.state.price,
@@ -201,15 +370,6 @@ export class EditFoodTruckPage extends React.Component {
 							/>
 						</FormGroup>
 						<FormGroup>
-							<Label for="ftRoute">Route</Label>
-							<Input
-								type="text"
-								name="route"
-								id="ftRoute"
-								placeholder="route placeholder"
-							/>
-						</FormGroup>
-						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
 							<Input type="select" name="status" id="ftStatus">
 								<option>Open</option>
@@ -228,15 +388,27 @@ export class EditFoodTruckPage extends React.Component {
 						</FormGroup>
 						<Form inline>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftPrice" className="mr-sm-2">
-									Average Price
+								<Label for="ftLowPrice" className="mr-sm-2">
+									Price Low
 								</Label>
 								<Input
 									type="number"
 									min={0}
 									name="price"
-									id="ftPrice"
-									placeholder="Whole Numbers Only"
+									id="ftLowPrice"
+									step="0.01"
+								/>
+							</FormGroup>
+							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+								<Label for="ftHighPrice" className="mr-sm-2">
+									Price High
+								</Label>
+								<Input
+									type="number"
+									min={0}
+									name="price"
+									id="ftHighPrice"
+									step="0.01"
 								/>
 							</FormGroup>
 						</Form>
@@ -262,30 +434,14 @@ export class EditFoodTruckPage extends React.Component {
 							</FormText>
 						</FormGroup>
 						<FormGroup tag="fieldset">
-							<legend>Schedule</legend>
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
-									Sunday
-								</FormGroup>
-								<FormGroup>
-									<Label for="ftSunday" hidden>
-										StartTime
-									</Label>
-									<Input
-										type="time"
-										name="time"
-										id="ftSunday"
-									/>
-									<Label for="exampleTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="exampleTime"
-										placeholder="time placeholder"
-									/>
-								</FormGroup>
-							</Form>
+							<legend>Schedule / Route</legend>
+							{this.displayDayOfTheWeek('Sunday')}
+							{this.displayDayOfTheWeek('Monday')}
+							{this.displayDayOfTheWeek('Tuesday')}
+							{this.displayDayOfTheWeek('Wednesday')}
+							{this.displayDayOfTheWeek('Thursday')}
+							{this.displayDayOfTheWeek('Friday')}
+							{this.displayDayOfTheWeek('Saturday')}
 						</FormGroup>
 						<Button>Submit</Button>{' '}
 						<Button color="danger">Delete Food Truck</Button>
@@ -303,10 +459,7 @@ export class EditRouteSchedulePage extends React.Component {
 				This is the edit food truck route and schedule page.
 				<ul>
 					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-					<li>
-						<Link to="/owner/edit-food-truck">Edit Food Truck</Link>
+						<Link to="/edit-food-truck">Edit Food Truck</Link>
 					</li>
 				</ul>
 			</div>
@@ -319,11 +472,6 @@ export class CreateEventPage extends React.Component {
 		return (
 			<div className="container padded">
 				This is the create event page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-				</ul>
 			</div>
 		);
 	}
@@ -334,11 +482,6 @@ export class CreateSpecialPage extends React.Component {
 		return (
 			<div className="container padded">
 				This is the create special page.
-				<ul>
-					<li>
-						<Link to="/owner">Home</Link>
-					</li>
-				</ul>
 			</div>
 		);
 	}

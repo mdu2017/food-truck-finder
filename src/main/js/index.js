@@ -31,12 +31,12 @@ export default class Index extends React.Component {
 					/>
 					<Route
 						exect
-						path="/user/view-profile"
+						path="/view-profile"
 						component={User.ViewUserProfilePage}
 					/>
 					<Route
 						exect
-						path="/user/edit-user"
+						path="/edit-user"
 						component={User.EditUserPage}
 					/>
 					<Route
@@ -56,33 +56,38 @@ export default class Index extends React.Component {
 					/>
 					<Route
 						exact
-						path="/user/notifications"
+						path="/notifications"
 						component={Pages.NotificationsPage}
 					/>
 					<Route exact path="/about" component={Pages.AboutUsPage} />
 					<Route
 						exact
-						path="/owner/create-food-truck"
+						path="/create-food-truck"
 						component={Owner.CreateFoodTruckPage}
 					/>
 					<Route
 						exact
-						path="/owner/edit-food-truck"
-						component={Owner.EditFoodTruckPage}
+						path="/edit-food-truck"
+						component={Owner.EditFoodTruck}
 					/>
 					<Route
 						exact
-						path="/owner/edit-food-truck/edit-route-schedule"
+						path="/list-food-trucks"
+						component={Owner.ListFoodTrucks}
+					/>
+					<Route
+						exact
+						path="/edit-food-truck/edit-route-schedule"
 						component={Owner.EditRouteSchedulePage}
 					/>
 					<Route
 						exact
-						path="/owner/create-event"
+						path="/create-event"
 						component={Owner.CreateEventPage}
 					/>
 					<Route
 						exact
-						path="/owner/create-special"
+						path="/create-special"
 						component={Owner.CreateSpecialPage}
 					/>
 					<Route exact path="/page-1" component={Pages.Page1} />

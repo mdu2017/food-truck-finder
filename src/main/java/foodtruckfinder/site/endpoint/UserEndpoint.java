@@ -11,6 +11,7 @@ import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
 import foodtruckfinder.site.common.user.UserService.UpdateRequest;
+import foodtruckfinder.site.common.user.UserService.GetRequest;
 import foodtruckfinder.site.common.user.UserDto;
 
 /**
@@ -91,8 +92,8 @@ public class UserEndpoint {
 		return userService.update(request);
 	}
 
-	@PostMapping(value = "/owner/getFoodTrucks", produces = "application/json")
-	public Optional<List<Long>> getOwnedFoodTrucks(){
-		return userService.getOwnedFoodTrucks(SecurityContextHolder.getContext().getAuthentication().getName());
+	@GetMapping(value = "/owner/getFoodTrucks", produces = "application/json")
+	public Optional<List<Long>> getOwnedFoodTrucks(Long id){
+		return userService.getOwnedFoodTrucks(id);
 	}
 }

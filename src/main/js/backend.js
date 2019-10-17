@@ -9,7 +9,7 @@ export function update(user) {
 }
 
 //Calls the food truck Endpoint to save it to the database
-export function createFoodTruck(foodTruck){
+export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
@@ -53,6 +53,11 @@ export function getUserDetails() {
 //Grab FOOD TRUCK details
 export function getFoodTruckDetails() {
 	return axios.get('/api/food-truck');
+}
+
+// Get list of Food Trucks
+export function getOwnerFoodTruckIDs(id) {
+	return axios.get('/api/user/owner/getFoodTrucks', id);
 }
 
 export function getCookie(name) {
@@ -104,6 +109,11 @@ Actions.createFT = foodTruck => {
 	};
 };
 
+Actions.getOwnerFoodTruckIDs = id => {
+	return () => {
+		return getOwnerFoodTruckIDs(id);
+	};
+};
 
 Actions.update = user => {
 	return dispatch => {
@@ -163,8 +173,7 @@ Actions.setAuthentication = authentication => {
 
 //Set food truck
 Actions.setFoodTruck = foodTruck => {
-
-	return{type: Actions.Types.SET_FOOD_TRUCK, foodTruck};
+	return { type: Actions.Types.SET_FOOD_TRUCK, foodTruck };
 };
 
 Actions.setUser = user => {

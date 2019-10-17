@@ -122,8 +122,11 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
-							<Input type="select" name="status" id="ftStatus"
-								   onChange={e => this.setStatus(e.target.value)}>
+							<Input
+								type="select"
+								name="status"
+								id="ftStatus"
+								onChange={e => this.setStatus(e.target.value)}>
 								<option>Open</option>
 								<option>Closed</option>
 								<option>Closed (Maintenance)</option>
@@ -212,7 +215,19 @@ CreateFoodTruckPage = connect(
 export class ListFoodTrucks extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			user: Users.getCookie('user'),
+			logout: Users.Actions.logout(),
+			id: Users.getCookie('userid'),
+			isOwner: Users.getCookie('owner')
+		};
 	}
+
+	handleSubmit = event => {
+		this.props.getTrucks(this.state.id);
+		event.preventDefault();
+	};
 
 	render() {
 		return (
@@ -220,6 +235,8 @@ export class ListFoodTrucks extends React.Component {
 				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Your Food Trucks</h1>
+					<text>{this.props.getTrucks}</text>
+					<button onClick={this.handleSubmit}>Click</button>
 					<ListGroup>
 						<ListGroupItem tag="a" href="#/edit-food-truck">
 							Food Truck 1
@@ -242,6 +259,13 @@ export class ListFoodTrucks extends React.Component {
 		);
 	}
 }
+
+ListFoodTrucks = connect(
+	() => {},
+	dispatch => ({
+		getTrucks: id => dispatch(Users.Actions.getOwnerFoodTruckIDs(id))
+	})
+)(ListFoodTrucks);
 
 export class EditFoodTruck extends React.Component {
 	constructor(props) {

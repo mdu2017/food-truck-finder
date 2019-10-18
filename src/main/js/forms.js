@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 
 import * as Users from 'js/backend';
 
-//Form for logging in
 export class LoginForm extends React.Component {
 	constructor(props) {
 		super(props);
@@ -59,7 +58,6 @@ LoginForm = connect(
 	})
 )(LoginForm);
 
-//Form for creating a new account
 export class RegistrationForm extends React.Component {
 	constructor(props) {
 		super(props);

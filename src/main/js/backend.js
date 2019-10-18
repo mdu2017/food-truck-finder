@@ -21,7 +21,6 @@ export function authenticate(username, password) {
 			username: 'food-truck-finder-app',
 			password: 'food-truck-finder-app-secret'
 		}
-
 	});
 }
 
@@ -62,7 +61,6 @@ Actions.Types = {
 	SET_FOOD_TRUCK: 'SET_FOOD_TRUCK'
 };
 
-//Registers user when creating an account
 Actions.register = user => {
 	return dispatch => {
 		return register(user).then(() => {
@@ -73,7 +71,7 @@ Actions.register = user => {
 	};
 };
 
-//Authenticates the user when logging in
+
 Actions.update = user => {
 	return dispatch => {
 		return update(user).then(() => {
@@ -89,11 +87,8 @@ Actions.authenticate = (username, password) => {
 		return authenticate(username, password).then(authentication => {
 			dispatch(Actions.setAuthentication(authentication));
 
-
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
-				// window.alert(document.cookie);
-				window.location.href = '/';
 
 				if (getCookie('user') != null) {
 					if (getCookie('owner') === 'true') {
@@ -111,7 +106,6 @@ Actions.authenticate = (username, password) => {
 	};
 };
 
-//Logs the user out (clears cookies)
 Actions.logout = () => {
 	return () => {
 		Actions.setAuthentication(null);
@@ -119,9 +113,6 @@ Actions.logout = () => {
 		document.cookie =
 			'authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
-
-		// window.alert(document.cookie);
-
 		document.cookie = 'userid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'owner= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';

@@ -19,7 +19,10 @@ const reducers = [{ form: formReducer }, Users.Reducers];
 const reducer = Utils.combineReducers(reducers);
 const store = createStore(
 	reducer,
-	{ authentication: Users.getCookie('authentication'), user: Users.getCookie('email')},
+	{
+		authentication: Users.getCookie('authentication'),
+		user: Users.getCookie('email')
+	},
 	applyMiddleware(thunkMiddleware, createLogger())
 );
 
@@ -54,7 +57,7 @@ ReactDOM.render(
 
 let token = Users.getCookie('authentication');
 let uToken = Users.getCookie('user');
-if(_.isDefined(token) && _.isDefined(uToken)) {
+if (_.isDefined(token) && _.isDefined(uToken)) {
 	store.dispatch(Users.Actions.setAuthentication(JSON.parse(token)));
 	store.dispatch(Users.Actions.setUser(JSON.parse(uToken)));
 }

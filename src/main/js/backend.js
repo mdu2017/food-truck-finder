@@ -61,8 +61,12 @@ export function getOwnerFoodTruckIDs(id) {
 }
 
 //
-export function getFoodTrucksByOwner(owner_id) {
-	return axios.get('/api/food-truck/getFoodTrucksByOwner', owner_id);
+export function getFoodTrucksByOwner(id) {
+	return axios.get('/api/food-truck/getFoodTrucksByOwner', {
+		params: {
+			owner_id: id
+		}
+	});
 }
 
 export function getCookie(name) {
@@ -121,8 +125,8 @@ Actions.getOwnerFoodTruckIDs = id => {
 };
 
 Actions.getFoodTrucksByOwner = owner_id => {
-	return () => {
-		return getFoodTrucksByOwner(owner_id);
+	return dispatch => {
+		return dispatch(getFoodTrucksByOwner(owner_id));
 	};
 };
 
@@ -143,13 +147,13 @@ Actions.authenticate = (username, password) => {
 			document.cookie =
 				'authentication=' + JSON.stringify(authentication) + '; path=/';
 
-
 			return getUserDetails().then(user => {
 				dispatch(Actions.setUser(user));
 				document.cookie = 'user=' + JSON.stringify(user) + '; path=/';
 				document.cookie = 'username=' + user['username'] + '; path=/';
 				document.cookie = 'userid=' + user['id'] + '; path=/';
-				document.cookie = 'owner=' + String(user['isOwner']) + '; path=/';
+				document.cookie =
+					'owner=' + String(user['isOwner']) + '; path=/';
 				document.cookie = 'email=' + user['principal'] + '; path=/';
 
 				if (getCookie('userid') != null) {

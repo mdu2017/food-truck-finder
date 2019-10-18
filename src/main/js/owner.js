@@ -219,15 +219,36 @@ export class ListFoodTrucks extends React.Component {
 			authentication: Users.getCookie('authentication'),
 			user: Users.getCookie('user'),
 			logout: Users.Actions.logout(),
-			id: Users.getCookie('userid'),
-			isOwner: Users.getCookie('owner')
+			owner_id: Users.getCookie('userid'),
+			isOwner: Users.getCookie('owner'),
+			trucks: []
 		};
 	}
 
-	handleSubmit = event => {
-		this.props.getTrucks(this.state.id);
-		event.preventDefault();
-	};
+	componentWillMount() {
+		Users.getFoodTrucksByOwner(this.state.owner_id).then(result => {
+			this.setState({ trucks: result });
+		});
+	}
+
+	renderFoodTrucks() {
+		return (
+			<div>
+				{this.state.trucks ? (
+					<ListGroup>
+						{this.state.trucks.map((truck, index) => (
+							<ListGroupItem
+								tag="a"
+								href="#/edit-food-truck"
+								key={index}>
+								{truck.name}
+							</ListGroupItem>
+						))}
+					</ListGroup>
+				) : null}
+			</div>
+		);
+	}
 
 	render() {
 		return (
@@ -235,37 +256,12 @@ export class ListFoodTrucks extends React.Component {
 				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Your Food Trucks</h1>
-					<text>{this.props.getTrucks}</text>
-					<button onClick={this.handleSubmit}>Click</button>
-					<ListGroup>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 1
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 2
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 3
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 4
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 5
-						</ListGroupItem>
-					</ListGroup>
+					{this.renderFoodTrucks()}
 				</div>
 			</div>
 		);
 	}
 }
-
-ListFoodTrucks = connect(
-	() => {},
-	dispatch => ({
-		getTrucks: id => dispatch(Users.Actions.getOwnerFoodTruckIDs(id))
-	})
-)(ListFoodTrucks);
 
 export class EditFoodTruck extends React.Component {
 	constructor(props) {

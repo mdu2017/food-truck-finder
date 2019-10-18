@@ -37,9 +37,7 @@
             `OWNER_ID` int(11) NOT NULL,
             `NAME` varchar(45) NOT NULL,
             `TYPE` int(11) NOT NULL,
-            `MENU` int(11) NOT NULL,
             `TRUCK_IMAGE` blob,
-            `SCHEDULE` int(11) NOT NULL,
             `PRICE_LOW` double NOT NULL,
             `PRICE_HIGH` double NOT NULL,
             `STATUS` varchar(12) NOT NULL,
@@ -87,6 +85,7 @@
             `DATE` datetime NOT NULL,
             PRIMARY KEY (`USER_ID`)
             );
+
             CREATE TABLE `SCHEDULE` (
             `TRUCK_ID` int(11) NOT NULL,
             `DAY` varchar(45) NOT NULL,

@@ -1,23 +1,11 @@
 import _ from 'lodash';
-
 import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import * as Forms from 'js/forms';
-import axios from 'axios';
 import * as NavBars from 'js/navBar';
-import {
-	Progress,
-	Container,
-	Row,
-	Col,
-	Button,
-	Media,
-	Nav,
-	NavItem,
-	NavLink
-} from 'reactstrap';
+import { Progress, Row, Col, Button, Media } from 'reactstrap';
 import SampleMenu from './images/MenuSample.png';
 
 // import { createStore, applyMiddleware, compose} from "redux";

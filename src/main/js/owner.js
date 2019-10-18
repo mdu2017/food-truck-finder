@@ -124,8 +124,11 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
-							<Input type="select" name="status" id="ftStatus"
-								   onChange={e => this.setStatus(e.target.value)}>
+							<Input
+								type="select"
+								name="status"
+								id="ftStatus"
+								onChange={e => this.setStatus(e.target.value)}>
 								<option>Open</option>
 								<option>Closed</option>
 								<option>Closed (Maintenance)</option>
@@ -214,6 +217,39 @@ CreateFoodTruckPage = connect(
 export class ListFoodTrucks extends React.Component {
 	constructor(props) {
 		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			user: Users.getCookie('user'),
+			logout: Users.Actions.logout(),
+			owner_id: Users.getCookie('userid'),
+			isOwner: Users.getCookie('owner'),
+			trucks: []
+		};
+	}
+
+	componentWillMount() {
+		Users.getFoodTrucksByOwner(this.state.owner_id).then(result => {
+			this.setState({ trucks: result });
+		});
+	}
+
+	renderFoodTrucks() {
+		return (
+			<div>
+				{this.state.trucks ? (
+					<ListGroup>
+						{this.state.trucks.map((truck, index) => (
+							<ListGroupItem
+								tag="a"
+								href="#/edit-food-truck"
+								key={index}>
+								{truck.name}
+							</ListGroupItem>
+						))}
+					</ListGroup>
+				) : null}
+			</div>
+		);
 	}
 
 	render() {
@@ -222,23 +258,7 @@ export class ListFoodTrucks extends React.Component {
 				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Your Food Trucks</h1>
-					<ListGroup>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 1
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 2
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 3
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 4
-						</ListGroupItem>
-						<ListGroupItem tag="a" href="#/edit-food-truck">
-							Food Truck 5
-						</ListGroupItem>
-					</ListGroup>
+					{this.renderFoodTrucks()}
 				</div>
 			</div>
 		);
@@ -364,32 +384,34 @@ export class EditFoodTruck extends React.Component {
 								placeholder="(Optional)"
 							/>
 						</FormGroup>
-						<Form inline>
-							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftLowPrice" className="mr-sm-2">
-									Price Low
-								</Label>
-								<Input
-									type="number"
-									min={0}
-									name="price"
-									id="ftLowPrice"
-									step="0.01"
-								/>
-							</FormGroup>
-							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftHighPrice" className="mr-sm-2">
-									Price High
-								</Label>
-								<Input
-									type="number"
-									min={0}
-									name="price"
-									id="ftHighPrice"
-									step="0.01"
-								/>
-							</FormGroup>
-						</Form>
+					</Form>
+					<Form inline>
+						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+							<Label for="ftLowPrice" className="mr-sm-2">
+								Price Low
+							</Label>
+							<Input
+								type="number"
+								min={0}
+								name="price"
+								id="ftLowPrice"
+								step="0.01"
+							/>
+						</FormGroup>
+						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+							<Label for="ftHighPrice" className="mr-sm-2">
+								Price High
+							</Label>
+							<Input
+								type="number"
+								min={0}
+								name="price"
+								id="ftHighPrice"
+								step="0.01"
+							/>
+						</FormGroup>
+					</Form>
+					<Form>
 						<FormGroup>
 							<Label for="ftDescription">Description</Label>
 							<Input
@@ -411,19 +433,17 @@ export class EditFoodTruck extends React.Component {
 								easily wraps to a new line.
 							</FormText>
 						</FormGroup>
-						<FormGroup tag="fieldset">
-							<legend>Schedule / Route</legend>
-							{this.displayDayOfTheWeek('Sunday')}
-							{this.displayDayOfTheWeek('Monday')}
-							{this.displayDayOfTheWeek('Tuesday')}
-							{this.displayDayOfTheWeek('Wednesday')}
-							{this.displayDayOfTheWeek('Thursday')}
-							{this.displayDayOfTheWeek('Friday')}
-							{this.displayDayOfTheWeek('Saturday')}
-						</FormGroup>
-						<Button>Submit</Button>{' '}
-						<Button color="danger">Delete Food Truck</Button>
 					</Form>
+					<legend>Schedule / Route</legend>
+					{this.displayDayOfTheWeek('Sunday')}
+					{this.displayDayOfTheWeek('Monday')}
+					{this.displayDayOfTheWeek('Tuesday')}
+					{this.displayDayOfTheWeek('Wednesday')}
+					{this.displayDayOfTheWeek('Thursday')}
+					{this.displayDayOfTheWeek('Friday')}
+					{this.displayDayOfTheWeek('Saturday')}
+					<Button>Submit</Button>{' '}
+					<Button color="danger">Delete Food Truck</Button>
 				</div>
 			</div>
 		);

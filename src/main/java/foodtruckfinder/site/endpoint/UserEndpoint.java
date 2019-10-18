@@ -11,6 +11,7 @@ import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
 import foodtruckfinder.site.common.user.UserService.UpdateRequest;
+import foodtruckfinder.site.common.user.UserService.GetRequest;
 import foodtruckfinder.site.common.user.UserDto;
 
 /**
@@ -86,13 +87,23 @@ public class UserEndpoint {
 	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
 	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
 
+	/**
+	 * Updates a user based on the passed in user
+	 * @param request the UpdateRequest as defined in UserService to get the authentication information too
+	 * @return the new UserDto (it could have changed in the backend)
+	 */
 	@PostMapping(value = "/update", produces = "application/json")
 	public UserDto update(@RequestBody UpdateRequest request) {
 		return userService.update(request);
 	}
 
-	@PostMapping(value = "/owner/getFoodTrucks", produces = "application/json")
-	public Optional<List<Long>> getOwnedFoodTrucks(){
-		return userService.getOwnedFoodTrucks(SecurityContextHolder.getContext().getAuthentication().getName());
+	/**
+	 * Gets a list of food truck ids owned by the given owner id
+	 * @param id the owner id to search under
+	 * @return the list of food truck ids
+	 */
+	@GetMapping(value = "/owner/getFoodTrucks", produces = "application/json")
+	public Optional<List<Long>> getOwnedFoodTrucks(Long id){
+		return userService.getOwnedFoodTrucks(id);
 	}
 }

@@ -1,5 +1,6 @@
 package foodtruckfinder.site.common.foodtruck;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,8 +21,10 @@ public class FoodTruckService {
 		return foodTruckDao.find(id);
 	}
 
-	public void save(FoodTruckDto foodTruckDto) {
-		foodTruckDao.save(foodTruckDto);
+	public void save(FoodTruckDto foodTruckDto) throws SQLException {
+        System.out.println("SAVE IS CALLED! ==============================");
+        foodTruckDao.testFT(foodTruckDto);
+//		foodTruckDao.save(foodTruckDto);
 	}
 
 	/**

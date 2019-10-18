@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import * as NavBars from 'js/navBar';
+import * as createFoodTruck from 'js/createFoodTruck';
+
 import {
 	Button,
 	Form,
@@ -205,7 +207,7 @@ export class CreateFoodTruckPage extends React.Component {
 CreateFoodTruckPage = connect(
 	() => ({}),
 	dispatch => ({
-		createFT: foodTruck => dispatch(Users.Actions.createFT(foodTruck))
+		createFT: foodTruck => dispatch(createFoodTruck.Actions.createFT(foodTruck))
 	})
 )(CreateFoodTruckPage);
 

@@ -1,6 +1,8 @@
 package foodtruckfinder.site.common.foodtruck;
 
+import java.sql.PreparedStatement;
 import java.sql.ResultSet;
+import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -8,6 +10,7 @@ import java.util.Optional;
 
 import alloy.util.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -95,12 +98,40 @@ public class FoodTruckDao {
 				typers.next();
 				return typers.getString("type");
 			});
-			foodTruckDto.setType(type);
+			foodTruckDto.setType(foodTruckDto.getType());
 
 			return foodTruckDto;
 		});
 
 		return Optional.ofNullable(result);
+	}
+
+	public FoodTruckDto testFT(FoodTruckDto foodTruck) throws SQLException {
+		System.out.println(foodTruck.toString());
+
+		int defaultMenu = 1;
+		int defaultImage = 'a';
+		int defaultSchedule = 1;
+		Map<String, ?> parameters = _Maps.mapPairs(
+				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
+				new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
+				new Tuple.Tuple2<>("name", foodTruck.getName()),
+				new Tuple.Tuple2<>("type", foodTruck.getType()),
+				new Tuple.Tuple2<>("menu", defaultMenu),
+				new Tuple.Tuple2<>("image", defaultImage),
+				new Tuple.Tuple2<>("schedule", defaultSchedule),
+				new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+				new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+				new Tuple.Tuple2<>("status", foodTruck.getStatus())
+		);
+
+		String myQuery = "INSERT INTO FOOD_TRUCK " +
+				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, MENU, TRUCK_IMAGE, SCHEDULE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
+				"(:food_truck_id, :owner_id, :name, :type, :menu, :image, :schedule, :price_low, :price_high, :status)";
+
+		jdbcTemplate.update(myQuery, parameters);
+
+		return foodTruck;
 	}
 
 	/**
@@ -133,6 +164,26 @@ public class FoodTruckDao {
                     jdbcTemplate.update(menusql, menuparams);
                 }
             }
+			//If no menu, set to 0
+			else if(menu == null){
+
+				System.out.println("NO MENU!");
+
+//				menusql = "UPDATE MENU SET " +
+//						"NAME = tempMenu" +
+//						"DESCRIPTION = testDescription " +
+//						"PRICE = 2.50 " +
+//						"WHERE ITEM_ID = 10 AND TRUCK_ID = 10";
+//
+//				Map<String, ?> menuparams = _Maps.map(
+//						"foodTruckId", foodTruck.getId(),
+//						"name", objects.getSecond().getFirst(),
+//						"description", objects.getSecond().getSecond(),
+//						"price", objects.getSecond().getThird(),
+//						"itemID", objects.getFirst());
+//
+//				jdbcTemplate.query(menusql);
+			}
 
 			//Update schedule in database
 			String schedsql;
@@ -180,7 +231,7 @@ public class FoodTruckDao {
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
 					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType().toString()),
+					new Tuple.Tuple2<>("type", foodTruck.getType()),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
 					new Tuple.Tuple2<>("status", foodTruck.getStatus())
@@ -236,6 +287,7 @@ public class FoodTruckDao {
             }
 
 
+
 			String sql = "INSERT INTO FOOD_TRUCK " +
 					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
 					"(:owner_id, :name, :type, :price_low, :price_high, :status)";
@@ -243,7 +295,7 @@ public class FoodTruckDao {
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
 					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType().toString()),
+					new Tuple.Tuple2<>("type", foodTruck.getType()),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
 					new Tuple.Tuple2<>("status", foodTruck.getStatus())

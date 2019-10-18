@@ -1,8 +1,12 @@
 package foodtruckfinder.site.endpoint;
 
+import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.foodtruck.Stop;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -31,11 +35,30 @@ public class FoodTruckEndpoint {
 	}
 
 	// Take a JSON representation of a food truck and save it to the database
+	// Maybe change to @request mapping?
 	@PostMapping(value = "/save", produces = "application/json")
-	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) {
-		foodTruckService.save(foodTruckDto);
-		return foodTruckDto;
-	}
+    public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+
+        System.out.println("testCreateFT is called!======================");
+
+        foodTruckDto.setId((long)1);
+        foodTruckDto.setStatus("Closed");
+        Map<String, Stop> temp = Collections.emptyMap();
+        foodTruckDto.setSchedule(temp);
+        foodTruckDto.setName("BURGER GOOD");
+        foodTruckDto.setType(1);
+        foodTruckDto.setPrice_low(1.00);
+        foodTruckDto.setPrice_high(2.00);
+        foodTruckDto.setOwnerId((long)1);
+        foodTruckDto.setMenu(null);
+
+        foodTruckService.save(foodTruckDto);
+        return foodTruckDto;
+
+
+    }
+
+
 
 	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") String id) { return foodTruckService.getSubscribers(id); }
@@ -44,5 +67,4 @@ public class FoodTruckEndpoint {
 	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
 		foodTruckService.subscribe(ftid, userid);
 	}
-
 }

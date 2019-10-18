@@ -35,7 +35,6 @@ public class FoodTruckEndpoint {
 	}
 
 	// Take a JSON representation of a food truck and save it to the database
-	// Maybe change to @request mapping?
 	@PostMapping(value = "/save", produces = "application/json")
     public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
 
@@ -45,7 +44,7 @@ public class FoodTruckEndpoint {
         foodTruckDto.setStatus("Closed");
         Map<String, Stop> temp = Collections.emptyMap();
         foodTruckDto.setSchedule(temp);
-        foodTruckDto.setName("BURGER GOOD");
+        foodTruckDto.setName("Burger Truck");
         foodTruckDto.setType(1);
         foodTruckDto.setPrice_low(1.00);
         foodTruckDto.setPrice_high(2.00);
@@ -58,13 +57,21 @@ public class FoodTruckEndpoint {
 
     }
 
-
-
 	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") String id) { return foodTruckService.getSubscribers(id); }
 
 	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
 	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
 		foodTruckService.subscribe(ftid, userid);
+	}
+
+	/**
+	 * This function returns a list of food trucks based on an owner id
+	 * @param owner_id the owner to retrieve food trucks for
+	 * @return A list of food trucks
+	 */
+	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
+	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
+		return foodTruckService.getFoodTrucksByOwner(owner_id);
 	}
 }

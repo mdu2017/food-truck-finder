@@ -1,12 +1,13 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+
+import java.util.*;
 
 import alloy.util.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,8 +93,8 @@ public class FoodTruckDao {
 			foodTruckDto.setTruck_image(null);
 
 			//type
-			String typesql = "SELECT type FROM food_type, food_truck " +
-							 "WHERE food_truck_id = :foodTruckId AND food_truck.type = type.type_id";
+			String typesql = "SELECT food_type.type FROM food_type, food_truck " +
+							 "WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
 			String type = jdbcTemplate.query(typesql, parameters, typers -> {
 				typers.next();
 				return typers.getString("type");
@@ -113,25 +114,21 @@ public class FoodTruckDao {
 	public FoodTruckDto testFT(FoodTruckDto foodTruck) throws SQLException {
 		System.out.println(foodTruck.toString());
 
-		int defaultMenu = 1;
 		int defaultImage = 'a';
-		int defaultSchedule = 1;
 		Map<String, ?> parameters = _Maps.mapPairs(
 				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
 				new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
 				new Tuple.Tuple2<>("name", foodTruck.getName()),
 				new Tuple.Tuple2<>("type", foodTruck.getType()),
-				new Tuple.Tuple2<>("menu", defaultMenu),
 				new Tuple.Tuple2<>("image", defaultImage),
-				new Tuple.Tuple2<>("schedule", defaultSchedule),
 				new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 				new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
 				new Tuple.Tuple2<>("status", foodTruck.getStatus())
 		);
 
-		String myQuery = "INSERT IGNORE INTO FOOD_TRUCK " +
-				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, MENU, TRUCK_IMAGE, SCHEDULE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-				"(:food_truck_id, :owner_id, :name, :type, :menu, :image, :schedule, :price_low, :price_high, :status)";
+		String myQuery = "INSERT INTO FOOD_TRUCK " +
+				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
+				"(:food_truck_id, :owner_id, :name, :type, :image, :price_low, :price_high, :status)";
 
 		jdbcTemplate.update(myQuery, parameters);
 
@@ -324,6 +321,13 @@ public class FoodTruckDao {
 		}
 	}
 
+	/**
+	 * This functions is a utility function for internal use only.  It inserts a stop into the database
+	 *
+	 * Assumes the stop doesn't exist and inserts it as such
+	 * @param s the stop to insert
+	 * @return The stop's ID as set in the database
+	 */
 	private Long insertStop(Stop s){
 		String sql = "INSERT INTO TRUCK_STOP " +
 				"(START, END, LATITUDE, LONGITUDE) VALUES " +
@@ -356,6 +360,11 @@ public class FoodTruckDao {
 		jdbcTemplate.update(sql, params);
 	}
 
+	/**
+	 * Gets the list of subscribers to a particular food truck
+	 * @param truck_id the truck to retrieve subscribers for
+	 * @return the list of subscribers to a particular food truck
+	 */
 	public List<String> getSubscribers(Long truck_id){
 		//todo:: fix because username isn't necessarily unique
 		String sql = "SELECT username FROM SUBSCRIPTIONS, USER WHERE " +
@@ -363,5 +372,34 @@ public class FoodTruckDao {
 
 		Map<String, ?> params = _Maps.map("truck_id", truck_id);
 		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("user_id"));
+	}
+
+	/**
+	 * This functions returns a list of food trucks owned by the given owner
+	 * @param owner_id the owner id
+	 * @return a list of food trucks owned by the given owner
+	 */
+	public Optional<List<FoodTruckDto>> getByOwner(Long owner_id) {
+		List<FoodTruckDto> trucks = null;
+		if(owner_id != null){
+			String sql = "SELECT FOOD_TRUCK_ID FROM FOOD_TRUCK WHERE " +
+					"OWNER_ID = :owner_id";
+
+			Map<String, ?> params = _Maps.map("owner_id", owner_id);
+			List<Long> ids = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID"));
+
+			if(ids != null){
+				trucks = new ArrayList<>();
+				for(Long ft : ids){
+					//get each food truck
+					Optional<FoodTruckDto> temp = this.find(ft + "");
+					if(temp.isPresent()){
+						trucks.add(temp.get());
+					}
+				}
+			}
+		}
+
+		return Optional.ofNullable(trucks);
 	}
 }

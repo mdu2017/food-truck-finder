@@ -106,6 +106,10 @@ public class FoodTruckDao {
 		return Optional.ofNullable(result);
 	}
 
+	/**
+	 * This function tests if a food truck is created and stored in the database
+	 * @param foodTruck
+	 */
 	public FoodTruckDto testFT(FoodTruckDto foodTruck) throws SQLException {
 		System.out.println(foodTruck.toString());
 

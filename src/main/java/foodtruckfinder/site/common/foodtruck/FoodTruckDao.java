@@ -114,25 +114,21 @@ public class FoodTruckDao {
 	public FoodTruckDto testFT(FoodTruckDto foodTruck) throws SQLException {
 		System.out.println(foodTruck.toString());
 
-		int defaultMenu = 1;
 		int defaultImage = 'a';
-		int defaultSchedule = 1;
 		Map<String, ?> parameters = _Maps.mapPairs(
 				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
 				new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
 				new Tuple.Tuple2<>("name", foodTruck.getName()),
 				new Tuple.Tuple2<>("type", foodTruck.getType()),
-				new Tuple.Tuple2<>("menu", defaultMenu),
 				new Tuple.Tuple2<>("image", defaultImage),
-				new Tuple.Tuple2<>("schedule", defaultSchedule),
 				new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 				new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
 				new Tuple.Tuple2<>("status", foodTruck.getStatus())
 		);
 
 		String myQuery = "INSERT INTO FOOD_TRUCK " +
-				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, MENU, TRUCK_IMAGE, SCHEDULE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-				"(:food_truck_id, :owner_id, :name, :type, :menu, :image, :schedule, :price_low, :price_high, :status)";
+				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
+				"(:food_truck_id, :owner_id, :name, :type, :image, :price_low, :price_high, :status)";
 
 		jdbcTemplate.update(myQuery, parameters);
 

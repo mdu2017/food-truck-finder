@@ -169,7 +169,9 @@ public class UserService {
 		userAuthenticationDto.setPassword(passwordEncoder.encode(request.getPassword()));
 
 		userAuthenticationDto = userDao.save(userAuthenticationDto);
+
 		return userAuthenticationDto.getUser();
+
 	}
 
 	public static class GetRequest {

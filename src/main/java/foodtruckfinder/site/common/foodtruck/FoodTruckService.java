@@ -22,7 +22,7 @@ public class FoodTruckService {
 	}
 
 	public void save(FoodTruckDto foodTruckDto) throws SQLException {
-        System.out.println("SAVE IS CALLED! ==============================");
+//        System.out.println("SAVE IS CALLED! ==============================");
         foodTruckDao.testFT(foodTruckDto);
 //		foodTruckDao.save(foodTruckDto);
 	}

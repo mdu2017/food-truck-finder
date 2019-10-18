@@ -116,7 +116,7 @@ public class FoodTruckDao {
 
 		int defaultImage = 'a';
 		Map<String, ?> parameters = _Maps.mapPairs(
-				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
+//				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
 				new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
 				new Tuple.Tuple2<>("name", foodTruck.getName()),
 				new Tuple.Tuple2<>("type", foodTruck.getType()),
@@ -127,8 +127,8 @@ public class FoodTruckDao {
 		);
 
 		String myQuery = "INSERT INTO FOOD_TRUCK " +
-				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-				"(:food_truck_id, :owner_id, :name, :type, :image, :price_low, :price_high, :status)";
+				"(OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
+				"(:owner_id, :name, :type, :image, :price_low, :price_high, :status)";
 
 		jdbcTemplate.update(myQuery, parameters);
 

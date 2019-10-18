@@ -24,28 +24,34 @@ export class CreateFoodTruckPage extends React.Component {
 		super(props);
 		this.state = {
 			name: null,
-			menu: null,
-			schedule: null,
-			price: null,
+			// menu: null,
+			// schedule: null,
+			price_low: null,
+			price_high: null,
 			status: null
 		};
 	}
 
+
+	// setMenu = menu => this.setState({ menu });
+	// setSchedule = schedule => this.setState({ schedule });
 	setName = name => this.setState({ name });
-	setMenu = menu => this.setState({ menu });
-	setSchedule = schedule => this.setState({ schedule });
-	setPrice = price => this.setState({ price });
+	setPrice_low = price_low => this.setState({ price_low });
+	setPrice_high = price_high => this.setState({ price_high });
 	setStatus = status => this.setState({ status });
 
 	handleSubmit = event => {
+		event.preventDefault();
+
 		this.props.createFT({
 			name: this.state.name,
-			menu: this.state.menu,
-			schedule: this.state.schedule,
-			price: this.state.price,
+			// menu: this.state.menu,
+			// schedule: this.state.schedule,
+			price_low: this.state.price_low,
+			price_high: this.state.price_high,
 			status: this.state.status
-		}); // Add registration
-		event.preventDefault();
+		});
+
 	};
 
 	displayDayOfTheWeek(dayofTheWeek) {
@@ -124,14 +130,12 @@ export class CreateFoodTruckPage extends React.Component {
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftStatus">Current Status</Label>
-							<Input
-								type="select"
-								name="status"
-								id="ftStatus"
-								onChange={e => this.setStatus(e.target.value)}>
-								<option>Open</option>
+							<Input type="select" name="status" id="ftStatus" onChange={e => this.setStatus(e.target.value)}>
+
+								<option >Open</option>
 								<option>Closed</option>
 								<option>Closed (Maintenance)</option>
+
 							</Input>
 						</FormGroup>
 						<FormGroup>
@@ -154,6 +158,7 @@ export class CreateFoodTruckPage extends React.Component {
 									name="price"
 									id="ftLowPrice"
 									step="0.01"
+									onChange={e => this.setPrice_low(e.target.value)}
 								/>
 							</FormGroup>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -166,6 +171,7 @@ export class CreateFoodTruckPage extends React.Component {
 									name="price"
 									id="ftHighPrice"
 									step="0.01"
+									onChange={e => this.setPrice_high(e.target.value)}
 								/>
 							</FormGroup>
 						</Form>

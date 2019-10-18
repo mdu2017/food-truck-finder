@@ -7,7 +7,10 @@ import java.util.Map;
 import java.util.Optional;
 
 import foodtruckfinder.site.common.foodtruck.Stop;
+import foodtruckfinder.site.common.user.UserDto;
+import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -38,18 +41,31 @@ public class FoodTruckEndpoint {
 	@PostMapping(value = "/save", produces = "application/json")
     public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
 
-        System.out.println("testCreateFT is called!======================");
+//		System.out.println("testCreateFT is called!======================");
+//		System.out.println("Entered name in form is: " + foodTruckDto.getName());
+//		System.out.println("Price low: " + foodTruckDto.getPrice_low());
+//		System.out.println("Price high: " + foodTruckDto.getPrice_high());
 
-        foodTruckDto.setId((long)1);
-        foodTruckDto.setStatus("Closed");
-        Map<String, Stop> temp = Collections.emptyMap();
-        foodTruckDto.setSchedule(temp);
-        foodTruckDto.setName("Burger Truck");
-        foodTruckDto.setType(1);
-        foodTruckDto.setPrice_low(1.00);
-        foodTruckDto.setPrice_high(2.00);
-        foodTruckDto.setOwnerId((long)1);
-        foodTruckDto.setMenu(null);
+		//Set status
+		if(foodTruckDto.getStatus() == null){
+			foodTruckDto.setStatus("Closed");
+		}
+		else{
+			foodTruckDto.setStatus(foodTruckDto.getStatus());
+		}
+//		System.out.println("Entered status in form is: " + foodTruckDto.getStatus());
+
+		//Default id/type/image values
+		long defaultOwnerID = 1;
+//        foodTruckDto.setId((long)1);
+		foodTruckDto.setOwnerId(defaultOwnerID);
+		foodTruckDto.setType(1);
+
+
+		//Set name, low price, high price
+        foodTruckDto.setName(foodTruckDto.getName());
+        foodTruckDto.setPrice_low(foodTruckDto.getPrice_low());
+        foodTruckDto.setPrice_high(foodTruckDto.getPrice_high());
 
         foodTruckService.save(foodTruckDto);
         return foodTruckDto;

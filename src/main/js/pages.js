@@ -4,48 +4,57 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import { connect } from 'react-redux';
 import * as Users from 'js/backend';
-import * as Login from 'js/forms';
+import * as Forms from 'js/forms';
 import axios from 'axios';
-import CustomNavBar from 'js/navBar';
-import { Progress, Container, Row, Col, Button,
-	Media, ListGroup, ListGroupItem, ListGroupItemHeading,
-	ListGroupItemText } from 'reactstrap';
+import * as NavBars from 'js/navBar';
+import {
+	Progress,
+	Container,
+	Row,
+	Col,
+	Button,
+	Media,
+	Nav,
+	NavItem,
+	NavLink
+} from 'reactstrap';
 import SampleMenu from './images/MenuSample.png';
 
 export class Home extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner')
+		};
+	}
+
+	displayCustomWelcome() {
+		if (this.state.authentication) {
+			return (
+				<div>
+					{'Welcome, '}
+					{this.state.username}
+					{'!'}
+				</div>
+			);
+		}
+		return <div>{'Welcome!'}</div>;
+	}
+
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
-					This is the home page.
-					<ul>
-						<li>
-							<Link to="/events">Events</Link>
-						</li>
-						<li>
-							<Link to="/search-trucks">Search Food Trucks</Link>
-						</li>
-						<li>
-							<Link to="/search-users">Search Users</Link>
-						</li>
-						<li>
-							<Link to="/user/notifications">Notifications</Link>
-						</li>
-						<li>
-							<Link to="/about-free-tank-top">About Us</Link>
-						</li>
-						<li>
-							<Link to="/page-1">Page 1</Link>
-						</li>
-						<li>
-							<Link to="/page-2">Page 2</Link>
-						</li>
-						<li>
-							<Link to="/page-3">Page 3</Link>
-						</li>
-						{/* <li><Link to="/hello">Example Endpoint</Link></li> */}
-					</ul>
+					<h1>{this.displayCustomWelcome()}</h1>
+					<NavBars.SidebarNav />
+					{/* <ul> */}
+					{/* <li><Link to="/hello">Example Endpoint</Link></li> */}
+					{/* </ul> */}
 				</div>
 			</div>
 		);
@@ -56,13 +65,13 @@ export class RegisterPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div>
 					<div className="row">
 						<div className="col-6 offset-md-3">
 							<h2>Create Account</h2>
 							<hr />
-							<Login.RegistrationForm />
+							<Forms.RegistrationForm />
 							<Link to="/login">Already have an account?</Link>
 						</div>
 					</div>
@@ -76,20 +85,20 @@ export class LoginPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="row">
 					<div className="col-6 offset-md-3">
 						<h2>Login</h2>
 						<hr />
-						<Login.LoginForm />
+						<Forms.LoginForm />
 						<Link to="/register">Create Account</Link>
 						<br />
 						<Link to="/forgot-password">Forgot Password?</Link>
 					</div>
 				</div>
-				<Link to="/owner">Owner Homepage</Link>
+				{/* <Link to="/owner">Login Owner Success</Link>
 				<br />
-				<Link to="/user">User Homepage</Link>
+				<Link to="/user">Login User Success</Link> */}
 			</div>
 		);
 	}
@@ -98,16 +107,11 @@ export class LoginPage extends React.Component {
 export class EventsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the events list page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-					<li>
-						<Link to="/events/event">Event Details</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>Events</h1>
+				</div>
 			</div>
 		);
 	}
@@ -149,16 +153,16 @@ export class HelpPage extends React.Component {
 export class ForgotPasswordPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the forgot password page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-					<li>
-						<Link to="/login">Login</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="row">
+					<div className="col-6 offset-md-3">
+						<h2>Forgot Password?</h2>
+						<hr />
+						<Forms.ForgotPasswordForm />
+						<Link to="/register">Need an Account?</Link>
+					</div>
+				</div>
 			</div>
 		);
 	}
@@ -191,9 +195,6 @@ export class SearchUsersPage extends React.Component {
 					<li>
 						<Link to="/">Home</Link>
 					</li>
-					<li>
-						<Link to="/customer-details">View Customer Details</Link>
-					</li>
 				</ul>
 			</div>
 		);
@@ -203,13 +204,11 @@ export class SearchUsersPage extends React.Component {
 export class NotificationsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the notifications page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>Notifications</h1>
+				</div>
 			</div>
 		);
 	}
@@ -218,13 +217,11 @@ export class NotificationsPage extends React.Component {
 export class AboutUsPage extends React.Component {
 	render() {
 		return (
-			<div className="container padded">
-				This is the about us page.
-				<ul>
-					<li>
-						<Link to="/">Home</Link>
-					</li>
-				</ul>
+			<div>
+				<NavBars.CustomNavBar />
+				<div className="container padded">
+					<h1>About Us</h1>
+				</div>
 			</div>
 		);
 	}
@@ -234,7 +231,7 @@ export class ViewFoodTruckDetailsPage extends React.Component {
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Torchy's Details Page</h1>
 					<br />
@@ -325,50 +322,19 @@ export class ViewFoodTruckDetailsPage extends React.Component {
 	}
 }
 
-//Template customer detail page
-export class viewCustomerDetailsPage extends React.Component{
-	constructor(props) {
-		super(props);
-	}
-
-	render(){
-		return(
-			<ListGroup>
-				<ListGroupItem>
-					<h2><text style={{color: 'green'}}> -- Reviews by baylorbear --</text></h2>
-				</ListGroupItem>
-				<ListGroupItem>
-					<ListGroupItemHeading>I Love this food truck!</ListGroupItemHeading>
-					<ListGroupItemText>
-						Food was great, tasted good, service was fast.
-					</ListGroupItemText>
-				</ListGroupItem>
-				<ListGroupItem>
-					<ListGroupItemHeading>Ok food truck.</ListGroupItemHeading>
-					<ListGroupItemText>
-						Mediocre food and average experience.
-					</ListGroupItemText>
-				</ListGroupItem>
-				<ListGroupItem>
-					<ListGroupItemHeading>Bad food truck.</ListGroupItemHeading>
-					<ListGroupItemText>
-						Bad food, stay away.
-					</ListGroupItemText>
-				</ListGroupItem>
-			</ListGroup>
-
-
-		);
-	}
-}
-
-//Test logout page
-class Page1 extends React.Component {
+export class Page1 extends React.Component {
 	constructor(props) {
 		super(props);
 	}
 
 	logout = () => this.props.logout();
+
+	displayIsOwner() {
+		if (this.props.isOwner == 'true') {
+			return <text>Yes!</text>;
+		}
+		return <text>No!</text>;
+	}
 
 	render() {
 		return (
@@ -379,6 +345,9 @@ class Page1 extends React.Component {
 				)}
 				{_.isDefined(this.props.user) && (
 					<div>Welcome, {this.props.user}!</div>
+				)}
+				{_.isDefined(this.props.isOwner) && (
+					<div>Owner? {this.displayIsOwner()}</div>
 				)}
 				<br />
 				<button onClick={this.logout} className="btn btn-primary">
@@ -392,22 +361,10 @@ class Page1 extends React.Component {
 Page1 = connect(() => ({
 	authentication: Users.getCookie('authentication'),
 	user: Users.getCookie('user'),
-	logout: Users.Actions.logout()
+	logout: Users.Actions.logout(),
+	id: Users.getCookie('userid'),
+	isOwner: Users.getCookie('owner')
 }))(Page1);
-
-export { Page1 };
-
-export class Page2 extends React.Component {
-	render() {
-		return <div className="container padded">This is page 2.</div>;
-	}
-}
-
-export class Page3 extends React.Component {
-	render() {
-		return <div className="container padded">This is page 3.</div>;
-	}
-}
 
 export class HelloSend extends React.Component {
 	constructor(props) {

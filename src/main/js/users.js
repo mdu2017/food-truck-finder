@@ -6,7 +6,7 @@ import { connect } from 'react-redux';
 import * as Users from 'js/backend';
 import * as Login from 'js/forms';
 import axios from 'axios';
-import CustomNavBar from 'js/navBar';
+import * as NavBars from 'js/navBar';
 import {
 	UncontrolledTooltip,
 	Col,
@@ -15,66 +15,51 @@ import {
 	FormGroup,
 	Label,
 	Input,
-	FormText
+	Row,
+	Nav,
+	NavItem,
+	NavLink,
+	Container
 } from 'reactstrap';
 
-export class HomeUser extends React.Component {
-	render() {
-		return (
-			<div>
-				<CustomNavBar isLoggedIn={true} />
-				<div className="container padded">
-					This is a user's home page.
-					<ul>
-						<li>
-							<Link to="/help">Help</Link>
-						</li>
-						<li>
-							<Link to="/events">Events</Link>
-						</li>
-						<li>
-							<Link to="/user/view-profile">View Profile</Link>
-						</li>
-						<li>
-							<Link to="/search-trucks">Search Food Trucks</Link>
-						</li>
-						<li>
-							<Link to="/search-users">Search Users</Link>
-						</li>
-						<li>
-							<Link to="/user/notifications">Notifications</Link>
-						</li>
-						<li>
-							<Link to="/about-free-tank-top">About Us</Link>
-						</li>
-						<li>
-							<Link to="/user">Home</Link>
-						</li>
-					</ul>
-				</div>
-			</div>
-		);
-	}
-}
-
 export class ViewUserProfilePage extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner')
+		};
+	}
+
+	isOwner() {
+		if (this.state.owner == 'true') {
+			return 'Owner';
+		}
+		return 'Customer';
+	}
+
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
-					This is the user's profile view page.
-					<ul>
-						<li>
-							<Link to="/">Home</Link>
-						</li>
-						<li>
-							<Link to="/user/edit-user">Edit User</Link>
-						</li>
-						<li>
-							<Link to="/login">Login</Link>
-						</li>
-					</ul>
+					<h1>View Profile</h1>
+					<Container>
+						<Row>
+							<Col>
+								<h2>Account Details</h2>
+								<h6>Username: {this.state.username}</h6>
+								<h6>Email: {this.state.principal}</h6>
+								<h6>Account Type: {this.isOwner()}</h6>
+							</Col>
+							<Col>
+								<h2>Ratings {'&'} Reviews</h2>
+							</Col>
+						</Row>
+					</Container>
 				</div>
 			</div>
 		);
@@ -82,32 +67,63 @@ export class ViewUserProfilePage extends React.Component {
 }
 
 export class EditUserPage extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner'),
+			id: Users.getCookie('userid')
+		};
+	}
+
+	setPrincipal = principal => this.setState({ principal });
+	setPassword = password => this.setState({ password });
+
+	handleSubmit = event => {
+		this.props.update({
+			principal: this.state.principal,
+			password: this.state.password,
+			username: this.state.username,
+			owner: this.state.owner.toString(),
+			id: this.state.id
+		}); // Add registration
+		event.preventDefault();
+	};
+
 	render() {
 		return (
 			<div>
-				<CustomNavBar />
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Manage Account</h1>
 					<br />{' '}
 					<span
-						style={
-							{
-								// textDecoration: 'underline',
-								// color: 'blue'
-							}
-						}
+						// style={
+						// 	{
+						// 		// textDecoration: 'underline',
+						// 		// color: 'blue'
+						// 	}
+						// }
 						href="#"
 						id="UncontrolledTooltipExample">
 						Username
 					</span>
-					: Destroyer123
+					:{' '}
+					{_.isDefined(this.props.user) && (
+						<text>{this.props.user}</text>
+					)}
 					<UncontrolledTooltip
 						placement="right"
 						target="UncontrolledTooltipExample">
 						This cannot be changed!
 					</UncontrolledTooltip>
 					<br />
-					Email: andrew_case1@baylor.edu
+					Email:{' '}
+					{_.isDefined(this.props.email) && (
+						<text>{this.props.email}</text>
+					)}
 					<br />
 					<br />
 					<Form>
@@ -118,6 +134,9 @@ export class EditUserPage extends React.Component {
 								name="email"
 								id="newEmail"
 								placeholder=""
+								onChange={e =>
+									this.setPrincipal(e.target.value)
+								}
 							/>
 						</FormGroup>
 						<br />
@@ -137,6 +156,7 @@ export class EditUserPage extends React.Component {
 								name="newpassword"
 								id="newPassword"
 								placeholder=""
+								onChange={e => this.setPassword(e.target.value)}
 							/>
 						</FormGroup>
 						<FormGroup>
@@ -150,10 +170,21 @@ export class EditUserPage extends React.Component {
 								placeholder=""
 							/>
 						</FormGroup>
-						<Button>Submit</Button>
+						<Button onClick={this.handleSubmit}>Submit</Button>
 					</Form>
 				</div>
 			</div>
 		);
 	}
 }
+
+EditUserPage = connect(
+	() => ({
+		authentication: Users.getCookie('authentication'),
+		user: Users.getCookie('user'),
+		email: Users.getCookie('email')
+	}),
+	dispatch => ({
+		update: user => dispatch(Users.Actions.update(user))
+	})
+)(EditUserPage);

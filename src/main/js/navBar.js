@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from './images/foodtruck.png';
+import * as Users from 'js/backend';
 import {
 	Collapse,
 	Navbar,
@@ -12,12 +13,15 @@ import {
 	UncontrolledDropdown,
 	DropdownToggle,
 	DropdownMenu,
-	DropdownItem
+	DropdownItem,
+	Container,
+	Row,
+	Col,
+	Badge
 } from 'reactstrap';
-import {connect} from 'react-redux';
-import * as Users from 'js/backend';
+import { connect } from 'react-redux';
 
-class CustomNavBar extends React.Component {
+export class CustomNavBar extends React.Component {
 	constructor(props) {
 		super(props);
 		this.toggleProfile = this.toggleProfile.bind(this);
@@ -27,38 +31,49 @@ class CustomNavBar extends React.Component {
 		};
 	}
 
-	//Display login button if not currently logged in
+	logout = () => this.props.logout();
+
 	displayLoginButton() {
-		if(!this.state.isLoggedIn) {
+		if (!Users.getCookie('user')) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
 				</NavLink>
 			);
 		}
+		return null;
 	}
 
-	//Logout functionality
-	logout = () => this.props.logout();
-
-	//Dropdown menu for viewing profile (on user/owner homepage)
 	displayViewProfile() {
-		if (this.state.isLoggedIn) {
+		if (Users.getCookie('user')) {
 			return (
 				<div>
 					<DropdownToggle nav caret>
 						View Profile
 					</DropdownToggle>
 					<DropdownMenu right>
-						<DropdownItem tag={Link} to="/user/view-profile">
+						<DropdownItem tag={Link} to="/view-profile">
 							View Profile
 						</DropdownItem>
-						<DropdownItem tag={Link} to="/user/edit-user">
+						<DropdownItem tag={Link} to="/edit-user">
 							Manage Account
 						</DropdownItem>
+						<DropdownItem
+							tag={Link}
+							to="/list-food-trucks"
+							hidden={!(Users.getCookie('owner') == 'true')}>
+							Edit Food Trucks
+						</DropdownItem>
+						<DropdownItem
+							tag={Link}
+							to="/create-food-truck"
+							hidden={!(Users.getCookie('owner') == 'true')}>
+							Add Food Truck
+						</DropdownItem>
 						<DropdownItem divider />
-						{/* Insert Logout Functionality (works, but not sure if it's the best way)*/}
-						<DropdownItem onClick={this.logout}>Logout</DropdownItem>
+						<DropdownItem onClick={this.logout}>
+							Logout
+						</DropdownItem>
 					</DropdownMenu>
 				</div>
 			);
@@ -66,14 +81,12 @@ class CustomNavBar extends React.Component {
 		return null;
 	}
 
-	//Set state for profile
 	toggleProfile() {
 		this.setState({
 			viewProfileDrop: !this.state.viewProfileDrop
 		});
 	}
 
-	//Displays the navbar with dropdown menu; login button
 	render() {
 		return (
 			<div>
@@ -95,11 +108,68 @@ class CustomNavBar extends React.Component {
 	}
 }
 
-//Connect to cause logout
 CustomNavBar = connect(() => ({
-	authentication: Users.getCookie('authentication'),
-	user: Users.getCookie('user'),
 	logout: Users.Actions.logout()
 }))(CustomNavBar);
 
-export default CustomNavBar;
+export class SidebarNav extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = {
+			authentication: Users.getCookie('authentication'),
+			principal: Users.getCookie('email'),
+			password: Users.getCookie('password'),
+			username: Users.getCookie('user'),
+			owner: Users.getCookie('owner')
+		};
+	}
+
+	render() {
+		return (
+			<div>
+				<Container>
+					<Row>
+						<Col xs="3">
+							<p>Quick Links</p>
+							<hr />
+							<Nav vertical>
+								<NavItem>
+									<NavLink href="#/">Dashboard</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink href="#/events">Events</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink
+										hidden={!this.state.authentication}
+										href="#/notifications">
+										Notifications{' '}
+										<Badge color="secondary">4</Badge>
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink disabled href="#/search-trucks">
+										Search Food Trucks
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink disabled href="#/search-users">
+										Search Users
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink disabled href="#/about">
+										About Us
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink href="#/page-1">Page 1</NavLink>
+								</NavItem>
+							</Nav>
+						</Col>
+					</Row>
+				</Container>
+			</div>
+		);
+	}
+}

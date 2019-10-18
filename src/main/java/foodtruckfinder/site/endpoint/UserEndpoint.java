@@ -5,15 +5,12 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
+import foodtruckfinder.site.common.user.UserService.UpdateRequest;
 import foodtruckfinder.site.common.user.UserDto;
 
 /**
@@ -67,6 +64,11 @@ public class UserEndpoint {
 		return userService.findUserByPrincipal(principal);
 	}
 
+	@GetMapping(value = "/{username}", produces = "application/json")
+	public Optional<UserDto> viewUser(@PathVariable String username) {
+		return userService.findUserByUsername(username);
+	}
+
 	/**
 	 * The @PostMapping annotation is very similar to the @GetMapping annotation except that it expects HTTP POST requests instead of GET request. Because of this, a post can
 	 * accept a payload of data in its post body. You can almost think of a GET call as a function which takes no parameters, while a POST call is a function that takes a parameter
@@ -79,5 +81,18 @@ public class UserEndpoint {
 	@PostMapping(value = "/register")
 	public UserDto register(@RequestBody RegistrationRequest request) {
 		return userService.register(request);
+	}
+
+	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
+	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
+
+	@PostMapping(value = "/update", produces = "application/json")
+	public UserDto update(@RequestBody UpdateRequest request) {
+		return userService.update(request);
+	}
+
+	@PostMapping(value = "/owner/getFoodTrucks", produces = "application/json")
+	public Optional<List<Long>> getOwnedFoodTrucks(){
+		return userService.getOwnedFoodTrucks(SecurityContextHolder.getContext().getAuthentication().getName());
 	}
 }

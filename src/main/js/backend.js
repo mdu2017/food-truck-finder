@@ -4,6 +4,10 @@ export function register(user) {
 	return axios.post('/api/user/register', user);
 }
 
+export function update(user) {
+	return axios.post('/api/user/update', user);
+}
+
 export function authenticate(username, password) {
 	return axios({
 		method: 'post',
@@ -21,6 +25,7 @@ export function authenticate(username, password) {
 	});
 }
 
+//Grab user details
 export function getUserDetails() {
 	return axios.get('/api/user');
 }
@@ -53,7 +58,8 @@ let Actions = {};
 
 Actions.Types = {
 	SET_AUTHENTICATION: 'SET_AUTHENTICATION',
-	SET_USER: 'SET_USER'
+	SET_USER: 'SET_USER',
+	SET_FOOD_TRUCK: 'SET_FOOD_TRUCK'
 };
 
 //Registers user when creating an account
@@ -68,6 +74,16 @@ Actions.register = user => {
 };
 
 //Authenticates the user when logging in
+Actions.update = user => {
+	return dispatch => {
+		return update(user).then(() => {
+			return dispatch(
+				Actions.authenticate(user.principal, user.password)
+			);
+		});
+	};
+};
+
 Actions.authenticate = (username, password) => {
 	return dispatch => {
 		return authenticate(username, password).then(authentication => {
@@ -78,6 +94,18 @@ Actions.authenticate = (username, password) => {
 				dispatch(Actions.setUser(user));
 				// window.alert(document.cookie);
 				window.location.href = '/';
+
+				if (getCookie('user') != null) {
+					if (getCookie('owner') === 'true') {
+						window.location.href = '/#/';
+					} else {
+						window.location.href = '/#/';
+					}
+				} else {
+					window.alert(
+						'This email and password combination is not valid, please try again'
+					);
+				}
 			});
 		});
 	};
@@ -91,7 +119,12 @@ Actions.logout = () => {
 		document.cookie =
 			'authentication= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		document.cookie = 'user= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+
 		// window.alert(document.cookie);
+
+		document.cookie = 'userid= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		document.cookie = 'username= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
+		document.cookie = 'owner= ; expires = Thu, 01 Jan 1970 00:00:00 GMT';
 		window.location.href = '/';
 	};
 };
@@ -106,7 +139,10 @@ Actions.setAuthentication = authentication => {
 
 Actions.setUser = user => {
 	if (user) {
-		document.cookie = 'user=' + user['principal'] + ';  path=/';
+		document.cookie = 'user=' + user['username'] + '; path=/';
+		document.cookie = 'userid=' + user['id'] + '; path=/';
+		document.cookie = 'owner=' + String(user['isOwner']) + '; path=/';
+		document.cookie = 'email=' + user['principal'] + '; path=/';
 	}
 	return { type: Actions.Types.SET_USER, user };
 };

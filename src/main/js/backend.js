@@ -58,7 +58,6 @@ let Actions = {};
 Actions.Types = {
 	SET_AUTHENTICATION: 'SET_AUTHENTICATION',
 	SET_USER: 'SET_USER',
-	SET_FOOD_TRUCK: 'SET_FOOD_TRUCK'
 };
 
 Actions.register = user => {

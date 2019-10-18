@@ -129,7 +129,7 @@ public class FoodTruckDao {
 				new Tuple.Tuple2<>("status", foodTruck.getStatus())
 		);
 
-		String myQuery = "INSERT INTO FOOD_TRUCK " +
+		String myQuery = "INSERT IGNORE INTO FOOD_TRUCK " +
 				"(FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, MENU, TRUCK_IMAGE, SCHEDULE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
 				"(:food_truck_id, :owner_id, :name, :type, :menu, :image, :schedule, :price_low, :price_high, :status)";
 

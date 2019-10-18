@@ -21,9 +21,13 @@ Actions.createFT = foodTruck => {
     };
 };
 
-export { Actions };
-
 //Set food truck
-// Actions.setFoodTruck = foodTruck => {
-// 	return{type: Actions.Types.SET_FOOD_TRUCK, foodTruck};
-// };
+Actions.setFoodTruck = foodTruck => {
+    // if(foodTruck){
+    //
+    // }
+    //
+    // return foodTruck;
+};
+
+export { Actions };

@@ -382,32 +382,34 @@ export class EditFoodTruck extends React.Component {
 								placeholder="(Optional)"
 							/>
 						</FormGroup>
-						<Form inline>
-							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftLowPrice" className="mr-sm-2">
-									Price Low
-								</Label>
-								<Input
-									type="number"
-									min={0}
-									name="price"
-									id="ftLowPrice"
-									step="0.01"
-								/>
-							</FormGroup>
-							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftHighPrice" className="mr-sm-2">
-									Price High
-								</Label>
-								<Input
-									type="number"
-									min={0}
-									name="price"
-									id="ftHighPrice"
-									step="0.01"
-								/>
-							</FormGroup>
-						</Form>
+					</Form>
+					<Form inline>
+						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+							<Label for="ftLowPrice" className="mr-sm-2">
+								Price Low
+							</Label>
+							<Input
+								type="number"
+								min={0}
+								name="price"
+								id="ftLowPrice"
+								step="0.01"
+							/>
+						</FormGroup>
+						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+							<Label for="ftHighPrice" className="mr-sm-2">
+								Price High
+							</Label>
+							<Input
+								type="number"
+								min={0}
+								name="price"
+								id="ftHighPrice"
+								step="0.01"
+							/>
+						</FormGroup>
+					</Form>
+					<Form>
 						<FormGroup>
 							<Label for="ftDescription">Description</Label>
 							<Input
@@ -429,19 +431,17 @@ export class EditFoodTruck extends React.Component {
 								easily wraps to a new line.
 							</FormText>
 						</FormGroup>
-						<FormGroup tag="fieldset">
-							<legend>Schedule / Route</legend>
-							{this.displayDayOfTheWeek('Sunday')}
-							{this.displayDayOfTheWeek('Monday')}
-							{this.displayDayOfTheWeek('Tuesday')}
-							{this.displayDayOfTheWeek('Wednesday')}
-							{this.displayDayOfTheWeek('Thursday')}
-							{this.displayDayOfTheWeek('Friday')}
-							{this.displayDayOfTheWeek('Saturday')}
-						</FormGroup>
-						<Button>Submit</Button>{' '}
-						<Button color="danger">Delete Food Truck</Button>
 					</Form>
+					<legend>Schedule / Route</legend>
+					{this.displayDayOfTheWeek('Sunday')}
+					{this.displayDayOfTheWeek('Monday')}
+					{this.displayDayOfTheWeek('Tuesday')}
+					{this.displayDayOfTheWeek('Wednesday')}
+					{this.displayDayOfTheWeek('Thursday')}
+					{this.displayDayOfTheWeek('Friday')}
+					{this.displayDayOfTheWeek('Saturday')}
+					<Button>Submit</Button>{' '}
+					<Button color="danger">Delete Food Truck</Button>
 				</div>
 			</div>
 		);

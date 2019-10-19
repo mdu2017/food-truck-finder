@@ -37,64 +37,67 @@ public class FoodTruckDao {
 		Map<String, ?> parameters = _Maps.map("foodTruckId", id);
 
 		FoodTruckDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			rs.next();
+			if(rs.next()) {
 
-			FoodTruckDto foodTruckDto = new FoodTruckDto(); //9 fields to set
-			foodTruckDto.setId(rs.getLong("FOOD_TRUCK_ID"));
-			foodTruckDto.setName(rs.getString("NAME"));
-			foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
-			foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
-			foodTruckDto.setStatus(rs.getString("STATUS"));
-			foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
+				FoodTruckDto foodTruckDto = new FoodTruckDto(); //9 fields to set
+				foodTruckDto.setId(rs.getLong("FOOD_TRUCK_ID"));
+				foodTruckDto.setName(rs.getString("NAME"));
+				foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
+				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
+				foodTruckDto.setStatus(rs.getString("STATUS"));
+				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
 
-			//need to get menu, schedule, truck_image, and type
-			//For menu, get a list
-			String menusql = "SELECT ITEM_ID, name, description, price FROM MENU WHERE TRUCK_ID = :foodTruckId";
+				//need to get menu, schedule, truck_image, and type
+				//For menu, get a list
+				String menusql = "SELECT ITEM_ID, name, description, price FROM MENU WHERE TRUCK_ID = :foodTruckId";
 
-			List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
-				Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
-						menurs.getLong("ITEM_ID"),
-						new Tuple3<>(
-						menurs.getString("NAME"),
-						menurs.getString("DESCRIPTION"),
-						menurs.getDouble("PRICE"))
-				);
-				return item;
-			});
-			foodTruckDto.setMenu(menu);
+				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
+					Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
+							menurs.getLong("ITEM_ID"),
+							new Tuple3<>(
+									menurs.getString("NAME"),
+									menurs.getString("DESCRIPTION"),
+									menurs.getDouble("PRICE"))
+					);
+					return item;
+				});
+				foodTruckDto.setMenu(menu);
 
-			//schedule
-			String schedsql = "SELECT day, start, end, latitude, longitude FROM truck_stop, schedule " +
-					          "WHERE truck_id = :foodTruckId AND schedule.stop_id = truck_stop.stop_id";
+				//schedule
+				String schedsql = "SELECT day, start, end, latitude, longitude FROM truck_stop, schedule " +
+						"WHERE truck_id = :foodTruckId AND schedule.stop_id = truck_stop.stop_id";
 
-			Map<String, Stop> schedule = jdbcTemplate.query(schedsql, parameters, (ResultSet schedrs) -> {
-				Map<String,Stop> results = new HashMap<>();
-				while (schedrs.next()) {
-					Stop s1 = new Stop();
-					s1.setStart(schedrs.getTimestamp("START").toLocalDateTime());
-					s1.setEnd(schedrs.getTimestamp("END").toLocalDateTime());
-					s1.setLat(schedrs.getDouble("LATITUDE"));
-					s1.setLog(schedrs.getDouble("LONGITUDE"));
-					results.put(schedrs.getString("DAY"), s1);
-				}
-				return results;
-			});
-			foodTruckDto.setSchedule(schedule);
+				Map<String, Stop> schedule = jdbcTemplate.query(schedsql, parameters, (ResultSet schedrs) -> {
+					Map<String, Stop> results = new HashMap<>();
+					while (schedrs.next()) {
+						Stop s1 = new Stop();
+						s1.setStart(schedrs.getTimestamp("START").toLocalDateTime());
+						s1.setEnd(schedrs.getTimestamp("END").toLocalDateTime());
+						s1.setLat(schedrs.getDouble("LATITUDE"));
+						s1.setLog(schedrs.getDouble("LONGITUDE"));
+						results.put(schedrs.getString("DAY"), s1);
+					}
+					return results;
+				});
+				foodTruckDto.setSchedule(schedule);
 
-			//TODO::truck_image
-			//not right now
-			foodTruckDto.setTruck_image(null);
+				//TODO::truck_image
+				//not right now
+				foodTruckDto.setTruck_image(null);
 
-			//type
-			String typesql = "SELECT food_type.type FROM food_type, food_truck " +
-							 "WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
-			String type = jdbcTemplate.query(typesql, parameters, typers -> {
-				typers.next();
-				return typers.getString("type");
-			});
-			foodTruckDto.setType(type);
+				//type
+				String typesql = "SELECT food_type.type FROM food_type, food_truck " +
+						"WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
+				String type = jdbcTemplate.query(typesql, parameters, typers -> {
+					typers.next();
+					return typers.getString("type");
+				});
+				foodTruckDto.setType(type);
 
-			return foodTruckDto;
+				return foodTruckDto;
+			} else {
+				return null;
+			}
 		});
 
 		return Optional.ofNullable(result);

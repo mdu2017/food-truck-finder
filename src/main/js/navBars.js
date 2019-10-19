@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import Logo from './images/foodtruck.png';
-import * as Users from 'js/backend';
+import Logo from 'js/images/foodtruck.png';
+import * as Axios from 'js/axios';
 import {
 	Collapse,
 	Navbar,
@@ -34,7 +34,7 @@ export class CustomNavBar extends React.Component {
 	logout = () => this.props.logout();
 
 	displayLoginButton() {
-		if (!Users.getCookie('user')) {
+		if (!Axios.getCookie('user')) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
@@ -45,7 +45,7 @@ export class CustomNavBar extends React.Component {
 	}
 
 	displayViewProfile() {
-		if (Users.getCookie('user')) {
+		if (Axios.getCookie('user')) {
 			return (
 				<div>
 					<DropdownToggle nav caret>
@@ -61,13 +61,13 @@ export class CustomNavBar extends React.Component {
 						<DropdownItem
 							tag={Link}
 							to="/list-food-trucks"
-							hidden={!(Users.getCookie('owner') == 'true')}>
+							hidden={!(Axios.getCookie('owner') == 'true')}>
 							Edit Food Trucks
 						</DropdownItem>
 						<DropdownItem
 							tag={Link}
 							to="/create-food-truck"
-							hidden={!(Users.getCookie('owner') == 'true')}>
+							hidden={!(Axios.getCookie('owner') == 'true')}>
 							Add Food Truck
 						</DropdownItem>
 						<DropdownItem divider />
@@ -109,18 +109,18 @@ export class CustomNavBar extends React.Component {
 }
 
 CustomNavBar = connect(() => ({
-	logout: Users.Actions.logout()
+	logout: Axios.Actions.logout()
 }))(CustomNavBar);
 
 export class SidebarNav extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authentication: Users.getCookie('authentication'),
-			principal: Users.getCookie('email'),
-			password: Users.getCookie('password'),
-			username: Users.getCookie('user'),
-			owner: Users.getCookie('owner')
+			authentication: Axios.getCookie('authentication'),
+			principal: Axios.getCookie('email'),
+			password: Axios.getCookie('password'),
+			username: Axios.getCookie('user'),
+			owner: Axios.getCookie('owner')
 		};
 	}
 

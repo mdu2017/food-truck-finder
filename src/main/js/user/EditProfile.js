@@ -1,73 +1,26 @@
 import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
-import * as Users from 'js/backend';
-import * as NavBars from 'js/navBar';
+import * as Axios from 'js/axios';
+import * as NavBars from 'js/navBars';
 import {
 	UncontrolledTooltip,
-	Col,
 	Button,
 	Form,
 	FormGroup,
 	Label,
-	Input,
-	Row,
-	Container
+	Input
 } from 'reactstrap';
 
-export class ViewUserProfilePage extends React.Component {
+export class EditProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authentication: Users.getCookie('authentication'),
-			principal: Users.getCookie('email'),
-			password: Users.getCookie('password'),
-			username: Users.getCookie('user'),
-			owner: Users.getCookie('owner')
-		};
-	}
-
-	isOwner() {
-		if (this.state.owner == 'true') {
-			return 'Owner';
-		}
-		return 'Customer';
-	}
-
-	render() {
-		return (
-			<div>
-				<NavBars.CustomNavBar />
-				<div className="container padded">
-					<h1>View Profile</h1>
-					<Container>
-						<Row>
-							<Col>
-								<h2>Account Details</h2>
-								<h6>Username: {this.state.username}</h6>
-								<h6>Email: {this.state.principal}</h6>
-								<h6>Account Type: {this.isOwner()}</h6>
-							</Col>
-							<Col>
-								<h2>Ratings {'&'} Reviews</h2>
-							</Col>
-						</Row>
-					</Container>
-				</div>
-			</div>
-		);
-	}
-}
-
-export class EditUserPage extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = {
-			principal: Users.getCookie('email'),
-			password: Users.getCookie('password'),
-			username: Users.getCookie('user'),
-			owner: Users.getCookie('owner'),
-			id: Users.getCookie('userid')
+			principal: Axios.getCookie('email'),
+			password: Axios.getCookie('password'),
+			username: Axios.getCookie('user'),
+			owner: Axios.getCookie('owner'),
+			id: Axios.getCookie('userid')
 		};
 	}
 
@@ -171,13 +124,13 @@ export class EditUserPage extends React.Component {
 	}
 }
 
-EditUserPage = connect(
+EditProfile = connect(
 	() => ({
-		authentication: Users.getCookie('authentication'),
-		user: Users.getCookie('user'),
-		email: Users.getCookie('email')
+		authentication: Axios.getCookie('authentication'),
+		user: Axios.getCookie('user'),
+		email: Axios.getCookie('email')
 	}),
 	dispatch => ({
-		update: user => dispatch(Users.Actions.update(user))
+		update: user => dispatch(Axios.Actions.update(user))
 	})
-)(EditUserPage);
+)(EditProfile);

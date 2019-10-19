@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-
-import * as Users from 'js/backend';
+import * as Axios from 'js/axios';
 
 export class LoginForm extends React.Component {
 	constructor(props) {
@@ -54,7 +53,7 @@ LoginForm = connect(
 	() => ({}),
 	dispatch => ({
 		authenticate: (principal, password) =>
-			dispatch(Users.Actions.authenticate(principal, password))
+			dispatch(Axios.Actions.authenticate(principal, password))
 	})
 )(LoginForm);
 
@@ -153,7 +152,7 @@ export class RegistrationForm extends React.Component {
 RegistrationForm = connect(
 	() => ({}),
 	dispatch => ({
-		register: user => dispatch(Users.Actions.register(user))
+		register: user => dispatch(Axios.Actions.register(user))
 	})
 )(RegistrationForm);
 

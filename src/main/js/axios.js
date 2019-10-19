@@ -1,14 +1,16 @@
 import axios from 'axios';
 
+// Registers a User in the Database
 export function register(user) {
 	return axios.post('/api/user/register', user);
 }
 
+// Updates a User in the Database
 export function update(user) {
 	return axios.post('/api/user/update', user);
 }
 
-//Calls the food truck Endpoint to save it to the database
+// Creates a FoodTruck in the Database
 export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
@@ -45,22 +47,26 @@ export function authenticate(username, password) {
 	});
 }
 
-//Grab user details
+// Gets User's Details from the Database
 export function getUserDetails() {
 	return axios.get('/api/user');
 }
 
-//Grab FOOD TRUCK details
-export function getFoodTruckDetails() {
-	return axios.get('/api/food-truck');
+// Gets a Food Truck's Details from the Database
+export function getFoodTruckDetails(id) {
+	return axios.get(`/api/food-truck/${id}`);
 }
 
-// Get list of Food Trucks
-export function getOwnerFoodTruckIDs(id) {
-	return axios.get('/api/user/owner/getFoodTrucks', id);
+// Gets a list of FT IDs owned by an owner from the Database
+export function getOwnerFoodTruckIDs(owner_id) {
+	return axios.get('/api/user/owner/getFoodTrucks', {
+		params: {
+			id: owner_id
+		}
+	});
 }
 
-//
+// Get a list of Foods Trucks by Owner
 export function getFoodTrucksByOwner(id) {
 	return axios.get('/api/food-truck/getFoodTrucksByOwner', {
 		params: {

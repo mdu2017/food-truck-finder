@@ -9,19 +9,19 @@ import { reducer as formReducer } from 'redux-form';
 import axios from 'axios';
 
 import Index from 'js/index';
-import * as Users from 'js/backend';
+import * as Axios from 'js/axios';
 import * as Utils from 'js/alloy/utils/core-utils';
 
 import 'styles/main.scss';
 
-const reducers = [{ form: formReducer }, Users.Reducers];
+const reducers = [{ form: formReducer }, Axios.Reducers];
 
 const reducer = Utils.combineReducers(reducers);
 const store = createStore(
 	reducer,
 	{
-		authentication: Users.getCookie('authentication'),
-		user: Users.getCookie('email')
+		authentication: Axios.getCookie('authentication'),
+		user: Axios.getCookie('email')
 	},
 	applyMiddleware(thunkMiddleware, createLogger())
 );
@@ -31,7 +31,7 @@ axios.defaults.headers.put['Content-Type'] = 'application/json';
 
 axios.interceptors.request.use(
 	request => {
-		let authentication = Users.State.getAuthentication(store.getState());
+		let authentication = Axios.State.getAuthentication(store.getState());
 		if (_.isDefined(authentication)) {
 			request.headers.common['Authorization'] =
 				'Bearer ' + authentication['access_token'];
@@ -55,9 +55,9 @@ ReactDOM.render(
 	mountNode
 );
 
-let token = Users.getCookie('authentication');
-let uToken = Users.getCookie('user');
+let token = Axios.getCookie('authentication');
+let uToken = Axios.getCookie('user');
 if (_.isDefined(token) && _.isDefined(uToken)) {
-	store.dispatch(Users.Actions.setAuthentication(JSON.parse(token)));
-	store.dispatch(Users.Actions.setUser(JSON.parse(uToken)));
+	store.dispatch(Axios.Actions.setAuthentication(JSON.parse(token)));
+	store.dispatch(Axios.Actions.setUser(JSON.parse(uToken)));
 }

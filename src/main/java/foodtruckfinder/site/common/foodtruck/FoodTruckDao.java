@@ -165,9 +165,7 @@ public class FoodTruckDao {
 
                     jdbcTemplate.update(menusql, menuparams);
                 }
-            }
-			//If no menu, set to 0
-			else if(menu == null){
+            } else if(menu == null){
 //				menusql = "UPDATE MENU SET " +
 //						"NAME = tempMenu" +
 //						"DESCRIPTION = testDescription " +
@@ -240,11 +238,10 @@ public class FoodTruckDao {
 			return foodTruck;
 		}
 		else {
-			//This needs to check if the food truck DOES exist already in the database (check for duplicate infomation
-			//  in any "unique" field
+			//todo:: check if the owner exists
 			//Add the menu to the database
 			String menusql;
-			// TODO: Implement Menu
+			// TODO: Implement Menu in front end
 //			List<Pair<Long, Triple<String, String, Double>>> menu = foodTruck.getMenu();
 //			for(int i=0; i < menu.size(); i++) {
 //				//add each item to the database
@@ -264,7 +261,7 @@ public class FoodTruckDao {
 //				menu.set(i, new Tuple2<>(menuKeyHolder.getKey().longValue(),
 //						  				 menu.get(i).getSecond()));
 //			}
-			// TODO: Implement Schedule
+			// TODO: Implement Schedule in front end
 			//Insert schedule in database
 //			String schedsql;
 //			Map<String, Stop> schedule = foodTruck.getSchedule();
@@ -326,21 +323,25 @@ public class FoodTruckDao {
 	 * @return The stop's ID as set in the database
 	 */
 	private Long insertStop(Stop s){
-		String sql = "INSERT INTO TRUCK_STOP " +
-				"(START, END, LATITUDE, LONGITUDE) VALUES " +
-				"(:start, :end, :lat, :long)";
+		if(s != null){
+			String sql = "INSERT INTO TRUCK_STOP " +
+					"(START, END, LATITUDE, LONGITUDE) VALUES " +
+					"(:start, :end, :lat, :long)";
 
-		Map<String, ?> params = _Maps.map(
-				"start", s.getStartSql(),
-				"stop", s.getEndSql(),
-				"lat", s.getLat(),
-				"long", s.getLog());
+			Map<String, ?> params = _Maps.map(
+					"start", s.getStartSql(),
+					"stop", s.getEndSql(),
+					"lat", s.getLat(),
+					"long", s.getLog());
 
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder);
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder);
 
-		s.setId(keyHolder.getKey().longValue());
-		return keyHolder.getKey().longValue();
+			s.setId(keyHolder.getKey().longValue());
+			return keyHolder.getKey().longValue();
+		} else {
+			return (long) -1;
+		}
 	}
 
 	/**
@@ -349,7 +350,7 @@ public class FoodTruckDao {
 	 * @param truck_id the truck id
 	 * @param user_id the user id
 	 */
-	public void subscribe(Long truck_id, Long user_id){ /*todo::do this*/
+	public void subscribe(Long truck_id, Long user_id){ //todo:: check if truck and user ids are valid
 		String sql = "INSERT IGNORE INTO SUBSCRIPTIONS " +
 				"(TRUCK_ID, USER_ID) VALUES (truck_id, user_id)";
 
@@ -363,7 +364,6 @@ public class FoodTruckDao {
 	 * @return the list of subscribers to a particular food truck
 	 */
 	public List<String> getSubscribers(Long truck_id){
-		//todo:: fix because username isn't necessarily unique
 		String sql = "SELECT username FROM SUBSCRIPTIONS, USER WHERE " +
 				"SUBSCRIPTIONS.USER_ID = USER.USER_ID AND TRUCK_ID = :truck_id";
 

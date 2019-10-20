@@ -43,8 +43,8 @@ public class UserDao {
 				userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
 				userDto.setId(rs.getLong("USER_ID"));
 				userDto.setPrincipal(rs.getString("PRINCIPAL"));
-				userDto.setUsername(rs.getString("Username"));
-				userDto.setIsOwner(rs.getBoolean("isOwner"));
+				userDto.setUsername(rs.getString("USERNAME"));
+				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
                 //Need this for stuffy stuff
 				userDto.setRoles(_Lists.list("ROLE_USER"));
 				return userAuthenticationDto;
@@ -58,7 +58,7 @@ public class UserDao {
 
     /*Same as findUserByPrincipal but searches by Username*/
 	public Optional<UserDto> findUserByUsername(String username) {
-		String sql = "SELECT * FROM `USER` WHERE Username = :username";
+		String sql = "SELECT * FROM `USER` WHERE USERNAME = :username";
 
 		Map<String, ?> parameters = _Maps.map("username", username);
 
@@ -69,8 +69,8 @@ public class UserDao {
 				UserDto userDto = new UserDto();
 				userDto.setId(rs.getLong("USER_ID"));
 				userDto.setPrincipal(rs.getString("PRINCIPAL"));
-				userDto.setUsername(rs.getString("Username"));
-				userDto.setIsOwner(rs.getBoolean("isOwner"));
+				userDto.setUsername(rs.getString("USERNAME"));
+				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
                 userDto.setRoles(_Lists.list("ROLE_USER"));
 
 				return userDto;
@@ -94,8 +94,8 @@ public class UserDao {
 			String sql = "UPDATE USER SET " +
 					"PRINCIPAL = :principal, " +
 					"PASSWORD = :password, " +
-					"Username = :username, " +
-					"isOwner = :owner " +
+					"USERNAME = :username, " +
+					"IS_OWNER = :owner " +
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.map(
@@ -109,7 +109,7 @@ public class UserDao {
 			return userAuthentication;
 		}
 		else {
-			String sql = "INSERT INTO USER (PRINCIPAL, Username, PASSWORD, isOwner) VALUES (:principal, :username, :password, :isOwner)";
+			String sql = "INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER) VALUES (:principal, :username, :password, :isOwner)";
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),

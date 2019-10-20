@@ -11,25 +11,13 @@ public class UserAuthenticationDto implements Momento<String> {
 	private UserDto user;
 	private String password;
 
-	public void setUser(UserDto user) {
-		this.user = user;
-	}
+	public void setUser(UserDto user) { this.user = user; }
+	public void setPassword(String password) { this.password = password; }
 
-	public void setPassword(String password) {
-		this.password = password;
-	}
-
-	public UserDto getUser() {
-		return user;
-	}
-
-	public String getPassword() {
-		return password;
-	}
+	public UserDto getUser() { return user; }
+	public String getPassword() { return password; }
 
 	@JsonIgnore
 	@Override
-	public String getMomento() {
-		return user.getMomento();
-	}
+	public String getMomento() { return user.getMomento(); }
 }

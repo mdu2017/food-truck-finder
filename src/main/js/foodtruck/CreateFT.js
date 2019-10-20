@@ -52,14 +52,15 @@ export class CreateFoodTruck extends React.Component {
 		event.preventDefault();
 	};
 
-	displayTypes() {
-		// alert(JSON.stringify(Axios.getFoodTypes()));
-		// var type;
-		// var types = '';
-		// for(type in Axios.getFoodTypes()) {
-		// 	types = types + '<option>' + type + '</option>';
-		// }
-		// document.getElementById('types').innerHTML = types;
+	// Promise value return
+	getFoodTypes() {
+		Axios.getFoodTypes().then(function(result) {
+			var str = '';
+			result.forEach(function(type) {
+				str += '<option>' + type + '</option>';
+			});
+			document.getElementById('foodTypes').innerHTML = str;
+		});
 	}
 
 	displayDayOfTheWeek(dayofTheWeek) {
@@ -149,19 +150,16 @@ export class CreateFoodTruck extends React.Component {
 							</Input>
 						</FormGroup>
 						<FormGroup>
+							{this.getFoodTypes()}
 							<Label for="ftFoodType">Food Type</Label>
 							<Input
 								type="select"
 								name="foodtype"
-								id="ftFoodType"
+								id="foodTypes"
 								onChange={e =>
 									this.setFoodType(e.target.value)
 								}>
-								{this.displayTypes()}
-								<div id="types"></div>
-								<option>Mexican</option>
-								<option>Breakfast</option>
-								<option>American</option>
+
 							</Input>
 						</FormGroup>
 						<FormGroup>

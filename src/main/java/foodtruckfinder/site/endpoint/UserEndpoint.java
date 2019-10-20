@@ -71,6 +71,8 @@ public class UserEndpoint {
 	}
 
 	/**
+	 * Returns id = -1 for incorrect username, -2 for incorrect principle/email
+	 *
 	 * The @PostMapping annotation is very similar to the @GetMapping annotation except that it expects HTTP POST requests instead of GET request. Because of this, a post can
 	 * accept a payload of data in its post body. You can almost think of a GET call as a function which takes no parameters, while a POST call is a function that takes a parameter
 	 * via the POST body. In this case, the body of the request is JSON that is serialized via Jackson into a RegistrationRequest Java object. The application calls this when you
@@ -80,9 +82,7 @@ public class UserEndpoint {
 	 * return that new user back to the frontend as a JSON payload - represented by the UserDto class here as the return type.
 	 */
 	@PostMapping(value = "/register")
-	public UserDto register(@RequestBody RegistrationRequest request) {
-		return userService.register(request);
-	}
+	public UserDto register(@RequestBody RegistrationRequest request) { return userService.register(request); }
 
 	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
 	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }

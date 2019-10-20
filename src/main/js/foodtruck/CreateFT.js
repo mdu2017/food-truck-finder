@@ -52,6 +52,16 @@ export class CreateFoodTruck extends React.Component {
 		event.preventDefault();
 	};
 
+	displayTypes() {
+		// alert(JSON.stringify(Axios.getFoodTypes()));
+		// var type;
+		// var types = '';
+		// for(type in Axios.getFoodTypes()) {
+		// 	types = types + '<option>' + type + '</option>';
+		// }
+		// document.getElementById('types').innerHTML = types;
+	}
+
 	displayDayOfTheWeek(dayofTheWeek) {
 		return (
 			<div>
@@ -147,6 +157,8 @@ export class CreateFoodTruck extends React.Component {
 								onChange={e =>
 									this.setFoodType(e.target.value)
 								}>
+								{this.displayTypes()}
+								<div id="types"></div>
 								<option>Mexican</option>
 								<option>Breakfast</option>
 								<option>American</option>

@@ -1,7 +1,9 @@
 package foodtruckfinder.site.endpoint;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -48,5 +50,16 @@ public class FoodTruckEndpoint {
 	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
 	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
+	}
+
+	/**
+	 * This function gets a string list of food types
+	 * @return the string list of food types
+	 */
+	@GetMapping(value = "/getFoodTypes", produces = "application/json")
+	public List<String> getFoodTypes(){
+		return Arrays.stream(FoodTruckDto.FoodType.values())
+				     .map(FoodTruckDto.FoodType::name)
+				     .collect(Collectors.toList());
 	}
 }

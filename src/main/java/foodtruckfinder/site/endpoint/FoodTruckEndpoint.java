@@ -74,4 +74,15 @@ public class FoodTruckEndpoint {
 				     .map(FoodTruckDto.FoodType::name)
 				     .collect(Collectors.toList());
 	}
+
+	/**
+	 * This function gets a string list of the status
+	 * @return the string list of the status
+	 */
+	@GetMapping(value = "/getStatusNames", produces = "application/json")
+	public List<String> getStatusNames(){
+		return Arrays.stream(FoodTruckDto.FTStatus.values())
+				.map(FoodTruckDto.FTStatus::name)
+				.collect(Collectors.toList());
+	}
 }

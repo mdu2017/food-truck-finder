@@ -170,7 +170,7 @@ Actions.authenticate = (username, password) => {
 					);
 				}
 			});
-		}).catch(err => alert(err));
+		}).catch(() => alert('Email and password combination is invalid, please try again'));
 	};
 };
 

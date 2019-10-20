@@ -111,32 +111,6 @@ public class FoodTruckDao {
 	}
 
 	/**
-	 * This function tests if a food truck is created and stored in the database
-	 * @param foodTruck
-	 */
-	public FoodTruckDto testFT(FoodTruckDto foodTruck) throws SQLException {
-		int defaultImage = 'a';
-		Map<String, ?> parameters = _Maps.mapPairs(
-//				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
-				new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
-				new Tuple.Tuple2<>("name", foodTruck.getName()),
-				new Tuple.Tuple2<>("type", foodTruck.getType()),
-				new Tuple.Tuple2<>("image", defaultImage),
-				new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
-				new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-				new Tuple.Tuple2<>("status", foodTruck.getStatus())
-		);
-
-		String myQuery = "INSERT INTO FOOD_TRUCK " +
-				"(OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-				"(:owner_id, :name, :type, :image, :price_low, :price_high, :status)";
-
-		jdbcTemplate.update(myQuery, parameters);
-
-		return foodTruck;
-	}
-
-	/**
 	 * This function saves a food truck's updates, if any.  If it doesn't have an id associated with it, it adds the
 	 * 	food truck to the database
 	 * @param foodTruck the food truck to update/add

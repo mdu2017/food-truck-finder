@@ -66,7 +66,7 @@ public class UserEndpoint {
 	}
 
 	@GetMapping(value = "/{username}", produces = "application/json")
-	public Optional<UserDto> viewUser(@PathVariable String username) {
+	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
 		return userService.findUserByUsername(username);
 	}
 

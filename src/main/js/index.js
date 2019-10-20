@@ -88,6 +88,7 @@ export default class Index extends React.Component {
 					/>
 					<Route exact path="/page-1" component={Pages.Page1} />
 					<Route exact path="/hello" component={Pages.HelloSend} />
+					<Route exact path="/wolf" component={Pages.ViewUser} />
 				</div>
 			</HashRouter>
 		);

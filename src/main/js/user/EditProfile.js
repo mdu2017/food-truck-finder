@@ -16,11 +16,11 @@ export class EditProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			principal: Axios.getCookie('email'),
-			password: Axios.getCookie('password'),
-			username: Axios.getCookie('user'),
-			owner: Axios.getCookie('owner'),
-			id: Axios.getCookie('userid')
+			principal: JSON.parse(Axios.getCookie('user')).principal,
+			password: null,
+			username: JSON.parse(Axios.getCookie('user')).username,
+			owner: JSON.parse(Axios.getCookie('user')).isOwner,
+			id: JSON.parse(Axios.getCookie('user')).id
 		};
 	}
 
@@ -79,7 +79,7 @@ export class EditProfile extends React.Component {
 								type="text"
 								name="email"
 								id="newEmail"
-								placeholder=""
+								placeholder={this.state.principal}
 								onChange={e =>
 									this.setPrincipal(e.target.value)
 								}
@@ -126,9 +126,8 @@ export class EditProfile extends React.Component {
 
 EditProfile = connect(
 	() => ({
-		authentication: Axios.getCookie('authentication'),
-		user: Axios.getCookie('user'),
-		email: Axios.getCookie('email')
+		user: JSON.parse(Axios.getCookie('user')).username,
+		email: JSON.parse(Axios.getCookie('user')).principal
 	}),
 	dispatch => ({
 		update: user => dispatch(Axios.Actions.update(user))

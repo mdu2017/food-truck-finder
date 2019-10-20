@@ -27,14 +27,14 @@ export class CustomNavBar extends React.Component {
 		this.toggleProfile = this.toggleProfile.bind(this);
 		this.state = {
 			viewProfileDrop: props.viewProfileDrop,
-			isLoggedIn: props.isLoggedIn
+			user: JSON.parse(Axios.getCookie('user'))
 		};
 	}
 
 	logout = () => this.props.logout();
 
 	displayLoginButton() {
-		if (!Axios.getCookie('user')) {
+		if (!this.state.user) {
 			return (
 				<NavLink tag={Link} to="/login">
 					Login
@@ -45,7 +45,7 @@ export class CustomNavBar extends React.Component {
 	}
 
 	displayViewProfile() {
-		if (Axios.getCookie('user')) {
+		if (this.state.user) {
 			return (
 				<div>
 					<DropdownToggle nav caret>
@@ -61,13 +61,13 @@ export class CustomNavBar extends React.Component {
 						<DropdownItem
 							tag={Link}
 							to="/list-food-trucks"
-							hidden={!(Axios.getCookie('owner') == 'true')}>
+							hidden={this.state.user.isOwner !== true}>
 							Edit Food Trucks
 						</DropdownItem>
 						<DropdownItem
 							tag={Link}
 							to="/create-food-truck"
-							hidden={!(Axios.getCookie('owner') == 'true')}>
+							hidden={this.state.user.isOwner !== true}>
 							Add Food Truck
 						</DropdownItem>
 						<DropdownItem divider />
@@ -116,11 +116,7 @@ export class SidebarNav extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authentication: Axios.getCookie('authentication'),
-			principal: Axios.getCookie('email'),
-			password: Axios.getCookie('password'),
-			username: Axios.getCookie('user'),
-			owner: Axios.getCookie('owner')
+			user: JSON.parse(Axios.getCookie('user'))
 		};
 	}
 
@@ -141,7 +137,7 @@ export class SidebarNav extends React.Component {
 								</NavItem>
 								<NavItem>
 									<NavLink
-										hidden={!this.state.authentication}
+										hidden={!this.state.user}
 										href="#/notifications">
 										Notifications{' '}
 										<Badge color="secondary">4</Badge>

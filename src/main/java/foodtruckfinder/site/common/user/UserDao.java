@@ -59,19 +59,18 @@ public class UserDao {
     /*Same as findUserByPrincipal but searches by Username*/
 	public Optional<UserDto> findUserByUsername(String username) {
 		String sql = "SELECT * FROM `USER` WHERE Username = :username";
-		Map<String, ?> parameters = _Maps.map("principal", username);
+
+		Map<String, ?> parameters = _Maps.map("username", username);
 
 		UserDto result = jdbcTemplate.query(sql, parameters, rs -> {
 			if(!rs.isLast()) {
 				rs.next();
 
 				UserDto userDto = new UserDto();
+				userDto.setId(rs.getLong("USER_ID"));
+				userDto.setPrincipal(rs.getString("PRINCIPAL"));
 				userDto.setUsername(rs.getString("Username"));
-                userDto.setId(rs.getLong("USER_ID"));
-                userDto.setPrincipal(rs.getString("PRINCIPAL"));
-                userDto.setUsername(rs.getString("USERNAME"));
-                userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
-                //Need this for stuffy stuff
+				userDto.setIsOwner(rs.getBoolean("isOwner"));
                 userDto.setRoles(_Lists.list("ROLE_USER"));
 
 				return userDto;

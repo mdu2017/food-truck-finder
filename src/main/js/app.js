@@ -19,10 +19,7 @@ const reducers = [{ form: formReducer }, Axios.Reducers];
 const reducer = Utils.combineReducers(reducers);
 const store = createStore(
 	reducer,
-	{
-		authentication: Axios.getCookie('authentication'),
-		user: Axios.getCookie('email')
-	},
+	{ authentication: null, user: null},
 	applyMiddleware(thunkMiddleware, createLogger())
 );
 

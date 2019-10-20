@@ -15,6 +15,11 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+// Saves a FoodTruck in the Database
+export function saveFoodTruck(foodTruck) {
+	return axios.post('/api/food-truck/save', foodTruck);
+}
+
 // export function makeFT(name, status) {
 // 	return axios({
 // 		method: 'post',

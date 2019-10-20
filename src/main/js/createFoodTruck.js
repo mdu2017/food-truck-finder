@@ -5,14 +5,14 @@ export function createFoodTruck(foodTruck){
     return axios.post('/api/food-truck/save', foodTruck);
 }
 
-export function sentFTDetails(name, price, status){
-    return axios.post('/api/food-truck');
-}
+// export function sentFTDetails(name, price, status){
+//     return axios.post('/api/food-truck');
+// }
 
 //Grab FOOD TRUCK details
-export function getFoodTruckDetails() {
-    return axios.get('/api/food-truck');
-}
+// export function getFoodTruckDetails() {
+//     return axios.get('/api/food-truck');
+// }
 
 let Actions = {};
 

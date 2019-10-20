@@ -25,7 +25,7 @@ export class CreateFoodTruck extends React.Component {
 			price_high: null,
 			status: null,
 			foodtype: null,
-			ownerId: Axios.getCookie('userid')
+			ownerId: JSON.parse(Axios.getCookie('user')).id
 		};
 	}
 
@@ -161,38 +161,38 @@ export class CreateFoodTruck extends React.Component {
 								placeholder="(Optional)"
 							/>
 						</FormGroup>
-						<Form inline>
-							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftLowPrice" className="mr-sm-2">
-									Price Low
-								</Label>
-								<Input
-									type="number"
-									min={0}
-									name="price"
-									id="ftLowPrice"
-									step="0.01"
-									onChange={e =>
-										this.setPriceLow(e.target.value)
-									}
-								/>
-							</FormGroup>
-							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-								<Label for="ftHighPrice" className="mr-sm-2">
-									Price High
-								</Label>
-								<Input
-									type="number"
-									min={0}
-									name="price"
-									id="ftHighPrice"
-									step="0.01"
-									onChange={e =>
-										this.setPriceHigh(e.target.value)
-									}
-								/>
-							</FormGroup>
-						</Form>
+					</Form>
+					<Form inline>
+						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+							<Label for="ftLowPrice" className="mr-sm-2">
+								Price Low
+							</Label>
+							<Input
+								type="number"
+								min={0}
+								name="price"
+								id="ftLowPrice"
+								step="0.01"
+								onChange={e => this.setPriceLow(e.target.value)}
+							/>
+						</FormGroup>
+						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+							<Label for="ftHighPrice" className="mr-sm-2">
+								Price High
+							</Label>
+							<Input
+								type="number"
+								min={0}
+								name="price"
+								id="ftHighPrice"
+								step="0.01"
+								onChange={e =>
+									this.setPriceHigh(e.target.value)
+								}
+							/>
+						</FormGroup>
+					</Form>
+					<Form>
 						<FormGroup>
 							<Label for="ftDescription">Description</Label>
 							<Input
@@ -214,18 +214,16 @@ export class CreateFoodTruck extends React.Component {
 								easily wraps to a new line.
 							</FormText>
 						</FormGroup>
-						<FormGroup tag="fieldset">
-							<legend>Schedule</legend>
-							{this.displayDayOfTheWeek('Sunday')}
-							{this.displayDayOfTheWeek('Monday')}
-							{this.displayDayOfTheWeek('Tuesday')}
-							{this.displayDayOfTheWeek('Wednesday')}
-							{this.displayDayOfTheWeek('Thursday')}
-							{this.displayDayOfTheWeek('Friday')}
-							{this.displayDayOfTheWeek('Saturday')}
-						</FormGroup>
-						<Button onClick={this.handleSubmit}>Submit</Button>
 					</Form>
+					<legend>Schedule</legend>
+					{this.displayDayOfTheWeek('Sunday')}
+					{this.displayDayOfTheWeek('Monday')}
+					{this.displayDayOfTheWeek('Tuesday')}
+					{this.displayDayOfTheWeek('Wednesday')}
+					{this.displayDayOfTheWeek('Thursday')}
+					{this.displayDayOfTheWeek('Friday')}
+					{this.displayDayOfTheWeek('Saturday')}
+					<Button onClick={this.handleSubmit}>Submit</Button>
 				</div>
 			</div>
 		);

@@ -1,5 +1,6 @@
 package foodtruckfinder.site.common.foodtruck;
 
+import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
@@ -20,7 +21,8 @@ public class FoodTruckService {
 		return foodTruckDao.find(id);
 	}
 
-	public void save(FoodTruckDto foodTruckDto) {
+	public void save(FoodTruckDto foodTruckDto) throws SQLException {
+//        foodTruckDao.testFT(foodTruckDto);
 		foodTruckDao.save(foodTruckDto);
 	}
 
@@ -39,4 +41,13 @@ public class FoodTruckService {
 	 * @return the list of usernames of people who are subscribed
 	 */
 	public List<String> getSubscribers(String id) { return foodTruckDao.getSubscribers(Long.parseLong(id)); }
+
+	/**
+	 * This returns a list of food trucks owned by the given owner id
+	 * @param owner_id the owner id
+	 * @return a list of food trucks owned by the given owner id
+	 */
+	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id) {
+		return foodTruckDao.getByOwner(owner_id);
+	}
 }

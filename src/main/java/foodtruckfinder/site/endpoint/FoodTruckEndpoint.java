@@ -1,15 +1,19 @@
 package foodtruckfinder.site.endpoint;
 
+import java.sql.SQLException;
+import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
+import foodtruckfinder.site.common.foodtruck.Stop;
+import foodtruckfinder.site.common.user.UserDto;
+import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.User;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -31,11 +35,16 @@ public class FoodTruckEndpoint {
 	}
 
 	// Take a JSON representation of a food truck and save it to the database
-	@PostMapping(produces = "application/json")
-	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) {
-		foodTruckService.save(foodTruckDto);
-		return foodTruckDto;
-	}
+	@PostMapping(value = "/save", produces = "application/json")
+    public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+		if(foodTruckDto.getStatus() == null){
+			foodTruckDto.setStatus("Closed");
+		} else {
+			foodTruckDto.setStatus(foodTruckDto.getStatus());
+		}
+        foodTruckService.save(foodTruckDto);
+        return foodTruckDto;
+    }
 
 	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") String id) { return foodTruckService.getSubscribers(id); }
@@ -45,4 +54,24 @@ public class FoodTruckEndpoint {
 		foodTruckService.subscribe(ftid, userid);
 	}
 
+	/**
+	 * This function returns a list of food trucks based on an owner id
+	 * @param owner_id the owner to retrieve food trucks for
+	 * @return A list of food trucks
+	 */
+	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
+	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
+		return foodTruckService.getFoodTrucksByOwner(owner_id);
+	}
+
+	/**
+	 * This function gets a string list of food types
+	 * @return the string list of food types
+	 */
+	@GetMapping(value = "/getFoodTypes", produces = "application/json")
+	public List<String> getFoodTypes(){
+		return Arrays.stream(FoodTruckDto.FoodType.values())
+				     .map(FoodTruckDto.FoodType::name)
+				     .collect(Collectors.toList());
+	}
 }

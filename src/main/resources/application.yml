@@ -1,59 +1,59 @@
 database:
-  name: food-truck-finder
-  connectionParams: useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&autoReconnect=true&useDynamicCharsetInfo=false&relaxAutoCommit=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
-  url: jdbc:mysql://${database.username}:${database.password}@${database.host}:${database.port}/${database.name}?${database.connectionParams}
-  driverClassName: com.mysql.jdbc.Driver
-  globalDialect: org.hibernate.dialect.MySQL5InnoDBDialect
-  initialSize: 10
-  maxActive: 50
-  minIdle: 1
-  maxIdle: 5
-  maxWait: 30000
+    name: food-truck-finder
+    connectionParams: useUnicode=true&characterEncoding=utf8&rewriteBatchedStatements=true&autoReconnect=true&useDynamicCharsetInfo=false&relaxAutoCommit=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+    url: jdbc:mysql://${database.username}:${database.password}@${database.host}:${database.port}/${database.name}?${database.connectionParams}
+    driverClassName: com.mysql.jdbc.Driver
+    globalDialect: org.hibernate.dialect.MySQL5InnoDBDialect
+    initialSize: 10
+    maxActive: 50
+    minIdle: 1
+    maxIdle: 5
+    maxWait: 30000
 
-  testWhileIdle: true
-  testOnBorrow: false
-  testOnReturn: false
-  timeBetweenEvictionRuns: 10000
-  minEvictableIdleTime: 30000
+    testWhileIdle: true
+    testOnBorrow: false
+    testOnReturn: false
+    timeBetweenEvictionRuns: 10000
+    minEvictableIdleTime: 30000
 
-  removeAbandoned: false
-  removeAbandonedTimeout: 60
-  logAbandoned: false
+    removeAbandoned: false
+    removeAbandonedTimeout: 60
+    logAbandoned: false
 
 security:
-  oauth2:
-    resource:
-      id: oauth2_id
+    oauth2:
+        resource:
+            id: oauth2_id
 
 management:
-  security:
-    roles: ADMIN
+    security:
+        roles: ADMIN
 
 ---
 spring:
-  profiles: development
+    profiles: development
 
 web:
-  statics:
-    js-bundle-location: http://localhost:3000/food-truck-finder-site.js
+    statics:
+        js-bundle-location: http://localhost:3000/food-truck-finder-site.js
 
 database:
-  host: localhost
-  port: 3306
-  username: root
-  password:
+    host: localhost
+    port: 3306
+    username: root
+    password:
 
 ---
 spring:
-  profiles: qa
+    profiles: qa
 
 web:
-  statics:
-    js-bundle-location: /statics/food-truck-finder-site.js
-    css-bundle-location: /statics/food-truck-finder-site.css
+    statics:
+        js-bundle-location: /statics/food-truck-finder-site.js
+        css-bundle-location: /statics/food-truck-finder-site.css
 
 database:
-  host: set me
-  port: set me
-  username: set me
-  password: set me
+    host: set me
+    port: set me
+    username: set me
+    password: set me

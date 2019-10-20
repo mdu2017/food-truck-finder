@@ -34,46 +34,52 @@ public class UserDao {
 		Map<String, ?> parameters = _Maps.map("principal", principal);
 
 		UserAuthenticationDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			rs.next();
+			if(!rs.isLast()) {
+				rs.next();
 
-			UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
-			UserDto userDto = new UserDto();
-			userAuthenticationDto.setUser(userDto);
-			userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
-			userDto.setId(rs.getLong("USER_ID"));
-			userDto.setPrincipal(rs.getString("PRINCIPAL"));
-			userDto.setUsername(rs.getString("USERNAME"));
-			userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
-            //Need this for stuffy stuff
-			userDto.setRoles(_Lists.list("ROLE_USER"));
-            return userAuthenticationDto;
+				UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
+				UserDto userDto = new UserDto();
+				userAuthenticationDto.setUser(userDto);
+				userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
+				userDto.setId(rs.getLong("USER_ID"));
+				userDto.setPrincipal(rs.getString("PRINCIPAL"));
+				userDto.setUsername(rs.getString("Username"));
+				userDto.setIsOwner(rs.getBoolean("isOwner"));
+                //Need this for stuffy stuff
+				userDto.setRoles(_Lists.list("ROLE_USER"));
+				return userAuthenticationDto;
+			} else {
+				return null;
+			}
 		});
 
 		return Optional.ofNullable(result);
 	}
 
-	/*Same as findUserByPrincipal but searches by Username*/
-	public Optional<UserAuthenticationDto> findUserByUsername(String username) { // == get user
-		String sql = "SELECT * FROM `USER` WHERE USERNAME = :username";
+    /*Same as findUserByPrincipal but searches by Username*/
+	public Optional<UserDto> findUserByUsername(String username) {
+		String sql = "SELECT * FROM `USER` WHERE Username = :username";
+
 		Map<String, ?> parameters = _Maps.map("username", username);
 
-		UserAuthenticationDto results = jdbcTemplate.query(sql, parameters, rs -> {
-			rs.next();
+		UserDto result = jdbcTemplate.query(sql, parameters, rs -> {
+			if(!rs.isLast()) {
+				rs.next();
 
-			UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
-			UserDto userDto = new UserDto();
-			userAuthenticationDto.setUser(userDto);
-			userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
-			userDto.setId(rs.getLong("USER_ID"));
-			userDto.setPrincipal(rs.getString("PRINCIPAL"));
-			userDto.setUsername(rs.getString("USERNAME"));
-			userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
-			//Need this for stuffy stuff
-			userDto.setRoles(_Lists.list("ROLE_USER"));
-			return userAuthenticationDto;
+				UserDto userDto = new UserDto();
+				userDto.setId(rs.getLong("USER_ID"));
+				userDto.setPrincipal(rs.getString("PRINCIPAL"));
+				userDto.setUsername(rs.getString("Username"));
+				userDto.setIsOwner(rs.getBoolean("isOwner"));
+                userDto.setRoles(_Lists.list("ROLE_USER"));
+
+				return userDto;
+			} else {
+				return null;
+			}
 		});
 
-		return Optional.ofNullable(results);
+		return Optional.ofNullable(result);
 	}
 
 	/**
@@ -87,23 +93,29 @@ public class UserDao {
 		if(userAuthentication.getUser().getId() != null) {
 			String sql = "UPDATE USER SET " +
 					"PRINCIPAL = :principal, " +
-					"PASSWORD = :password " +
+					"PASSWORD = :password, " +
+					"Username = :username, " +
+					"isOwner = :owner " +
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),
+					"username", userAuthentication.getUser().getUsername(),
 					"password", userAuthentication.getPassword(),
-					"userId", userAuthentication.getUser().getId());
+					"userId", userAuthentication.getUser().getId(),
+					"owner", userAuthentication.getUser().getIsOwner());
 
 			jdbcTemplate.update(sql, parameters);
 			return userAuthentication;
 		}
 		else {
-			String sql = "INSERT INTO USER (PRINCIPAL, PASSWORD) VALUES (:principal, :password)";
+			String sql = "INSERT INTO USER (PRINCIPAL, Username, PASSWORD, isOwner) VALUES (:principal, :username, :password, :isOwner)";
 
 			Map<String, ?> parameters = _Maps.map(
 					"principal", userAuthentication.getUser().getPrincipal(),
-					"password", userAuthentication.getPassword());
+					"password", userAuthentication.getPassword(),
+					"username", userAuthentication.getUser().getUsername(),
+					"isOwner", userAuthentication.getUser().getIsOwner());
 
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 

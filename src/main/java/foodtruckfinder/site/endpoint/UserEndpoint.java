@@ -10,6 +10,8 @@ import org.springframework.web.bind.annotation.*;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
+import foodtruckfinder.site.common.user.UserService.UpdateRequest;
+import foodtruckfinder.site.common.user.UserService.GetRequest;
 import foodtruckfinder.site.common.user.UserDto;
 
 /**
@@ -63,6 +65,11 @@ public class UserEndpoint {
 		return userService.findUserByPrincipal(principal);
 	}
 
+	@GetMapping(value = "/{username}", produces = "application/json")
+	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
+		return userService.findUserByUsername(username);
+	}
+
 	/**
 	 * The @PostMapping annotation is very similar to the @GetMapping annotation except that it expects HTTP POST requests instead of GET request. Because of this, a post can
 	 * accept a payload of data in its post body. You can almost think of a GET call as a function which takes no parameters, while a POST call is a function that takes a parameter
@@ -80,8 +87,23 @@ public class UserEndpoint {
 	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
 	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
 
-	@PostMapping(value = "/owner/getFoodTrucks")
-	public Optional<List<Long>> getOwnedFoodTrucks(){
-		return userService.getOwnedFoodTrucks(SecurityContextHolder.getContext().getAuthentication().getName());
+	/**
+	 * Updates a user based on the passed in user
+	 * @param request the UpdateRequest as defined in UserService to get the authentication information too
+	 * @return the new UserDto (it could have changed in the backend)
+	 */
+	@PostMapping(value = "/update", produces = "application/json")
+	public UserDto update(@RequestBody UpdateRequest request) {
+		return userService.update(request);
+	}
+
+	/**
+	 * Gets a list of food truck ids owned by the given owner id
+	 * @param id the owner id to search under
+	 * @return the list of food truck ids
+	 */
+	@GetMapping(value = "/owner/getFoodTrucks", produces = "application/json")
+	public Optional<List<Long>> getOwnedFoodTrucks(Long id){
+		return userService.getOwnedFoodTrucks(id);
 	}
 }

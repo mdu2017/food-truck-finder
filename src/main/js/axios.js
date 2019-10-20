@@ -20,22 +20,6 @@ export function saveFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
-// export function makeFT(name, status) {
-// 	return axios({
-// 		method: 'post',
-// 		url: '/oauth/token',
-// 		params: {
-// 			grant_type: 'password',
-// 			name,
-// 			status
-// 		},
-// 		auth: {
-// 			username: 'food-truck-finder-app',
-// 			password: 'food-truck-finder-app-secret'
-// 		}
-// 	});
-// }
-
 export function authenticate(username, password) {
 	return axios({
 		method: 'post',
@@ -108,8 +92,7 @@ let Actions = {};
 
 Actions.Types = {
 	SET_AUTHENTICATION: 'SET_AUTHENTICATION',
-	SET_USER: 'SET_USER',
-	SET_FOOD_TRUCK: 'SET_FOOD_TRUCK'
+	SET_USER: 'SET_USER'
 };
 
 Actions.register = user => {
@@ -195,11 +178,6 @@ Actions.logout = () => {
 
 Actions.setAuthentication = authentication => {
 	return { type: Actions.Types.SET_AUTHENTICATION, authentication };
-};
-
-//Set food truck
-Actions.setFoodTruck = foodTruck => {
-	return { type: Actions.Types.SET_FOOD_TRUCK, foodTruck };
 };
 
 Actions.setUser = user => {

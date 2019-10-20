@@ -14,7 +14,7 @@ import foodtruckfinder.site.common.user.UserAuthenticationDto;
 import foodtruckfinder.site.common.user.UserService;
 
 /**
- * Created by jlutteringer on 1/15/18.
+ *
  */
 @Service
 public class FoodTruckFinderUserDetailsService implements UserDetailsService {

@@ -1,10 +1,17 @@
 package foodtruckfinder.site.endpoint;
 
+import java.sql.SQLException;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.foodtruck.Stop;
+import foodtruckfinder.site.common.user.UserDto;
+import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.security.core.userdetails.User;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -27,10 +34,15 @@ public class FoodTruckEndpoint {
 
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
-	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) {
-		foodTruckService.save(foodTruckDto);
-		return foodTruckDto;
-	}
+    public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+		if(foodTruckDto.getStatus() == null){
+			foodTruckDto.setStatus("Closed");
+		} else {
+			foodTruckDto.setStatus(foodTruckDto.getStatus());
+		}
+        foodTruckService.save(foodTruckDto);
+        return foodTruckDto;
+    }
 
 	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") String id) { return foodTruckService.getSubscribers(id); }

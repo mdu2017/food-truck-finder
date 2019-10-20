@@ -19,30 +19,36 @@ export class CreateFoodTruck extends React.Component {
 		super(props);
 		this.state = {
 			name: null,
-			menu: null,
-			schedule: null,
-			price: null,
+			// menu: null,
+			// schedule: null,
+			price_low: null,
+			price_high: null,
 			status: null,
-			foodtype: null
+			foodtype: null,
+			ownerId: Axios.getCookie('userid')
 		};
 	}
 
 	setName = name => this.setState({ name });
-	setMenu = menu => this.setState({ menu });
-	setSchedule = schedule => this.setState({ schedule });
-	setPrice = price => this.setState({ price });
+	// setMenu = menu => this.setState({ menu });
+	// setSchedule = schedule => this.setState({ schedule });
+	setPriceLow = price_low => this.setState({ price_low });
+	setPriceHigh = price_high => this.setState({ price_high });
 	setStatus = status => this.setState({ status });
 	setFoodType = foodtype => this.setState({ foodtype });
+	setownerId = ownerId => this.setState({ ownerId });
 
 	handleSubmit = event => {
 		this.props.createFT({
 			name: this.state.name,
-			menu: this.state.menu,
-			schedule: this.state.schedule,
-			price: this.state.price,
+			// menu: this.state.menu,
+			// schedule: this.state.schedule,
+			price_low: this.state.price_low,
+			price_high: this.state.price_high,
 			status: this.state.status,
-			foodtype: this.state.foodtype
-		}); // Add registration
+			foodtype: this.state.foodtype,
+			ownerId: this.state.ownerId
+		});
 		event.preventDefault();
 	};
 
@@ -166,6 +172,9 @@ export class CreateFoodTruck extends React.Component {
 									name="price"
 									id="ftLowPrice"
 									step="0.01"
+									onChange={e =>
+										this.setPriceLow(e.target.value)
+									}
 								/>
 							</FormGroup>
 							<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -178,6 +187,9 @@ export class CreateFoodTruck extends React.Component {
 									name="price"
 									id="ftHighPrice"
 									step="0.01"
+									onChange={e =>
+										this.setPriceHigh(e.target.value)
+									}
 								/>
 							</FormGroup>
 						</Form>

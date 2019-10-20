@@ -1,11 +1,7 @@
 package foodtruckfinder.site.endpoint;
 
 import java.sql.SQLException;
-import java.util.Collections;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 import java.util.stream.Collectors;
 
 import foodtruckfinder.site.common.foodtruck.Stop;
@@ -82,7 +78,7 @@ public class FoodTruckEndpoint {
 	@GetMapping(value = "/getStatusNames", produces = "application/json")
 	public List<String> getStatusNames(){
 		return Arrays.stream(FoodTruckDto.FTStatus.values())
-				.map(FoodTruckDto.FTStatus::name)
-				.collect(Collectors.toList());
+                     .map(FoodTruckDto.FTStatus::name)
+                     .collect(Collectors.toList());
 	}
 }

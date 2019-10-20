@@ -53,7 +53,7 @@ export class CreateFoodTruck extends React.Component {
 	};
 
 	displayTypes() {
-		alert(JSON.stringify(Axios.getFoodTypes()));
+		// alert(JSON.stringify(Axios.getFoodTypes()));
 		// var type;
 		// var types = '';
 		// for(type in Axios.getFoodTypes()) {

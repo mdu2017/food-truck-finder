@@ -132,12 +132,12 @@ export class RegistrationForm extends React.Component {
 					<input
 						name="owner"
 						type="checkbox"
-						class="form-check-input"
+						className="form-check-input"
 						id="owner"
 						value={this.state.owner}
 						onChange={this.setOwner}
 					/>
-					<label class="form-check-label" for="owner">
+					<label className="form-check-label" htmlFor="owner">
 						Owner Account?
 					</label>
 				</div>

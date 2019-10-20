@@ -170,7 +170,7 @@ Actions.authenticate = (username, password) => {
 					);
 				}
 			});
-		});
+		}).catch(err => alert(err));
 	};
 };
 

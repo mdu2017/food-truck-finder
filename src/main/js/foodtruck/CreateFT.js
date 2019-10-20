@@ -27,6 +27,7 @@ export class CreateFoodTruck extends React.Component {
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id
 		};
+		this.getFoodTypes();
 	}
 
 	setName = name => this.setState({ name });
@@ -150,7 +151,6 @@ export class CreateFoodTruck extends React.Component {
 							</Input>
 						</FormGroup>
 						<FormGroup>
-							{this.getFoodTypes()}
 							<Label for="ftFoodType">Food Type</Label>
 							<Input
 								type="select"

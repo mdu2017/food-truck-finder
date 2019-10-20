@@ -8,11 +8,7 @@ export class OwnedFoodTrucks extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authentication: Axios.getCookie('authentication'),
-			user: Axios.getCookie('user'),
-			logout: Axios.Actions.logout(),
-			owner_id: Axios.getCookie('userid'),
-			isOwner: Axios.getCookie('owner'),
+			owner_id: JSON.parse(Axios.getCookie('user')).id,
 			trucks: []
 		};
 	}

@@ -62,6 +62,9 @@ public class FoodTruckDto implements Momento<Long> {
 		OPEN, CLOSED, IN_TRANSIT
 	}
 
+	/**
+	 * This enum will have to stay updated with the database
+	 */
 	public enum FoodType {
 		AMERICAN, BBQ, BREAKFAST, CHINESE, DESERT, HEALTHY,
 		INDIAN, MEDITERRANEAN, MEXICAN, PIZZA, SEAFOOD, VEGITARIAN, VEGAN, VIETNAMESE

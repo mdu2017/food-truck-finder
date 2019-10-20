@@ -33,7 +33,7 @@ export class Page1 extends React.Component {
 	logout = () => this.props.logout();
 
 	displayIsOwner() {
-		if (this.props.isOwner == 'true') {
+		if (this.props.user.isOwner === true) {
 			return <text>Yes!</text>;
 		}
 		return <text>No!</text>;
@@ -47,9 +47,9 @@ export class Page1 extends React.Component {
 					<div>{this.props.authentication}</div>
 				)}
 				{_.isDefined(this.props.user) && (
-					<div>Welcome, {this.props.user}!</div>
+					<div>Welcome, {this.props.user.username}!</div>
 				)}
-				{_.isDefined(this.props.isOwner) && (
+				{_.isDefined(this.props.user.isOwner) && (
 					<div>Owner? {this.displayIsOwner()}</div>
 				)}
 				<br />
@@ -63,10 +63,8 @@ export class Page1 extends React.Component {
 
 Page1 = connect(() => ({
 	authentication: Axios.getCookie('authentication'),
-	user: Axios.getCookie('user'),
-	logout: Axios.Actions.logout(),
-	id: Axios.getCookie('userid'),
-	isOwner: Axios.getCookie('owner')
+	user: JSON.parse(Axios.getCookie('user')),
+	logout: Axios.Actions.logout()
 }))(Page1);
 
 export class HelloSend extends React.Component {

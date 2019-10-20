@@ -1,6 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
-import * as Forms from 'js/Forms';
+import * as Forms from 'js/forms';
 import * as NavBars from 'js/navBars';
 
 export class CreateAccount extends React.Component {

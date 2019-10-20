@@ -7,16 +7,14 @@ export class ViewProfile extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			authentication: Axios.getCookie('authentication'),
-			principal: Axios.getCookie('email'),
-			password: Axios.getCookie('password'),
-			username: Axios.getCookie('user'),
-			owner: Axios.getCookie('owner')
+			principal: JSON.parse(Axios.getCookie('user')).principal,
+			username: JSON.parse(Axios.getCookie('user')).username,
+			owner: JSON.parse(Axios.getCookie('user')).isOwner
 		};
 	}
 
 	isOwner() {
-		if (this.state.owner == 'true') {
+		if (this.state.owner === true) {
 			return 'Owner';
 		}
 		return 'Customer';

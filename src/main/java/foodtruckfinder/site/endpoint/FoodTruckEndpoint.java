@@ -2,9 +2,11 @@ package foodtruckfinder.site.endpoint;
 
 import java.sql.SQLException;
 import java.util.Collections;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 import foodtruckfinder.site.common.foodtruck.Stop;
 import foodtruckfinder.site.common.user.UserDto;
@@ -60,5 +62,16 @@ public class FoodTruckEndpoint {
 	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
 	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
+	}
+
+	/**
+	 * This function gets a string list of food types
+	 * @return the string list of food types
+	 */
+	@GetMapping(value = "/getFoodTypes", produces = "application/json")
+	public List<String> getFoodTypes(){
+		return Arrays.stream(FoodTruckDto.FoodType.values())
+				     .map(FoodTruckDto.FoodType::name)
+				     .collect(Collectors.toList());
 	}
 }

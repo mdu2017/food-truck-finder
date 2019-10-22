@@ -28,6 +28,7 @@ export class CreateFoodTruck extends React.Component {
 			ownerId: JSON.parse(Axios.getCookie('user')).id
 		};
 		this.getFoodTypes();
+		this.getStatuses();
 	}
 
 	setName = name => this.setState({ name });
@@ -61,6 +62,16 @@ export class CreateFoodTruck extends React.Component {
 				str += '<option>' + type + '</option>';
 			});
 			document.getElementById('foodTypes').innerHTML = str;
+		});
+	}
+
+	getStatuses() {
+		Axios.getStatuses().then(function(result) {
+			var str = '';
+			result.forEach(function(status) {
+				str += '<option>' + status + '</option>';
+			});
+			document.getElementById('statuses').innerHTML = str;
 		});
 	}
 
@@ -139,28 +150,24 @@ export class CreateFoodTruck extends React.Component {
 							/>
 						</FormGroup>
 						<FormGroup>
-							<Label for="ftStatus">Current Status</Label>
+							<Label for="statuses">Current Status</Label>
 							<Input
 								type="select"
 								name="status"
-								id="ftStatus"
-								onChange={e => this.setStatus(e.target.value)}>
-								<option>Open</option>
-								<option>Closed</option>
-								<option>Closed (Maintenance)</option>
-							</Input>
+								id="statuses"
+								onChange={e =>
+									this.setStatus(e.target.value)
+								}></Input>
 						</FormGroup>
 						<FormGroup>
-							<Label for="ftFoodType">Food Type</Label>
+							<Label for="foodTypes">Food Type</Label>
 							<Input
 								type="select"
 								name="foodtype"
 								id="foodTypes"
 								onChange={e =>
 									this.setFoodType(e.target.value)
-								}>
-
-							</Input>
+								}></Input>
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftWebsite">Website</Label>

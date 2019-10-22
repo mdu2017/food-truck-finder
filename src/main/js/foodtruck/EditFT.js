@@ -19,18 +19,19 @@ export class EditFoodTruck extends React.Component {
 		super(props);
 		this.state = {
 			name: null,
-			menu: null,
-			schedule: null,
+			// menu: null,
+			// schedule: null,
 			price: null,
 			status: null,
 			foodtype: null,
-			truck: null
+			truck: null,
+			ownerId: JSON.parse(Axios.getCookie('user')).id
 		};
 	}
 
 	setName = name => this.setState({ name });
-	setMenu = menu => this.setState({ menu });
-	setSchedule = schedule => this.setState({ schedule });
+	// setMenu = menu => this.setState({ menu });
+	// setSchedule = schedule => this.setState({ schedule });
 	setPrice = price => this.setState({ price });
 	setStatus = status => this.setState({ status });
 	setFoodType = type => this.setState({ type });
@@ -103,11 +104,13 @@ export class EditFoodTruck extends React.Component {
 	handleSubmit = event => {
 		this.props.editTruck({
 			name: this.state.name,
-			menu: this.state.menu,
-			schedule: this.state.schedule,
-			price: this.state.price,
+			// menu: this.state.menu,
+			// schedule: this.state.schedule,
+			price_low: this.state.price_low,
+			price_high: this.state.price_high,
 			status: this.state.status,
-			foodtype: this.state.foodtype
+			foodtype: this.state.foodtype,
+			ownerId: this.state.ownerId
 		});
 
 		event.preventDefault();
@@ -249,6 +252,6 @@ export class EditFoodTruck extends React.Component {
 EditFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		editTruck: foodTruck => dispatch(Axios.Actions.createFT(foodTruck))
+		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck))
 	})
 )(EditFoodTruck);

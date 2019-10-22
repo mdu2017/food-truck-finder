@@ -157,38 +157,38 @@ public class FoodTruckDao {
 			}
 
 			//Update schedule in database
-			String schedsql;
-			Map<String, Stop> schedule = foodTruck.getSchedule();
-			String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
-            for (String key : keys) {
-                //add each item to the database
-                schedsql = "UPDATE SCHEDULE SET " +
-                        "STOP_ID = :stopid " +
-                        "WHERE TRUCK_ID = :foodTruckid AND DAY = :day";
-
-                Map<String, ?> schedparams = _Maps.map(
-                        "foodTruckId", foodTruck.getId(),
-                        "day", key,
-                        "stopid", schedule.get(key).getId());
-
-                jdbcTemplate.update(schedsql, schedparams);
-
-                //update the stops table
-                String stopsql = "UPDATE TRUCK_STOP SET " +
-                        "START = :start, " +
-                        "END = :end, " +
-                        "LATITUDE = :lat, " +
-                        "LONGITUDE = :long " +
-                        "WHERE STOP_ID = :stopid";
-                Map<String, ?> stopparams = _Maps.map(
-                        "start", schedule.get(key).getStartSql(),
-                        "end", schedule.get(key).getEndSql(),
-                        "lat", schedule.get(key).getLat(),
-                        "long", schedule.get(key).getLog(),
-                        "stopid", schedule.get(key).getId());
-
-                jdbcTemplate.update(stopsql, stopparams);
-            }
+//			String schedsql;
+//			Map<String, Stop> schedule = foodTruck.getSchedule();
+//			String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
+//            for (String key : keys) {
+//                //add each item to the database
+//                schedsql = "UPDATE SCHEDULE SET " +
+//                        "STOP_ID = :stopid " +
+//                        "WHERE TRUCK_ID = :foodTruckid AND DAY = :day";
+//
+//                Map<String, ?> schedparams = _Maps.map(
+//                        "foodTruckId", foodTruck.getId(),
+//                        "day", key,
+//                        "stopid", schedule.get(key).getId());
+//
+//                jdbcTemplate.update(schedsql, schedparams);
+//
+//                //update the stops table
+//                String stopsql = "UPDATE TRUCK_STOP SET " +
+//                        "START = :start, " +
+//                        "END = :end, " +
+//                        "LATITUDE = :lat, " +
+//                        "LONGITUDE = :long " +
+//                        "WHERE STOP_ID = :stopid";
+//                Map<String, ?> stopparams = _Maps.map(
+//                        "start", schedule.get(key).getStartSql(),
+//                        "end", schedule.get(key).getEndSql(),
+//                        "lat", schedule.get(key).getLat(),
+//                        "long", schedule.get(key).getLog(),
+//                        "stopid", schedule.get(key).getId());
+//
+//                jdbcTemplate.update(stopsql, stopparams);
+//            }
 
 
 			String sql = "UPDATE FOOD_TRUCK SET " +
@@ -205,7 +205,7 @@ public class FoodTruckDao {
 					new Tuple.Tuple2<>("type", foodTruck.getType()),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus())
+					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
 			);
 
 			jdbcTemplate.update(sql, parameters);

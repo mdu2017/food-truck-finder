@@ -155,9 +155,8 @@ export class CreateFoodTruck extends React.Component {
 								type="select"
 								name="status"
 								id="statuses"
-								onChange={e =>
-									this.setStatus(e.target.value)
-								}></Input>
+								onChange={e => this.setStatus(e.target.value)}
+							/>
 						</FormGroup>
 						<FormGroup>
 							<Label for="foodTypes">Food Type</Label>
@@ -165,9 +164,8 @@ export class CreateFoodTruck extends React.Component {
 								type="select"
 								name="foodtype"
 								id="foodTypes"
-								onChange={e =>
-									this.setFoodType(e.target.value)
-								}></Input>
+								onChange={e => this.setFoodType(e.target.value)}
+							/>
 						</FormGroup>
 						<FormGroup>
 							<Label for="ftWebsite">Website</Label>

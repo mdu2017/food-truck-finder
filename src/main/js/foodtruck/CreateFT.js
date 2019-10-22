@@ -167,15 +167,6 @@ export class CreateFoodTruck extends React.Component {
 								onChange={e => this.setFoodType(e.target.value)}
 							/>
 						</FormGroup>
-						<FormGroup>
-							<Label for="ftWebsite">Website</Label>
-							<Input
-								type="url"
-								name="url"
-								id="ftWebsite"
-								placeholder="(Optional)"
-							/>
-						</FormGroup>
 					</Form>
 					<Form inline>
 						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -247,6 +238,15 @@ export class CreateFoodTruck extends React.Component {
 CreateFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		createFT: foodTruck => dispatch(Axios.Actions.createFT(foodTruck))
+		createFT: foodTruck =>
+			dispatch(Axios.Actions.createFT(foodTruck))
+				// Success
+				.then(function(result) {
+					window.alert('Creation of the Food Truck was successful!');
+				})
+				// Failed
+				.catch(error =>
+					window.alert('Creation of the Food Truck failed!')
+				)
 	})
 )(CreateFoodTruck);

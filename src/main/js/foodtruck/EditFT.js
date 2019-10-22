@@ -187,15 +187,6 @@ export class EditFoodTruck extends React.Component {
 										}
 									/>
 								</FormGroup>
-								<FormGroup>
-									<Label for="ftWebsite">Website</Label>
-									<Input
-										type="url"
-										name="url"
-										id="ftWebsite"
-										placeholder="(Optional)"
-									/>
-								</FormGroup>
 							</Form>
 							<Form inline>
 								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">

@@ -57,9 +57,7 @@ export class EditProfile extends React.Component {
 						Username
 					</span>
 					:{' '}
-					{_.isDefined(this.props.user) && (
-						<text>{this.props.user}</text>
-					)}
+					{_.isDefined(this.props.user) && <h8>{this.props.user}</h8>}
 					<UncontrolledTooltip
 						placement="right"
 						target="UncontrolledTooltipExample">
@@ -68,7 +66,7 @@ export class EditProfile extends React.Component {
 					<br />
 					Email:{' '}
 					{_.isDefined(this.props.email) && (
-						<text>{this.props.email}</text>
+						<h8>{this.props.email}</h8>
 					)}
 					<br />
 					<br />
@@ -89,7 +87,7 @@ export class EditProfile extends React.Component {
 						<FormGroup>
 							<Label for="currPassword">Current Password</Label>
 							<Input
-								type="text"
+								type="password"
 								name="currentpassword"
 								id="currPassword"
 								placeholder=""
@@ -98,7 +96,7 @@ export class EditProfile extends React.Component {
 						<FormGroup>
 							<Label for="newPassword">New Password</Label>
 							<Input
-								type="text"
+								type="password"
 								name="newpassword"
 								id="newPassword"
 								placeholder=""
@@ -110,7 +108,7 @@ export class EditProfile extends React.Component {
 								New Password (Retyped)
 							</Label>
 							<Input
-								type="text"
+								type="password"
 								name="retypedPassword"
 								id="retypedPassword"
 								placeholder=""

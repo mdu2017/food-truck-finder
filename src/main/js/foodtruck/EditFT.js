@@ -41,7 +41,6 @@ export class EditFoodTruck extends React.Component {
 	setFoodType = foodtype => this.setState({ foodtype });
 
 	handleSubmit = event => {
-		console.log(this.state.foodtype);
 		this.props.editTruck({
 			id: this.state.id,
 			name: this.state.name,

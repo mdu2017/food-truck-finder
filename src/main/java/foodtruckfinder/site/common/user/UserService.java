@@ -84,18 +84,45 @@ public class UserService {
 	}
 
 	public UserDto register(RegistrationRequest request) {
+		//Initialize variables
+		String username = request.getUsername();
+		String principal = request.getPrincipal();
 		UserDto userDto = new UserDto();
-		userDto.setPrincipal(request.getPrincipal());
-		userDto.setUsername(request.getUsername());
-		userDto.setIsOwner(request.getOwner());
-		userDto.setRoles(_Lists.list("ROLE_USER"));
 
-		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
-		userAuthenticationDto.setUser(userDto);
-		userAuthenticationDto.setPassword(passwordEncoder.encode(request.getPassword()));
+		//Check that username is not already in Database;
+		if(findUserByUsername(username) != null){
+			//If the user already exists, set all to null and return err code
+			userDto.setId(-1L);
+			userDto.setPrincipal(null);
+			userDto.setUsername(null);
+			userDto.setIsOwner(false);
+			userDto.setRoles(null);
 
-		userAuthenticationDto = userDao.save(userAuthenticationDto);
-		return userAuthenticationDto.getUser();
+			return userDto;
+		}//Check the principal
+		else if(findUserByPrincipal(principal) != null){
+			//Repeat process from above
+			userDto.setId(-2L);
+			userDto.setPrincipal(null);
+			userDto.setUsername(null);
+			userDto.setIsOwner(false);
+			userDto.setRoles(null);
+
+			return userDto;
+		}
+		else{
+			userDto.setPrincipal(request.getPrincipal());
+			userDto.setUsername(request.getUsername());
+			userDto.setIsOwner(request.getOwner());
+			userDto.setRoles(_Lists.list("ROLE_USER"));
+
+			UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
+			userAuthenticationDto.setUser(userDto);
+			userAuthenticationDto.setPassword(passwordEncoder.encode(request.getPassword()));
+
+			userAuthenticationDto = userDao.save(userAuthenticationDto);
+			return userAuthenticationDto.getUser();
+		}
 	}
 
 	public static class UpdateRequest {

@@ -41,22 +41,36 @@ export class CreateFoodTruck extends React.Component {
 	setownerId = ownerId => this.setState({ ownerId });
 
 	handleSubmit = event => {
-		this.props.createFT({
-			name: this.state.name,
-			// menu: this.state.menu,
-			// schedule: this.state.schedule,
-			price_low: this.state.price_low,
-			price_high: this.state.price_high,
-			status: this.state.status,
-			foodtype: this.state.foodtype,
-			ownerId: this.state.ownerId
-		});
-		event.preventDefault();
+		// The price_high is not lower than price_low
+		if (this.state.price_high >= this.state.price_low) {
+			// Check if Prices are lower than zero
+			if (this.state.price_low < 0) {
+				this.state.price_low = 0;
+			}
+			if (this.state.price_high < 0) {
+				this.state.price_high = 0;
+			}
+			this.props.createFT({
+				name: this.state.name,
+				// menu: this.state.menu,
+				// schedule: this.state.schedule,
+				price_low: this.state.price_low,
+				price_high: this.state.price_high,
+				status: this.state.status,
+				foodtype: this.state.foodtype,
+				ownerId: this.state.ownerId
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Error: Price High cannot be lower than Price Low!');
+		}
 	};
 
 	// Promise value return
 	getFoodTypes() {
+		var self = this;
 		Axios.getFoodTypes().then(function(result) {
+			self.setState({ foodtype: result[0] });
 			var str = '';
 			result.forEach(function(type) {
 				str += '<option>' + type + '</option>';
@@ -65,8 +79,11 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
+	// setState in Axios Call
 	getStatuses() {
+		var self = this;
 		Axios.getStatuses().then(function(result) {
+			self.setState({ status: result[0] });
 			var str = '';
 			result.forEach(function(status) {
 				str += '<option>' + status + '</option>';

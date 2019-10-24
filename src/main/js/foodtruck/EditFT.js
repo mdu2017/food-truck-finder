@@ -41,18 +41,30 @@ export class EditFoodTruck extends React.Component {
 	setFoodType = foodtype => this.setState({ foodtype });
 
 	handleSubmit = event => {
-		this.props.editTruck({
-			id: this.state.id,
-			name: this.state.name,
-			// menu: this.state.menu,
-			// schedule: this.state.schedule,
-			price_low: this.state.price_low,
-			price_high: this.state.price_high,
-			status: this.state.status,
-			foodtype: this.state.foodtype,
-			ownerId: this.state.ownerId
-		});
-		event.preventDefault();
+		// The price_high is not lower than price_low
+		if (this.state.price_high >= this.state.price_low) {
+			// Check if Prices are lower than zero
+			if (this.state.price_low < 0) {
+				this.state.price_low = 0;
+			}
+			if (this.state.price_high < 0) {
+				this.state.price_high = 0;
+			}
+			this.props.editTruck({
+				id: this.state.id,
+				name: this.state.name,
+				// menu: this.state.menu,
+				// schedule: this.state.schedule,
+				price_low: this.state.price_low,
+				price_high: this.state.price_high,
+				status: this.state.status,
+				foodtype: this.state.foodtype,
+				ownerId: this.state.ownerId
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Error: Price High cannot be lower than Price Low!');
+		}
 	};
 
 	componentWillMount() {
@@ -61,6 +73,9 @@ export class EditFoodTruck extends React.Component {
 		var { foodtruckId: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
 			this.setState({ id: result.id });
+			this.setState({ name: result.name });
+			this.setState({ price_low: result.price_low });
+			this.setState({ price_high: result.price_high });
 			this.setState({ truck: result });
 		});
 		this.getFoodTypes();
@@ -68,7 +83,9 @@ export class EditFoodTruck extends React.Component {
 	}
 
 	getFoodTypes() {
+		var self = this;
 		Axios.getFoodTypes().then(function(result) {
+			self.setState({ foodtype: result[0] });
 			var str = '';
 			result.forEach(function(type) {
 				str += '<option>' + type + '</option>';
@@ -78,7 +95,9 @@ export class EditFoodTruck extends React.Component {
 	}
 
 	getStatuses() {
+		var self = this;
 		Axios.getStatuses().then(function(result) {
+			self.setState({ status: result[0] });
 			var str = '';
 			result.forEach(function(status) {
 				str += '<option>' + status + '</option>';

@@ -34,7 +34,6 @@ export class Dashboard extends React.Component {
 					<NavBars.SidebarNav />
 
                     {/*Render map*/}
-                    {/*fill*/}
                     <MapContainer/>
 
 				</div>

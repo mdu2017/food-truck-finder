@@ -1,6 +1,7 @@
 import React from 'react';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
+import MapContainer from 'js/GoogleMap';
 
 export class Dashboard extends React.Component {
 	constructor(props) {
@@ -21,7 +22,7 @@ export class Dashboard extends React.Component {
 				</div>
 			);
 		}
-		return <div>{'Welcome!'}</div>;
+		return <div>{'Welcome!'} </div>;
 	}
 
 	render() {
@@ -31,6 +32,11 @@ export class Dashboard extends React.Component {
 				<div className="container padded">
 					<h1>{this.displayCustomWelcome()}</h1>
 					<NavBars.SidebarNav />
+
+                    {/*Render map*/}
+                    {/*fill*/}
+                    <MapContainer/>
+
 				</div>
 			</div>
 		);

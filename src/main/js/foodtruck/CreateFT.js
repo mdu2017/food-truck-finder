@@ -13,6 +13,7 @@ import {
 	Col,
 	Row
 } from 'reactstrap';
+import SimpleMap from 'js/Maps';
 
 export class CreateFoodTruck extends React.Component {
 	constructor(props) {
@@ -233,6 +234,10 @@ export class CreateFoodTruck extends React.Component {
 					{this.displayDayOfTheWeek('Thursday')}
 					{this.displayDayOfTheWeek('Friday')}
 					{this.displayDayOfTheWeek('Saturday')}
+
+					{/*Render map*/}
+					<SimpleMap/>
+
 					<Button onClick={this.handleSubmit}>Submit</Button>
 				</div>
 			</div>

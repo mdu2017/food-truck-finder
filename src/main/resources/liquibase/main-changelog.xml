@@ -93,7 +93,7 @@
             `TRUCK_ID` int(11) NOT NULL,
             `DAY` varchar(45) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`DAY`)
+            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`)
             );
 
             CREATE TABLE `SUBSCRIPTIONS` (

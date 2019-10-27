@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import MapContainer from 'js/GoogleMap';
+import MapContainer from 'js/Maps';
 
 export class Dashboard extends React.Component {
 	constructor(props) {

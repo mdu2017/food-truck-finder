@@ -13,7 +13,7 @@ import {
 	Col,
 	Row
 } from 'reactstrap';
-import MapContainer from 'js/GoogleMap';
+import MapContainer from 'js/Maps';
 
 export class CreateFoodTruck extends React.Component {
 	constructor(props) {

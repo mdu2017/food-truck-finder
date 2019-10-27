@@ -53,6 +53,7 @@ public class FoodTruckDao {
 				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
 				foodTruckDto.setStatus(rs.getString("STATUS"));
 				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
+				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
 
 				//need to get menu, schedule, truck_image, and type
 				//For menu, get a list
@@ -200,7 +201,8 @@ public class FoodTruckDao {
 					"TYPE = :type, " +
 					"PRICE_LOW = :price_low, " +
 					"PRICE_HIGH = :price_high, " +
-					"STATUS = :status " +
+					"STATUS = :status, " +
+					"DESCRIPTION = :desc " +
 					"WHERE FOOD_TRUCK_ID = :foodTruckId";
 
 			Map<String, ?> parameters = _Maps.mapPairs(
@@ -209,7 +211,8 @@ public class FoodTruckDao {
 					new Tuple.Tuple2<>("type", typeid),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
+					new Tuple.Tuple2<>("status", foodTruck.getStatus().name()),
+					new Tuple.Tuple2<>("desc", foodTruck.getDescription())
 			);
 
 			jdbcTemplate.update(sql, parameters);
@@ -264,8 +267,8 @@ public class FoodTruckDao {
 			int typeid = getFoodTypeId(foodTruck.getType());
 
 			String sql = "INSERT INTO FOOD_TRUCK " +
-					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-					"(:owner_id, :name, :type, :price_low, :price_high, :status)";
+					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS, DESCRIPTION) VALUES " +
+					"(:owner_id, :name, :type, :price_low, :price_high, :status, :desc)";
 
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
@@ -273,7 +276,8 @@ public class FoodTruckDao {
 					new Tuple.Tuple2<>("type", typeid),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
+					new Tuple.Tuple2<>("status", foodTruck.getStatus().name()),
+					new Tuple.Tuple2<>("desc", foodTruck.getDescription())
 			);
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			jdbcTemplate.update(sql, new MapSqlParameterSource(parameters), keyHolder);

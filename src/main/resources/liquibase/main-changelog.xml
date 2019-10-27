@@ -42,6 +42,7 @@
             `PRICE_LOW` double NOT NULL,
             `PRICE_HIGH` double NOT NULL,
             `STATUS` varchar(12) NOT NULL,
+            `DESCRIPTION` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`FOOD_TRUCK_ID`),
             UNIQUE KEY `FOOD_TRUCK_ID_UNIQUE` (`FOOD_TRUCK_ID`),
             KEY `owned_by_idx` (`OWNER_ID`),

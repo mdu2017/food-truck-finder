@@ -57,7 +57,7 @@ export class CreateFoodTruck extends React.Component {
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
-				foodtype: this.state.foodtype,
+				type: this.state.foodtype,
 				ownerId: this.state.ownerId
 			});
 			event.preventDefault();

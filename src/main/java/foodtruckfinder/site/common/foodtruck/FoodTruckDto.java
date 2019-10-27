@@ -23,8 +23,7 @@ public class FoodTruckDto implements Momento<Long> {
     //Getters
 	public Long getId() { return id; }
 	public String getName() { return name; }
-	public int getType() { return 0; } //TODO: Get type from database
-//	public FoodType getType() { return type; }
+	public FoodType getType() { return type; }
 	public List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> getMenu() { return menu; }
 	public BufferedImage getTruck_image() { return truck_image; }
     public Map<String, Stop> getSchedule() { return schedule; }

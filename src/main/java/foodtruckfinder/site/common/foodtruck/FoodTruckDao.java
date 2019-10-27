@@ -96,8 +96,11 @@ public class FoodTruckDao {
 				String typesql = "SELECT food_type.type FROM food_type, food_truck " +
 						"WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
 				String type = jdbcTemplate.query(typesql, parameters, typers -> {
-					typers.next();
-					return typers.getString("type");
+					if(typers.next()){
+						return typers.getString("type");
+					} else {
+						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
+					}
 				});
 				foodTruckDto.setType(type);
 
@@ -190,6 +193,7 @@ public class FoodTruckDao {
 //                jdbcTemplate.update(stopsql, stopparams);
 //            }
 
+			int typeid = getFoodTypeId(foodTruck.getType());
 
 			String sql = "UPDATE FOOD_TRUCK SET " +
 					"NAME = :name, " +
@@ -202,7 +206,7 @@ public class FoodTruckDao {
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
 					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType()),
+					new Tuple.Tuple2<>("type", typeid),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
 					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
@@ -257,6 +261,8 @@ public class FoodTruckDao {
 //                jdbcTemplate.update(schedsql, new MapSqlParameterSource(schedparams));
 //            }
 
+			int typeid = getFoodTypeId(foodTruck.getType());
+
 			String sql = "INSERT INTO FOOD_TRUCK " +
 					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
 					"(:owner_id, :name, :type, :price_low, :price_high, :status)";
@@ -264,7 +270,7 @@ public class FoodTruckDao {
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
 					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType()),
+					new Tuple.Tuple2<>("type", typeid),
 					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
 					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
 					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
@@ -287,6 +293,28 @@ public class FoodTruckDao {
 //			foodTruck.setId(key.longValue());
 			return foodTruck;
 		}
+	}
+
+	/**
+	 * Gets the food type id from the database or else defaults to american food
+	 * @param type the FoodType to fetch from the database
+	 * @return the integer representation in the database of the food type
+	 */
+	private int getFoodTypeId(FoodTruckDto.FoodType type) {
+		//get food type id from database
+		String typesql = "SELECT TYPE_ID FROM FOOD_TYPE WHERE TYPE = :type";
+
+		Map<String, ?> typeparams = _Maps.map("type", type.name());
+
+		int typeid = jdbcTemplate.query(typesql, typeparams, typers -> {
+			if(typers.next()){
+				return typers.getInt("TYPE_ID");
+			} else {
+				return 0;//default american food
+			}
+		});
+
+		return typeid;
 	}
 
 	/**

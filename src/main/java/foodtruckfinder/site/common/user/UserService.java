@@ -88,9 +88,10 @@ public class UserService {
 		String username = request.getUsername();
 		String principal = request.getPrincipal();
 		UserDto userDto = new UserDto();
-
+		System.out.println("Checking if the user is in the database: " + request.getUsername() + ", " + request.getPrincipal());
 		//Check that username is not already in Database;
-		if(findUserByUsername(username) != null){
+		if(findUserByUsername(username).isPresent()){
+			System.out.println("Found the user in the database by uname");
 			//If the user already exists, set all to null and return err code
 			userDto.setId(-1L);
 			userDto.setPrincipal(null);
@@ -100,7 +101,8 @@ public class UserService {
 
 			return userDto;
 		}//Check the principal
-		else if(findUserByPrincipal(principal) != null){
+		else if(findUserByPrincipal(principal).isPresent()){
+			System.out.println("Found the user in the database by email");
 			//Repeat process from above
 			userDto.setId(-2L);
 			userDto.setPrincipal(null);
@@ -111,6 +113,7 @@ public class UserService {
 			return userDto;
 		}
 		else{
+			System.out.println("Didn't find the user in the database");
 			userDto.setPrincipal(request.getPrincipal());
 			userDto.setUsername(request.getUsername());
 			userDto.setIsOwner(request.getOwner());

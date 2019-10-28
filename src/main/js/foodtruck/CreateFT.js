@@ -11,7 +11,11 @@ import {
 	FormText,
 	Container,
 	Col,
-	Row
+	Row,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter
 } from 'reactstrap';
 
 export class CreateFoodTruck extends React.Component {
@@ -21,17 +25,23 @@ export class CreateFoodTruck extends React.Component {
 			name: null,
 			// menu: null,
 			// schedule: null,
+			description: null,
 			price_low: null,
 			price_high: null,
 			status: null,
 			foodtype: null,
-			ownerId: JSON.parse(Axios.getCookie('user')).id
+			ownerId: JSON.parse(Axios.getCookie('user')).id,
+			weekdayCounter: [0, 0, 0, 0, 0, 0, 0],
+			modal: false
 		};
+		this.toggle = this.toggle.bind(this);
+		this.handleModalSubmit = this.handleModalSubmit.bind(this);
 		this.getFoodTypes();
 		this.getStatuses();
 	}
 
 	setName = name => this.setState({ name });
+	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
 	// setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
@@ -52,6 +62,7 @@ export class CreateFoodTruck extends React.Component {
 			}
 			this.props.createFT({
 				name: this.state.name,
+				description: this.state.description,
 				// menu: this.state.menu,
 				// schedule: this.state.schedule,
 				price_low: this.state.price_low,
@@ -65,6 +76,17 @@ export class CreateFoodTruck extends React.Component {
 			window.alert('Error: Price High cannot be lower than Price Low!');
 		}
 	};
+
+	toggle() {
+		this.setState({
+			modal: !this.state.modal
+		});
+	}
+
+	handleModalSubmit(event) {
+		this.toggle();
+		event.preventDefault();
+	}
 
 	// Promise value return
 	getFoodTypes() {
@@ -92,18 +114,85 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	displayDayOfTheWeek(dayofTheWeek) {
+	addStop(dayofTheWeek) {
+		// Copies array
+		const newArray = this.state.weekdayCounter.slice();
+		switch (dayofTheWeek) {
+			case 'Sunday':
+				newArray[0] = newArray[0] + 1;
+				break;
+			case 'Monday':
+				newArray[1] = newArray[1] + 1;
+				break;
+			case 'Tuesday':
+				newArray[2] = newArray[2] + 1;
+				break;
+			case 'Wednesday':
+				newArray[3] = newArray[3] + 1;
+				break;
+			case 'Thursday':
+				newArray[4] = newArray[4] + 1;
+				break;
+			case 'Friday':
+				newArray[5] = newArray[5] + 1;
+				break;
+			case 'Saturday':
+				newArray[6] = newArray[6] + 1;
+		}
+		this.setState({
+			weekdayCounter: newArray
+		});
+	}
+
+	dynamicRender(dayofTheWeek) {
+		var divList = [];
+		var i = 0;
+		switch (dayofTheWeek) {
+			case 'Sunday':
+				i = 0;
+				break;
+			case 'Monday':
+				i = 1;
+				break;
+			case 'Tuesday':
+				i = 2;
+				break;
+			case 'Wednesday':
+				i = 3;
+				break;
+			case 'Thursday':
+				i = 4;
+				break;
+			case 'Friday':
+				i = 5;
+				break;
+			case 'Saturday':
+				i = 6;
+		}
+		for (var j = 0; j < this.state.weekdayCounter[i]; j++) {
+			divList.push(<div>{this.displaySchedule('Repeat')}</div>);
+		}
+		return divList;
+	}
+
+	displaySchedule(dayofTheWeek) {
 		return (
 			<div>
 				<Container>
+					<Row hidden={dayofTheWeek != 'Sunday'}>
+						<Col md={{ offset: 1 }}>Time at Location:</Col>
+					</Row>
 					<Row>
-						<Col xs="auto">
-							<Form inline>
+						<Col xs="1">
+							<Form inline hidden={dayofTheWeek == 'Repeat'}>
 								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
 									{dayofTheWeek}
 								</FormGroup>
-								<FormGroup>
+							</Form>
+						</Col>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup className="text-center">
 									<Input
 										type="time"
 										name="time"
@@ -118,27 +207,39 @@ export class CreateFoodTruck extends React.Component {
 								</FormGroup>
 							</Form>
 						</Col>
-						<Col>
+						<Col xs="auto">
 							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input
-										type="number"
-										min={0}
-										name="latitude"
-										id="latitude"
-										placeholder="latitude"
-										step="0.01"
-									/>
+								<FormGroup>
+									<Button
+										outline
+										color="primary"
+										onClick={this.toggle}>
+										Location
+									</Button>
 								</FormGroup>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input
-										type="number"
-										min={0}
-										name="longitude"
-										id="longitude"
-										placeholder="longitude"
-										step="0.01"
-									/>
+							</Form>
+						</Col>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup hidden={dayofTheWeek == 'Repeat'}>
+									<Input type="checkbox" />
+									Closed?
+								</FormGroup>
+							</Form>
+						</Col>
+						<Col xs="auto">
+							<Form inline>
+								<FormGroup>
+									<Button
+										type="submit"
+										hidden={dayofTheWeek == 'Repeat'}
+										color="primary"
+										size="sm"
+										onClick={() => {
+											this.addStop(dayofTheWeek);
+										}}>
+										Add Stop
+									</Button>
 								</FormGroup>
 							</Form>
 						</Col>
@@ -222,7 +323,10 @@ export class CreateFoodTruck extends React.Component {
 								type="textarea"
 								name="description"
 								id="ftDescription"
-								placeholder="(Optional) Will be displayed on the Food Truck's page"
+								placeholder="(Optional) Will be displayed on the Food Truck's page. Limited to 200 characters."
+								onChange={e =>
+									this.setDescription(e.target.value)
+								}
 							/>
 						</FormGroup>
 						<FormGroup>
@@ -239,14 +343,40 @@ export class CreateFoodTruck extends React.Component {
 						</FormGroup>
 					</Form>
 					<legend>Schedule</legend>
-					{this.displayDayOfTheWeek('Sunday')}
-					{this.displayDayOfTheWeek('Monday')}
-					{this.displayDayOfTheWeek('Tuesday')}
-					{this.displayDayOfTheWeek('Wednesday')}
-					{this.displayDayOfTheWeek('Thursday')}
-					{this.displayDayOfTheWeek('Friday')}
-					{this.displayDayOfTheWeek('Saturday')}
+					{this.displaySchedule('Sunday')}
+					{this.dynamicRender('Sunday')}
+					{this.displaySchedule('Monday')}
+					{this.dynamicRender('Monday')}
+					{this.displaySchedule('Tuesday')}
+					{this.dynamicRender('Tuesday')}
+					{this.displaySchedule('Wednesday')}
+					{this.dynamicRender('Wednesday')}
+					{this.displaySchedule('Thursday')}
+					{this.dynamicRender('Thursday')}
+					{this.displaySchedule('Friday')}
+					{this.dynamicRender('Friday')}
+					{this.displaySchedule('Saturday')}
+					{this.dynamicRender('Saturday')}
 					<Button onClick={this.handleSubmit}>Submit</Button>
+				</div>
+				<div>
+					<Modal isOpen={this.state.modal}>
+						<form onSubmit={this.handleModalSubmit}>
+							<ModalHeader>Google Maps</ModalHeader>
+							<ModalBody>Where map will go...</ModalBody>
+							<ModalFooter>
+								<input
+									type="submit"
+									value="Submit"
+									color="primary"
+									className="btn btn-primary"
+								/>
+								<Button color="danger" onClick={this.toggle}>
+									Cancel
+								</Button>
+							</ModalFooter>
+						</form>
+					</Modal>
 				</div>
 			</div>
 		);
@@ -267,3 +397,52 @@ CreateFoodTruck = connect(
 				)
 	})
 )(CreateFoodTruck);
+
+export class ModalComponent extends React.Component {
+	constructor(props) {
+		super(props);
+		this.state = { modal: false, name: '', team: '', country: '' };
+
+		this.toggle = this.toggle.bind(this);
+		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	toggle() {
+		this.setState({
+			modal: !this.state.modal
+		});
+	}
+
+	handleSubmit(event) {
+		console.log('this');
+		this.toggle();
+		event.preventDefault();
+	}
+
+	render() {
+		return (
+			<div>
+				<Button color="success" onClick={this.toggle}>
+					React Modal
+				</Button>
+				<Modal isOpen={this.state.modal}>
+					<form onSubmit={this.handleSubmit}>
+						<ModalHeader>IPL 2018</ModalHeader>
+						<ModalBody></ModalBody>
+						<ModalFooter>
+							<input
+								type="submit"
+								value="Submit"
+								color="primary"
+								className="btn btn-primary"
+							/>
+							<Button color="danger" onClick={this.toggle}>
+								Cancel
+							</Button>
+						</ModalFooter>
+					</form>
+				</Modal>
+			</div>
+		);
+	}
+}

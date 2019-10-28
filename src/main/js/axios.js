@@ -23,6 +23,12 @@ export function getStatuses() {
 	return axios.get('/api/food-truck/getStatusNames');
 }
 
+export async function viewUser(username) {
+	return await axios.get('/api/user/' + username).then(result => {
+		document.cookie = 'searchedUser=' + result + '; path=/';
+	});
+}
+
 // export function makeFT(name, status) {
 // 	return axios({
 // 		method: 'post',
@@ -215,6 +221,15 @@ Actions.setFoodTruck = foodTruck => {
 
 Actions.setUser = user => {
 	return { type: Actions.Types.SET_USER, user };
+};
+
+Actions.viewUser = username => {
+	return () => {
+		return viewUser(username).then(user => {
+			document.cookie = 'searchedUser=' + user + '; path=/';
+			window.alert(document.cookie);
+		});
+	};
 };
 
 export { Actions };

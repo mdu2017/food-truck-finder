@@ -6,15 +6,17 @@ import { Col, Row, Container } from 'reactstrap';
 export class ViewProfile extends React.Component {
 	constructor(props) {
 		super(props);
+		const URLObject = this.props.match.params;
+		let {username: username} = URLObject;
 		this.state = {
-			principal: JSON.parse(Axios.getCookie('user')).principal,
-			username: JSON.parse(Axios.getCookie('user')).username,
-			owner: JSON.parse(Axios.getCookie('user')).isOwner
+			user: Axios.viewUser(username)
 		};
+		console.log(this.state.user);
+		console.log(document.cookie);
 	}
 
 	isOwner() {
-		if (this.state.owner === true) {
+		if (this.state.user.isOwner === true) {
 			return 'Owner';
 		}
 		return 'Customer';
@@ -26,12 +28,13 @@ export class ViewProfile extends React.Component {
 				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>View Profile</h1>
+					<h2>{this.state.user.username}</h2>
 					<Container>
 						<Row>
 							<Col>
 								<h2>Account Details</h2>
-								<h6>Username: {this.state.username}</h6>
-								<h6>Email: {this.state.principal}</h6>
+								<h6>Username: {this.state.user.username}</h6>
+								<h6>Email: {this.state.user.principal}</h6>
 								<h6>Account Type: {this.isOwner()}</h6>
 							</Col>
 							<Col>

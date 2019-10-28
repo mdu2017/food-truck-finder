@@ -65,14 +65,7 @@ public class UserEndpoint {
 
 	@GetMapping(value = "/{username}", produces = "application/json")
 	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
-		Optional<UserDto> temp = userService.findUserByUsername(username);
-
-		if(temp.isPresent()){
-			UserDto user = temp.get();
-			user.setPrincipal("");//protect email
-		}
-
-		return temp;
+		return userService.findUserByUsername(username);
 	}
 
 	/**

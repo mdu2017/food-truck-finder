@@ -3,30 +3,10 @@ import React, { Component } from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import * as FoodTruck from 'js/foodtruck/CreateFT';
 
-let eLat, eLng;
-
 const style = {
     width: '50%',
     height: '50%',
 };
-
-//Gets user location
-function getLocation() {
-    if (navigator.geolocation) {
-        navigator.geolocation.getCurrentPosition(setUserCoord);
-    } else {
-        console.log('Geolocation is not supported by this browser.');
-    }
-}
-
-//Get user coordinates
-function setUserCoord(position) {
-    let lat = parseFloat(position.coords.latitude);
-    let lng = parseFloat(position.coords.longitude);
-    console.log('current lat: ' + lat + '\n' + 'current lng: ' + lng);
-    eLat = lat;
-    eLng = lng;
-}
 
 export class MapContainer extends React.Component {
     constructor(props) {
@@ -34,10 +14,6 @@ export class MapContainer extends React.Component {
 
         //State for info window/markers/selectedPlace
         this.state = {
-
-            expectedCenter: getLocation(),
-            expectedLat: eLat,
-            expectedLng: eLng,
 
             //Center
             centerLat: 31.549701,
@@ -58,10 +34,27 @@ export class MapContainer extends React.Component {
             ftLat: 0.0,
             ftLng: 0.0
         };
-
+        this.setUserCoord();
         //binds status of click on map
         this.onMapClicked = this.onMapClicked.bind(this);
     }
+
+    getLocation() {
+        if (navigator.geolocation) {
+            navigator.geolocation.getCurrentPosition(this.setUserCoord);
+        } else {
+            console.log('Geolocation is not supported by this browser.');
+        }
+    }
+
+    //Get user coordinates
+    setUserCoord = (position) => {
+        let lat = parseFloat(position.coords.latitude);
+        let lng = parseFloat(position.coords.longitude);
+        console.log(lat + ' | ' + lng);
+        this.state.centerLat = lat;
+        this.state.centerLng = lng;
+    };
 
     //Map click logic
     onMapClicked = (props, map, coord) => {
@@ -139,7 +132,7 @@ export class MapContainer extends React.Component {
                 {/* Add marker on click */}
                 {this.state.locations.map((location, index) => {
                     return(
-                        <Marker onClick={this.onMarkerClick} icon={LogoMarker} /*draggable={true}*/
+                        <Marker onClick={this.onMarkerClick} icon={LogoMarker}
                             key={index}
                             position={{lat: location.lat(), lng: location.lng()}}
                             name={'Your Food Truck!'}

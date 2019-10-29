@@ -435,4 +435,35 @@ public class FoodTruckDao {
 
 		return Optional.ofNullable(trucks);
 	}
+
+	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
+														   double userlong) {
+		List<FoodTruckDto> trucks = null;
+
+		String sql = "SELECT sch.TRUCK_ID " +
+				"FROM schedule AS sch, truck_stop AS st " +
+				"WHERE sch.STOP_ID = st.STOP_ID " +
+				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
+				"AND (TIME(st.end) > TIME(NOW())) " +
+				"AND ((POW(st.LATITUDE - :userlat, 2) + POW(st.LONGITUDE - " +
+				":userlong, 2)) < 1)";
+
+		Map<String, ?> params = _Maps.map("userlat", userlat,
+				"userlong", userlong);
+		List<Long> ids = jdbcTemplate.query(sql, params,
+				(rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID"));
+
+		if(ids != null){
+			trucks = new ArrayList<>();
+			for(Long ft : ids){
+				//get each food truck
+				Optional<FoodTruckDto> temp = this.find(ft + "");
+				if(temp.isPresent()){
+					trucks.add(temp.get());
+				}
+			}
+		}
+
+		return Optional.ofNullable(trucks);
+	}
 }

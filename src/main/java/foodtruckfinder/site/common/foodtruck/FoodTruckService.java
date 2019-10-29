@@ -50,4 +50,9 @@ public class FoodTruckService {
 	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id) {
 		return foodTruckDao.getByOwner(owner_id);
 	}
+
+	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
+														   double userlong) {
+		return foodTruckDao.getRecommendations(userlat, userlong);
+	}
 }

@@ -116,8 +116,23 @@ export class SidebarNav extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: JSON.parse(Axios.getCookie('user'))
+			user: JSON.parse(Axios.getCookie('user')),
+			userlat: null,
+			userlong: null
 		};
+		this.setUserlong = this.setUserlong.bind(this);
+		this.setUserlat = this.setUserlat.bind(this);
+		navigator.geolocation.getCurrentPosition(this.showPosition);
+	}
+
+	setUserlat = userlat => this.setState({ userlat });
+	setUserlong = userlong => this.setState({ userlong });
+
+	showPosition(position) {
+		console.log('Latitude: ' + position.coords.latitude + ' Longitude: ' +
+			position.coords.longitude);
+		this.setUserlat(position.coords.latitude);
+		this.setUserlong(position.coords.longitude);
 	}
 
 	render() {

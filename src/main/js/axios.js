@@ -27,6 +27,17 @@ export function viewUser(username) {
 	return axios.get('/unsecure/user/' + username);
 }
 
+export function getRecommendations(userlat, userlong) {
+	return axios.get('/api/food-truck/recommendations', {
+		params: {
+			userlat: userlat,
+			userlong: userlong
+		}
+	}).then(result => {
+		console.log(result);
+	});
+}
+
 // export function makeFT(name, status) {
 // 	return axios({
 // 		method: 'post',

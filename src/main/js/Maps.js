@@ -3,6 +3,8 @@ import React, { Component } from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import * as FoodTruck from 'js/foodtruck/CreateFT';
 
+let eLat, eLng;
+
 const style = {
     width: '50%',
     height: '50%',
@@ -21,7 +23,9 @@ function getLocation() {
 function setUserCoord(position) {
     let lat = parseFloat(position.coords.latitude);
     let lng = parseFloat(position.coords.longitude);
-    console.log(lat + ' | ' + lng);
+    console.log('current lat: ' + lat + '\n' + 'current lng: ' + lng);
+    eLat = lat;
+    eLng = lng;
 }
 
 export class MapContainer extends React.Component {
@@ -30,6 +34,10 @@ export class MapContainer extends React.Component {
 
         //State for info window/markers/selectedPlace
         this.state = {
+
+            expectedCenter: getLocation(),
+            expectedLat: eLat,
+            expectedLng: eLng,
 
             //Center
             centerLat: 31.549701,
@@ -99,6 +107,20 @@ export class MapContainer extends React.Component {
             showingInfoWindow: true
         });
 
+    // TODO: Set location when marker is dragged
+    // onMarkerDragend = (coord, index) => {
+    //     let {latLng} = coord;
+    //     let lat = latLng.lat();
+    //     let lng = latLng.lng();
+    //
+    //     this.setState(prevState => ({
+    //         locations: [...this.state.locations];
+    //         location[index] = {...locations[index], position: { lat, lng } };
+    //     });
+    //
+    //
+    // };
+
     render(){
         return(
             <div>
@@ -117,7 +139,7 @@ export class MapContainer extends React.Component {
                 {/* Add marker on click */}
                 {this.state.locations.map((location, index) => {
                     return(
-                        <Marker onClick={this.onMarkerClick} icon={LogoMarker}
+                        <Marker onClick={this.onMarkerClick} icon={LogoMarker} /*draggable={true}*/
                             key={index}
                             position={{lat: location.lat(), lng: location.lng()}}
                             name={'Your Food Truck!'}
@@ -135,7 +157,10 @@ export class MapContainer extends React.Component {
                     </InfoWindow>
                 </Map>
 
-                {console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}
+                {/*Test truck lat*/}
+                {/*{console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}*/}
+
+                {console.log('expected lat: ' + this.state.expectedLat + '\n' + 'expected lng: ' + this.state.expectedLng)}
             </div>
         );
     }

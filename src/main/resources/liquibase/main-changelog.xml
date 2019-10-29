@@ -104,7 +104,7 @@
             );
 
             CREATE TABLE `TRUCK_STOP` (
-            `STOP_ID` int(11) NOT NULL,
+            `STOP_ID` int(11) NOT NULL AUTO_INCREMENT,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
             `LATITUDE` double NOT NULL,

@@ -23,7 +23,7 @@
 
             CREATE TABLE `USER` (
             `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
-            `USERNAME` varchar(12) NOT NULL,
+            `USERNAME` varchar(20) NOT NULL,
             `PRINCIPAL` varchar(255) NOT NULL,
             `PASSWORD` varchar(255) NOT NULL,
             `IS_OWNER` tinyint(4) NOT NULL,
@@ -104,7 +104,7 @@
             );
 
             CREATE TABLE `TRUCK_STOP` (
-            `STOP_ID` int(11) NOT NULL,
+            `STOP_ID` int(11) NOT NULL AUTO_INCREMENT,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
             `LATITUDE` double NOT NULL,

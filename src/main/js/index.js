@@ -12,6 +12,7 @@ import { Notifications } from './user/Notifications';
 import { ViewEventDetails } from './user/ViewEventDetails';
 import { SearchTrucks } from './user/SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
+import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
 import { Events } from './foodtruck/Events';
 import { CreateFoodTruck } from './foodtruck/CreateFT';
@@ -90,7 +91,7 @@ export default class Index extends React.Component {
 					<Route exact path="/hello" component={Pages.HelloSend} />
 					<Route exact
 						   path="/user/:username"
-						   component={ViewProfile}
+						   component={ViewOtherProfile}
 					/>
 				</div>
 			</HashRouter>

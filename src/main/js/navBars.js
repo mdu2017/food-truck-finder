@@ -117,11 +117,7 @@ export class SidebarNav extends React.Component {
 		super(props);
 		this.state = {
 			user: JSON.parse(Axios.getCookie('user')),
-			userlat: null,
-			userlong: null
 		};
-		this.setUserlong = this.setUserlong.bind(this);
-		this.setUserlat = this.setUserlat.bind(this);
 		navigator.geolocation.getCurrentPosition(this.showPosition);
 	}
 
@@ -129,10 +125,8 @@ export class SidebarNav extends React.Component {
 	setUserlong = userlong => this.setState({ userlong });
 
 	showPosition(position) {
-		console.log('Latitude: ' + position.coords.latitude + ' Longitude: ' +
-			position.coords.longitude);
-		this.setUserlat(position.coords.latitude);
-		this.setUserlong(position.coords.longitude);
+		Axios.getRecommendations(position.coords.latitude, position.coords.longitude);
+		console.log(position.coords.latitude + ' ' + position.coords.longitude);
 	}
 
 	render() {

@@ -23,10 +23,8 @@ export function getStatuses() {
 	return axios.get('/api/food-truck/getStatusNames');
 }
 
-export async function viewUser(username) {
-	return await axios.get('/api/user/' + username).then(result => {
-		document.cookie = 'searchedUser=' + result + '; path=/';
-	});
+export function viewUser(username) {
+	return axios.get('/unsecure/user/' + username);
 }
 
 // export function makeFT(name, status) {

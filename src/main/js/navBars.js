@@ -126,7 +126,7 @@ export class SidebarNav extends React.Component {
 				<Container>
 					<Row>
 						<Col xs="3">
-							<p>Quick Links</p>
+							<h4>Quick Links</h4>
 							<hr />
 							<Nav vertical>
 								<NavItem>
@@ -162,6 +162,8 @@ export class SidebarNav extends React.Component {
 									<NavLink href="#/page-1">Page 1</NavLink>
 								</NavItem>
 							</Nav>
+							<h4>Recommendations</h4>
+							<hr />
 						</Col>
 					</Row>
 				</Container>

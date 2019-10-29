@@ -63,11 +63,6 @@ public class UserEndpoint {
 		return userService.findUserByPrincipal(principal);
 	}
 
-	@GetMapping(value = "/{username}", produces = "application/json")
-	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
-		return userService.findUserByUsername(username);
-	}
-
 	/**
 	 * Returns id = -1 for incorrect username, -2 for incorrect principle/email
 	 *

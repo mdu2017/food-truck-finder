@@ -18,29 +18,91 @@ export class EditFoodTruck extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
+			id: null,
 			name: null,
-			menu: null,
-			schedule: null,
-			price: null,
+			// menu: null,
+			// schedule: null,
+			price_low: null,
+			price_high: null,
 			status: null,
 			foodtype: null,
-			truck: null
+			truck: null,
+			ownerId: JSON.parse(Axios.getCookie('user')).id
 		};
 	}
 
+	setID = id => this.setState({ id });
 	setName = name => this.setState({ name });
-	setMenu = menu => this.setState({ menu });
-	setSchedule = schedule => this.setState({ schedule });
-	setPrice = price => this.setState({ price });
+	// setMenu = menu => this.setState({ menu });
+	// setSchedule = schedule => this.setState({ schedule });
+	setPriceLow = price_low => this.setState({ price_low });
+	setPriceHigh = price_high => this.setState({ price_high });
 	setStatus = status => this.setState({ status });
-	setFoodType = type => this.setState({ type });
+	setFoodType = foodtype => this.setState({ foodtype });
+
+	handleSubmit = event => {
+		// The price_high is not lower than price_low
+		if (this.state.price_high >= this.state.price_low) {
+			// Check if Prices are lower than zero
+			if (this.state.price_low < 0) {
+				this.state.price_low = 0;
+			}
+			if (this.state.price_high < 0) {
+				this.state.price_high = 0;
+			}
+			this.props.editTruck({
+				id: this.state.id,
+				name: this.state.name,
+				// menu: this.state.menu,
+				// schedule: this.state.schedule,
+				price_low: this.state.price_low,
+				price_high: this.state.price_high,
+				status: this.state.status,
+				foodtype: this.state.foodtype,
+				ownerId: this.state.ownerId
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Error: Price High cannot be lower than Price Low!');
+		}
+	};
 
 	componentWillMount() {
 		const URLObject = this.props.match.params;
 		// Object Destruction
 		var { foodtruckId: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
+			this.setState({ id: result.id });
+			this.setState({ name: result.name });
+			this.setState({ price_low: result.price_low });
+			this.setState({ price_high: result.price_high });
 			this.setState({ truck: result });
+		});
+		this.getFoodTypes();
+		this.getStatuses();
+	}
+
+	getFoodTypes() {
+		var self = this;
+		Axios.getFoodTypes().then(function(result) {
+			self.setState({ foodtype: result[0] });
+			var str = '';
+			result.forEach(function(type) {
+				str += '<option>' + type + '</option>';
+			});
+			document.getElementById('foodTypes').innerHTML = str;
+		});
+	}
+
+	getStatuses() {
+		var self = this;
+		Axios.getStatuses().then(function(result) {
+			self.setState({ status: result[0] });
+			var str = '';
+			result.forEach(function(status) {
+				str += '<option>' + status + '</option>';
+			});
+			document.getElementById('statuses').innerHTML = str;
 		});
 	}
 
@@ -100,19 +162,6 @@ export class EditFoodTruck extends React.Component {
 		);
 	}
 
-	handleSubmit = event => {
-		this.props.editTruck({
-			name: this.state.name,
-			menu: this.state.menu,
-			schedule: this.state.schedule,
-			price: this.state.price,
-			status: this.state.status,
-			foodtype: this.state.foodtype
-		});
-
-		event.preventDefault();
-	};
-
 	render() {
 		return (
 			<div>
@@ -130,40 +179,31 @@ export class EditFoodTruck extends React.Component {
 										name="name"
 										id="ftName"
 										placeholder={this.state.truck.name}
+										onChange={e =>
+											this.setName(e.target.value)
+										}
 									/>
 								</FormGroup>
 								<FormGroup>
-									<Label for="ftStatus">Current Status</Label>
+									<Label for="statuses">Current Status</Label>
 									<Input
 										type="select"
 										name="status"
-										id="ftStatus">
-										<option>Open</option>
-										<option>Closed</option>
-										<option>Closed (Maintenance)</option>
-									</Input>
+										id="statuses"
+										onChange={e =>
+											this.setStatus(e.target.value)
+										}
+									/>
 								</FormGroup>
 								<FormGroup>
-									<Label for="ftFoodType">Food Type</Label>
+									<Label for="foodTypes">Food Type</Label>
 									<Input
 										type="select"
 										name="foodtype"
-										id="ftFoodType"
+										id="foodTypes"
 										onChange={e =>
 											this.setFoodType(e.target.value)
-										}>
-										<option>Mexican</option>
-										<option>Breakfast</option>
-										<option>American</option>
-									</Input>
-								</FormGroup>
-								<FormGroup>
-									<Label for="ftWebsite">Website</Label>
-									<Input
-										type="url"
-										name="url"
-										id="ftWebsite"
-										placeholder="(Optional)"
+										}
 									/>
 								</FormGroup>
 							</Form>
@@ -179,6 +219,9 @@ export class EditFoodTruck extends React.Component {
 										id="ftLowPrice"
 										step="0.01"
 										placeholder={this.state.truck.price_low}
+										onChange={e =>
+											this.setPriceLow(e.target.value)
+										}
 									/>
 								</FormGroup>
 								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
@@ -195,6 +238,9 @@ export class EditFoodTruck extends React.Component {
 										step="0.01"
 										placeholder={
 											this.state.truck.price_high
+										}
+										onChange={e =>
+											this.setPriceHigh(e.target.value)
 										}
 									/>
 								</FormGroup>
@@ -249,6 +295,6 @@ export class EditFoodTruck extends React.Component {
 EditFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		editTruck: foodTruck => dispatch(Axios.Actions.createFT(foodTruck))
+		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck))
 	})
 )(EditFoodTruck);

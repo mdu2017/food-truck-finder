@@ -7,11 +7,9 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
 import foodtruckfinder.site.common.user.UserService.UpdateRequest;
-import foodtruckfinder.site.common.user.UserService.GetRequest;
 import foodtruckfinder.site.common.user.UserDto;
 
 /**
@@ -67,7 +65,14 @@ public class UserEndpoint {
 
 	@GetMapping(value = "/{username}", produces = "application/json")
 	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
-		return userService.findUserByUsername(username);
+		Optional<UserDto> temp = userService.findUserByUsername(username);
+
+		if(temp.isPresent()){
+			UserDto user = temp.get();
+			user.setPrincipal("");//protect email
+		}
+
+		return temp;
 	}
 
 	/**

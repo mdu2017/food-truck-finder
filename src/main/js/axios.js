@@ -15,13 +15,12 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
-// Saves a FoodTruck in the Database
-export function saveFoodTruck(foodTruck) {
-	return axios.post('/api/food-truck/save', foodTruck);
-}
-
 export function getFoodTypes() {
 	return axios.get('/api/food-truck/getFoodTypes');
+}
+
+export function getStatuses() {
+	return axios.get('/api/food-truck/getStatusNames');
 }
 
 // export function makeFT(name, status) {
@@ -133,6 +132,13 @@ Actions.createFT = foodTruck => {
 	};
 };
 
+// Save food truck
+Actions.saveFoodFT = foodTruck => {
+	return () => {
+		return createFoodTruck(foodTruck);
+	};
+};
+
 Actions.getOwnerFoodTruckIDs = id => {
 	return () => {
 		return getOwnerFoodTruckIDs(id);
@@ -157,24 +163,33 @@ Actions.update = user => {
 
 Actions.authenticate = (username, password) => {
 	return dispatch => {
-		return authenticate(username, password).then(authentication => {
-			dispatch(Actions.setAuthentication(authentication));
-			document.cookie =
-				'authentication=' + JSON.stringify(authentication) + '; path=/';
+		return authenticate(username, password)
+			.then(authentication => {
+				dispatch(Actions.setAuthentication(authentication));
+				document.cookie =
+					'authentication=' +
+					JSON.stringify(authentication) +
+					'; path=/';
 
-			return getUserDetails().then(user => {
-				dispatch(Actions.setUser(user));
-				document.cookie = 'user=' + JSON.stringify(user) + '; path=/';
+				return getUserDetails().then(user => {
+					dispatch(Actions.setUser(user));
+					document.cookie =
+						'user=' + JSON.stringify(user) + '; path=/';
 
-				if (getCookie('user') != null) {
-					window.location.href = '/#/';
-				} else {
-					window.alert(
-						'This email and password combination is not valid, please try again'
-					);
-				}
-			});
-		}).catch(() => alert('Email and password combination is invalid, please try again'));
+					if (getCookie('user') != null) {
+						window.location.href = '/#/';
+					} else {
+						window.alert(
+							'This email and password combination is not valid, please try again'
+						);
+					}
+				});
+			})
+			.catch(() =>
+				alert(
+					'Email and password combination is invalid, please try again'
+				)
+			);
 	};
 };
 

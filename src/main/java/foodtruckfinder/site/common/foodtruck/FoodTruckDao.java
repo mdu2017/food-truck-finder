@@ -53,6 +53,7 @@ public class FoodTruckDao {
 				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
 				foodTruckDto.setStatus(rs.getString("STATUS"));
 				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
+				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
 
 				//need to get menu, schedule, truck_image, and type
 				//For menu, get a list
@@ -96,8 +97,11 @@ public class FoodTruckDao {
 				String typesql = "SELECT food_type.type FROM food_type, food_truck " +
 						"WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
 				String type = jdbcTemplate.query(typesql, parameters, typers -> {
-					typers.next();
-					return typers.getString("type");
+					if(typers.next()){
+						return typers.getString("type");
+					} else {
+						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
+					}
 				});
 				foodTruckDto.setType(type);
 
@@ -108,32 +112,6 @@ public class FoodTruckDao {
 		});
 
 		return Optional.ofNullable(result);
-	}
-
-	/**
-	 * This function tests if a food truck is created and stored in the database
-	 * @param foodTruck
-	 */
-	public FoodTruckDto testFT(FoodTruckDto foodTruck) throws SQLException {
-		int defaultImage = 'a';
-		Map<String, ?> parameters = _Maps.mapPairs(
-//				new Tuple.Tuple2<>("food_truck_id", foodTruck.getId()),
-				new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
-				new Tuple.Tuple2<>("name", foodTruck.getName()),
-				new Tuple.Tuple2<>("type", foodTruck.getType()),
-				new Tuple.Tuple2<>("image", defaultImage),
-				new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
-				new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-				new Tuple.Tuple2<>("status", foodTruck.getStatus())
-		);
-
-		String myQuery = "INSERT INTO FOOD_TRUCK " +
-				"(OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-				"(:owner_id, :name, :type, :image, :price_low, :price_high, :status)";
-
-		jdbcTemplate.update(myQuery, parameters);
-
-		return foodTruck;
 	}
 
 	/**
@@ -165,9 +143,7 @@ public class FoodTruckDao {
 
                     jdbcTemplate.update(menusql, menuparams);
                 }
-            }
-			//If no menu, set to 0
-			else if(menu == null){
+            } else if(menu == null){
 //				menusql = "UPDATE MENU SET " +
 //						"NAME = tempMenu" +
 //						"DESCRIPTION = testDescription " +
@@ -185,66 +161,81 @@ public class FoodTruckDao {
 			}
 
 			//Update schedule in database
-			String schedsql;
-			Map<String, Stop> schedule = foodTruck.getSchedule();
-			String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
-            for (String key : keys) {
-                //add each item to the database
-                schedsql = "UPDATE SCHEDULE SET " +
-                        "STOP_ID = :stopid " +
-                        "WHERE TRUCK_ID = :foodTruckid AND DAY = :day";
+//			String schedsql;
+//			Map<String, Stop> schedule = foodTruck.getSchedule();
+//			String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
+//            for (String key : keys) {
+//                //add each item to the database
+//                schedsql = "UPDATE SCHEDULE SET " +
+//                        "STOP_ID = :stopid " +
+//                        "WHERE TRUCK_ID = :foodTruckid AND DAY = :day";
+//
+//                Map<String, ?> schedparams = _Maps.map(
+//                        "foodTruckId", foodTruck.getId(),
+//                        "day", key,
+//                        "stopid", schedule.get(key).getId());
+//
+//                jdbcTemplate.update(schedsql, schedparams);
+//
+//                //update the stops table
+//                String stopsql = "UPDATE TRUCK_STOP SET " +
+//                        "START = :start, " +
+//                        "END = :end, " +
+//                        "LATITUDE = :lat, " +
+//                        "LONGITUDE = :long " +
+//                        "WHERE STOP_ID = :stopid";
+//                Map<String, ?> stopparams = _Maps.map(
+//                        "start", schedule.get(key).getStartSql(),
+//                        "end", schedule.get(key).getEndSql(),
+//                        "lat", schedule.get(key).getLat(),
+//                        "long", schedule.get(key).getLog(),
+//                        "stopid", schedule.get(key).getId());
+//
+//                jdbcTemplate.update(stopsql, stopparams);
+//            }
 
-                Map<String, ?> schedparams = _Maps.map(
-                        "foodTruckId", foodTruck.getId(),
-                        "day", key,
-                        "stopid", schedule.get(key).getId());
-
-                jdbcTemplate.update(schedsql, schedparams);
-
-                //update the stops table
-                String stopsql = "UPDATE TRUCK_STOP SET " +
-                        "START = :start, " +
-                        "END = :end, " +
-                        "LATITUDE = :lat, " +
-                        "LONGITUDE = :long " +
-                        "WHERE STOP_ID = :stopid";
-                Map<String, ?> stopparams = _Maps.map(
-                        "start", schedule.get(key).getStartSql(),
-                        "end", schedule.get(key).getEndSql(),
-                        "lat", schedule.get(key).getLat(),
-                        "long", schedule.get(key).getLog(),
-                        "stopid", schedule.get(key).getId());
-
-                jdbcTemplate.update(stopsql, stopparams);
-            }
-
+			int typeid = getFoodTypeId(foodTruck.getType());
 
 			String sql = "UPDATE FOOD_TRUCK SET " +
 					"NAME = :name, " +
 					"TYPE = :type, " +
 					"PRICE_LOW = :price_low, " +
 					"PRICE_HIGH = :price_high, " +
-					"STATUS = :status " +
+					"STATUS = :status" +
+                    (foodTruck.getDescription() != null ? ", DESCRIPTION = :desc " : " ") +
 					"WHERE FOOD_TRUCK_ID = :foodTruckId";
 
-			Map<String, ?> parameters = _Maps.mapPairs(
-					new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
-					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType()),
-					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
-					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus())
-			);
+            Map<String, ?> parameters;
+			if(foodTruck.getDescription() != null){
+                 parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name()),
+                        new Tuple.Tuple2<>("desc", foodTruck.getDescription())
+                );
+            } else {
+                parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
+                );
+            }
+
 
 			jdbcTemplate.update(sql, parameters);
 			return foodTruck;
 		}
 		else {
-			//This needs to check if the food truck DOES exist already in the database (check for duplicate infomation
-			//  in any "unique" field
+			//todo:: check if the owner exists
 			//Add the menu to the database
 			String menusql;
-			// TODO: Implement Menu
+			// TODO: Implement Menu in front end
 //			List<Pair<Long, Triple<String, String, Double>>> menu = foodTruck.getMenu();
 //			for(int i=0; i < menu.size(); i++) {
 //				//add each item to the database
@@ -264,7 +255,7 @@ public class FoodTruckDao {
 //				menu.set(i, new Tuple2<>(menuKeyHolder.getKey().longValue(),
 //						  				 menu.get(i).getSecond()));
 //			}
-			// TODO: Implement Schedule
+			// TODO: Implement Schedule in front end
 			//Insert schedule in database
 //			String schedsql;
 //			Map<String, Stop> schedule = foodTruck.getSchedule();
@@ -286,18 +277,38 @@ public class FoodTruckDao {
 //                jdbcTemplate.update(schedsql, new MapSqlParameterSource(schedparams));
 //            }
 
-			String sql = "INSERT INTO FOOD_TRUCK " +
-					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-					"(:owner_id, :name, :type, :price_low, :price_high, :status)";
+			int typeid = getFoodTypeId(foodTruck.getType());
 
-			Map<String, ?> parameters = _Maps.mapPairs(
-					new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
-					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType()),
-					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
-					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
-			);
+			String sql = "INSERT INTO FOOD_TRUCK " +
+					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS" +
+					(foodTruck.getDescription() != null ? ", DESCRIPTION" : "") +
+					") VALUES " +
+					"(:owner_id, :name, :type, :price_low, :price_high, :status" +
+                    (foodTruck.getDescription() != null ? ", :desc" : "") +
+                    ")";
+
+            Map<String, ?> parameters;
+            if(foodTruck.getDescription() != null){
+                parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name()),
+                        new Tuple.Tuple2<>("desc", foodTruck.getDescription())
+                );
+            } else {
+                parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
+                );
+            }
+
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			jdbcTemplate.update(sql, new MapSqlParameterSource(parameters), keyHolder);
 			foodTruck.setId(keyHolder.getKey().longValue());
@@ -319,6 +330,28 @@ public class FoodTruckDao {
 	}
 
 	/**
+	 * Gets the food type id from the database or else defaults to american food
+	 * @param type the FoodType to fetch from the database
+	 * @return the integer representation in the database of the food type
+	 */
+	private int getFoodTypeId(FoodTruckDto.FoodType type) {
+		//get food type id from database
+		String typesql = "SELECT TYPE_ID FROM FOOD_TYPE WHERE TYPE = :type";
+
+		Map<String, ?> typeparams = _Maps.map("type", type.name());
+
+		int typeid = jdbcTemplate.query(typesql, typeparams, typers -> {
+			if(typers.next()){
+				return typers.getInt("TYPE_ID");
+			} else {
+				return 0;//default american food
+			}
+		});
+
+		return typeid;
+	}
+
+	/**
 	 * This functions is a utility function for internal use only.  It inserts a stop into the database
 	 *
 	 * Assumes the stop doesn't exist and inserts it as such
@@ -326,21 +359,25 @@ public class FoodTruckDao {
 	 * @return The stop's ID as set in the database
 	 */
 	private Long insertStop(Stop s){
-		String sql = "INSERT INTO TRUCK_STOP " +
-				"(START, END, LATITUDE, LONGITUDE) VALUES " +
-				"(:start, :end, :lat, :long)";
+		if(s != null){
+			String sql = "INSERT INTO TRUCK_STOP " +
+					"(START, END, LATITUDE, LONGITUDE) VALUES " +
+					"(:start, :end, :lat, :long)";
 
-		Map<String, ?> params = _Maps.map(
-				"start", s.getStartSql(),
-				"stop", s.getEndSql(),
-				"lat", s.getLat(),
-				"long", s.getLog());
+			Map<String, ?> params = _Maps.map(
+					"start", s.getStartSql(),
+					"stop", s.getEndSql(),
+					"lat", s.getLat(),
+					"long", s.getLog());
 
-		KeyHolder keyHolder = new GeneratedKeyHolder();
-		jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder);
+			KeyHolder keyHolder = new GeneratedKeyHolder();
+			jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder);
 
-		s.setId(keyHolder.getKey().longValue());
-		return keyHolder.getKey().longValue();
+			s.setId(keyHolder.getKey().longValue());
+			return keyHolder.getKey().longValue();
+		} else {
+			return (long) -1;
+		}
 	}
 
 	/**
@@ -349,7 +386,7 @@ public class FoodTruckDao {
 	 * @param truck_id the truck id
 	 * @param user_id the user id
 	 */
-	public void subscribe(Long truck_id, Long user_id){ /*todo::do this*/
+	public void subscribe(Long truck_id, Long user_id){ //todo:: check if truck and user ids are valid
 		String sql = "INSERT IGNORE INTO SUBSCRIPTIONS " +
 				"(TRUCK_ID, USER_ID) VALUES (truck_id, user_id)";
 
@@ -363,7 +400,6 @@ public class FoodTruckDao {
 	 * @return the list of subscribers to a particular food truck
 	 */
 	public List<String> getSubscribers(Long truck_id){
-		//todo:: fix because username isn't necessarily unique
 		String sql = "SELECT username FROM SUBSCRIPTIONS, USER WHERE " +
 				"SUBSCRIPTIONS.USER_ID = USER.USER_ID AND TRUCK_ID = :truck_id";
 

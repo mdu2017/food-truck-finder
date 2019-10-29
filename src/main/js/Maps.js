@@ -1,13 +1,11 @@
 import {GoogleApiWrapper, Map, Marker, InfoWindow} from 'google-maps-react';
 import React, { Component } from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
-
-let cLat;
-let cLng;
+import * as FoodTruck from 'js/foodtruck/CreateFT';
 
 const style = {
     width: '50%',
-    height: '50%'
+    height: '50%',
 };
 
 //Gets user location
@@ -23,24 +21,19 @@ function getLocation() {
 function setUserCoord(position) {
     let lat = parseFloat(position.coords.latitude);
     let lng = parseFloat(position.coords.longitude);
-
-    cLat = lat;
-    cLng = lng;
-
-    console.log(cLat + ' | ' + cLng);
+    console.log(lat + ' | ' + lng);
 }
 
 export class MapContainer extends React.Component {
     constructor(props) {
         super(props);
 
-
         //State for info window/markers/selectedPlace
         this.state = {
 
             //Center
-            centerLat: 31.559814,
-            centerLng: -97.141800,
+            centerLat: 31.549701,
+            centerLng: -97.114305,
 
             //Marker and info window
             showingInfoWindow: false,
@@ -48,7 +41,14 @@ export class MapContainer extends React.Component {
             selectedPlace: {},
 
             //TODO: need to add info window to each marker
-            locations: []
+            locations: [],
+
+            //One click for location
+            alreadyClicked: false,
+
+            //Food truck location when clicked
+            ftLat: 0.0,
+            ftLng: 0.0
         };
 
         //binds status of click on map
@@ -74,11 +74,21 @@ export class MapContainer extends React.Component {
             });
         }
 
-        //Add marker when clicked
-        this.setState(prevState => ({
-            locations: [...prevState.locations, location]
-        }));
-        // map.panTo(location);
+        //Add marker unless location has already been added
+        if(!this.alreadyClicked) {
+            //Set marker location, click status, food truck coordinates
+            this.setState(prevState => ({
+                locations: [...prevState.locations, location],
+                ftLat: lat,
+                ftLng: lng
+            }));
+        }
+        else{
+            console.log('You have already added a location');
+        }
+
+        // Update click status
+        this.alreadyClicked = true;
     };
 
     //Opens info window when marker clicked
@@ -89,27 +99,19 @@ export class MapContainer extends React.Component {
             showingInfoWindow: true
         });
 
-
     render(){
         return(
             <div>
                 <Map google={this.props.google}
                      style={style}
-                     zoom={10}
+                     zoom={14}
                      initialCenter={{lat: this.state.centerLat, lng: this.state.centerLng}}
                      onClick={this.onMapClicked}
                      scrollwheel={true}
                 >
 
-                <InfoWindow
-                    marker={this.state.activeMarker}
-                    visible={this.state.showingInfoWindow}>
-                    <h3>{this.state.selectedPlace.name}</h3>
-                </InfoWindow>
-
                 {/*Info marker working*/}
-                <Marker onClick={this.onMarkerClick}
-                        name={'Current location'} />
+                <Marker onClick={this.onMarkerClick} name={'Current location'} />
 
 
                 {/* Add marker on click */}
@@ -118,13 +120,22 @@ export class MapContainer extends React.Component {
                         <Marker onClick={this.onMarkerClick} icon={LogoMarker}
                             key={index}
                             position={{lat: location.lat(), lng: location.lng()}}
-                            name={'Your Food Truck'}
+                            name={'Your Food Truck!'}
                         />
-                    );
+                        );
                 })}
+                    <InfoWindow id={'ftWindow'}
+                        marker={this.state.activeMarker}
+                        visible={this.state.showingInfoWindow}>
+                        <div>
+                            <h3>{this.state.selectedPlace.name}</h3>
+                            <a href={'#'}>Visit Info Page</a>
+                        </div>
 
+                    </InfoWindow>
                 </Map>
 
+                {console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}
             </div>
         );
     }

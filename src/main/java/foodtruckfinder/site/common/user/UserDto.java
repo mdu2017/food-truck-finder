@@ -20,30 +20,16 @@ public class UserDto implements Momento<String> {
 	public Long getId() {
 		return id;
 	}
-
 	public List<String> getRoles() { return roles; }
+	public String getPrincipal() { return principal; }
+	public String getUsername() { return username; }
+	public boolean getIsOwner() { return isOwner; }
 
 	public void setRoles(List<String> roles) { this.roles = roles; }
-
-	public void setId(Long id) {
-		this.id = id;
-	}
-
-	public void setPrincipal(String principal) {
-		this.principal = principal;
-	}
-
-	public String getPrincipal() {
-		return principal;
-	}
-
-	public String getUsername() { return username; }
-
+	public void setId(Long id) { this.id = id;}
+	public void setPrincipal(String principal) { this.principal = principal; }
 	public void setUsername(String username) { this.username = username; }
-
 	public void setIsOwner(boolean value) { this.isOwner = value; }
-
-	public boolean getIsOwner() { return isOwner; }
 
 	/*What even is this*/
 	@JsonIgnore
@@ -51,5 +37,4 @@ public class UserDto implements Momento<String> {
 	public String getMomento() {
 		return principal;
 	}
-
 }

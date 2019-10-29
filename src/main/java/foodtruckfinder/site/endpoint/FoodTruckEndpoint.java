@@ -33,12 +33,6 @@ public class FoodTruckEndpoint {
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
     public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
-		//TODO: Remove this once frontend is implemented properly
-		if(foodTruckDto.getStatus() == null){
-			foodTruckDto.setStatus("Closed");
-		} else {
-			foodTruckDto.setStatus(foodTruckDto.getStatus());
-		}
         foodTruckService.save(foodTruckDto);
         return foodTruckDto;
     }

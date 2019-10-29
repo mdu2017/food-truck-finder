@@ -28,6 +28,8 @@ export class CreateFoodTruck extends React.Component {
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id
 		};
+		this.getFoodTypes();
+		this.getStatuses();
 	}
 
 	setName = name => this.setState({ name });
@@ -40,27 +42,54 @@ export class CreateFoodTruck extends React.Component {
 	setownerId = ownerId => this.setState({ ownerId });
 
 	handleSubmit = event => {
-		this.props.createFT({
-			name: this.state.name,
-			// menu: this.state.menu,
-			// schedule: this.state.schedule,
-			price_low: this.state.price_low,
-			price_high: this.state.price_high,
-			status: this.state.status,
-			foodtype: this.state.foodtype,
-			ownerId: this.state.ownerId
-		});
-		event.preventDefault();
+		// The price_high is not lower than price_low
+		if (this.state.price_high >= this.state.price_low) {
+			// Check if Prices are lower than zero
+			if (this.state.price_low < 0) {
+				this.state.price_low = 0;
+			}
+			if (this.state.price_high < 0) {
+				this.state.price_high = 0;
+			}
+			this.props.createFT({
+				name: this.state.name,
+				// menu: this.state.menu,
+				// schedule: this.state.schedule,
+				price_low: this.state.price_low,
+				price_high: this.state.price_high,
+				status: this.state.status,
+				type: this.state.foodtype,
+				ownerId: this.state.ownerId
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Error: Price High cannot be lower than Price Low!');
+		}
 	};
 
 	// Promise value return
 	getFoodTypes() {
+		var self = this;
 		Axios.getFoodTypes().then(function(result) {
+			self.setState({ foodtype: result[0] });
 			var str = '';
 			result.forEach(function(type) {
 				str += '<option>' + type + '</option>';
 			});
 			document.getElementById('foodTypes').innerHTML = str;
+		});
+	}
+
+	// setState in Axios Call
+	getStatuses() {
+		var self = this;
+		Axios.getStatuses().then(function(result) {
+			self.setState({ status: result[0] });
+			var str = '';
+			result.forEach(function(status) {
+				str += '<option>' + status + '</option>';
+			});
+			document.getElementById('statuses').innerHTML = str;
 		});
 	}
 
@@ -139,37 +168,21 @@ export class CreateFoodTruck extends React.Component {
 							/>
 						</FormGroup>
 						<FormGroup>
-							<Label for="ftStatus">Current Status</Label>
+							<Label for="statuses">Current Status</Label>
 							<Input
 								type="select"
 								name="status"
-								id="ftStatus"
-								onChange={e => this.setStatus(e.target.value)}>
-								<option>Open</option>
-								<option>Closed</option>
-								<option>Closed (Maintenance)</option>
-							</Input>
+								id="statuses"
+								onChange={e => this.setStatus(e.target.value)}
+							/>
 						</FormGroup>
 						<FormGroup>
-							{this.getFoodTypes()}
-							<Label for="ftFoodType">Food Type</Label>
+							<Label for="foodTypes">Food Type</Label>
 							<Input
 								type="select"
 								name="foodtype"
 								id="foodTypes"
-								onChange={e =>
-									this.setFoodType(e.target.value)
-								}>
-
-							</Input>
-						</FormGroup>
-						<FormGroup>
-							<Label for="ftWebsite">Website</Label>
-							<Input
-								type="url"
-								name="url"
-								id="ftWebsite"
-								placeholder="(Optional)"
+								onChange={e => this.setFoodType(e.target.value)}
 							/>
 						</FormGroup>
 					</Form>
@@ -247,6 +260,15 @@ export class CreateFoodTruck extends React.Component {
 CreateFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		createFT: foodTruck => dispatch(Axios.Actions.createFT(foodTruck))
+		createFT: foodTruck =>
+			dispatch(Axios.Actions.createFT(foodTruck))
+				// Success
+				.then(function(result) {
+					window.alert('Creation of the Food Truck was successful!');
+				})
+				// Failed
+				.catch(error =>
+					window.alert('Creation of the Food Truck failed!')
+				)
 	})
 )(CreateFoodTruck);

@@ -18,6 +18,7 @@ export class EditProfile extends React.Component {
 		this.state = {
 			principal: JSON.parse(Axios.getCookie('user')).principal,
 			password: null,
+			retpassword: null,
 			username: JSON.parse(Axios.getCookie('user')).username,
 			owner: JSON.parse(Axios.getCookie('user')).isOwner,
 			id: JSON.parse(Axios.getCookie('user')).id
@@ -26,16 +27,21 @@ export class EditProfile extends React.Component {
 
 	setPrincipal = principal => this.setState({ principal });
 	setPassword = password => this.setState({ password });
+	setRetPassword = retpassword => this.setState({ retpassword });
 
 	handleSubmit = event => {
-		this.props.update({
-			principal: this.state.principal,
-			password: this.state.password,
-			username: this.state.username,
-			owner: this.state.owner.toString(),
-			id: this.state.id
-		}); // Add registration
-		event.preventDefault();
+		if (this.state.retpassword == this.state.password) {
+			this.props.update({
+				principal: this.state.principal,
+				password: this.state.password,
+				username: this.state.username,
+				owner: this.state.owner.toString(),
+				id: this.state.id
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Passwords do not match!');
+		}
 	};
 
 	render() {
@@ -45,21 +51,11 @@ export class EditProfile extends React.Component {
 				<div className="container padded">
 					<h1>Manage Account</h1>
 					<br />{' '}
-					<span
-						// style={
-						// 	{
-						// 		// textDecoration: 'underline',
-						// 		// color: 'blue'
-						// 	}
-						// }
-						href="#"
-						id="UncontrolledTooltipExample">
+					<span href="#" id="UncontrolledTooltipExample">
 						Username
 					</span>
 					:{' '}
-					{_.isDefined(this.props.user) && (
-						<text>{this.props.user}</text>
-					)}
+					{_.isDefined(this.props.user) && <h3>{this.props.user}</h3>}
 					<UncontrolledTooltip
 						placement="right"
 						target="UncontrolledTooltipExample">
@@ -68,13 +64,13 @@ export class EditProfile extends React.Component {
 					<br />
 					Email:{' '}
 					{_.isDefined(this.props.email) && (
-						<text>{this.props.email}</text>
+						<h3>{this.props.email}</h3>
 					)}
 					<br />
 					<br />
 					<Form>
 						<FormGroup>
-							<Label for="newEmail">New Email</Label>
+							<Label for="newEmail">New Email </Label>
 							<Input
 								type="text"
 								name="email"
@@ -87,18 +83,24 @@ export class EditProfile extends React.Component {
 						</FormGroup>
 						<br />
 						<FormGroup>
-							<Label for="currPassword">Current Password</Label>
+							<Label for="currPassword">
+								Current Password
+								<span style={{ color: 'red' }}> * </span>
+							</Label>
 							<Input
-								type="text"
+								type="password"
 								name="currentpassword"
 								id="currPassword"
 								placeholder=""
 							/>
 						</FormGroup>
 						<FormGroup>
-							<Label for="newPassword">New Password</Label>
+							<Label for="newPassword">
+								New Password
+								<span style={{ color: 'red' }}> * </span>
+							</Label>
 							<Input
-								type="text"
+								type="password"
 								name="newpassword"
 								id="newPassword"
 								placeholder=""
@@ -108,12 +110,16 @@ export class EditProfile extends React.Component {
 						<FormGroup>
 							<Label for="retypedPassword">
 								New Password (Retyped)
+								<span style={{ color: 'red' }}> * </span>
 							</Label>
 							<Input
-								type="text"
+								type="password"
 								name="retypedPassword"
 								id="retypedPassword"
 								placeholder=""
+								onChange={e =>
+									this.setRetPassword(e.target.value)
+								}
 							/>
 						</FormGroup>
 						<Button onClick={this.handleSubmit}>Submit</Button>

@@ -23,13 +23,14 @@
 
             CREATE TABLE `USER` (
             `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
-            `Username` varchar(12) NOT NULL,
+            `USERNAME` varchar(20) NOT NULL,
             `PRINCIPAL` varchar(255) NOT NULL,
             `PASSWORD` varchar(255) NOT NULL,
-            `isOwner` tinyint(4) NOT NULL,
+            `IS_OWNER` tinyint(4) NOT NULL,
             PRIMARY KEY (`USER_ID`),
             UNIQUE KEY `PRINCIPAL_UNIQUE` (`PRINCIPAL`),
-            UNIQUE KEY `USER_ID_UNIQUE` (`USER_ID`)
+            UNIQUE KEY `USER_ID_UNIQUE` (`USER_ID`),
+            UNIQUE KEY `Username_UNIQUE` (`USERNAME`)
             );
 
             CREATE TABLE `FOOD_TRUCK` (
@@ -41,6 +42,7 @@
             `PRICE_LOW` double NOT NULL,
             `PRICE_HIGH` double NOT NULL,
             `STATUS` varchar(12) NOT NULL,
+            `DESCRIPTION` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`FOOD_TRUCK_ID`),
             UNIQUE KEY `FOOD_TRUCK_ID_UNIQUE` (`FOOD_TRUCK_ID`),
             KEY `owned_by_idx` (`OWNER_ID`),
@@ -58,7 +60,8 @@
             CREATE TABLE `FOOD_TYPE` (
             `TYPE_ID` int(11) NOT NULL,
             `TYPE` varchar(30) NOT NULL,
-            PRIMARY KEY (`TYPE_ID`)
+            PRIMARY KEY (`TYPE_ID`),
+            UNIQUE KEY `TYPE_UNIQUE` (`TYPE`)
             );
 
             CREATE TABLE `MENU` (
@@ -75,6 +78,7 @@
             `USER_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,
             `SENT` datetime NOT NULL,
+            `VIEWED` tinyint(4) NOT NULL DEFAULT '0',
             PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
             );
 
@@ -90,7 +94,7 @@
             `TRUCK_ID` int(11) NOT NULL,
             `DAY` varchar(45) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`DAY`)
+            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`)
             );
 
             CREATE TABLE `SUBSCRIPTIONS` (
@@ -100,7 +104,7 @@
             );
 
             CREATE TABLE `TRUCK_STOP` (
-            `STOP_ID` int(11) NOT NULL,
+            `STOP_ID` int(11) NOT NULL AUTO_INCREMENT,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
             `LATITUDE` double NOT NULL,
@@ -125,6 +129,23 @@
             CONSTRAINT `ATTENDED_BY` FOREIGN KEY (`TRUCK_ID`) REFERENCES `FOOD_TRUCK` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
             CONSTRAINT `HOSTED_BY` FOREIGN KEY (`EVENT_ID`) REFERENCES `EVENT` (`EVENT_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
+
+<!--            populate stuff -->
+            INSERT INTO FOOD_TYPE (TYPE_ID, TYPE) VALUES
+            (0, 'AMERICAN'),
+            (1, 'BBQ'),
+            (2, 'BREAKFAST'),
+            (3, 'CHINESE'),
+            (4, 'DESERT'),
+            (5, 'HEALTHY'),
+            (6, 'INDIAN'),
+            (7, 'MEDITERRANEAN'),
+            (8, 'MEXICAN'),
+            (9, 'PIZZA'),
+            (10, 'SEAFOOD'),
+            (11, 'VEGITARIAN'),
+            (12, 'VEGAN'),
+            (13, 'VIETNAMESE');
         </sql>
     </changeSet>
 </databaseChangeLog>

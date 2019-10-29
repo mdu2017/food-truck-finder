@@ -122,6 +122,7 @@ export class MapContainer extends React.Component {
                         />
                     );
                 })}
+
                 </Map>
 
             </div>

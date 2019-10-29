@@ -33,8 +33,6 @@ export function getRecommendations(userlat, userlong) {
 			userlat: userlat,
 			userlong: userlong
 		}
-	}).then(result => {
-		console.log(result);
 	});
 }
 

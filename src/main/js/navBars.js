@@ -115,18 +115,33 @@ CustomNavBar = connect(() => ({
 export class SidebarNav extends React.Component {
 	constructor(props) {
 		super(props);
+		navigator.geolocation.getCurrentPosition(this.showPosition);
 		this.state = {
 			user: JSON.parse(Axios.getCookie('user')),
+			foodtrucks: JSON.parse(Axios.getCookie('recommendations'))
 		};
-		navigator.geolocation.getCurrentPosition(this.showPosition);
+
+		console.log(this.state.foodtrucks);
+
+		if(Axios.getCookie('recommendations') !== null) {
+			var str;
+			var foodtrucks = JSON.parse(Axios.getCookie('recommendations'));
+			foodtrucks.forEach(function(name) {
+				str += '<div>' + name.name + '</div>';
+			});
+			document.getElementById('recommendations').innerHTML = str;
+		}
 	}
 
 	setUserlat = userlat => this.setState({ userlat });
 	setUserlong = userlong => this.setState({ userlong });
 
 	showPosition(position) {
-		Axios.getRecommendations(position.coords.latitude, position.coords.longitude);
-		console.log(position.coords.latitude + ' ' + position.coords.longitude);
+		Axios.getRecommendations(position.coords.latitude, position.coords.longitude).then(
+			function(result) {
+				document.cookie = 'recommendations=' + JSON.stringify(result) + '; path=/';
+			}
+		);
 	}
 
 	render() {
@@ -172,6 +187,7 @@ export class SidebarNav extends React.Component {
 								</NavItem>
 							</Nav>
 							<h4>Recommendations</h4>
+							<div id="recommendations"></div>
 							<hr />
 						</Col>
 					</Row>

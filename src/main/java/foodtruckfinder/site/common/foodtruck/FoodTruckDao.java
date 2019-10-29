@@ -449,9 +449,9 @@ public class FoodTruckDao {
 				":userlong, 2)) < 1)";
 
 		Map<String, ?> params = _Maps.map("userlat", userlat,
-				"userlong", userlong, "day", "Tuesday");
+				"userlong", userlong, "day", "Tue");
 		List<Long> ids = jdbcTemplate.query(sql, params,
-				(rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID"));
+				(rs, rowNum) -> rs.getLong("TRUCK_ID"));
 
 		if(ids != null){
 			trucks = new ArrayList<>();

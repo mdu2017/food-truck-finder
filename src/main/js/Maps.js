@@ -1,7 +1,6 @@
 import {GoogleApiWrapper, Map, Marker, InfoWindow} from 'google-maps-react';
 import React, { Component } from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
-import * as FoodTruck from 'js/foodtruck/CreateFT';
 
 const style = {
     width: '50%',
@@ -24,17 +23,21 @@ export class MapContainer extends React.Component {
             activeMarker: {},
             selectedPlace: {},
 
-            //TODO: need to add info window to each marker
+            //Food truck locations (markers)
             locations: [],
 
             //One click for location
             alreadyClicked: false,
 
             //Food truck location when clicked
-            ftLat: 0.0,
-            ftLng: 0.0
+            ftLat: null,
+            ftLng: null
         };
-        this.setUserCoord();
+
+
+        //Set user location
+        this.getLocation();
+
         //binds status of click on map
         this.onMapClicked = this.onMapClicked.bind(this);
     }
@@ -47,13 +50,18 @@ export class MapContainer extends React.Component {
         }
     }
 
-    //Get user coordinates
+    //Sets user coordinates (WORKS)
     setUserCoord = (position) => {
         let lat = parseFloat(position.coords.latitude);
         let lng = parseFloat(position.coords.longitude);
         console.log(lat + ' | ' + lng);
-        this.state.centerLat = lat;
-        this.state.centerLng = lng;
+
+        this.setState({
+            centerLat: lat,
+            centerLng: lng
+        });
+
+        {console.log('user lat: ' + this.state.centerLat + ' | user lng: ' + this.state.centerLng);}
     };
 
     //Map click logic
@@ -65,7 +73,7 @@ export class MapContainer extends React.Component {
         const location = coord.latLng;
 
         //Click location works
-        {console.log(lat + ' | ' + lng);}
+        // {console.log(lat + ' | ' + lng);}
 
         //If map clicked, dont show info window
         if (this.state.showingInfoWindow) {
@@ -150,10 +158,11 @@ export class MapContainer extends React.Component {
                     </InfoWindow>
                 </Map>
 
-                {/*Test truck lat*/}
+                {/*Test truck lat (WORKS) */}
                 {/*{console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}*/}
 
-                {console.log('expected lat: ' + this.state.expectedLat + '\n' + 'expected lng: ' + this.state.expectedLng)}
+                {/*Test user location*/}
+                {/*{console.log('user lat: ' + this.state.centerLat + ' | user lng: ' + this.state.centerLng)}*/}
             </div>
         );
     }

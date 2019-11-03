@@ -420,7 +420,7 @@ public class FoodTruckDao {
 	 */
 	public void subscribe(Long truck_id, Long user_id){ //todo:: check if truck and user ids are valid
 		String sql = "INSERT IGNORE INTO SUBSCRIPTIONS " +
-				"(TRUCK_ID, USER_ID) VALUES (truck_id, user_id)";
+				"(TRUCK_ID, USER_ID) VALUES (:truck_id, :user_id)";
 
 		Map<String, ?> params = _Maps.map("truck_id", truck_id, "user_id", user_id);
 		jdbcTemplate.update(sql, params);

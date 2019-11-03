@@ -23,7 +23,7 @@
 
             CREATE TABLE `USER` (
             `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
-            `USERNAME` varchar(12) NOT NULL,
+            `USERNAME` varchar(20) NOT NULL,
             `PRINCIPAL` varchar(255) NOT NULL,
             `PASSWORD` varchar(255) NOT NULL,
             `IS_OWNER` tinyint(4) NOT NULL,
@@ -42,6 +42,7 @@
             `PRICE_LOW` double NOT NULL,
             `PRICE_HIGH` double NOT NULL,
             `STATUS` varchar(12) NOT NULL,
+            `DESCRIPTION` varchar(255) DEFAULT NULL,
             PRIMARY KEY (`FOOD_TRUCK_ID`),
             UNIQUE KEY `FOOD_TRUCK_ID_UNIQUE` (`FOOD_TRUCK_ID`),
             KEY `owned_by_idx` (`OWNER_ID`),
@@ -77,6 +78,7 @@
             `USER_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,
             `SENT` datetime NOT NULL,
+            `VIEWED` tinyint(4) NOT NULL DEFAULT '0',
             PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
             );
 
@@ -92,7 +94,7 @@
             `TRUCK_ID` int(11) NOT NULL,
             `DAY` varchar(45) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`DAY`)
+            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`)
             );
 
             CREATE TABLE `SUBSCRIPTIONS` (
@@ -102,7 +104,7 @@
             );
 
             CREATE TABLE `TRUCK_STOP` (
-            `STOP_ID` int(11) NOT NULL,
+            `STOP_ID` int(11) NOT NULL AUTO_INCREMENT,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
             `LATITUDE` double NOT NULL,

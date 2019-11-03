@@ -12,7 +12,7 @@ import java.util.Map;
  */
 public class FoodTruckDto implements Momento<Long> {
 	private Long id, ownerId;
-	private String name;
+	private String name, description;
 	private FoodType type;
 	private List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu;
 	private BufferedImage truck_image = null;
@@ -23,8 +23,7 @@ public class FoodTruckDto implements Momento<Long> {
     //Getters
 	public Long getId() { return id; }
 	public String getName() { return name; }
-	public int getType() { return 0; } //TODO: Get type from database
-//	public FoodType getType() { return type; }
+	public FoodType getType() { return type; }
 	public List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> getMenu() { return menu; }
 	public BufferedImage getTruck_image() { return truck_image; }
     public Map<String, Stop> getSchedule() { return schedule; }
@@ -32,6 +31,7 @@ public class FoodTruckDto implements Momento<Long> {
     public double getPrice_high() { return price_high; }
     public FTStatus getStatus() { return status; }
 	public Long getOwnerId() { return ownerId; }
+	public String getDescription() { return description; }
 
 	//Setters
     public void setId(Long id) { this.id = id; }
@@ -46,11 +46,15 @@ public class FoodTruckDto implements Momento<Long> {
 	public void setStatus(FTStatus status) { this.status = status; }
 	public void setStatus(String status){ this.status = FTStatus.valueOf(status.toUpperCase()); }
 	public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
+	public void setDescription(String description) { this.description = description; }
 
-	public String toString(){
-		return	"Food_Truck_ID: " + id + "\nName: " + name
-				+ "\nFoodType: " + type + "\nLowPrice: " + price_low + "\nHighPrice: "
-				+ price_high + "\nStatus: " + status + "\nOwnerID: " + ownerId + "\n";
+	@Override
+	public String toString() {
+		return "FoodTruckDto{" +
+				"id=" + id + ", ownerId=" + ownerId + ", name='" + name + '\'' +
+				", description='" + description + '\'' + ", type=" + type + ", menu=" + menu +
+				", truck_image=" + truck_image + ", schedule=" + schedule + ", price_low=" + price_low +
+				", price_high=" + price_high + ", status=" + status + '}';
 	}
 
 	@Override

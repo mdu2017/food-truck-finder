@@ -22,7 +22,7 @@ export class OwnedFoodTrucks extends React.Component {
 	renderFoodTrucks() {
 		return (
 			<div>
-				{this.state.trucks ? (
+				{this.state.trucks.length > 0 ? (
 					<div>
 						{this.state.trucks.map((truck, index) => (
 							<ListGroup key={index}>
@@ -34,7 +34,14 @@ export class OwnedFoodTrucks extends React.Component {
 							</ListGroup>
 						))}
 					</div>
-				) : null}
+				) : (
+					<div>
+						<h6>No Food Trucks Created.</h6>
+						<Link to={'/create-food-truck'}>
+							<h6>Create One!</h6>
+						</Link>
+					</div>
+				)}
 			</div>
 		);
 	}

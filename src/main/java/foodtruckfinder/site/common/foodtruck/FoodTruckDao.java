@@ -56,6 +56,7 @@ public class FoodTruckDao {
 				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
 				foodTruckDto.setStatus(rs.getString("STATUS"));
 				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
+				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
 
 				//need to get menu, schedule, truck_image, and type
 				//For menu, get a list
@@ -99,8 +100,11 @@ public class FoodTruckDao {
 				String typesql = "SELECT food_type.type FROM food_type, food_truck " +
 						"WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
 				String type = jdbcTemplate.query(typesql, parameters, typers -> {
-					typers.next();
-					return typers.getString("type");
+					if(typers.next()){
+						return typers.getString("type");
+					} else {
+						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
+					}
 				});
 				foodTruckDto.setType(type);
 
@@ -160,56 +164,72 @@ public class FoodTruckDao {
 			}
 
 			//Update schedule in database
-			String schedsql;
-			Map<String, Stop> schedule = foodTruck.getSchedule();
-			String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
-            for (String key : keys) {
-                //add each item to the database
-                schedsql = "UPDATE SCHEDULE SET " +
-                        "STOP_ID = :stopid " +
-                        "WHERE TRUCK_ID = :foodTruckid AND DAY = :day";
+//			String schedsql;
+//			Map<String, Stop> schedule = foodTruck.getSchedule();
+//			String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
+//            for (String key : keys) {
+//                //add each item to the database
+//                schedsql = "UPDATE SCHEDULE SET " +
+//                        "STOP_ID = :stopid " +
+//                        "WHERE TRUCK_ID = :foodTruckid AND DAY = :day";
+//
+//                Map<String, ?> schedparams = _Maps.map(
+//                        "foodTruckId", foodTruck.getId(),
+//                        "day", key,
+//                        "stopid", schedule.get(key).getId());
+//
+//                jdbcTemplate.update(schedsql, schedparams);
+//
+//                //update the stops table
+//                String stopsql = "UPDATE TRUCK_STOP SET " +
+//                        "START = :start, " +
+//                        "END = :end, " +
+//                        "LATITUDE = :lat, " +
+//                        "LONGITUDE = :long " +
+//                        "WHERE STOP_ID = :stopid";
+//                Map<String, ?> stopparams = _Maps.map(
+//                        "start", schedule.get(key).getStartSql(),
+//                        "end", schedule.get(key).getEndSql(),
+//                        "lat", schedule.get(key).getLat(),
+//                        "long", schedule.get(key).getLog(),
+//                        "stopid", schedule.get(key).getId());
+//
+//                jdbcTemplate.update(stopsql, stopparams);
+//            }
 
-                Map<String, ?> schedparams = _Maps.map(
-                        "foodTruckId", foodTruck.getId(),
-                        "day", key,
-                        "stopid", schedule.get(key).getId());
-
-                jdbcTemplate.update(schedsql, schedparams);
-
-                //update the stops table
-                String stopsql = "UPDATE TRUCK_STOP SET " +
-                        "START = :start, " +
-                        "END = :end, " +
-                        "LATITUDE = :lat, " +
-                        "LONGITUDE = :long " +
-                        "WHERE STOP_ID = :stopid";
-                Map<String, ?> stopparams = _Maps.map(
-                        "start", schedule.get(key).getStartSql(),
-                        "end", schedule.get(key).getEndSql(),
-                        "lat", schedule.get(key).getLat(),
-                        "long", schedule.get(key).getLog(),
-                        "stopid", schedule.get(key).getId());
-
-                jdbcTemplate.update(stopsql, stopparams);
-            }
-
+			int typeid = getFoodTypeId(foodTruck.getType());
 
 			String sql = "UPDATE FOOD_TRUCK SET " +
 					"NAME = :name, " +
 					"TYPE = :type, " +
 					"PRICE_LOW = :price_low, " +
 					"PRICE_HIGH = :price_high, " +
-					"STATUS = :status " +
+					"STATUS = :status" +
+                    (foodTruck.getDescription() != null ? ", DESCRIPTION = :desc " : " ") +
 					"WHERE FOOD_TRUCK_ID = :foodTruckId";
 
-			Map<String, ?> parameters = _Maps.mapPairs(
-					new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
-					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType()),
-					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
-					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus())
-			);
+            Map<String, ?> parameters;
+			if(foodTruck.getDescription() != null){
+                 parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name()),
+                        new Tuple.Tuple2<>("desc", foodTruck.getDescription())
+                );
+            } else {
+                parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("foodTruckId", foodTruck.getId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
+                );
+            }
+
 
 			jdbcTemplate.update(sql, parameters);
 			return foodTruck;
@@ -260,18 +280,38 @@ public class FoodTruckDao {
 //                jdbcTemplate.update(schedsql, new MapSqlParameterSource(schedparams));
 //            }
 
-			String sql = "INSERT INTO FOOD_TRUCK " +
-					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS) VALUES " +
-					"(:owner_id, :name, :type, :price_low, :price_high, :status)";
+			int typeid = getFoodTypeId(foodTruck.getType());
 
-			Map<String, ?> parameters = _Maps.mapPairs(
-					new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
-					new Tuple.Tuple2<>("name", foodTruck.getName()),
-					new Tuple.Tuple2<>("type", foodTruck.getType()),
-					new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
-					new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
-					new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
-			);
+			String sql = "INSERT INTO FOOD_TRUCK " +
+					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS" +
+					(foodTruck.getDescription() != null ? ", DESCRIPTION" : "") +
+					") VALUES " +
+					"(:owner_id, :name, :type, :price_low, :price_high, :status" +
+                    (foodTruck.getDescription() != null ? ", :desc" : "") +
+                    ")";
+
+            Map<String, ?> parameters;
+            if(foodTruck.getDescription() != null){
+                parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name()),
+                        new Tuple.Tuple2<>("desc", foodTruck.getDescription())
+                );
+            } else {
+                parameters = _Maps.mapPairs(
+                        new Tuple.Tuple2<>("owner_id", foodTruck.getOwnerId()),
+                        new Tuple.Tuple2<>("name", foodTruck.getName()),
+                        new Tuple.Tuple2<>("type", typeid),
+                        new Tuple.Tuple2<>("price_low", foodTruck.getPrice_low()),
+                        new Tuple.Tuple2<>("price_high", foodTruck.getPrice_high()),
+                        new Tuple.Tuple2<>("status", foodTruck.getStatus().name())
+                );
+            }
+
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 			jdbcTemplate.update(sql, new MapSqlParameterSource(parameters), keyHolder);
 			foodTruck.setId(keyHolder.getKey().longValue());
@@ -290,6 +330,28 @@ public class FoodTruckDao {
 //			foodTruck.setId(key.longValue());
 			return foodTruck;
 		}
+	}
+
+	/**
+	 * Gets the food type id from the database or else defaults to american food
+	 * @param type the FoodType to fetch from the database
+	 * @return the integer representation in the database of the food type
+	 */
+	private int getFoodTypeId(FoodTruckDto.FoodType type) {
+		//get food type id from database
+		String typesql = "SELECT TYPE_ID FROM FOOD_TYPE WHERE TYPE = :type";
+
+		Map<String, ?> typeparams = _Maps.map("type", type.name());
+
+		int typeid = jdbcTemplate.query(typesql, typeparams, typers -> {
+			if(typers.next()){
+				return typers.getInt("TYPE_ID");
+			} else {
+				return 0;//default american food
+			}
+		});
+
+		return typeid;
 	}
 
 	/**

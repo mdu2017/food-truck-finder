@@ -34,13 +34,13 @@ public class UserDao {
 		Map<String, ?> parameters = _Maps.map("principal", principal);
 
 		UserAuthenticationDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			if(!rs.isLast()) {
-				rs.next();
-
+			if(rs.next()) {
 				UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
 				UserDto userDto = new UserDto();
+
 				userAuthenticationDto.setUser(userDto);
 				userAuthenticationDto.setPassword(rs.getString("PASSWORD"));
+
 				userDto.setId(rs.getLong("USER_ID"));
 				userDto.setPrincipal(rs.getString("PRINCIPAL"));
 				userDto.setUsername(rs.getString("USERNAME"));
@@ -63,9 +63,7 @@ public class UserDao {
 		Map<String, ?> parameters = _Maps.map("username", username);
 
 		UserDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			if(!rs.isLast()) {
-				rs.next();
-
+			if(rs.next()) {
 				UserDto userDto = new UserDto();
 				userDto.setId(rs.getLong("USER_ID"));
 				userDto.setPrincipal(rs.getString("PRINCIPAL"));

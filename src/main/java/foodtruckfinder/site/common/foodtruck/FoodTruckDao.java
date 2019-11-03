@@ -265,29 +265,7 @@ public class FoodTruckDao {
 //				menu.set(i, new Tuple2<>(menuKeyHolder.getKey().longValue(),
 //						  				 menu.get(i).getSecond()));
 //			}
-			// TODO: Implement Schedule in front end
-			//Insert schedule in database
-			String schedsql = "INSERT INTO SCHEDULE " +
-					"(TRUCK_ID, DAY, STOP_ID) VALUES " +
-					"(:foodTruckid, :day, :stopid)";
-			Map<String, List<Stop>> schedule = foodTruck.getSchedule();
-			if(schedule != null){
-				String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
-				for (String key : keys) {
-					//Add each stop to the database
-					for(Stop s : schedule.get(key)){
-						Long stopid = insertStop(s);
 
-						//add each item to the database
-						Map<String, ?> schedparams = _Maps.map(
-								"foodTruckId", foodTruck.getId(),
-								"day", key,
-								"stopid", stopid);
-
-						jdbcTemplate.update(schedsql, new MapSqlParameterSource(schedparams));
-					}
-				}
-			}
 
 			//type
 			int typeid = getFoodTypeId(foodTruck.getType());
@@ -327,6 +305,29 @@ public class FoodTruckDao {
 			jdbcTemplate.update(sql, new MapSqlParameterSource(parameters), keyHolder);
 			foodTruck.setId(keyHolder.getKey().longValue());
 
+			// TODO: Implement Schedule in front end
+			//Insert schedule in database
+			String schedsql = "INSERT INTO SCHEDULE " +
+					"(TRUCK_ID, DAY, STOP_ID) VALUES " +
+					"(:foodTruckId, :day, :stopid)";
+			Map<String, List<Stop>> schedule = foodTruck.getSchedule();
+			if(schedule != null){
+				String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
+				for (String key : keys) {
+					//Add each stop to the database
+					for(Stop s : schedule.get(key)){
+						Long stopid = insertStop(s);
+
+						//add each item to the database
+						Map<String, ?> schedparams = _Maps.map(
+								"foodTruckId", foodTruck.getId(),
+								"day", key,
+								"stopid", stopid);
+
+						jdbcTemplate.update(schedsql, new MapSqlParameterSource(schedparams));
+					}
+				}
+			}
 //			String sql = "INSERT INTO FOOD_TRUCK (NAME, TYPE) VALUES (:name, :type)";
 //
 //			Map<String, ?> parameters = _Maps.map(

@@ -1,7 +1,6 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import * as Axios from 'js/axios';
-import * as NavBars from 'js/navBars';
 import { ListGroup, ListGroupItem } from 'reactstrap';
 
 export class OwnedFoodTrucks extends React.Component {
@@ -49,7 +48,6 @@ export class OwnedFoodTrucks extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Your Food Trucks</h1>
 					{this.renderFoodTrucks()}

@@ -24,12 +24,14 @@ import { ViewFoodTruckDetails } from './foodtruck/ViewFTDetails';
 // System Pages
 import { HelpPage } from './HelpPage';
 import { AboutUs } from './AboutUs';
+import * as NavBars from 'js/navBars';
 
 export default class Index extends React.Component {
 	render() {
 		return (
 			<HashRouter>
 				<div>
+					<NavBars.CustomNavBar />
 					<Route exact path="/" component={Dashboard} />
 					<Route exact path="/register" component={CreateAccount} />
 					<Route exact path="/login" component={Login} />

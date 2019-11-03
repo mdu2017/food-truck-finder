@@ -1,5 +1,4 @@
 import React from 'react';
-import * as NavBars from 'js/navBars';
 import { Progress, Row, Col, Button, Media } from 'reactstrap';
 import SampleMenu from 'js/images/MenuSample.png';
 
@@ -7,7 +6,6 @@ export class ViewFoodTruckDetails extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Torchy's Details Page</h1>
 					<br />

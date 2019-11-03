@@ -1,6 +1,5 @@
 import React from 'react';
 import * as Axios from 'js/axios';
-import * as NavBars from 'js/navBars';
 import { Col, Row, Container } from 'reactstrap';
 
 export class ViewProfile extends React.Component {
@@ -23,7 +22,6 @@ export class ViewProfile extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>View Profile</h1>
 					<Container>

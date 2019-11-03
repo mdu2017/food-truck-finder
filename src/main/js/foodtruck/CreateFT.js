@@ -1,7 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
-import * as NavBars from 'js/navBars';
 import {
 	Button,
 	Form,
@@ -38,6 +37,8 @@ export class CreateFoodTruck extends React.Component {
 			modal: false,
 			temp: null
 		};
+		// Make Dynamic Page
+		window.location.href = '/?#/create-food-truck/';
 		this.toggle = this.toggle.bind(this);
 		this.handleModalSubmit = this.handleModalSubmit.bind(this);
 		this.getFoodTypes();
@@ -317,7 +318,6 @@ export class CreateFoodTruck extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Create a Food Truck</h1>
 					<br />

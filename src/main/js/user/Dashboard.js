@@ -7,7 +7,7 @@ export class Dashboard extends React.Component {
 		super(props);
 		this.state = {
 			authentication: Axios.getCookie('authentication'),
-			username: JSON.parse(Axios.getCookie('user')),
+			username: JSON.parse(Axios.getCookie('user'))
 		};
 	}
 
@@ -27,7 +27,6 @@ export class Dashboard extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>{this.displayCustomWelcome()}</h1>
 					<NavBars.SidebarNav />

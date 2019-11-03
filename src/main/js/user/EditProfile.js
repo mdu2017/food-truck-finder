@@ -2,7 +2,6 @@ import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
-import * as NavBars from 'js/navBars';
 import {
 	UncontrolledTooltip,
 	Button,
@@ -47,7 +46,6 @@ export class EditProfile extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Manage Account</h1>
 					<br />{' '}

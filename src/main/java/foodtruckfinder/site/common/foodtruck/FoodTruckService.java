@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -49,5 +50,14 @@ public class FoodTruckService {
 	 */
 	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id) {
 		return foodTruckDao.getByOwner(owner_id);
+	}
+
+    /**
+     * send a message to all the owner's subscribers
+     * @param message what you want to say
+     * @param ownerID The owner's ID
+     */
+	public void sendNotification(String message, Long ownerID){
+        foodTruckDao.sendNotification(message, ownerID);
 	}
 }

@@ -82,4 +82,9 @@ public class FoodTruckEndpoint {
                      .map(FoodTruckDto.FTStatus::name)
                      .collect(Collectors.toList());
 	}
+
+	@PostMapping(value = "/send-notification" )
+	public void sendNotification(String message, Long foodTruckId){
+		foodTruckService.sendNotification(message, foodTruckId);
+	}
 }

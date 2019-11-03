@@ -2,6 +2,7 @@ package foodtruckfinder.site.common.foodtruck;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -10,6 +11,8 @@ import java.util.Optional;
 import java.util.*;
 
 import alloy.util.Tuple;
+import foodtruckfinder.site.common.user.UserDao;
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -372,5 +375,23 @@ public class FoodTruckDao {
 		}
 
 		return Optional.ofNullable(trucks);
+	}
+
+	public void sendNotification(String message, Long ownerID){
+		LocalDateTime sent;
+		UserDao users = new UserDao();
+		Long userID;
+		String sql = "INSERT INTO NOTIFICATION " +
+				"(TRUCK_ID, USER_ID, MESSAGE, SENT) VALUES " +
+				"(:ownerID, :userID, :message, :sent)";
+
+		List<String> subscribers = getSubscribers(ownerID);
+		for(String subscriber: subscribers){
+			sent = LocalDateTime.now();
+			Optional<UserDto> curUser = users.findUserByUsername(subscriber);
+			userID = curUser.get().getId();
+			Map<String, ?> params = _Maps.map("ownerID", ownerID, "userID", userID, "message", message, "sent", sent);
+        	jdbcTemplate.update(sql, params);
+		}
 	}
 }

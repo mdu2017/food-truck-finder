@@ -384,7 +384,7 @@ public class FoodTruckDao {
 
                 Map<String, ?> params = _Maps.map(
                         "start", s.getStartSql(),
-                        "stop", s.getEndSql(),
+                        "end", s.getEndSql(),
                         "lat", s.getLat(),
                         "long", s.getLog());
 

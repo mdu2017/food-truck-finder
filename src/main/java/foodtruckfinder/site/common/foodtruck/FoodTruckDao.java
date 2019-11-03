@@ -294,10 +294,13 @@ public class FoodTruckDao {
 
 			//overall insert food truck
 			String sql = "INSERT INTO FOOD_TRUCK " +
-					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS, DESCRIPTION) VALUES " +
+					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS" +
+					(foodTruck.getDescription() != null ? ", DESCRIPTION" : "") +
+					") VALUES " +
 					"(:owner_id, :name, :type, :price_low, :price_high, :status" +
                     (foodTruck.getDescription() != null ? ", :desc" : "") +
                     ")";
+
             Map<String, ?> parameters;
             if(foodTruck.getDescription() != null){
                 parameters = _Maps.mapPairs(

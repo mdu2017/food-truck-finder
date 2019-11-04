@@ -248,7 +248,7 @@ export class CreateFoodTruck extends React.Component {
 					{this.displayDayOfTheWeek('Friday')}
 					{this.displayDayOfTheWeek('Saturday')}
 
-					{/*Render map*/}
+					Render map
 					<MapContainer/>
 
 					<Button onClick={this.handleSubmit}>Submit</Button>

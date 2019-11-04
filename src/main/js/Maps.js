@@ -1,6 +1,10 @@
 import {GoogleApiWrapper, Map, Marker, InfoWindow} from 'google-maps-react';
 import React, { Component } from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
+import ViewMarker from 'js/images/food_truck_existing.png';
+
+
+// Currently in dashboard and Create food truck page
 
 const style = {
     width: '50%',
@@ -31,9 +35,17 @@ export class MapContainer extends React.Component {
 
             //Food truck location when clicked
             ftLat: null,
-            ftLng: null
-        };
+            ftLng: null,
 
+            loc: {lat: 31.538813002764755, lng: -97.14596871840052},
+
+            // TODO: Sample locations to test view nearby food truck (stores object object)
+            markers: [{lat: 31.538813002764755, lng: -97.14596871840052},
+                {lat: 31.532965359436357, lng: -97.11},
+                {lat: 31.532965359436357, lng: -97.12021951185756},
+                {lat: 31.580066500056425, lng: -97.15},
+                {lat: 31.5724617149029, lng: -97.06357125746302}]
+        };
 
         //Set user location
         this.getLocation();
@@ -42,6 +54,22 @@ export class MapContainer extends React.Component {
         this.onMapClicked = this.onMapClicked.bind(this);
     }
 
+    // TODO: Sample function to display nearby food trucks
+    displayMarkers = () => {
+        return this.state.markers.map((marker, index) => {
+
+            // TODO: assign latLng to position??
+            // const {latLng} = marker.coords;
+            // const location = marker.coords.latLng;
+
+            return <Marker key={index} icon={ViewMarker} position={{
+                lat: marker.lat,
+                lng: marker.lng
+            }}/>;
+        });
+    }
+
+    // Gets and sets users current location
     getLocation() {
         if (navigator.geolocation) {
             navigator.geolocation.getCurrentPosition(this.setUserCoord);
@@ -54,7 +82,7 @@ export class MapContainer extends React.Component {
     setUserCoord = (position) => {
         let lat = parseFloat(position.coords.latitude);
         let lng = parseFloat(position.coords.longitude);
-        console.log(lat + ' | ' + lng);
+        console.log('Current location: ' + lat + ' | ' + lng);
 
         this.setState({
             centerLat: lat,
@@ -108,26 +136,32 @@ export class MapContainer extends React.Component {
             showingInfoWindow: true
         });
 
-    // TODO: Set location when marker is dragged
-    // onMarkerDragend = (coord, index) => {
-    //     let {latLng} = coord;
-    //     let lat = latLng.lat();
-    //     let lng = latLng.lng();
-    //
-    //     this.setState(prevState => ({
-    //         locations: [...this.state.locations];
-    //         location[index] = {...locations[index], position: { lat, lng } };
-    //     });
-    //
-    //
-    // };
+
+    // TODO: Set location when marker is dragged (modify for multiple markers??)
+    onMarkerDragend = (e, index, coord) => {
+        let {latLng} = coord;
+        let lat = latLng.lat();
+        let lng = latLng.lng();
+        const location = coord.latLng;
+
+        console.log('New location: ' + lat + ' | ' + lng);
+
+        // (Update new location of marker -- only works for 1 FT)
+        this.setState(prevState => ({
+            // -1 resets array
+            locations: [...prevState.locations-1, location],
+            ftLat: lat,
+            ftLng: lng
+        }));
+
+    };
 
     render(){
         return(
             <div>
                 <Map google={this.props.google}
                      style={style}
-                     zoom={14}
+                     zoom={12}
                      initialCenter={{lat: this.state.centerLat, lng: this.state.centerLng}}
                      onClick={this.onMapClicked}
                      scrollwheel={true}
@@ -144,6 +178,8 @@ export class MapContainer extends React.Component {
                             key={index}
                             position={{lat: location.lat(), lng: location.lng()}}
                             name={'Your Food Truck!'}
+                            draggable={true}
+                            onDragend={(e, index, coord) => this.onMarkerDragend(e, index, coord)}
                         />
                         );
                 })}
@@ -156,12 +192,21 @@ export class MapContainer extends React.Component {
                         </div>
 
                     </InfoWindow>
+
+                    {/* TODO: Display nearby food trucks*/}
+                    {this.displayMarkers()}
+
+                    {console.log(this.state.locations[0] + this.state.locations[1])}
+                    {console.log(this.state.markers[0] + this.state.markers[1])}
+
+
+
                 </Map>
 
                 {/*Test truck lat (WORKS) */}
                 {/*{console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}*/}
 
-                {/*Test user location*/}
+                {/*Test user location (WORKS)*/}
                 {/*{console.log('user lat: ' + this.state.centerLat + ' | user lng: ' + this.state.centerLng)}*/}
             </div>
         );

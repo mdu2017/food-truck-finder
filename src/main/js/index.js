@@ -26,7 +26,6 @@ import { ViewFoodTruckDetails } from './foodtruck/ViewFTDetails';
 // System Pages
 import { HelpPage } from './HelpPage';
 import { AboutUs } from './AboutUs';
-import SimpleMap from 'js/Maps';
 
 export default class Index extends React.Component {
 	render() {

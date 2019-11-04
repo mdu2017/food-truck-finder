@@ -54,15 +54,11 @@ export class MapContainer extends React.Component {
         this.onMapClicked = this.onMapClicked.bind(this);
     }
 
-    // TODO: Sample function to display nearby food trucks
+    // Sample function to display nearby food trucks
     displayMarkers = () => {
         return this.state.markers.map((marker, index) => {
 
-            // TODO: assign latLng to position??
-            // const {latLng} = marker.coords;
-            // const location = marker.coords.latLng;
-
-            return <Marker key={index} icon={ViewMarker} position={{
+            return <Marker onClick={this.onMarkerClick} key={index} icon={ViewMarker} position={{
                 lat: marker.lat,
                 lng: marker.lng
             }}/>;
@@ -129,12 +125,13 @@ export class MapContainer extends React.Component {
     };
 
     //Opens info window when marker clicked
-    onMarkerClick = (props, marker, e) =>
+    onMarkerClick = (props, marker, e) => {
         this.setState({
             selectedPlace: props,
             activeMarker: marker,
             showingInfoWindow: true
         });
+    }
 
 
     // TODO: Set location when marker is dragged (modify for multiple markers??)
@@ -146,7 +143,7 @@ export class MapContainer extends React.Component {
 
         console.log('New location: ' + lat + ' | ' + lng);
 
-        // (Update new location of marker -- only works for 1 FT)
+        // TODO: (Update new location of marker -- only works for 1 FT)
         this.setState(prevState => ({
             // -1 resets array
             locations: [...prevState.locations-1, location],
@@ -183,6 +180,11 @@ export class MapContainer extends React.Component {
                         />
                         );
                 })}
+
+                    {/* TODO: Display nearby food trucks*/}
+                    {this.displayMarkers()}
+
+                    {/*Generates info windows for all markers (must be put after displayMarkers*/}
                     <InfoWindow id={'ftWindow'}
                         marker={this.state.activeMarker}
                         visible={this.state.showingInfoWindow}>
@@ -192,15 +194,6 @@ export class MapContainer extends React.Component {
                         </div>
 
                     </InfoWindow>
-
-                    {/* TODO: Display nearby food trucks*/}
-                    {this.displayMarkers()}
-
-                    {console.log(this.state.locations[0] + this.state.locations[1])}
-                    {console.log(this.state.markers[0] + this.state.markers[1])}
-
-
-
                 </Map>
 
                 {/*Test truck lat (WORKS) */}

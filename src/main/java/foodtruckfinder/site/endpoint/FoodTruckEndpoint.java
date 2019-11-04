@@ -76,10 +76,4 @@ public class FoodTruckEndpoint {
                      .map(FoodTruckDto.FTStatus::name)
                      .collect(Collectors.toList());
 	}
-
-	@GetMapping(value = "/recommendations", produces = "application/json")
-	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-														   double userlong) {
-		return foodTruckService.getRecommendations(userlat, userlong);
-	}
 }

@@ -51,7 +51,7 @@ export default class Index extends React.Component {
 					/>
 					<Route
 						exact
-						path="/food-truck-details"
+						path="/food-truck-details/:foodtruckID"
 						component={ViewFoodTruckDetails}
 					/>
 					<Route exact path="/search-users" component={SearchUsers} />

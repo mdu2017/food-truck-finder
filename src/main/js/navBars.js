@@ -17,7 +17,7 @@ import {
 	Container,
 	Row,
 	Col,
-	Badge
+	Badge, ListGroup, ListGroupItem
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -115,26 +115,11 @@ CustomNavBar = connect(() => ({
 export class SidebarNav extends React.Component {
 	constructor(props) {
 		super(props);
-		navigator.geolocation.getCurrentPosition(this.showPosition);
 		this.state = {
 			user: JSON.parse(Axios.getCookie('user')),
-			foodtrucks: JSON.parse(Axios.getCookie('recommendations'))
+			foodtrucks: []
 		};
-
-		console.log(this.state.foodtrucks);
-
-		if(Axios.getCookie('recommendations') !== null) {
-			var str;
-			var foodtrucks = JSON.parse(Axios.getCookie('recommendations'));
-			foodtrucks.forEach(function(name) {
-				str += '<div>' + name.name + '</div>';
-			});
-			document.getElementById('recommendations').innerHTML = str;
-		}
 	}
-
-	setUserlat = userlat => this.setState({ userlat });
-	setUserlong = userlong => this.setState({ userlong });
 
 	showPosition(position) {
 		Axios.getRecommendations(position.coords.latitude, position.coords.longitude).then(
@@ -142,6 +127,18 @@ export class SidebarNav extends React.Component {
 				document.cookie = 'recommendations=' + JSON.stringify(result) + '; path=/';
 			}
 		);
+	}
+
+	componentDidMount() {
+		navigator.geolocation.getCurrentPosition(this.showPosition);
+		let initialRecommendations = JSON.parse(Axios.getCookie('recommendations'));
+
+		this.setState({
+			foodtrucks: initialRecommendations
+		});
+
+		console.log(this.state.foodtrucks);
+		console.log(initialRecommendations);
 	}
 
 	render() {
@@ -186,9 +183,14 @@ export class SidebarNav extends React.Component {
 									<NavLink href="#/page-1">Page 1</NavLink>
 								</NavItem>
 							</Nav>
-							<h4>Recommendations</h4>
-							<div id="recommendations"></div>
-							<hr />
+							<div>
+								<h4>Recommendations</h4>
+								<Nav>
+									{this.state.foodtrucks.map((foodtruck, index) => {
+										return <NavLink key={index} href={'/#/food-truck-details/' + foodtruck.id}>{foodtruck.name}</NavLink>;
+									})}
+								</Nav>
+							</div>
 						</Col>
 					</Row>
 				</Container>

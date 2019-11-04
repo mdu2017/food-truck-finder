@@ -28,7 +28,7 @@ export function viewUser(username) {
 }
 
 export function getRecommendations(userlat, userlong) {
-	return axios.get('/api/food-truck/recommendations', {
+	return axios.get('/unsecure/recommendations', {
 		params: {
 			userlat: userlat,
 			userlong: userlong

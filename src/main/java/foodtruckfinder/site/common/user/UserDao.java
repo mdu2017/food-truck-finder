@@ -58,7 +58,7 @@ public class UserDao {
 
     /*Same as findUserByPrincipal but searches by Username*/
 	public Optional<UserDto> findUserByUsername(String username) {
-		String sql = "SELECT * FROM `USER` WHERE USERNAME = :username";
+		String sql = "SELECT * FROM USER WHERE USERNAME = :username";
 
 		Map<String, ?> parameters = _Maps.map("username", username);
 

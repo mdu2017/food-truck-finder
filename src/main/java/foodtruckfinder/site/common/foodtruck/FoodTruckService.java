@@ -32,8 +32,8 @@ public class FoodTruckService {
 	 * @param truck_id the truck id
 	 * @param user_id the user id
 	 */
-	public void subscribe(String truck_id, String user_id) {
-		foodTruckDao.subscribe(Long.parseLong(truck_id), Long.parseLong(user_id));
+	public void subscribe(Long truck_id, Long user_id) {
+		foodTruckDao.subscribe(truck_id, user_id);
 	}
 
 	/**
@@ -41,7 +41,7 @@ public class FoodTruckService {
 	 * @param id the truck id
 	 * @return the list of usernames of people who are subscribed
 	 */
-	public List<String> getSubscribers(String id) { return foodTruckDao.getSubscribers(Long.parseLong(id)); }
+	public List<String> getSubscribers(Long id) { return foodTruckDao.getSubscribers(id); }
 
 	/**
 	 * This returns a list of food trucks owned by the given owner id

@@ -131,14 +131,13 @@ export class SidebarNav extends React.Component {
 
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(this.showPosition);
-		let initialRecommendations = JSON.parse(Axios.getCookie('recommendations'));
 
 		this.setState({
-			foodtrucks: initialRecommendations
+			foodtrucks: JSON.parse(Axios.getCookie('recommendations'))
 		});
 
 		console.log(this.state.foodtrucks);
-		console.log(initialRecommendations);
+		console.log(JSON.parse(Axios.getCookie('recommendations')));
 	}
 
 	render() {
@@ -185,11 +184,14 @@ export class SidebarNav extends React.Component {
 							</Nav>
 							<div>
 								<h4>Recommendations</h4>
-								<Nav>
-									{this.state.foodtrucks.map((foodtruck, index) => {
-										return <NavLink key={index} href={'/#/food-truck-details/' + foodtruck.id}>{foodtruck.name}</NavLink>;
-									})}
-								</Nav>
+								{this.state.foodtrucks ? (
+									<Nav>
+										{this.state.foodtrucks.map((foodtruck, index) => {
+											return <NavLink key={index}
+															href={'/#/food-truck-details/' + foodtruck.id}>{foodtruck.name}</NavLink>;
+										})}
+									</Nav>
+								) : null}
 							</div>
 						</Col>
 					</Row>

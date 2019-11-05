@@ -7,8 +7,8 @@ import ViewMarker from 'js/images/food_truck_existing.png';
 // Currently in dashboard and Create food truck page
 
 const style = {
-    width: '50%',
-    height: '50%',
+    width: '65%',
+    height: '65%',
 };
 
 export class MapContainer extends React.Component {

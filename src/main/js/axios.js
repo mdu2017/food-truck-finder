@@ -15,8 +15,12 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+// Multivalue axios post
 export function notifyUsers(message, truck_id) {
-	return axios.post('api/food-truck/notifyUsers', message, truck_id);
+	return axios.post('api/food-truck/notifyUsers', {
+		message: message,
+		truck_id: truck_id
+	});
 }
 
 export function getFoodTypes() {

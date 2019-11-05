@@ -46,7 +46,7 @@ public class FoodTruckEndpoint {
 	}
 
 	@PostMapping(value = "/notifyUsers", produces = "application/json")
-	public void notifyUsers(@RequestParam("message") String message,@RequestParam("truck_id") String truck_id) {
+	public void notifyUsers(String message, String truck_id) {
 		System.out.println("Endpoint");
 		System.out.println(truck_id);
 		System.out.println(message);

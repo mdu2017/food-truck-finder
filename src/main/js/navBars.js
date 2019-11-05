@@ -62,7 +62,7 @@ export class CustomNavBar extends React.Component {
 							tag={Link}
 							to="/list-food-trucks"
 							hidden={this.state.user.isOwner !== true}>
-							Edit Food Trucks
+							Manage Trucks
 						</DropdownItem>
 						<DropdownItem
 							tag={Link}

@@ -1,23 +1,59 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import { ListGroup, ListGroupItem } from 'reactstrap';
+import Bell from 'js/images/notificationBell.png';
+import {
+	ListGroup,
+	ListGroupItem,
+	Button,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter,
+	Input
+} from 'reactstrap';
 
 export class OwnedFoodTrucks extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			owner_id: JSON.parse(Axios.getCookie('user')).id,
-			trucks: []
+			trucks: [],
+			modal: false,
+			notificationMessage: null,
+			truck_id: null
 		};
+		this.toggle = this.toggle.bind(this);
+		this.handleModalSubmit = this.handleModalSubmit.bind(this);
 	}
+
+	setMessage = notificationMessage => this.setState({ notificationMessage });
 
 	componentWillMount() {
 		Axios.getFoodTrucksByOwner(this.state.owner_id).then(result => {
 			this.setState({ trucks: result });
+			result.map((truck, index) => (
+				<li key={index}>{this.setState({ truck_id: truck.id })}</li>
+			));
 		});
 	}
+
+	toggle() {
+		this.setState({
+			modal: !this.state.modal
+		});
+	}
+
+	handleModalSubmit = event => {
+		this.toggle();
+		this.props.notifyUsers({
+			message: this.state.notificationMessage,
+			truck_id: this.state.truck_id
+		});
+		event.preventDefault();
+	};
 
 	renderFoodTrucks() {
 		return (
@@ -27,9 +63,23 @@ export class OwnedFoodTrucks extends React.Component {
 						{this.state.trucks.map((truck, index) => (
 							<ListGroup key={index}>
 								<ListGroupItem>
+									{truck.name}{' '}
 									<Link to={`/edit-food-truck/${truck.id}`}>
-										{truck.name}
-									</Link>
+										<Button color="primary" size="sm">
+											Edit
+										</Button>
+									</Link>{' '}
+									<Button
+										color="info"
+										size="sm"
+										onClick={this.toggle}>
+										<img
+											src={Bell}
+											width={20}
+											height={20}
+											mode="fit"
+										/>
+									</Button>
 								</ListGroupItem>
 							</ListGroup>
 						))}
@@ -46,6 +96,38 @@ export class OwnedFoodTrucks extends React.Component {
 		);
 	}
 
+	renderModal() {
+		return (
+			<div>
+				<Modal isOpen={this.state.modal}>
+					<form onSubmit={this.handleModalSubmit}>
+						<ModalHeader>Notify Subscribers</ModalHeader>
+						<ModalBody>
+							<Input
+								type="textarea"
+								name="text"
+								id="exampleText"
+								placeholder="Limited to 300 characters."
+								onChange={e => this.setMessage(e.target.value)}
+							/>
+						</ModalBody>
+						<ModalFooter>
+							<input
+								type="submit"
+								value="Submit"
+								color="primary"
+								className="btn btn-primary"
+							/>
+							<Button color="danger" onClick={this.toggle}>
+								Cancel
+							</Button>
+						</ModalFooter>
+					</form>
+				</Modal>
+			</div>
+		);
+	}
+
 	render() {
 		return (
 			<div>
@@ -54,7 +136,26 @@ export class OwnedFoodTrucks extends React.Component {
 					<h1>Your Food Trucks</h1>
 					{this.renderFoodTrucks()}
 				</div>
+				{this.renderModal()}
 			</div>
 		);
 	}
 }
+OwnedFoodTrucks = connect(
+	() => ({}),
+	dispatch => ({
+		notifyUsers: notification =>
+			dispatch(
+				Axios.Actions.notifyUsers(
+					notification.message,
+					notification.truck_id
+				)
+			)
+				// Success
+				.then(function(result) {
+					window.alert('Notification was sent successfully!');
+				})
+				// Failed
+				.catch(error => window.alert('Failed to send notification!'))
+	})
+)(OwnedFoodTrucks);

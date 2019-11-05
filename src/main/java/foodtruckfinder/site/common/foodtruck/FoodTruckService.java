@@ -6,6 +6,7 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * If this is your first time looking at Spring Services, check out the detailed explanation in UserService first.
@@ -49,5 +50,11 @@ public class FoodTruckService {
 	 */
 	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id) {
 		return foodTruckDao.getByOwner(owner_id);
+	}
+
+	public void notifyUsers(String message,String truck_id) {
+		System.out.println("System");
+		System.out.println(truck_id);
+		foodTruckDao.notifyUsers(message, Long.parseLong(truck_id));
 	}
 }

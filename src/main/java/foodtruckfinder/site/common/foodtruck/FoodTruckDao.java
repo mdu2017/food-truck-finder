@@ -2,6 +2,7 @@ package foodtruckfinder.site.common.foodtruck;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -434,5 +435,16 @@ public class FoodTruckDao {
 		}
 
 		return Optional.ofNullable(trucks);
+	}
+
+	public void notifyUsers(String message, Long truck_id) {
+		long user_id = 1;
+		int viewed = 0;
+		LocalTime localTime = LocalTime.now();
+		String sql = "INSERT INTO NOTIFICATION " +
+				"(TRUCK_ID, USER_ID, MESSAGE, SENT, VIEWED) VALUES " +
+				"(:truck_id, :user_id, :message, :sent, :viewed)";
+		Map<String, ?> params = _Maps.map("truck_id", truck_id, "user_id", user_id,"message", message, "sent", localTime, "viewed", viewed);
+		jdbcTemplate.update(sql, params);
 	}
 }

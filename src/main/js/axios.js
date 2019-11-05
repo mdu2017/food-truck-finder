@@ -15,6 +15,10 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+export function notifyUsers(message, truck_id) {
+	return axios.post('api/food-truck/notifyUsers', message, truck_id);
+}
+
 export function getFoodTypes() {
 	return axios.get('/api/food-truck/getFoodTypes');
 }
@@ -129,6 +133,12 @@ Actions.register = user => {
 Actions.createFT = foodTruck => {
 	return () => {
 		return createFoodTruck(foodTruck);
+	};
+};
+
+Actions.notifyUsers = (message, truck_id) => {
+	return () => {
+		return notifyUsers(message, truck_id);
 	};
 };
 

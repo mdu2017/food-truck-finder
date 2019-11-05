@@ -58,7 +58,7 @@ public class FoodTruckService {
      * @param message what you want to say
      * @param ownerID The owner's ID
      */
-	public void sendNotification(String message, Long ownerID){
-        foodTruckDao.sendNotification(message, ownerID);
+	public void sendNotification(String message, Long foodTruckId){
+        foodTruckDao.sendNotification(message, foodTruckId);
 	}
 }

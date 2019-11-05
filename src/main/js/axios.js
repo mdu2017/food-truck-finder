@@ -16,10 +16,11 @@ export function createFoodTruck(foodTruck) {
 }
 
 // Multivalue axios post
-export function notifyUsers(message, truck_id) {
-	return axios.post('api/food-truck/notifyUsers', {
+export function sendNotification(message, foodTruckId) {
+	console.log(message);
+	return axios.post('api/food-truck/send-notification', {
 		message: message,
-		truck_id: truck_id
+		foodTruckId: foodTruckId
 	});
 }
 
@@ -140,9 +141,9 @@ Actions.createFT = foodTruck => {
 	};
 };
 
-Actions.notifyUsers = (message, truck_id) => {
+Actions.sendNotification = (message, foodTruckId) => {
 	return () => {
-		return notifyUsers(message, truck_id);
+		return sendNotification(message, foodTruckId);
 	};
 };
 

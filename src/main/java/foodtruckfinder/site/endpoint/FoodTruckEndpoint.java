@@ -50,14 +50,6 @@ public class FoodTruckEndpoint {
 		foodTruckService.subscribe(ftid, userid);
 	}
 
-	@PostMapping(value = "/notifyUsers", produces = "application/json")
-	public void notifyUsers(String message, String truck_id) {
-		System.out.println("Endpoint");
-		System.out.println(truck_id);
-		System.out.println(message);
-		foodTruckService.notifyUsers(message,truck_id);
-	}
-
 	/**
 	 * This function returns a list of food trucks based on an owner id
 	 * @param owner_id the owner to retrieve food trucks for
@@ -92,6 +84,7 @@ public class FoodTruckEndpoint {
 
 	@PostMapping(value = "/send-notification", produces = "application/json" )
 	public void sendNotification(String message, Long foodTruckId){
+		System.out.println(foodTruckId);
 		foodTruckService.sendNotification(message, foodTruckId);
 	}
 }

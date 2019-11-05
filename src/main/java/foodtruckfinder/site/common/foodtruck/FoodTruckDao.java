@@ -403,11 +403,11 @@ public class FoodTruckDao {
 	 * @param truck_id the truck to retrieve subscribers for
 	 * @return the list of subscribers to a particular food truck
 	 */
-	public List<String> getSubscribers(Long truck_id){
+	public List<String> getSubscribers(Long foodTruckId){
 		String sql = "SELECT username FROM SUBSCRIPTIONS, USER WHERE " +
-				"SUBSCRIPTIONS.USER_ID = USER.USER_ID AND TRUCK_ID = :truck_id";
+				"SUBSCRIPTIONS.USER_ID = USER.USER_ID AND TRUCK_ID = :foodTruckId";
 
-		Map<String, ?> params = _Maps.map("truck_id", truck_id);
+		Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId);
 		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("username"));
 	}
 
@@ -440,19 +440,19 @@ public class FoodTruckDao {
 		return Optional.ofNullable(trucks);
 	}
 
-	public void sendNotification(String message, Long ownerID){
+	public void sendNotification(String message, Long foodTruckId){
 		LocalDateTime sent;
 		Long userID;
 		String sql = "INSERT INTO NOTIFICATION " +
 		"(TRUCK_ID, USER_ID, MESSAGE, SENT) VALUES " +
-		"(:ownerID, (SELECT User_ID FROM User WHERE username = :username), :message, NOW())";
+		"(:foodTruckId, (SELECT User_ID FROM User WHERE username = :username), :message, NOW())";
 
-		List<String> subscribers = getSubscribers(ownerID);
+		List<String> subscribers = getSubscribers(foodTruckId);
 		for(String subscriber: subscribers){
 			sent = LocalDateTime.now();
 //			Optional<UserDto> curUser = users.findUserByUsername(subscriber);
 //			userID = curUser.get().getId();
-			Map<String, ?> params = _Maps.map("ownerID", ownerID, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
+			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
         	jdbcTemplate.update(sql, params);
 		}
 	}

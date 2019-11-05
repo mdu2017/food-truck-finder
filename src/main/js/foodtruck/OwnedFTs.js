@@ -23,7 +23,7 @@ export class OwnedFoodTrucks extends React.Component {
 			trucks: [],
 			modal: false,
 			notificationMessage: null,
-			truck_id: null
+			foodTruckId: null
 		};
 		this.toggle = this.toggle.bind(this);
 		this.handleModalSubmit = this.handleModalSubmit.bind(this);
@@ -35,7 +35,7 @@ export class OwnedFoodTrucks extends React.Component {
 		Axios.getFoodTrucksByOwner(this.state.owner_id).then(result => {
 			this.setState({ trucks: result });
 			result.map((truck, index) => (
-				<li key={index}>{this.setState({ truck_id: truck.id })}</li>
+				<li key={index}>{this.setState({ foodTruckId: truck.id })}</li>
 			));
 		});
 	}
@@ -48,9 +48,10 @@ export class OwnedFoodTrucks extends React.Component {
 
 	handleModalSubmit = event => {
 		this.toggle();
+		// console.log(this.state.foodTruckId);
 		this.props.notifyUsers({
 			message: this.state.notificationMessage,
-			truck_id: this.state.truck_id
+			foodTruckId: this.state.foodTruckId
 		});
 		event.preventDefault();
 	};
@@ -146,9 +147,9 @@ OwnedFoodTrucks = connect(
 	dispatch => ({
 		notifyUsers: notification =>
 			dispatch(
-				Axios.Actions.notifyUsers(
+				Axios.Actions.sendNotification(
 					notification.message,
-					notification.truck_id
+					notification.foodTruckId
 				)
 			)
 				// Success

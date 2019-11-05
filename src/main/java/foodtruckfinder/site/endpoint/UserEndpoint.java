@@ -112,8 +112,8 @@ public class UserEndpoint {
 		return userService.getOwnedFoodTrucks(id);
 	}
 
-	@GetMapping(value = "/getNotifications", produces = "application/json")
-	public Optional<List<String>> getNotifications(Long userId){
-		return userService.getNotifications(userId);
-	}
+//	@GetMapping(value = "/getNotifications", produces = "application/json")
+//	public Optional<List<String>> getNotifications(Long userId){
+//		return userService.getNotifications(userId);
+//	}
 }

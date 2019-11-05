@@ -208,7 +208,7 @@ public class UserService {
 
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id) { return userDao.getOwnedFoodTrucks(id); }
 
-	public Optional<List<String>> getNotifications(Long userId){
-		return userDao.getNotifications(userId);
-	}
+//	public Optional<List<String>> getNotifications(Long userId){
+//		return userDao.getNotifications(userId);
+//	}
 }

@@ -145,10 +145,10 @@ public class UserDao {
 	}
 
 	public Optional<List<String>> getNotifications(Long userId){
-		String sql = "SELECT message FROM NOTIFICATIONS WHERE" +
+		String sql = "SELECT message FROM NOTIFICATION WHERE " +
 					 "USER_ID = :userId";
 
 		Map<String, ?> params = _Maps.map("userId", userId);
-		return jdbcTemplate.query(sql, params);
+		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("message")));
 	}
 }

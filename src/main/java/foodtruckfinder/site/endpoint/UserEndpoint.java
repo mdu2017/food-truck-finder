@@ -63,18 +63,6 @@ public class UserEndpoint {
 		return userService.findUserByPrincipal(principal);
 	}
 
-	@GetMapping(value = "/{username}", produces = "application/json")
-	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
-		Optional<UserDto> temp = userService.findUserByUsername(username);
-
-		if(temp.isPresent()){
-			UserDto user = temp.get();
-			user.setPrincipal("");//protect email
-		}
-
-		return temp;
-	}
-
 	/**
 	 * Returns id = -1 for incorrect username, -2 for incorrect principle/email
 	 *

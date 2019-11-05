@@ -17,7 +17,7 @@ import {
 	Container,
 	Row,
 	Col,
-	Badge
+	Badge, ListGroup, ListGroupItem
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -116,8 +116,28 @@ export class SidebarNav extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			user: JSON.parse(Axios.getCookie('user'))
+			user: JSON.parse(Axios.getCookie('user')),
+			foodtrucks: []
 		};
+	}
+
+	showPosition(position) {
+		Axios.getRecommendations(position.coords.latitude, position.coords.longitude).then(
+			function(result) {
+				document.cookie = 'recommendations=' + JSON.stringify(result) + '; path=/';
+			}
+		);
+	}
+
+	componentDidMount() {
+		navigator.geolocation.getCurrentPosition(this.showPosition);
+
+		this.setState({
+			foodtrucks: JSON.parse(Axios.getCookie('recommendations'))
+		});
+
+		console.log(this.state.foodtrucks);
+		console.log(JSON.parse(Axios.getCookie('recommendations')));
 	}
 
 	render() {
@@ -126,7 +146,7 @@ export class SidebarNav extends React.Component {
 				<Container>
 					<Row>
 						<Col xs="3">
-							<p>Quick Links</p>
+							<h4>Quick Links</h4>
 							<hr />
 							<Nav vertical>
 								<NavItem>
@@ -162,6 +182,17 @@ export class SidebarNav extends React.Component {
 									<NavLink href="#/page-1">Page 1</NavLink>
 								</NavItem>
 							</Nav>
+							<div>
+								<h4>Recommendations</h4>
+								{this.state.foodtrucks ? (
+									<Nav>
+										{this.state.foodtrucks.map((foodtruck, index) => {
+											return <NavLink key={index}
+															href={'/#/food-truck-details/' + foodtruck.id}>{foodtruck.name}</NavLink>;
+										})}
+									</Nav>
+								) : null}
+							</div>
 						</Col>
 					</Row>
 				</Container>

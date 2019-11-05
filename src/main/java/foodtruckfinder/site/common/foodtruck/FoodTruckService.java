@@ -61,4 +61,9 @@ public class FoodTruckService {
 	public void sendNotification(String message, Long foodTruckId){
         foodTruckDao.sendNotification(message, foodTruckId);
 	}
+
+	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
+														   double userlong) {
+		return foodTruckDao.getRecommendations(userlat, userlong);
+	}
 }

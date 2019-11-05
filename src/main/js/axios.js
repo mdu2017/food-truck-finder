@@ -32,6 +32,19 @@ export function getStatuses() {
 	return axios.get('/api/food-truck/getStatusNames');
 }
 
+export function viewUser(username) {
+	return axios.get('/unsecure/user/' + username);
+}
+
+export function getRecommendations(userlat, userlong) {
+	return axios.get('/unsecure/recommendations', {
+		params: {
+			userlat: userlat,
+			userlong: userlong
+		}
+	});
+}
+
 // export function makeFT(name, status) {
 // 	return axios({
 // 		method: 'post',
@@ -230,6 +243,15 @@ Actions.setFoodTruck = foodTruck => {
 
 Actions.setUser = user => {
 	return { type: Actions.Types.SET_USER, user };
+};
+
+Actions.viewUser = username => {
+	return () => {
+		return viewUser(username).then(user => {
+			document.cookie = 'searchedUser=' + user + '; path=/';
+			window.alert(document.cookie);
+		});
+	};
 };
 
 export { Actions };

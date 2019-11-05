@@ -162,6 +162,7 @@ export class MapContainer extends React.Component {
                      initialCenter={{lat: this.state.centerLat, lng: this.state.centerLng}}
                      onClick={this.onMapClicked}
                      scrollwheel={true}
+                     scaleControl={true}
                 >
 
                 {/*Info marker working*/}

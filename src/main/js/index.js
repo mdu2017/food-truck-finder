@@ -1,6 +1,8 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import * as Pages from './TestingPages';
+import { Link } from 'react-router-dom';
+
 // User Pages
 import { ViewProfile } from './user/ViewProfile';
 import { Dashboard } from './user/Dashboard';
@@ -89,6 +91,7 @@ export default class Index extends React.Component {
 					<Route exact path="/page-1" component={Pages.Page1} />
 					<Route exact path="/hello" component={Pages.HelloSend} />
 					<Route exact path="/wolf" component={Pages.ViewUser} />
+
 				</div>
 			</HashRouter>
 		);

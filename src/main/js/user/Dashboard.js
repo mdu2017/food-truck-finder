@@ -2,6 +2,12 @@ import React from 'react';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 
+// const divStyle = {
+// 	flex: 1,
+// 	flexDirection: 'column',
+// 	justifyContent: 'flex-start',
+// };
+
 export class Dashboard extends React.Component {
 	constructor(props) {
 		super(props);

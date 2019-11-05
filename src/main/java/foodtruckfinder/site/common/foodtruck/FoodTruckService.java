@@ -4,6 +4,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -32,8 +33,8 @@ public class FoodTruckService {
 	 * @param truck_id the truck id
 	 * @param user_id the user id
 	 */
-	public void subscribe(String truck_id, String user_id) {
-		foodTruckDao.subscribe(Long.parseLong(truck_id), Long.parseLong(user_id));
+	public void subscribe(Long truck_id, Long user_id) {
+		foodTruckDao.subscribe(truck_id, user_id);
 	}
 
 	/**
@@ -41,7 +42,7 @@ public class FoodTruckService {
 	 * @param id the truck id
 	 * @return the list of usernames of people who are subscribed
 	 */
-	public List<String> getSubscribers(String id) { return foodTruckDao.getSubscribers(Long.parseLong(id)); }
+	public List<String> getSubscribers(Long id) { return foodTruckDao.getSubscribers(id); }
 
 	/**
 	 * This returns a list of food trucks owned by the given owner id
@@ -52,9 +53,12 @@ public class FoodTruckService {
 		return foodTruckDao.getByOwner(owner_id);
 	}
 
-	public void notifyUsers(String message,String truck_id) {
-		System.out.println("System");
-		System.out.println(truck_id);
-		foodTruckDao.notifyUsers(message, Long.parseLong(truck_id));
+    /**
+     * send a message to all the owner's subscribers
+     * @param message what you want to say
+     * @param ownerID The owner's ID
+     */
+	public void sendNotification(String message, Long ownerID){
+        foodTruckDao.sendNotification(message, ownerID);
 	}
 }

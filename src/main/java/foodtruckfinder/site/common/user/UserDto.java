@@ -3,6 +3,7 @@ package foodtruckfinder.site.common.user;
 import java.util.List;
 import java.util.Map;
 
+import foodtruckfinder.site.common.External.Notification;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import alloy.util.Momento;

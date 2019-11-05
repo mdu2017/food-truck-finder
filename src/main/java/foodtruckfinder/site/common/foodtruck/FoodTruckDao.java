@@ -2,7 +2,8 @@ package foodtruckfinder.site.common.foodtruck;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalTime;
+import java.sql.Timestamp;
+import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -11,6 +12,8 @@ import java.util.Optional;
 import java.util.*;
 
 import alloy.util.Tuple;
+import foodtruckfinder.site.common.user.UserDao;
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
@@ -405,7 +408,7 @@ public class FoodTruckDao {
 				"SUBSCRIPTIONS.USER_ID = USER.USER_ID AND TRUCK_ID = :truck_id";
 
 		Map<String, ?> params = _Maps.map("truck_id", truck_id);
-		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("user_id"));
+		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("username"));
 	}
 
 	/**
@@ -437,14 +440,20 @@ public class FoodTruckDao {
 		return Optional.ofNullable(trucks);
 	}
 
-	public void notifyUsers(String message, Long truck_id) {
-		long user_id = 1;
-		int viewed = 0;
-		LocalTime localTime = LocalTime.now();
+	public void sendNotification(String message, Long ownerID){
+		LocalDateTime sent;
+		Long userID;
 		String sql = "INSERT INTO NOTIFICATION " +
-				"(TRUCK_ID, USER_ID, MESSAGE, SENT, VIEWED) VALUES " +
-				"(:truck_id, :user_id, :message, :sent, :viewed)";
-		Map<String, ?> params = _Maps.map("truck_id", truck_id, "user_id", user_id,"message", message, "sent", localTime, "viewed", viewed);
-		jdbcTemplate.update(sql, params);
+		"(TRUCK_ID, USER_ID, MESSAGE, SENT) VALUES " +
+		"(:ownerID, (SELECT User_ID FROM User WHERE username = :username), :message, NOW())";
+
+		List<String> subscribers = getSubscribers(ownerID);
+		for(String subscriber: subscribers){
+			sent = LocalDateTime.now();
+//			Optional<UserDto> curUser = users.findUserByUsername(subscriber);
+//			userID = curUser.get().getId();
+			Map<String, ?> params = _Maps.map("ownerID", ownerID, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
+        	jdbcTemplate.update(sql, params);
+		}
 	}
 }

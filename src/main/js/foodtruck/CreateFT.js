@@ -31,11 +31,19 @@ export class CreateFoodTruck extends React.Component {
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
 			weekdayCounter: [0, 0, 0, 0, 0, 0, 0],
-			weekdayStops: Array(7)
-				.fill(0)
-				.map(row => new Array(0)),
-			modal: false,
-			temp: null
+			schedule: [
+				// {
+				// 	day: '',
+				// 	stop: [
+				// 		{
+				// 			startTime: '',
+				// 			endTime: '',
+				// 			location: [{ lat: '', long: '' }]
+				// 		}
+				// 	]
+				// }
+			],
+			modal: false
 		};
 		// Make Dynamic Page
 		window.location.href = '/?#/create-food-truck/';
@@ -48,7 +56,7 @@ export class CreateFoodTruck extends React.Component {
 	setName = name => this.setState({ name });
 	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
-	// setSchedule = schedule => this.setState({ schedule });
+	setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
 	setPriceHigh = price_high => this.setState({ price_high });
 	setStatus = status => this.setState({ status });
@@ -88,10 +96,10 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	handleModalSubmit(event) {
+	handleModalSubmit = event => {
 		this.toggle();
 		event.preventDefault();
-	}
+	};
 
 	// Promise value return
 	getFoodTypes() {
@@ -119,112 +127,65 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	addStop(dayofTheWeek, type, value) {
-		// Remove Repeat to get Day of the week
-		if (dayofTheWeek.includes('Repeat')) {
-			dayofTheWeek = dayofTheWeek.split('/').pop();
-		}
-		const newArray = this.state.weekdayStops.slice();
-		var time = '';
-		if (type == 'ST') {
-			this.setState({ temp: value });
-		} else if (type == 'ET') {
-			if (this.state.temp != null) {
-				time = this.state.temp + '-' + value;
-				switch (dayofTheWeek) {
-					case 'Sunday':
-						newArray[0].push(time);
-						break;
-					case 'Monday':
-						newArray[1].push(time);
-						break;
-					case 'Tuesday':
-						newArray[2].push(time);
-						break;
-					case 'Wednesday':
-						newArray[3].push(time);
-						break;
-					case 'Thursday':
-						newArray[4].push(time);
-						break;
-					case 'Friday':
-						newArray[5].push(time);
-						break;
-					case 'Saturday':
-						newArray[6].push(time);
-				}
-			}
-		}
-		this.setState({
-			weekdayStops: newArray
+	editStop(index, sTime, eTime, lat, long) {
+		let edited = JSON.parse(JSON.stringify(this.state.schedule));
+		edited[index].stop.push({
+			id: index + this.state.weekdayCounter[index],
+			startTime: sTime,
+			endTime: eTime,
+			location: [{ lat: lat, long: long }]
 		});
-		console.log(this.state.weekdayStops);
+		this.setState({
+			schedule: edited
+		});
+		{
+			console.log(this.state.schedule);
+		}
 	}
 
-	addStopDisplay(dayofTheWeek) {
+	incrementSchedule(dayOfTheWeek, index) {
+		let i = 0;
+		if ((dayOfTheWeek == 'Thursday') | (dayOfTheWeek == 'Saturday')) {
+			i = 3;
+		}
+		if (!(index in this.state.schedule)) {
+			this.state.schedule.push({
+				day: dayOfTheWeek.charAt(i).toUpperCase(),
+				stop: [
+					// {
+					// 	startTime: null,
+					// 	endTime: null,
+					// 	location: [{ lat: null, long: null }]
+					// }
+				]
+			});
+			console.log(this.state.schedule);
+		}
+	}
+
+	addStopClicked(dayOfTheWeek, index) {
 		// Copies array
 		const newArray = this.state.weekdayCounter.slice();
-		switch (dayofTheWeek) {
-			case 'Sunday':
-				newArray[0] = newArray[0] + 1;
-				break;
-			case 'Monday':
-				newArray[1] = newArray[1] + 1;
-				break;
-			case 'Tuesday':
-				newArray[2] = newArray[2] + 1;
-				break;
-			case 'Wednesday':
-				newArray[3] = newArray[3] + 1;
-				break;
-			case 'Thursday':
-				newArray[4] = newArray[4] + 1;
-				break;
-			case 'Friday':
-				newArray[5] = newArray[5] + 1;
-				break;
-			case 'Saturday':
-				newArray[6] = newArray[6] + 1;
-		}
+		newArray[index] = newArray[index] + 1;
 		this.setState({
 			weekdayCounter: newArray
 		});
 	}
 
-	dynamicRender(dayofTheWeek) {
+	dynamicRender(index) {
 		var divList = [];
-		var i = 0;
-		switch (dayofTheWeek) {
-			case 'Sunday':
-				i = 0;
-				break;
-			case 'Monday':
-				i = 1;
-				break;
-			case 'Tuesday':
-				i = 2;
-				break;
-			case 'Wednesday':
-				i = 3;
-				break;
-			case 'Thursday':
-				i = 4;
-				break;
-			case 'Friday':
-				i = 5;
-				break;
-			case 'Saturday':
-				i = 6;
-		}
-		for (var j = 0; j < this.state.weekdayCounter[i]; j++) {
-			divList.push(
-				<div>{this.displaySchedule('Repeat/' + dayofTheWeek)}</div>
-			);
+		for (var j = 0; j < this.state.weekdayCounter[index]; j++) {
+			divList.push(<div>{this.displaySchedule('Repeat')}</div>);
 		}
 		return divList;
 	}
 
-	displaySchedule(dayofTheWeek) {
+	displaySchedule(dayofTheWeek, index) {
+		if (Object.keys(this.state.schedule).length < 7) {
+			{
+				this.incrementSchedule(dayofTheWeek, index);
+			}
+		}
 		return (
 			<div>
 				<Container>
@@ -249,10 +210,10 @@ export class CreateFoodTruck extends React.Component {
 										name="time"
 										id="StartTime"
 										onChange={e =>
-											this.addStop(
+											this.editStop(
 												dayofTheWeek,
-												'ST',
-												e.target.value
+												e.target.value,
+												-1
 											)
 										}
 									/>
@@ -262,10 +223,12 @@ export class CreateFoodTruck extends React.Component {
 										name="time"
 										id="EndTime"
 										onChange={e =>
-											this.addStop(
-												dayofTheWeek,
-												'ET',
-												e.target.value
+											this.editStop(
+												index,
+												-1,
+												e.target.value,
+												'null',
+												'null'
 											)
 										}
 									/>
@@ -286,24 +249,25 @@ export class CreateFoodTruck extends React.Component {
 						</Col>
 						<Col xs="auto">
 							<Form inline>
-								<FormGroup
-									hidden={dayofTheWeek.includes('Repeat')}>
+								<FormGroup>
 									<Input type="checkbox" />
 									Closed?
 								</FormGroup>
 							</Form>
 						</Col>
-						<Col xs="auto">
+						<Col xs="auto" hidden={dayofTheWeek.includes('Repeat')}>
 							<Form inline>
 								<FormGroup>
 									<Button
 										type="submit"
-										hidden={dayofTheWeek.includes('Repeat')}
 										color="primary"
 										size="sm"
-										onClick={() => {
-											this.addStopDisplay(dayofTheWeek);
-										}}>
+										onClick={() =>
+											this.addStopClicked(
+												dayofTheWeek,
+												index
+											)
+										}>
 										Add Stop
 									</Button>
 								</FormGroup>
@@ -311,6 +275,7 @@ export class CreateFoodTruck extends React.Component {
 						</Col>
 					</Row>
 				</Container>
+				{this.dynamicRender(index)}
 			</div>
 		);
 	}
@@ -408,20 +373,13 @@ export class CreateFoodTruck extends React.Component {
 						</FormGroup>
 					</Form>
 					<legend>Schedule</legend>
-					{this.displaySchedule('Sunday')}
-					{this.dynamicRender('Sunday')}
-					{this.displaySchedule('Monday')}
-					{this.dynamicRender('Monday')}
-					{this.displaySchedule('Tuesday')}
-					{this.dynamicRender('Tuesday')}
-					{this.displaySchedule('Wednesday')}
-					{this.dynamicRender('Wednesday')}
-					{this.displaySchedule('Thursday')}
-					{this.dynamicRender('Thursday')}
-					{this.displaySchedule('Friday')}
-					{this.dynamicRender('Friday')}
-					{this.displaySchedule('Saturday')}
-					{this.dynamicRender('Saturday')}
+					{this.displaySchedule('Sunday', 0)}
+					{this.displaySchedule('Monday', 1)}
+					{this.displaySchedule('Tuesday', 2)}
+					{this.displaySchedule('Wednesday', 3)}
+					{this.displaySchedule('Thursday', 4)}
+					{this.displaySchedule('Friday', 5)}
+					{this.displaySchedule('Saturday', 6)}
 					<Button onClick={this.handleSubmit}>Submit</Button>
 				</div>
 				<div>
@@ -453,61 +411,10 @@ CreateFoodTruck = connect(
 		createFT: foodTruck =>
 			dispatch(Axios.Actions.createFT(foodTruck))
 				// Success
-				.then(function(result) {
+				.then(function() {
 					window.alert('Creation of the Food Truck was successful!');
 				})
 				// Failed
-				.catch(error =>
-					window.alert('Creation of the Food Truck failed!')
-				)
+				.catch(() => window.alert('Creation of the Food Truck failed!'))
 	})
 )(CreateFoodTruck);
-
-export class ModalComponent extends React.Component {
-	constructor(props) {
-		super(props);
-		this.state = { modal: false, name: '', team: '', country: '' };
-
-		this.toggle = this.toggle.bind(this);
-		this.handleSubmit = this.handleSubmit.bind(this);
-	}
-
-	toggle() {
-		this.setState({
-			modal: !this.state.modal
-		});
-	}
-
-	handleSubmit(event) {
-		console.log('this');
-		this.toggle();
-		event.preventDefault();
-	}
-
-	render() {
-		return (
-			<div>
-				<Button color="success" onClick={this.toggle}>
-					React Modal
-				</Button>
-				<Modal isOpen={this.state.modal}>
-					<form onSubmit={this.handleSubmit}>
-						<ModalHeader>IPL 2018</ModalHeader>
-						<ModalBody></ModalBody>
-						<ModalFooter>
-							<input
-								type="submit"
-								value="Submit"
-								color="primary"
-								className="btn btn-primary"
-							/>
-							<Button color="danger" onClick={this.toggle}>
-								Cancel
-							</Button>
-						</ModalFooter>
-					</form>
-				</Modal>
-			</div>
-		);
-	}
-}

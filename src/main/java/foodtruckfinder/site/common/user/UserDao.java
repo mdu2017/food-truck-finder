@@ -144,11 +144,11 @@ public class UserDao {
 		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID")));
 	}
 
-//	public Optional<List<String>> getNotifications(Long userId){
-//		String sql = "SELECT message FROM NOTIFICATIONS WHERE" +
-//					 "USER_ID = :userId";
-//
-//		Map<String, ?> params = _Maps.map("userId", userId);
-//		return jdbcTemplate.query(sql, params);
-//	}
+	public Optional<List<String>> getNotifications(Long userId){
+		String sql = "SELECT message FROM NOTIFICATION WHERE " +
+					 "USER_ID = :userId";
+
+		Map<String, ?> params = _Maps.map("userId", userId);
+		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("MESSAGE")));
+	}
 }

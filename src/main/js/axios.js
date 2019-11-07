@@ -18,10 +18,7 @@ export function createFoodTruck(foodTruck) {
 // Multivalue axios post
 export function sendNotification(message, foodTruckId) {
 	console.log(message);
-	return axios.post('api/food-truck/send-notification', {
-		message: message,
-		foodTruckId: foodTruckId
-	});
+	return axios.post('api/food-truck/send-notification?message=' + message + '&foodTruckId=' + foodTruckId);
 }
 
 export function getFoodTypes() {
@@ -44,6 +41,11 @@ export function getRecommendations(userlat, userlong) {
 		}
 	});
 }
+
+export function subscribe(foodtruckId, userId) {
+	return axios.post('api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId);
+}
+
 
 // export function makeFT(name, status) {
 // 	return axios({

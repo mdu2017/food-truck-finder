@@ -2,8 +2,15 @@ import React from 'react';
 import * as NavBars from 'js/navBars';
 import { Progress, Row, Col, Button, Media } from 'reactstrap';
 import SampleMenu from 'js/images/MenuSample.png';
+import * as Axios from 'js/axios';
 
 export class ViewFoodTruckDetails extends React.Component {
+	subscribe() {
+		const URLObject = this.props.match.params;
+		let {foodtruckID: id} = URLObject;
+		let promise = Axios.subscribe(1, 2);
+	}
+
 	render() {
 		return (
 			<div>
@@ -13,7 +20,7 @@ export class ViewFoodTruckDetails extends React.Component {
 					<br />
 					<Row>
 						<Col xs="auto">
-							<Button color="primary">Subscribe</Button>
+							<Button color="primary" onClick={this.subscribe()}>Subscribe</Button>
 						</Col>
 						<Col xs="auto">
 							<legend>

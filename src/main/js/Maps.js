@@ -1,5 +1,5 @@
 import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
-import React, { Component } from 'react';
+import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import ViewMarker from 'js/images/food_truck_existing.png';
 
@@ -52,6 +52,11 @@ export class MapContainer extends React.Component {
 
 		//binds status of click on map
 		this.onMapClicked = this.onMapClicked.bind(this);
+	}
+
+	// Passes the selected Location back to caller
+	handleSelection(lat, long) {
+		this.props.handleMapSelection(lat, long);
 	}
 
 	// Sample function to display nearby food trucks
@@ -111,6 +116,7 @@ export class MapContainer extends React.Component {
 
 		//Click location works
 		// {console.log(lat + ' | ' + lng);}
+		this.handleSelection(lat, lng);
 
 		//If map clicked, dont show info window
 		if (this.state.showingInfoWindow) {
@@ -153,6 +159,7 @@ export class MapContainer extends React.Component {
 		const location = coord.latLng;
 
 		console.log('New location: ' + lat + ' | ' + lng);
+		this.handleSelection(lat, lng);
 
 		// TODO: (Update new location of marker -- only works for 1 FT)
 		this.setState(prevState => ({

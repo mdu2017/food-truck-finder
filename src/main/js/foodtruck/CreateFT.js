@@ -1,6 +1,7 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
+
 import {
 	Button,
 	Form,
@@ -42,6 +43,9 @@ export class CreateFoodTruck extends React.Component {
 					]
 				}
 			],
+			selectedLatitude: 0,
+			selectedLongitude: 0,
+			buttonVisibility: true,
 			modal: false
 		};
 		// Make Dynamic Page
@@ -72,8 +76,6 @@ export class CreateFoodTruck extends React.Component {
 			if (this.state.price_high < 0) {
 				this.state.price_high = 0;
 			}
-			// this.consolidateSchedule();
-			// console.log(this.state.schedule);
 			this.props.createFT({
 				name: this.state.name,
 				description: this.state.description,
@@ -99,6 +101,7 @@ export class CreateFoodTruck extends React.Component {
 
 	handleModalSubmit = event => {
 		this.toggle();
+		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		event.preventDefault();
 	};
 
@@ -127,31 +130,6 @@ export class CreateFoodTruck extends React.Component {
 			document.getElementById('statuses').innerHTML = str;
 		});
 	}
-
-	// consolidateSchedule() {
-	// 	let newSchedule = this.state.schedule;
-	// 	for (let i = 0; i < Object.keys(newSchedule).length; i++) {
-	// 		for (let j = i; j >= 0; j--) {
-	// 			if (i != j && newSchedule[i].day == newSchedule[j].day) {
-	// 				console.log('i' + i);
-	// 				console.log('j' + j);
-	// 				newSchedule[i].stop[i].concat([
-	// 					{
-	// 						startTime: newSchedule[j].stop[j].startTime,
-	// 						endTime: newSchedule[j].stop[j].endTime,
-	// 						location: [
-	// 							{
-	// 								lat: newSchedule[j].stop[j].lat,
-	// 								long: newSchedule[j].stop[j].long
-	// 							}
-	// 						]
-	// 					}
-	// 				]);
-	// 			}
-	// 		}
-	// 	}
-	// 	this.setState({ schedule: newSchedule });
-	// }
 
 	handleStartTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
@@ -192,6 +170,28 @@ export class CreateFoodTruck extends React.Component {
 		console.log(newSchedule);
 	};
 
+	handleLocationChange = idx => evt => {
+		this.setState({ buttonVisibility: !this.state.buttonVisibility });
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			const newStop = schedule.stop.map((stop, sidx) => {
+				// if (idx !== sidx) return stop;
+				const newLocation = stop.location.map((location, sidx) => {
+					return {
+						...location,
+						long: this.state.selectedLongitude,
+						lat: this.state.selectedLatitude
+					};
+				});
+				return { ...stop, location: newLocation };
+			});
+			return { ...schedule, stop: newStop };
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
 	handleAddStop() {
 		this.setState({
 			schedule: this.state.schedule.concat([
@@ -207,6 +207,11 @@ export class CreateFoodTruck extends React.Component {
 				}
 			])
 		});
+	}
+
+	handleMapSelection(latitude, longitude) {
+		this.setState({ selectedLatitude: latitude });
+		this.setState({ selectedLongitude: longitude });
 	}
 
 	render() {
@@ -316,6 +321,11 @@ export class CreateFoodTruck extends React.Component {
 									<Col xs="auto">
 										<Form inline>
 											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+												<span>
+													{'Stop '}
+													{idx + 1}
+													{': '}
+												</span>
 												<Input
 													required
 													type="select"
@@ -379,10 +389,56 @@ export class CreateFoodTruck extends React.Component {
 											<FormGroup>
 												<Button
 													outline
+													hidden={
+														!this.state
+															.buttonVisibility
+													}
 													color="primary"
+													id="AddLocation"
 													onClick={this.toggle}>
-													Location
+													Add Location
 												</Button>
+												<Button
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													outline
+													color="primary"
+													onClick={this.handleLocationChange(
+														idx
+													)}>
+													Confirm Location for Stop{' '}
+													{idx + 1} ?
+												</Button>
+												<Input
+													disabled
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													type="number"
+													name="latitude"
+													id="latitude"
+													value={
+														this.state
+															.selectedLatitude
+													}
+												/>
+												<Input
+													disabled
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													type="number"
+													name="longitude"
+													id="longitude"
+													value={
+														this.state
+															.selectedLongitude
+													}
+												/>
 											</FormGroup>
 										</Form>
 									</Col>
@@ -395,6 +451,7 @@ export class CreateFoodTruck extends React.Component {
 							<FormGroup>
 								<Button
 									type="submit"
+									hidden={!this.state.buttonVisibility}
 									color="primary"
 									size="sm"
 									onClick={() => this.handleAddStop()}>
@@ -407,23 +464,43 @@ export class CreateFoodTruck extends React.Component {
 					<Button onClick={this.handleSubmit}>Create Truck</Button>
 				</div>
 				<div>
-					<Modal isOpen={this.state.modal}>
-						<form onSubmit={this.handleModalSubmit}>
-							<ModalHeader>Google Maps</ModalHeader>
-							<ModalBody>Where map will go...</ModalBody>
-							<ModalFooter>
-								<input
-									type="submit"
-									value="Submit"
-									color="primary"
-									className="btn btn-primary"
-								/>
-								<Button color="danger" onClick={this.toggle}>
-									Cancel
-								</Button>
-							</ModalFooter>
-						</form>
-					</Modal>
+					{this.state.schedule.map((schedule, idx) => (
+						<div className="schedule">
+							<Modal
+								isOpen={this.state.modal}
+								size="lg"
+								scrollable="true"
+								style={{ height: '400px', width: '425px' }}>
+								<form onSubmit={this.handleModalSubmit}>
+									<ModalHeader>Google Maps</ModalHeader>
+									<ModalBody
+										style={{
+											height: '400px',
+											width: '600px'
+										}}>
+										<MapContainer
+											handleMapSelection={this.handleMapSelection.bind(
+												this
+											)}
+										/>
+									</ModalBody>
+									<ModalFooter>
+										<input
+											type="submit"
+											value="Submit"
+											color="primary"
+											className="btn btn-primary"
+										/>
+										<Button
+											color="danger"
+											onClick={this.toggle}>
+											Cancel
+										</Button>
+									</ModalFooter>
+								</form>
+							</Modal>
+						</div>
+					))}
 				</div>
 			</div>
 		);

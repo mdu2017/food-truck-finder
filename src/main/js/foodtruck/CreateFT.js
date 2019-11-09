@@ -31,18 +31,7 @@ export class CreateFoodTruck extends React.Component {
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
 			weekdayCounter: [0, 0, 0, 0, 0, 0, 0],
-			schedule: [
-				// {
-				// 	day: '',
-				// 	stop: [
-				// 		{
-				// 			startTime: '',
-				// 			endTime: '',
-				// 			location: [{ lat: '', long: '' }]
-				// 		}
-				// 	]
-				// }
-			],
+			schedule: [],
 			modal: false
 		};
 		// Make Dynamic Page
@@ -127,19 +116,61 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	editStop(index, sTime, eTime, lat, long) {
+	editStop(dotW, index, sTime, eTime, lat, long) {
 		let edited = JSON.parse(JSON.stringify(this.state.schedule));
-		edited[index].stop.push({
-			id: index + this.state.weekdayCounter[index],
-			startTime: sTime,
-			endTime: eTime,
-			location: [{ lat: lat, long: long }]
-		});
+		let outerIndex = index;
+		let innerIndex = this.state.weekdayCounter[outerIndex];
+		if (dotW.includes('Repeat')) {
+			switch (dotW.charAt(0)) {
+				case 'S':
+					outerIndex = 0;
+					break;
+				case 'M':
+					outerIndex = 1;
+					break;
+				case 'T':
+					outerIndex = 2;
+					break;
+				case 'W':
+					outerIndex = 3;
+					break;
+				case 'R':
+					outerIndex = 4;
+					break;
+				case 'F':
+					outerIndex = 5;
+					break;
+				case 'U':
+					outerIndex = 6;
+			}
+			innerIndex = this.state.weekdayCounter[outerIndex];
+			innerIndex = innerIndex + 1;
+			console.log(this.state.weekdayCounter);
+			console.log(index);
+			console.log(innerIndex);
+		}
+		if (
+			!(outerIndex in edited) ||
+			!(innerIndex in edited[outerIndex].stop)
+		) {
+			console.log('got added');
+			edited[outerIndex].stop.push({
+				startTime: sTime,
+				endTime: eTime,
+				location: [{ lat: lat, long: long }]
+			});
+		} else {
+			console.log('got edited');
+			if (sTime) edited[outerIndex].stop[innerIndex].startTime = sTime;
+			if (eTime) edited[outerIndex].stop[innerIndex].endTime = eTime;
+			if (lat) edited[outerIndex].stop[innerIndex].location[0] = lat;
+			if (long) edited[outerIndex].stop[innerIndex].location[1] = long;
+		}
 		this.setState({
 			schedule: edited
 		});
 		{
-			console.log(this.state.schedule);
+			console.log(edited);
 		}
 	}
 
@@ -172,10 +203,17 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	dynamicRender(index) {
+	dynamicRender(dotW, index) {
 		var divList = [];
 		for (var j = 0; j < this.state.weekdayCounter[index]; j++) {
-			divList.push(<div>{this.displaySchedule('Repeat')}</div>);
+			divList.push(
+				<div>
+					{this.displaySchedule(
+						dotW + 'Repeat',
+						index + this.state.weekdayCounter[index]
+					)}
+				</div>
+			);
 		}
 		return divList;
 	}
@@ -212,8 +250,11 @@ export class CreateFoodTruck extends React.Component {
 										onChange={e =>
 											this.editStop(
 												dayofTheWeek,
+												index,
 												e.target.value,
-												-1
+												null,
+												null,
+												null
 											)
 										}
 									/>
@@ -224,11 +265,12 @@ export class CreateFoodTruck extends React.Component {
 										id="EndTime"
 										onChange={e =>
 											this.editStop(
+												dayofTheWeek,
 												index,
-												-1,
+												null,
 												e.target.value,
-												'null',
-												'null'
+												null,
+												null
 											)
 										}
 									/>
@@ -275,7 +317,7 @@ export class CreateFoodTruck extends React.Component {
 						</Col>
 					</Row>
 				</Container>
-				{this.dynamicRender(index)}
+				{this.dynamicRender(dayofTheWeek, index)}
 			</div>
 		);
 	}

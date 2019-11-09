@@ -16,6 +16,7 @@ import {
 	ModalBody,
 	ModalFooter
 } from 'reactstrap';
+import MapContainer from 'js/Maps';
 
 export class CreateFoodTruck extends React.Component {
 	constructor(props) {

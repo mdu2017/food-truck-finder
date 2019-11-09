@@ -21,6 +21,8 @@ import {
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
+
+
 export class CustomNavBar extends React.Component {
 	constructor(props) {
 		super(props);
@@ -90,7 +92,7 @@ export class CustomNavBar extends React.Component {
 	render() {
 		return (
 			<div>
-				<Navbar color="light" light expand="md">
+				<Navbar style={{backgroundColor: '#00CF69'}} light expand="md">
 					<NavbarBrand href="/">Food Truck Finder</NavbarBrand>
 					<img src={Logo} width={30} height={30} mode="fit" />
 					<NavbarToggler onClick={this.toggleProfile} />

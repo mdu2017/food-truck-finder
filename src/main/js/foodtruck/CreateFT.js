@@ -23,15 +23,24 @@ export class CreateFoodTruck extends React.Component {
 		this.state = {
 			name: null,
 			// menu: null,
-			// schedule: null,
 			description: null,
 			price_low: null,
 			price_high: null,
 			status: null,
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
-			weekdayCounter: [0, 0, 0, 0, 0, 0, 0],
-			schedule: [],
+			schedule: [
+				{
+					day: 'S',
+					stop: [
+						{
+							startTime: null,
+							endTime: null,
+							location: [{ lat: null, long: null }]
+						}
+					]
+				}
+			],
 			modal: false
 		};
 		// Make Dynamic Page
@@ -62,6 +71,8 @@ export class CreateFoodTruck extends React.Component {
 			if (this.state.price_high < 0) {
 				this.state.price_high = 0;
 			}
+			// this.consolidateSchedule();
+			// console.log(this.state.schedule);
 			this.props.createFT({
 				name: this.state.name,
 				description: this.state.description,
@@ -116,210 +127,85 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	editStop(dotW, index, sTime, eTime, lat, long) {
-		let edited = JSON.parse(JSON.stringify(this.state.schedule));
-		let outerIndex = index;
-		let innerIndex = this.state.weekdayCounter[outerIndex];
-		if (dotW.includes('Repeat')) {
-			switch (dotW.charAt(0)) {
-				case 'S':
-					outerIndex = 0;
-					break;
-				case 'M':
-					outerIndex = 1;
-					break;
-				case 'T':
-					outerIndex = 2;
-					break;
-				case 'W':
-					outerIndex = 3;
-					break;
-				case 'R':
-					outerIndex = 4;
-					break;
-				case 'F':
-					outerIndex = 5;
-					break;
-				case 'U':
-					outerIndex = 6;
-			}
-			innerIndex = this.state.weekdayCounter[outerIndex];
-			innerIndex = innerIndex + 1;
-			console.log(this.state.weekdayCounter);
-			console.log(index);
-			console.log(innerIndex);
-		}
-		if (
-			!(outerIndex in edited) ||
-			!(innerIndex in edited[outerIndex].stop)
-		) {
-			console.log('got added');
-			edited[outerIndex].stop.push({
-				startTime: sTime,
-				endTime: eTime,
-				location: [{ lat: lat, long: long }]
+	// consolidateSchedule() {
+	// 	let newSchedule = this.state.schedule;
+	// 	for (let i = 0; i < Object.keys(newSchedule).length; i++) {
+	// 		for (let j = i; j >= 0; j--) {
+	// 			if (i != j && newSchedule[i].day == newSchedule[j].day) {
+	// 				console.log('i' + i);
+	// 				console.log('j' + j);
+	// 				newSchedule[i].stop[i].concat([
+	// 					{
+	// 						startTime: newSchedule[j].stop[j].startTime,
+	// 						endTime: newSchedule[j].stop[j].endTime,
+	// 						location: [
+	// 							{
+	// 								lat: newSchedule[j].stop[j].lat,
+	// 								long: newSchedule[j].stop[j].long
+	// 							}
+	// 						]
+	// 					}
+	// 				]);
+	// 			}
+	// 		}
+	// 	}
+	// 	this.setState({ schedule: newSchedule });
+	// }
+
+	handleStartTimeScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			const newStop = schedule.stop.map((stop, idx) => {
+				return { ...stop, startTime: evt.target.value };
 			});
-		} else {
-			console.log('got edited');
-			if (sTime) edited[outerIndex].stop[innerIndex].startTime = sTime;
-			if (eTime) edited[outerIndex].stop[innerIndex].endTime = eTime;
-			if (lat) edited[outerIndex].stop[innerIndex].location[0] = lat;
-			if (long) edited[outerIndex].stop[innerIndex].location[1] = long;
-		}
-		this.setState({
-			schedule: edited
+			return { ...schedule, stop: newStop };
 		});
-		{
-			console.log(edited);
-		}
-	}
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
 
-	incrementSchedule(dayOfTheWeek, index) {
-		let i = 0;
-		if ((dayOfTheWeek == 'Thursday') | (dayOfTheWeek == 'Saturday')) {
-			i = 3;
-		}
-		if (!(index in this.state.schedule)) {
-			this.state.schedule.push({
-				day: dayOfTheWeek.charAt(i).toUpperCase(),
-				stop: [
-					// {
-					// 	startTime: null,
-					// 	endTime: null,
-					// 	location: [{ lat: null, long: null }]
-					// }
-				]
+	handleEndTimeScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			const newStop = schedule.stop.map((stop, idx) => {
+				return { ...stop, endTime: evt.target.value };
 			});
-			console.log(this.state.schedule);
-		}
-	}
-
-	addStopClicked(dayOfTheWeek, index) {
-		// Copies array
-		const newArray = this.state.weekdayCounter.slice();
-		newArray[index] = newArray[index] + 1;
-		this.setState({
-			weekdayCounter: newArray
+			return { ...schedule, stop: newStop };
 		});
-	}
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
 
-	dynamicRender(dotW, index) {
-		var divList = [];
-		for (var j = 0; j < this.state.weekdayCounter[index]; j++) {
-			divList.push(
-				<div>
-					{this.displaySchedule(
-						dotW + 'Repeat',
-						index + this.state.weekdayCounter[index]
-					)}
-				</div>
-			);
-		}
-		return divList;
-	}
+	handleDayScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			return {
+				...schedule,
+				day: evt.target.value
+			};
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
 
-	displaySchedule(dayofTheWeek, index) {
-		if (Object.keys(this.state.schedule).length < 7) {
-			{
-				this.incrementSchedule(dayofTheWeek, index);
-			}
-		}
-		return (
-			<div>
-				<Container>
-					<Row hidden={dayofTheWeek != 'Sunday'}>
-						<Col md={{ offset: 1 }}>Time at Location:</Col>
-					</Row>
-					<Row>
-						<Col xs="1">
-							<Form
-								inline
-								hidden={dayofTheWeek.includes('Repeat')}>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									{dayofTheWeek}
-								</FormGroup>
-							</Form>
-						</Col>
-						<Col xs="auto">
-							<Form inline>
-								<FormGroup className="text-center">
-									<Input
-										type="time"
-										name="time"
-										id="StartTime"
-										onChange={e =>
-											this.editStop(
-												dayofTheWeek,
-												index,
-												e.target.value,
-												null,
-												null,
-												null
-											)
-										}
-									/>
-									<Label for="EndTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="EndTime"
-										onChange={e =>
-											this.editStop(
-												dayofTheWeek,
-												index,
-												null,
-												e.target.value,
-												null,
-												null
-											)
-										}
-									/>
-								</FormGroup>
-							</Form>
-						</Col>
-						<Col xs="auto">
-							<Form inline>
-								<FormGroup>
-									<Button
-										outline
-										color="primary"
-										onClick={this.toggle}>
-										Location
-									</Button>
-								</FormGroup>
-							</Form>
-						</Col>
-						<Col xs="auto">
-							<Form inline>
-								<FormGroup>
-									<Input type="checkbox" />
-									Closed?
-								</FormGroup>
-							</Form>
-						</Col>
-						<Col xs="auto" hidden={dayofTheWeek.includes('Repeat')}>
-							<Form inline>
-								<FormGroup>
-									<Button
-										type="submit"
-										color="primary"
-										size="sm"
-										onClick={() =>
-											this.addStopClicked(
-												dayofTheWeek,
-												index
-											)
-										}>
-										Add Stop
-									</Button>
-								</FormGroup>
-							</Form>
-						</Col>
-					</Row>
-				</Container>
-				{this.dynamicRender(dayofTheWeek, index)}
-			</div>
-		);
+	handleAddStop() {
+		this.setState({
+			schedule: this.state.schedule.concat([
+				{
+					day: 'S',
+					stop: [
+						{
+							startTime: null,
+							endTime: null,
+							location: [{ lat: null, long: null }]
+						}
+					]
+				}
+			])
+		});
 	}
 
 	render() {
@@ -415,14 +301,109 @@ export class CreateFoodTruck extends React.Component {
 						</FormGroup>
 					</Form>
 					<legend>Schedule</legend>
-					{this.displaySchedule('Sunday', 0)}
-					{this.displaySchedule('Monday', 1)}
-					{this.displaySchedule('Tuesday', 2)}
-					{this.displaySchedule('Wednesday', 3)}
-					{this.displaySchedule('Thursday', 4)}
-					{this.displaySchedule('Friday', 5)}
-					{this.displaySchedule('Saturday', 6)}
-					<Button onClick={this.handleSubmit}>Submit</Button>
+					<FormText color="muted">
+						If no time is selected for an individual day, it is
+						assumed to be closed.
+					</FormText>
+					<Container>
+						<Row>
+							<Col md={{ offset: 3 }}>Time at Location:</Col>
+						</Row>
+						{this.state.schedule.map((schedule, idx) => (
+							<div className="schedule">
+								<Row>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+												<Input
+													required
+													type="select"
+													name="DotW"
+													id="DotW"
+													onChange={this.handleDayScheduleChange(
+														idx
+													)}>
+													<option value="S">
+														Sunday
+													</option>
+													<option value="M">
+														Monday
+													</option>
+													<option value="T">
+														Tuesday
+													</option>
+													<option value="W">
+														Wednesday
+													</option>
+													<option value="R">
+														Thursday
+													</option>
+													<option value="F">
+														Friday
+													</option>
+													<option value="U">
+														Saturday
+													</option>
+												</Input>
+											</FormGroup>
+										</Form>
+									</Col>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup className="text-center">
+												<Input
+													required
+													type="time"
+													name="time"
+													id="StartTime"
+													onChange={this.handleStartTimeScheduleChange(
+														idx
+													)}
+												/>
+												<Label for="EndTime"> - </Label>
+												<Input
+													required
+													type="time"
+													name="time"
+													id="EndTime"
+													onChange={this.handleEndTimeScheduleChange(
+														idx
+													)}
+												/>
+											</FormGroup>
+										</Form>
+									</Col>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup>
+												<Button
+													outline
+													color="primary"
+													onClick={this.toggle}>
+													Location
+												</Button>
+											</FormGroup>
+										</Form>
+									</Col>
+								</Row>
+							</div>
+						))}
+					</Container>
+					<Col sm="12" md={{ size: 6, offset: 2 }}>
+						<Form inline>
+							<FormGroup>
+								<Button
+									type="submit"
+									color="primary"
+									size="sm"
+									onClick={() => this.handleAddStop()}>
+									Add Stop
+								</Button>
+							</FormGroup>
+						</Form>
+					</Col>
+
+					<Button onClick={this.handleSubmit}>Create Truck</Button>
 				</div>
 				<div>
 					<Modal isOpen={this.state.modal}>

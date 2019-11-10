@@ -56,7 +56,6 @@ public class FoodTruckService {
 	//TODO: WIP
 	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
 		System.out.println("Name in FT service: " + name);
-//		return foodTruckDao.searchFoodTrucks(name);
-		return null;
+		return foodTruckDao.searchFoodTrucks(name);
 	}
 }

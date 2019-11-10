@@ -4,12 +4,12 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import alloy.util.Json;
 import foodtruckfinder.site.common.foodtruck.Stop;
 import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.userdetails.User;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -70,6 +70,7 @@ public class FoodTruckEndpoint {
 				.collect(Collectors.toList());
 	}
 
+
 	/**
 	 * This function gets a string list of the status
 	 *
@@ -90,7 +91,13 @@ public class FoodTruckEndpoint {
 	 */
 	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
 	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
-		System.out.println("Name in endpoint: " + name);
-		return foodTruckService.searchFoodTrucks(name);
+
+		//Manually parse json
+		int startIndex = name.indexOf(":") + 2;
+		int endIndex = name.lastIndexOf("\"");
+		String ftName = name.substring(startIndex, endIndex);
+		System.out.println("Name in endpoint: " + ftName);
+
+		return foodTruckService.searchFoodTrucks(ftName);
 	}
 }

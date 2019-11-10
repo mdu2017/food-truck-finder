@@ -442,28 +442,34 @@ public class FoodTruckDao {
 	 * @param name the name to search for
 	 * @return List of food trucks avavilable by name
 	 */
-//	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
-//		List<FoodTruckDto> trucks = null;
-//		if(name != null && !name.isEmpty()){
-//			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE " +
-//					"NAME = :name";
-//
-//			Map<String, ?> params = _Maps.map("name", name);
-//			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
-//
-//			if(names != null){
-//				trucks = new ArrayList<>();
-//				for(String ft : names){
-//					//get each food truck
-//					//TODO: need to edit find to search for name instead of ID
+	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+
+		System.out.println("Name in DAO: " + name);
+
+		List<FoodTruckDto> trucks = null;
+		if(name != null && !name.isEmpty()){
+			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE " +
+					"NAME = :name";
+
+			Map<String, ?> params = _Maps.map("name", name);
+			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
+
+			System.out.println("List of food trucks matching " + name + "\n" + names);
+
+			if(names != null){
+				trucks = new ArrayList<>();
+				for(String ft : names){
+					//get each food truck
+					//TODO: need to edit find to search for name instead of ID
 //					Optional<FoodTruckDto> temp = this.find(ft);
-//					if(temp.isPresent()){
-//						trucks.add(temp.get());
-//					}
-//				}
-//			}
-//		}
-//
-//		return Optional.ofNullable(trucks);
-//	}
+					Optional<FoodTruckDto> temp;
+					if(temp.isPresent()){
+						trucks.add(temp.get());
+					}
+				}
+			}
+		}
+
+		return Optional.ofNullable(trucks);
+	}
 }

@@ -15,6 +15,13 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+// Deletes a FoodTruck in the Database
+export function removeFoodTruck(truck_id) {
+	return axios.post(
+		'/api/food-truck/removeTruck/?truck_id=' + truck_id.truck_id
+	);
+}
+
 export function getFoodTypes() {
 	return axios.get('/api/food-truck/getFoodTypes');
 }
@@ -129,6 +136,13 @@ Actions.register = user => {
 Actions.createFT = foodTruck => {
 	return () => {
 		return createFoodTruck(foodTruck);
+	};
+};
+
+//Delete food truck
+Actions.removeFoodFT = truck_id => {
+	return () => {
+		return removeFoodTruck(truck_id);
 	};
 };
 

@@ -30,11 +30,11 @@ public class FoodTruckService {
 
 	/**
 	 *
-	 * @param truckID
+	 * @param truck_id
 	 */
-	public void remove(Long truckID){
-		foodTruckDao.remove(truckID);
-		return;
+	public boolean remove(Long truck_id){
+		System.out.println("Service ID: " + truck_id);
+		return foodTruckDao.remove(truck_id);
 	}
 
 	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){

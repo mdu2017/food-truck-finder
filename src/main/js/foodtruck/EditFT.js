@@ -67,6 +67,13 @@ export class EditFoodTruck extends React.Component {
 		}
 	};
 
+	handleRemoveTruck = event => {
+		this.props.removeTruck({
+			truck_id: this.state.id
+		});
+		event.preventDefault();
+	};
+
 	componentWillMount() {
 		const URLObject = this.props.match.params;
 		// Object Destruction
@@ -286,7 +293,9 @@ export class EditFoodTruck extends React.Component {
 					{this.displayDayOfTheWeek('Friday')}
 					{this.displayDayOfTheWeek('Saturday')}
 					<Button onClick={this.handleSubmit}>Submit</Button>{' '}
-					<Button color="danger">Delete Food Truck</Button>
+					<Button color="danger" onClick={this.handleRemoveTruck}>
+						Delete Food Truck
+					</Button>
 				</div>
 			</div>
 		);
@@ -295,6 +304,17 @@ export class EditFoodTruck extends React.Component {
 EditFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck))
+		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck)),
+		removeTruck: truck_id =>
+			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function(
+				result
+			) {
+				if (result) {
+					window.location.href = '/#/list-food-trucks';
+					window.alert('Deletion was successful!');
+				} else {
+					window.alert('Deletion was NOT successful!');
+				}
+			})
 	})
 )(EditFoodTruck);

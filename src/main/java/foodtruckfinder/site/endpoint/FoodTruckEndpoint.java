@@ -39,9 +39,9 @@ public class FoodTruckEndpoint {
     }
 
     @PostMapping(value = "/removeTruck", produces = "application/json")
-	public void removeTruck(Long truckID){
-		foodTruckService.remove(truckID);
-		return;
+	public boolean removeTruck(Long truck_id){
+		System.out.println("ENDPOINT ID: " + truck_id);
+		return foodTruckService.remove(truck_id);
 	}
 
 	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")

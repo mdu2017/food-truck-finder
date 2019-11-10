@@ -333,10 +333,16 @@ public class FoodTruckDao {
 		}
 	}
 
-	public void remove(Long truckID){
-		String sql = "DELETE * FROM FOOD_TRUCK WHERE FOOD_TRUCK_ID = :truckId";
-		Map<String, ?> params = _Maps.map("truck_id", truckID);
-		jdbcTemplate.update(sql, params);
+	public boolean remove(Long truck_id){
+		System.out.println("DAO ID: " + truck_id);
+		try {
+			String sql = "DELETE FROM FOOD_TRUCK WHERE FOOD_TRUCK_ID = :truck_id";
+			Map<String, ?> params = _Maps.map("truck_id", truck_id);
+			jdbcTemplate.update(sql, params);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
 	}
 
 	/**

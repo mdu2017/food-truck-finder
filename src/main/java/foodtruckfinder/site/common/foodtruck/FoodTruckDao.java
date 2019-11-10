@@ -334,7 +334,6 @@ public class FoodTruckDao {
 	}
 
 	public boolean remove(Long truck_id){
-		System.out.println("DAO ID: " + truck_id);
 		try {
 			String sql = "DELETE FROM FOOD_TRUCK WHERE FOOD_TRUCK_ID = :truck_id";
 			Map<String, ?> params = _Maps.map("truck_id", truck_id);

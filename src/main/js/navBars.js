@@ -143,6 +143,11 @@ export class SidebarNav extends React.Component {
 	}
 
 	render() {
+
+		if(!this.state.foodtrucks) {
+			return <div />;
+		}
+
 		return (
 			<div>
 				<Container>

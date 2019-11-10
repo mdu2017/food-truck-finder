@@ -1,8 +1,10 @@
 package foodtruckfinder.site.endpoint;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.External.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -115,5 +117,20 @@ public class UserEndpoint {
 	@GetMapping(value = "/getNotifications", produces = "application/json")
 	public Optional<List<String>> getNotifications(Long userId){
 		return userService.getNotifications(userId);
+	}
+
+	@PostMapping(value = "/rate", produces = "application/json")
+	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){
+		userService.rateTruck(user_ID, truck_ID, message, rating);
+	}
+
+	@GetMapping(value = "/getRatingByUser", produces = "application/json")
+	public List<Rating> getRatingByUser(Long user_ID){
+		return userService.getRatingByUser(user_ID);
+	}
+
+	@GetMapping(value = "/getRatingByTruck", produces = "application/json")
+	public List<Rating> getRatingByTruck(Long truck_ID){
+		return userService.getRatingByTruck(truck_ID);
 	}
 }

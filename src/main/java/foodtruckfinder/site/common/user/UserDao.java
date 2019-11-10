@@ -1,11 +1,13 @@
 package foodtruckfinder.site.common.user;
 
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import foodtruckfinder.site.common.External.Rating;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -150,5 +152,54 @@ public class UserDao {
 
 		Map<String, ?> params = _Maps.map("userId", userId);
 		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("message")));
+	}
+
+	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){
+		String sql = "INSERT INTO `food-truck-finder`.`review` (`USER_ID`," +
+				"`MESSAGE`, `RATING`, `DATE`) VALUES" +
+				"(:user_ID, :truck_ID, :message, :rating, NOW())";
+		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "message", message, "rating", rating);
+
+		jdbcTemplate.update(sql, params);
+		return;
+	}
+
+	public List<Rating> getRatingByUser(Long user_ID){
+		String sql = "SELECT * FROM REVIEW WHERE USER_ID = :user_ID";
+		Map<String, ?> params = _Maps.map("user_ID", user_ID);
+
+		List<Rating> r = jdbcTemplate.query(sql, params, (rs, rownum) -> {
+			Rating temp = new Rating();
+
+			temp.setTruck(rs.getLong("TRUCK_ID"));
+			temp.setUser(user_ID);
+			temp.setDate(rs.getTimestamp("DATE").toLocalDateTime());
+			temp.setMessage(rs.getString("MESSAGE"));
+			temp.setRating(rs.getInt("RATING"));
+
+
+			return temp;
+		});
+
+		return r;
+	}
+
+	public List<Rating> getRatingByTruck(Long truck_ID){
+		String sql = "SELECT * FROM REVIEW WHERE TRUCK_ID = :truck_ID";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID);
+
+		List<Rating> r = jdbcTemplate.query(sql, params, (rs, rownum) -> {
+			Rating temp = new Rating();
+
+			temp.setTruck(truck_ID);
+			temp.setUser(rs.getLong("USER_ID"));
+			temp.setDate(rs.getTimestamp("DATE").toLocalDateTime());
+			temp.setMessage(rs.getString("MESSAGE"));
+			temp.setRating(rs.getInt("RATING"));
+
+			return temp;
+		});
+
+		return r;
 	}
 }

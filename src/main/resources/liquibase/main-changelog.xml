@@ -49,7 +49,7 @@
             CONSTRAINT `OWNED_BY` FOREIGN KEY (`OWNER_ID`) REFERENCES `USER` (`USER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
-            CREATE TABLE `deal` (
+            CREATE TABLE `DEAL` (
             `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(500) DEFAULT NULL,
             `START` datetime NOT NULL,
@@ -83,12 +83,13 @@
             );
 
             CREATE TABLE `REVIEW` (
+            `TRUCK_ID` int(11) NOT NULL,
             `USER_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,
             `RATING` int(11) NOT NULL,
             `DATE` datetime NOT NULL,
-            PRIMARY KEY (`USER_ID`)
-            );
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            ) ;
 
             CREATE TABLE `SCHEDULE` (
             `TRUCK_ID` int(11) NOT NULL,

@@ -50,11 +50,14 @@
             );
 
             CREATE TABLE `DEAL` (
+            `DEAL_ID` int(11) NOT NULL AUTO_INCREMENT,
             `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) DEFAULT NULL,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`)
+            PRIMARY KEY (`DEAL_ID`),
+            KEY `truck_id_idx` (`TRUCK_ID`),
+            CONSTRAINT `truck_id` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
             );
 
             CREATE TABLE `FOOD_TYPE` (
@@ -65,42 +68,39 @@
             );
 
             CREATE TABLE `MENU` (
-            `ITEM_ID` int(11) NOT NULL,
+            `ITEM_ID` int(11) NOT NULL AUTO_INCREMENT,
             `TRUCK_ID` int(11) NOT NULL,
             `NAME` varchar(45) NOT NULL,
             `DESCRIPTION` varchar(300) DEFAULT NULL,
             `PRICE` double NOT NULL,
-            PRIMARY KEY (`ITEM_ID`)
+            PRIMARY KEY (`ITEM_ID`),
+            KEY `truckid_idx` (`TRUCK_ID`),
+            CONSTRAINT `truckid` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
             );
 
             CREATE TABLE `NOTIFICATION` (
             `TRUCK_ID` int(11) NOT NULL,
             `USER_ID` int(11) NOT NULL,
-            `MESSAGE` varchar(300) NOT NULL,
             `SENT` datetime NOT NULL,
+            `MESSAGE` varchar(300) NOT NULL,
             `VIEWED` tinyint(4) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`,`SENT`),
+            KEY `userid_idx` (`USER_ID`),
+            KEY `useridnot_idx` (`USER_ID`),
+            CONSTRAINT `truckidnot` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
+            CONSTRAINT `useridnot` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
             );
 
             CREATE TABLE `REVIEW` (
             `USER_ID` int(11) NOT NULL,
+            `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,
             `RATING` int(11) NOT NULL,
             `DATE` datetime NOT NULL,
-            PRIMARY KEY (`USER_ID`)
-            );
-
-            CREATE TABLE `SCHEDULE` (
-            `TRUCK_ID` int(11) NOT NULL,
-            `DAY` varchar(45) NOT NULL,
-            `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`)
-            );
-
-            CREATE TABLE `SUBSCRIPTIONS` (
-            `TRUCK_ID` int(11) NOT NULL,
-            `USER_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            PRIMARY KEY (`USER_ID`,`TRUCK_ID`),
+            KEY `truckidrev_idx` (`TRUCK_ID`),
+            CONSTRAINT `truckidrev` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
+            CONSTRAINT `useridrev` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
             );
 
             CREATE TABLE `TRUCK_STOP` (
@@ -110,6 +110,25 @@
             `LATITUDE` double NOT NULL,
             `LONGITUDE` double NOT NULL,
             PRIMARY KEY (`STOP_ID`)
+            );
+
+            CREATE TABLE `SCHEDULE` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `DAY` varchar(45) NOT NULL,
+            `STOP_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`),
+            KEY `stopidsched_idx` (`STOP_ID`),
+            CONSTRAINT `stopidsched` FOREIGN KEY (`STOP_ID`) REFERENCES `truck_stop` (`STOP_ID`),
+            CONSTRAINT `truckidsched` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
+            );
+
+            CREATE TABLE `SUBSCRIPTIONS` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `USER_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`),
+            KEY `user_id_sub_idx` (`USER_ID`),
+            CONSTRAINT `truck_id_sub` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
+            CONSTRAINT `user_id_sub` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
             );
 
             CREATE TABLE `EVENT` (

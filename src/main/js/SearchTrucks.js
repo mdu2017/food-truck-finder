@@ -13,7 +13,6 @@ import {
     Col,
     Row
 } from 'reactstrap';
-import MapContainer from 'js/Maps';
 
 export class SearchFoodTrucks extends React.Component {
     constructor(props) {
@@ -29,6 +28,7 @@ export class SearchFoodTrucks extends React.Component {
         this.props.searchFoodTrucks({
             name: this.state.name,
         });
+        console.log('Name in handleSubmit: ' + this.state.name);
         event.preventDefault();
     };
 
@@ -37,7 +37,7 @@ export class SearchFoodTrucks extends React.Component {
             <div>
                 <NavBars.CustomNavBar />
                 <div className="container padded">
-                    <h1>Create a Food Truck</h1>
+                    <h1>Search for Food Truck</h1>
                     <br />
                     <Form>
                         <FormGroup>
@@ -52,29 +52,20 @@ export class SearchFoodTrucks extends React.Component {
                         </FormGroup>
                     </Form>
 
-                    <Button onClick={this.handleSubmit}>Submit</Button>
+                    <Button type="button" className="btn btn-info" onClick={this.handleSubmit}>Submit</Button>
                 </div>
             </div>
         );
     }
 }
-CreateFoodTruck = connect(
+
+SearchFoodTrucks = connect(
     () => ({}),
     dispatch => ({
-        searchFoodTrucks: foodTruck =>
-            dispatch(Axios.Actions.createFT(foodTruck))
-            // Success
-                .then(function(result) {
-                    window.alert('Creation of the Food Truck was successful!');
-                })
-                // Failed
-                .catch(error =>
-                    window.alert('Creation of the Food Truck failed!')
-                )
+        searchFoodTrucks: name =>
+            dispatch(Axios.Actions.searchFoodTrucks(name))
     })
-)(CreateFoodTruck);
-
-
+)(SearchFoodTrucks);
 
 {/*<h1>Search Trucks Page</h1>*/}
 

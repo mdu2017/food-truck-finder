@@ -425,7 +425,7 @@ public class FoodTruckDao {
 				trucks = new ArrayList<>();
 				for(Long ft : ids){
 					//get each food truck
-					Optional<FoodTruckDto> temp = this.find(ft + ""); this.f
+					Optional<FoodTruckDto> temp = this.find(ft + "");
 					if(temp.isPresent()){
 						trucks.add(temp.get());
 					}
@@ -435,4 +435,35 @@ public class FoodTruckDao {
 
 		return Optional.ofNullable(trucks);
 	}
+
+	//TODO: WIP
+	/**
+	 * Searches for food trucks by name in the database
+	 * @param name the name to search for
+	 * @return List of food trucks avavilable by name
+	 */
+//	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+//		List<FoodTruckDto> trucks = null;
+//		if(name != null && !name.isEmpty()){
+//			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE " +
+//					"NAME = :name";
+//
+//			Map<String, ?> params = _Maps.map("name", name);
+//			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
+//
+//			if(names != null){
+//				trucks = new ArrayList<>();
+//				for(String ft : names){
+//					//get each food truck
+//					//TODO: need to edit find to search for name instead of ID
+//					Optional<FoodTruckDto> temp = this.find(ft);
+//					if(temp.isPresent()){
+//						trucks.add(temp.get());
+//					}
+//				}
+//			}
+//		}
+//
+//		return Optional.ofNullable(trucks);
+//	}
 }

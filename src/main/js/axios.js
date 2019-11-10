@@ -23,15 +23,6 @@ export function getStatuses() {
 	return axios.get('/api/food-truck/getStatusNames');
 }
 
-//TODO: Work in progress
-export function searchFoodTrucks(name){
-	return axios.get('/api/user/searchFoodTrucks', {
-	    params: {
-	        name: name
-        }
-    });
-}
-
 export function authenticate(username, password) {
 	return axios({
 		method: 'post',
@@ -74,6 +65,15 @@ export function getFoodTrucksByOwner(id) {
 			owner_id: id
 		}
 	});
+}
+
+//TODO: Work in progress
+export function searchFoodTrucks(name){
+    return axios.get('/api/food-truck/searchFoodTrucks', {
+        params: {
+            name: name
+        }
+    });
 }
 
 export function getCookie(name) {

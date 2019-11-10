@@ -32,13 +32,15 @@ public class FoodTruckEndpoint {
 
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
-    public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
-        foodTruckService.save(foodTruckDto);
-        return foodTruckDto;
-    }
+	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+		foodTruckService.save(foodTruckDto);
+		return foodTruckDto;
+	}
 
 	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
-	public List<String> getSubscribers(@PathVariable("id") String id) { return foodTruckService.getSubscribers(id); }
+	public List<String> getSubscribers(@PathVariable("id") String id) {
+		return foodTruckService.getSubscribers(id);
+	}
 
 	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
 	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
@@ -47,48 +49,48 @@ public class FoodTruckEndpoint {
 
 	/**
 	 * This function returns a list of food trucks based on an owner id
+	 *
 	 * @param owner_id the owner to retrieve food trucks for
 	 * @return A list of food trucks
 	 */
 	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
-	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
+	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id) {
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
 	}
 
 	/**
 	 * This function gets a string list of food types
+	 *
 	 * @return the string list of food types
 	 */
 	@GetMapping(value = "/getFoodTypes", produces = "application/json")
-	public List<String> getFoodTypes(){
+	public List<String> getFoodTypes() {
 		return Arrays.stream(FoodTruckDto.FoodType.values())
-				     .map(FoodTruckDto.FoodType::name)
-				     .collect(Collectors.toList());
+				.map(FoodTruckDto.FoodType::name)
+				.collect(Collectors.toList());
 	}
 
 	/**
 	 * This function gets a string list of the status
+	 *
 	 * @return the string list of the status
 	 */
 	@GetMapping(value = "/getStatusNames", produces = "application/json")
-	public List<String> getStatusNames(){
+	public List<String> getStatusNames() {
 		return Arrays.stream(FoodTruckDto.FTStatus.values())
-                     .map(FoodTruckDto.FTStatus::name)
-                     .collect(Collectors.toList());
+				.map(FoodTruckDto.FTStatus::name)
+				.collect(Collectors.toList());
 	}
 
 	//TODO: WIP
 	/**
-	 * Gets a list of food truck ids owned by the given owner id
-	 * @param name the name to search
-	 * @return the food truck found
+	 * Search for a food truck by name
+	 * @param name The food truck name
+	 * @return the list of food trucks
 	 */
-	// Take an id, and look up the corresponding foodtruck
-	@GetMapping(value = "/searchFoodTruck", produces = "application/json")
-	public Optional<FoodTruckDto> searchFoodTruck(String name) {
-		System.out.println("Searched name: " + name);
-//		return foodTruckService.find(name);
-
-        return null;
+	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
+	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+		System.out.println("Name in endpoint: " + name);
+		return foodTruckService.searchFoodTrucks(name);
 	}
 }

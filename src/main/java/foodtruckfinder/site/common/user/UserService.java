@@ -209,9 +209,4 @@ public class UserService {
 
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id) { return userDao.getOwnedFoodTrucks(id); }
 
-	//TODO: Test this
-	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
-//		return userDao.searchFoodTrucks(name);
-		return null;
-	}
 }

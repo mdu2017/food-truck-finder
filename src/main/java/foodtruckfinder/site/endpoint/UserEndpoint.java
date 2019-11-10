@@ -112,16 +112,4 @@ public class UserEndpoint {
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id){
 		return userService.getOwnedFoodTrucks(id);
 	}
-
-	//TODO: WIP
-	/**
-	 * Search for a food truck by name
-	 * @param name The food truck name
-	 * @return the list of food trucks
-	 */
-	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
-	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name){
-		System.out.println("Name in endpt: " + name);
-		return userService.searchFoodTrucks(name);
-	}
 }

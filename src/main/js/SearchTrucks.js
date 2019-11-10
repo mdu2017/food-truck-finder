@@ -66,15 +66,3 @@ SearchFoodTrucks = connect(
             dispatch(Axios.Actions.searchFoodTrucks(name))
     })
 )(SearchFoodTrucks);
-
-{/*<h1>Search Trucks Page</h1>*/}
-
-{/*/!*TODO: Fix call (not working from front end)*!/*/}
-{/*<FormGroup>*/}
-{/*    <Label for="exampleSearch">Search for Food Trucks</Label>*/}
-{/*    <Input type='text' name='search'*/}
-{/*           placeholder="spicy spicy"*/}
-{/*           onChange={e => this.setName(e.target.value)}/>*/}
-{/*    <button type="button" className="btn btn-info"*/}
-{/*            onClick={this.handleSubmit}>Search</button>*/}
-{/*</FormGroup>*/}

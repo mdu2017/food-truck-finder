@@ -462,4 +462,21 @@ public class FoodTruckDao {
         	jdbcTemplate.update(sql, params);
 		}
 	}
+
+	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+		Timestamp startTime = Timestamp.valueOf(start);
+		Timestamp endTime = Timestamp.valueOf(end);
+		String sql = "INSERT INTO DEAL " +
+				"(TRUCK_ID, MESSAGE, START, END) VALUES " +
+				"(:truckID, :message, :startTime, :endTime);";
+		Map<String, ?> params = _Maps.map("truckID", truckID, "message", message, "start", startTime, "end", endTime);
+
+		jdbcTemplate.update(sql, params);
+	}
+
+	public void removeDeal(Long truckID){
+		String sql = "DELETE * FROM DEAL WHERE TRUCK_ID = :truckID";
+		Map<String, ?> params = _Maps.map("truckID", truckID);
+		jdbcTemplate.update(sql, params);
+	}
 }

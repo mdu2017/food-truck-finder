@@ -1,6 +1,8 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import * as Pages from './TestingPages';
+import { Link } from 'react-router-dom';
+
 // User Pages
 import { ViewProfile } from './user/ViewProfile';
 import { Dashboard } from './user/Dashboard';

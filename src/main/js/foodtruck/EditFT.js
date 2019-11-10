@@ -293,13 +293,14 @@ export class EditFoodTruck extends React.Component {
 						</div>
 					) : null}
 					<legend>Schedule / Route</legend>
-					{this.displayDayOfTheWeek('Sunday')}
+					{/* AWAITING CreateFT's Schedule to be implemented. */}
+					{/* {this.displayDayOfTheWeek('Sunday')}
 					{this.displayDayOfTheWeek('Monday')}
 					{this.displayDayOfTheWeek('Tuesday')}
 					{this.displayDayOfTheWeek('Wednesday')}
 					{this.displayDayOfTheWeek('Thursday')}
 					{this.displayDayOfTheWeek('Friday')}
-					{this.displayDayOfTheWeek('Saturday')}
+					{this.displayDayOfTheWeek('Saturday')} */}
 					<Button onClick={this.handleSubmit}>Submit</Button>{' '}
 					<Button color="danger" onClick={this.handleRemoveTruck}>
 						Delete Food Truck

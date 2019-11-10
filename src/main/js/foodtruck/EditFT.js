@@ -20,6 +20,7 @@ export class EditFoodTruck extends React.Component {
 		this.state = {
 			id: null,
 			name: null,
+			description: null,
 			// menu: null,
 			// schedule: null,
 			price_low: null,
@@ -33,6 +34,7 @@ export class EditFoodTruck extends React.Component {
 
 	setID = id => this.setState({ id });
 	setName = name => this.setState({ name });
+	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
 	// setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
@@ -53,6 +55,7 @@ export class EditFoodTruck extends React.Component {
 			this.props.editTruck({
 				id: this.state.id,
 				name: this.state.name,
+				description: this.state.description,
 				// menu: this.state.menu,
 				// schedule: this.state.schedule,
 				price_low: this.state.price_low,
@@ -84,6 +87,8 @@ export class EditFoodTruck extends React.Component {
 			this.setState({ price_low: result.price_low });
 			this.setState({ price_high: result.price_high });
 			this.setState({ truck: result });
+			// Fix Reload issue
+			window.parent.location = window.parent.location.href;
 		});
 		this.getFoodTypes();
 		this.getStatuses();
@@ -262,6 +267,9 @@ export class EditFoodTruck extends React.Component {
 										name="description"
 										id="ftDescription"
 										placeholder="(Optional) Will be displayed on the Food Truck's page"
+										onChange={e =>
+											this.setDescription(e.target.value)
+										}
 									/>
 								</FormGroup>
 								<FormGroup>

@@ -90,21 +90,21 @@ export class MapContainer extends React.Component {
 	setUserCoord = position => {
 		let lat = parseFloat(position.coords.latitude);
 		let lng = parseFloat(position.coords.longitude);
-		console.log('Current location: ' + lat + ' | ' + lng);
+		// console.log('Current location: ' + lat + ' | ' + lng);
 
 		this.setState({
 			centerLat: lat,
 			centerLng: lng
 		});
 
-		{
-			console.log(
-				'user lat: ' +
-					this.state.centerLat +
-					' | user lng: ' +
-					this.state.centerLng
-			);
-		}
+		// {
+		// 	console.log(
+		// 		'user lat: ' +
+		// 			this.state.centerLat +
+		// 			' | user lng: ' +
+		// 			this.state.centerLng
+		// 	);
+		// }
 	};
 
 	//Map click logic
@@ -143,7 +143,7 @@ export class MapContainer extends React.Component {
 	};
 
 	//Opens info window when marker clicked
-	onMarkerClick = (props, marker, e) => {
+	onMarkerClick = (props, marker, evt) => {
 		this.setState({
 			selectedPlace: props,
 			activeMarker: marker,
@@ -158,7 +158,7 @@ export class MapContainer extends React.Component {
 		let lng = latLng.lng();
 		const location = coord.latLng;
 
-		console.log('New location: ' + lat + ' | ' + lng);
+		// console.log('New location: ' + lat + ' | ' + lng);
 		this.handleSelection(lat, lng);
 
 		// TODO: (Update new location of marker -- only works for 1 FT)

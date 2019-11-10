@@ -134,7 +134,7 @@ export class CreateFoodTruck extends React.Component {
 	handleStartTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map((stop, idx) => {
+			const newStop = schedule.stop.map(stop => {
 				return { ...stop, startTime: evt.target.value };
 			});
 			return { ...schedule, stop: newStop };
@@ -147,7 +147,7 @@ export class CreateFoodTruck extends React.Component {
 	handleEndTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map((stop, idx) => {
+			const newStop = schedule.stop.map(stop => {
 				return { ...stop, endTime: evt.target.value };
 			});
 			return { ...schedule, stop: newStop };
@@ -174,9 +174,9 @@ export class CreateFoodTruck extends React.Component {
 		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map((stop, sidx) => {
+			const newStop = schedule.stop.map(stop => {
 				// if (idx !== sidx) return stop;
-				const newLocation = stop.location.map((location, sidx) => {
+				const newLocation = stop.location.map(location => {
 					return {
 						...location,
 						long: this.state.selectedLongitude,
@@ -217,6 +217,7 @@ export class CreateFoodTruck extends React.Component {
 	render() {
 		return (
 			<div>
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Create a Food Truck</h1>
 					<br />
@@ -464,7 +465,7 @@ export class CreateFoodTruck extends React.Component {
 					<Button onClick={this.handleSubmit}>Create Truck</Button>
 				</div>
 				<div>
-					{this.state.schedule.map((schedule, idx) => (
+					{this.state.schedule.map(schedule => (
 						<div className="schedule">
 							<Modal
 								isOpen={this.state.modal}

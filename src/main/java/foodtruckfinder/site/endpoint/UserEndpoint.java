@@ -3,6 +3,7 @@ package foodtruckfinder.site.endpoint;
 import java.util.List;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -110,5 +111,17 @@ public class UserEndpoint {
 	@GetMapping(value = "/owner/getFoodTrucks", produces = "application/json")
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id){
 		return userService.getOwnedFoodTrucks(id);
+	}
+
+	//TODO: WIP
+	/**
+	 * Search for a food truck by name
+	 * @param name The food truck name
+	 * @return the list of food trucks
+	 */
+	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
+	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name){
+		System.out.println("Name in endpt: " + name);
+		return userService.searchFoodTrucks(name);
 	}
 }

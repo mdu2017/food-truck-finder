@@ -77,6 +77,7 @@ public class FoodTruckEndpoint {
                      .collect(Collectors.toList());
 	}
 
+	//TODO: WIP
 	/**
 	 * Gets a list of food truck ids owned by the given owner id
 	 * @param name the name to search
@@ -87,5 +88,7 @@ public class FoodTruckEndpoint {
 	public Optional<FoodTruckDto> searchFoodTruck(String name) {
 		System.out.println("Searched name: " + name);
 //		return foodTruckService.find(name);
+
+        return null;
 	}
 }

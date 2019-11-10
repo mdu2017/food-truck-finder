@@ -6,6 +6,7 @@ import java.util.Optional;
 
 // import javax.jws.soap.SOAPBinding.Use;
 
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -207,4 +208,10 @@ public class UserService {
 	public List<String> getSubscriptions(String id) { return userDao.getSubscriptions(Long.parseLong(id)); }
 
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id) { return userDao.getOwnedFoodTrucks(id); }
+
+	//TODO: Test this
+	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+//		return userDao.searchFoodTrucks(name);
+		return null;
+	}
 }

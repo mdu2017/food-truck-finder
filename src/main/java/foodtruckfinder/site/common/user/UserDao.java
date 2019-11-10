@@ -1,11 +1,13 @@
 package foodtruckfinder.site.common.user;
 
 import java.math.BigInteger;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -143,4 +145,34 @@ public class UserDao {
 		Map<String, ?> params = _Maps.map("owner_id", owner_id);
 		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID")));
 	}
+
+	//TODO: WIP
+	/**
+	 * Searches for a list of food trucks by name in the database
+	 * @param name The food truck to look for
+	 * @return list of names matching in the DB
+	 */
+//	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+//		List<FoodTruckDto> trucks = null;
+//		if(name != null && !name.isEmpty()){
+//			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE " +
+//					"NAME = :name";
+//
+//			Map<String, ?> params = _Maps.map("name", name);
+//			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
+//
+//			if(names != null){
+//				trucks = new ArrayList<>();
+//				for(String ft : names){
+//					//get each food truck
+//					Optional<FoodTruckDto> temp = this.find(ft);
+//					if(temp.isPresent()){
+//						trucks.add(temp.get());
+//					}
+//				}
+//			}
+//		}
+//
+//		return Optional.ofNullable(trucks);
+//	}
 }

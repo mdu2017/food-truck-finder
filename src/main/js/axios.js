@@ -24,12 +24,12 @@ export function getStatuses() {
 }
 
 //TODO: Work in progress
-export function searchFoodTruck(name){
-	return axios.get('/api/food-truck/searchFoodTruck', {
-		params: {
-			truckName: name
-		}
-	});
+export function searchFoodTrucks(name){
+	return axios.get('/api/user/searchFoodTrucks', {
+	    params: {
+	        name: name
+        }
+    });
 }
 
 export function authenticate(username, password) {
@@ -145,10 +145,10 @@ Actions.getFoodTrucksByOwner = owner_id => {
 };
 
 //TODO: Work in progress
-Actions.searchFoodTruck = name => {
-	return () => {
-		return searchFoodTruck(name);
-	};
+Actions.searchFoodTrucks = name => {
+    return () => {
+        return searchFoodTrucks(name);
+    };
 };
 
 Actions.update = user => {

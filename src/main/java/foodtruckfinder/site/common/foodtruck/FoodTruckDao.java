@@ -425,7 +425,7 @@ public class FoodTruckDao {
 				trucks = new ArrayList<>();
 				for(Long ft : ids){
 					//get each food truck
-					Optional<FoodTruckDto> temp = this.find(ft + "");
+					Optional<FoodTruckDto> temp = this.find(ft + ""); this.f
 					if(temp.isPresent()){
 						trucks.add(temp.get());
 					}

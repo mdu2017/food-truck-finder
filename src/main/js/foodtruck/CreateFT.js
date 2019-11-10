@@ -13,6 +13,7 @@ import {
 	Col,
 	Row
 } from 'reactstrap';
+import MapContainer from 'js/Maps';
 
 export class CreateFoodTruck extends React.Component {
 	constructor(props) {
@@ -246,7 +247,11 @@ export class CreateFoodTruck extends React.Component {
 					{this.displayDayOfTheWeek('Thursday')}
 					{this.displayDayOfTheWeek('Friday')}
 					{this.displayDayOfTheWeek('Saturday')}
+
 					<Button onClick={this.handleSubmit}>Submit</Button>
+
+					{/*Render map*/}
+					<MapContainer/>
 				</div>
 			</div>
 		);

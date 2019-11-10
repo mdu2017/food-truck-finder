@@ -27,6 +27,11 @@ public class FoodTruckService {
 		foodTruckDao.save(foodTruckDto);
 	}
 
+	public void remove(Long truckID){
+		foodTruckDao.remove(truckID);
+		return;
+	}
+
 	/**
 	 * This function subscribes a user to a food truck
 	 * @param truck_id the truck id

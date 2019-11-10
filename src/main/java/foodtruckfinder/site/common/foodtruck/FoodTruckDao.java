@@ -333,6 +333,12 @@ public class FoodTruckDao {
 		}
 	}
 
+	public void remove(Long truckID){
+		String sql = "DELETE * FROM FOOD_TRUCK WHERE FOOD_TRUCK_ID = :truckId";
+		Map<String, ?> params = _Maps.map("truck_id", truckID);
+		jdbcTemplate.update(sql, params);
+	}
+
 	/**
 	 * Gets the food type id from the database or else defaults to american food
 	 * @param type the FoodType to fetch from the database

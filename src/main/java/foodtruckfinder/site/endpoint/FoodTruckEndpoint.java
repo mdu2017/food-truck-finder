@@ -37,6 +37,12 @@ public class FoodTruckEndpoint {
         return foodTruckDto;
     }
 
+    @PostMapping(value = "/removeTruck", produces = "application/json")
+	public void removeTruck(Long truckID){
+		foodTruckService.remove(truckID);
+		return;
+	}
+
 	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
 

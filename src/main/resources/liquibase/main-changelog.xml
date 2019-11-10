@@ -49,13 +49,13 @@
             CONSTRAINT `OWNED_BY` FOREIGN KEY (`OWNER_ID`) REFERENCES `USER` (`USER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
-            CREATE TABLE `DEAL` (
+            CREATE TABLE `deal` (
             `TRUCK_ID` int(11) NOT NULL,
-            `MESSAGE` varchar(300) DEFAULT NULL,
+            `MESSAGE` varchar(500) DEFAULT NULL,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`)
-            );
+            PRIMARY KEY (`TRUCK_ID`,`START`,`END`)
+            ) ;
 
             CREATE TABLE `FOOD_TYPE` (
             `TYPE_ID` int(11) NOT NULL,

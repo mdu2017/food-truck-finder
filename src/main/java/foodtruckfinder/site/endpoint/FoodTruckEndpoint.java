@@ -76,4 +76,16 @@ public class FoodTruckEndpoint {
                      .map(FoodTruckDto.FTStatus::name)
                      .collect(Collectors.toList());
 	}
+
+	/**
+	 * Gets a list of food truck ids owned by the given owner id
+	 * @param name the name to search
+	 * @return the food truck found
+	 */
+	// Take an id, and look up the corresponding foodtruck
+	@GetMapping(value = "/searchFoodTruck", produces = "application/json")
+	public Optional<FoodTruckDto> searchFoodTruck(String name) {
+		System.out.println("Searched name: " + name);
+//		return foodTruckService.find(name);
+	}
 }

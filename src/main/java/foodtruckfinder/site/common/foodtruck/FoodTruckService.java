@@ -21,6 +21,8 @@ public class FoodTruckService {
 		return foodTruckDao.find(id);
 	}
 
+	//TODO: function to get food truck by name
+
 	public void save(FoodTruckDto foodTruckDto) throws SQLException {
 //        foodTruckDao.testFT(foodTruckDto);
 		foodTruckDao.save(foodTruckDto);

@@ -23,21 +23,14 @@ export function getStatuses() {
 	return axios.get('/api/food-truck/getStatusNames');
 }
 
-// export function makeFT(name, status) {
-// 	return axios({
-// 		method: 'post',
-// 		url: '/oauth/token',
-// 		params: {
-// 			grant_type: 'password',
-// 			name,
-// 			status
-// 		},
-// 		auth: {
-// 			username: 'food-truck-finder-app',
-// 			password: 'food-truck-finder-app-secret'
-// 		}
-// 	});
-// }
+//TODO: Work in progress
+export function searchFoodTruck(name){
+	return axios.get('/api/food-truck/searchFoodTruck', {
+		params: {
+			truckName: name
+		}
+	});
+}
 
 export function authenticate(username, password) {
 	return axios({
@@ -148,6 +141,13 @@ Actions.getOwnerFoodTruckIDs = id => {
 Actions.getFoodTrucksByOwner = owner_id => {
 	return dispatch => {
 		return dispatch(getFoodTrucksByOwner(owner_id));
+	};
+};
+
+//TODO: Work in progress
+Actions.searchFoodTruck = name => {
+	return () => {
+		return searchFoodTruck(name);
 	};
 };
 

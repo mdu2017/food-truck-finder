@@ -79,7 +79,7 @@
             `MESSAGE` varchar(300) NOT NULL,
             `SENT` datetime NOT NULL,
             `VIEWED` tinyint(4) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`,`SENT`)
             );
 
             CREATE TABLE `REVIEW` (

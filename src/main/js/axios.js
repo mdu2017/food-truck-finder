@@ -146,8 +146,8 @@ Actions.getFoodTrucksByOwner = owner_id => {
 
 //TODO: Work in progress
 Actions.searchFoodTrucks = name => {
-    return () => {
-        return searchFoodTrucks(name);
+    return dispatch => {
+        return dispatch(searchFoodTrucks(name));
     };
 };
 

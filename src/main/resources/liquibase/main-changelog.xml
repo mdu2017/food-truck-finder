@@ -94,7 +94,6 @@
             CREATE TABLE `REVIEW` (
             `TRUCK_ID` int(11) NOT NULL,
             `USER_ID` int(11) NOT NULL,
-            `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,
             `RATING` int(11) NOT NULL,
             `DATE` datetime NOT NULL,

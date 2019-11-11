@@ -1,11 +1,14 @@
 package foodtruckfinder.site.common.user;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 // import javax.jws.soap.SOAPBinding.Use;
 
+import alloy.util.Tuple;
+import foodtruckfinder.site.common.External.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -210,5 +213,17 @@ public class UserService {
 
 	public Optional<List<String>> getNotifications(Long userId){
 		return userDao.getNotifications(userId);
+	}
+
+	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){
+		userDao.rateTruck(user_ID, truck_ID, message, rating);
+	}
+
+	public List<Rating> getRatingByUser(Long user_ID){
+		return userDao.getRatingByUser(user_ID);
+	}
+
+	public List<Rating> getRatingByTruck(Long truck_ID){
+		return userDao.getRatingByTruck(truck_ID);
 	}
 }

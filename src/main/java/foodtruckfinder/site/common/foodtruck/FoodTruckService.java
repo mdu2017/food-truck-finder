@@ -1,6 +1,7 @@
 package foodtruckfinder.site.common.foodtruck;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -26,6 +27,22 @@ public class FoodTruckService {
 	public void save(FoodTruckDto foodTruckDto) throws SQLException {
 //        foodTruckDao.testFT(foodTruckDto);
 		foodTruckDao.save(foodTruckDto);
+	}
+
+	/**
+	 *
+	 * @param truck_id
+	 */
+	public boolean remove(Long truck_id){
+		return foodTruckDao.remove(truck_id);
+	}
+
+	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+		foodTruckDao.addDeal(message, truckID, start, end);
+	}
+
+	public void removeDeal(Long truckID){
+		foodTruckDao.removeDeal(truckID);
 	}
 
 	/**

@@ -51,7 +51,7 @@ export class CustomNavBar extends React.Component {
 			return (
 				<div>
 					<DropdownToggle nav caret>
-						View Profile
+						Options
 					</DropdownToggle>
 					<DropdownMenu right>
 						<DropdownItem tag={Link} to="/view-profile">

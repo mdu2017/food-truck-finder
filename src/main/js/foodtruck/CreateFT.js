@@ -11,7 +11,11 @@ import {
 	FormText,
 	Container,
 	Col,
-	Row
+	Row,
+	Modal,
+	ModalHeader,
+	ModalBody,
+	ModalFooter
 } from 'reactstrap';
 import MapContainer from 'js/Maps';
 
@@ -21,20 +25,41 @@ export class CreateFoodTruck extends React.Component {
 		this.state = {
 			name: null,
 			// menu: null,
-			// schedule: null,
+			description: null,
 			price_low: null,
 			price_high: null,
 			status: null,
 			foodtype: null,
-			ownerId: JSON.parse(Axios.getCookie('user')).id
+			ownerId: JSON.parse(Axios.getCookie('user')).id,
+			schedule: [
+				{
+					day: 'S',
+					stop: [
+						{
+							startTime: null,
+							endTime: null,
+							location: [{ lat: null, long: null }]
+						}
+					]
+				}
+			],
+			selectedLatitude: 0,
+			selectedLongitude: 0,
+			buttonVisibility: true,
+			modal: false
 		};
+		// Make Dynamic Page
+		window.location.href = '/?#/create-food-truck/';
+		this.toggle = this.toggle.bind(this);
+		this.handleModalSubmit = this.handleModalSubmit.bind(this);
 		this.getFoodTypes();
 		this.getStatuses();
 	}
 
 	setName = name => this.setState({ name });
+	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
-	// setSchedule = schedule => this.setState({ schedule });
+	setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
 	setPriceHigh = price_high => this.setState({ price_high });
 	setStatus = status => this.setState({ status });
@@ -53,6 +78,7 @@ export class CreateFoodTruck extends React.Component {
 			}
 			this.props.createFT({
 				name: this.state.name,
+				description: this.state.description,
 				// menu: this.state.menu,
 				// schedule: this.state.schedule,
 				price_low: this.state.price_low,
@@ -65,6 +91,18 @@ export class CreateFoodTruck extends React.Component {
 		} else {
 			window.alert('Error: Price High cannot be lower than Price Low!');
 		}
+	};
+
+	toggle() {
+		this.setState({
+			modal: !this.state.modal
+		});
+	}
+
+	handleModalSubmit = event => {
+		this.toggle();
+		this.setState({ buttonVisibility: !this.state.buttonVisibility });
+		event.preventDefault();
 	};
 
 	// Promise value return
@@ -93,60 +131,87 @@ export class CreateFoodTruck extends React.Component {
 		});
 	}
 
-	displayDayOfTheWeek(dayofTheWeek) {
-		return (
-			<div>
-				<Container>
-					<Row>
-						<Col xs="auto">
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
-									{dayofTheWeek}
-								</FormGroup>
-								<FormGroup>
-									<Input
-										type="time"
-										name="time"
-										id="StartTime"
-									/>
-									<Label for="EndTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="EndTime"
-									/>
-								</FormGroup>
-							</Form>
-						</Col>
-						<Col>
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input
-										type="number"
-										min={0}
-										name="latitude"
-										id="latitude"
-										placeholder="latitude"
-										step="0.01"
-									/>
-								</FormGroup>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input
-										type="number"
-										min={0}
-										name="longitude"
-										id="longitude"
-										placeholder="longitude"
-										step="0.01"
-									/>
-								</FormGroup>
-							</Form>
-						</Col>
-					</Row>
-				</Container>
-			</div>
-		);
+	handleStartTimeScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			const newStop = schedule.stop.map(stop => {
+				return { ...stop, startTime: evt.target.value };
+			});
+			return { ...schedule, stop: newStop };
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleEndTimeScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			const newStop = schedule.stop.map(stop => {
+				return { ...stop, endTime: evt.target.value };
+			});
+			return { ...schedule, stop: newStop };
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleDayScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			return {
+				...schedule,
+				day: evt.target.value
+			};
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleLocationChange = idx => evt => {
+		this.setState({ buttonVisibility: !this.state.buttonVisibility });
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			const newStop = schedule.stop.map(stop => {
+				// if (idx !== sidx) return stop;
+				const newLocation = stop.location.map(location => {
+					return {
+						...location,
+						long: this.state.selectedLongitude,
+						lat: this.state.selectedLatitude
+					};
+				});
+				return { ...stop, location: newLocation };
+			});
+			return { ...schedule, stop: newStop };
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleAddStop() {
+		this.setState({
+			schedule: this.state.schedule.concat([
+				{
+					day: 'S',
+					stop: [
+						{
+							startTime: null,
+							endTime: null,
+							location: [{ lat: null, long: null }]
+						}
+					]
+				}
+			])
+		});
+	}
+
+	handleMapSelection(latitude, longitude) {
+		this.setState({ selectedLatitude: latitude });
+		this.setState({ selectedLongitude: longitude });
 	}
 
 	render() {
@@ -223,7 +288,10 @@ export class CreateFoodTruck extends React.Component {
 								type="textarea"
 								name="description"
 								id="ftDescription"
-								placeholder="(Optional) Will be displayed on the Food Truck's page"
+								placeholder="(Optional) Will be displayed on the Food Truck's page. Limited to 200 characters."
+								onChange={e =>
+									this.setDescription(e.target.value)
+								}
 							/>
 						</FormGroup>
 						<FormGroup>
@@ -240,18 +308,200 @@ export class CreateFoodTruck extends React.Component {
 						</FormGroup>
 					</Form>
 					<legend>Schedule</legend>
-					{this.displayDayOfTheWeek('Sunday')}
-					{this.displayDayOfTheWeek('Monday')}
-					{this.displayDayOfTheWeek('Tuesday')}
-					{this.displayDayOfTheWeek('Wednesday')}
-					{this.displayDayOfTheWeek('Thursday')}
-					{this.displayDayOfTheWeek('Friday')}
-					{this.displayDayOfTheWeek('Saturday')}
+					<FormText color="muted">
+						If no time is selected for an individual day, it is
+						assumed to be closed.
+					</FormText>
+					<Container>
+						<Row>
+							<Col md={{ offset: 3 }}>Time at Location:</Col>
+						</Row>
+						{this.state.schedule.map((schedule, idx) => (
+							<div className="schedule">
+								<Row>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+												<span>
+													{'Stop '}
+													{idx + 1}
+													{': '}
+												</span>
+												<Input
+													required
+													type="select"
+													name="DotW"
+													id="DotW"
+													onChange={this.handleDayScheduleChange(
+														idx
+													)}>
+													<option value="S">
+														Sunday
+													</option>
+													<option value="M">
+														Monday
+													</option>
+													<option value="T">
+														Tuesday
+													</option>
+													<option value="W">
+														Wednesday
+													</option>
+													<option value="R">
+														Thursday
+													</option>
+													<option value="F">
+														Friday
+													</option>
+													<option value="U">
+														Saturday
+													</option>
+												</Input>
+											</FormGroup>
+										</Form>
+									</Col>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup className="text-center">
+												<Input
+													required
+													type="time"
+													name="time"
+													id="StartTime"
+													onChange={this.handleStartTimeScheduleChange(
+														idx
+													)}
+												/>
+												<Label for="EndTime"> - </Label>
+												<Input
+													required
+													type="time"
+													name="time"
+													id="EndTime"
+													onChange={this.handleEndTimeScheduleChange(
+														idx
+													)}
+												/>
+											</FormGroup>
+										</Form>
+									</Col>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup>
+												<Button
+													outline
+													hidden={
+														!this.state
+															.buttonVisibility
+													}
+													color="primary"
+													id="AddLocation"
+													onClick={this.toggle}>
+													Add Location
+												</Button>
+												<Button
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													outline
+													color="primary"
+													onClick={this.handleLocationChange(
+														idx
+													)}>
+													Confirm Location for Stop{' '}
+													{idx + 1} ?
+												</Button>
+												<Input
+													disabled
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													type="number"
+													name="latitude"
+													id="latitude"
+													value={
+														this.state
+															.selectedLatitude
+													}
+												/>
+												<Input
+													disabled
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													type="number"
+													name="longitude"
+													id="longitude"
+													value={
+														this.state
+															.selectedLongitude
+													}
+												/>
+											</FormGroup>
+										</Form>
+									</Col>
+								</Row>
+							</div>
+						))}
+					</Container>
+					<Col sm="12" md={{ size: 6, offset: 2 }}>
+						<Form inline>
+							<FormGroup>
+								<Button
+									type="submit"
+									hidden={!this.state.buttonVisibility}
+									color="primary"
+									size="sm"
+									onClick={() => this.handleAddStop()}>
+									Add Stop
+								</Button>
+							</FormGroup>
+						</Form>
+					</Col>
 
-					<Button onClick={this.handleSubmit}>Submit</Button>
-
-					{/*Render map*/}
-					<MapContainer/>
+					<Button onClick={this.handleSubmit}>Create Truck</Button>
+				</div>
+				<div>
+					{this.state.schedule.map(schedule => (
+						<div className="schedule">
+							<Modal
+								isOpen={this.state.modal}
+								size="lg"
+								scrollable="true"
+								style={{ height: '400px', width: '425px' }}>
+								<form onSubmit={this.handleModalSubmit}>
+									<ModalHeader>Google Maps</ModalHeader>
+									<ModalBody
+										style={{
+											height: '400px',
+											width: '600px'
+										}}>
+										<MapContainer
+											handleMapSelection={this.handleMapSelection.bind(
+												this
+											)}
+										/>
+									</ModalBody>
+									<ModalFooter>
+										<input
+											type="submit"
+											value="Submit"
+											color="primary"
+											className="btn btn-primary"
+										/>
+										<Button
+											color="danger"
+											onClick={this.toggle}>
+											Cancel
+										</Button>
+									</ModalFooter>
+								</form>
+							</Modal>
+						</div>
+					))}
 				</div>
 			</div>
 		);
@@ -263,12 +513,11 @@ CreateFoodTruck = connect(
 		createFT: foodTruck =>
 			dispatch(Axios.Actions.createFT(foodTruck))
 				// Success
-				.then(function(result) {
+				.then(function() {
+					window.location.href = '/#/list-food-trucks';
 					window.alert('Creation of the Food Truck was successful!');
 				})
 				// Failed
-				.catch(error =>
-					window.alert('Creation of the Food Truck failed!')
-				)
+				.catch(() => window.alert('Creation of the Food Truck failed!'))
 	})
 )(CreateFoodTruck);

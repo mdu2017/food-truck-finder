@@ -52,7 +52,7 @@
             CREATE TABLE `DEAL` (
             `DEAL_ID` int(11) NOT NULL AUTO_INCREMENT,
             `TRUCK_ID` int(11) NOT NULL,
-            `MESSAGE` varchar(300) DEFAULT NULL,
+            `MESSAGE` varchar(500) DEFAULT NULL,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
             PRIMARY KEY (`DEAL_ID`),
@@ -92,6 +92,7 @@
             );
 
             CREATE TABLE `REVIEW` (
+            `TRUCK_ID` int(11) NOT NULL,
             `USER_ID` int(11) NOT NULL,
             `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,

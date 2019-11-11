@@ -1,6 +1,7 @@
 package foodtruckfinder.site.endpoint;
 
 import java.sql.SQLException;
+import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -36,6 +37,11 @@ public class FoodTruckEndpoint {
         foodTruckService.save(foodTruckDto);
         return foodTruckDto;
     }
+
+    @PostMapping(value = "/removeTruck", produces = "application/json")
+	public boolean removeTruck(Long truck_id){
+		return foodTruckService.remove(truck_id);
+	}
 
 	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
@@ -86,5 +92,16 @@ public class FoodTruckEndpoint {
 	public void sendNotification(String message, Long foodTruckId){
 		System.out.println(foodTruckId);
 		foodTruckService.sendNotification(message, foodTruckId);
+	}
+
+	@PostMapping(value = "/addDeal", produces = "application/json")
+	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+		foodTruckService.sendNotification(message, truckID);
+		foodTruckService.addDeal(message, truckID, start, end);
+	}
+
+	@PostMapping(value = "/removeDeal", produces = "application/json")
+	public void removeDeal(Long truckID){
+		foodTruckService.removeDeal(truckID);
 	}
 }

@@ -21,6 +21,7 @@ export class EditFoodTruck extends React.Component {
 		this.state = {
 			id: null,
 			name: null,
+			description: null,
 			// menu: null,
 			// schedule: null,
 			price_low: null,
@@ -36,6 +37,7 @@ export class EditFoodTruck extends React.Component {
 
 	setID = id => this.setState({ id });
 	setName = name => this.setState({ name });
+	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
 	// setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
@@ -56,6 +58,7 @@ export class EditFoodTruck extends React.Component {
 			this.props.editTruck({
 				id: this.state.id,
 				name: this.state.name,
+				description: this.state.description,
 				// menu: this.state.menu,
 				// schedule: this.state.schedule,
 				price_low: this.state.price_low,
@@ -95,6 +98,13 @@ export class EditFoodTruck extends React.Component {
 			self.setState({ statuses: result });
 		});
 	}
+
+	handleRemoveTruck = event => {
+		this.props.removeTruck({
+			truck_id: this.state.id
+		});
+		event.preventDefault();
+	};
 
 	displayDayOfTheWeek(dayofTheWeek) {
 		return (
@@ -240,6 +250,9 @@ export class EditFoodTruck extends React.Component {
 										name="description"
 										id="ftDescription"
 										placeholder="(Optional) Will be displayed on the Food Truck's page"
+										onChange={e =>
+											this.setDescription(e.target.value)
+										}
 									/>
 								</FormGroup>
 								<FormGroup>
@@ -263,15 +276,18 @@ export class EditFoodTruck extends React.Component {
 						</div>
 					) : null}
 					<legend>Schedule / Route</legend>
-					{this.displayDayOfTheWeek('Sunday')}
+					{/* AWAITING CreateFT's Schedule to be implemented. */}
+					{/* {this.displayDayOfTheWeek('Sunday')}
 					{this.displayDayOfTheWeek('Monday')}
 					{this.displayDayOfTheWeek('Tuesday')}
 					{this.displayDayOfTheWeek('Wednesday')}
 					{this.displayDayOfTheWeek('Thursday')}
 					{this.displayDayOfTheWeek('Friday')}
-					{this.displayDayOfTheWeek('Saturday')}
+					{this.displayDayOfTheWeek('Saturday')} */}
 					<Button onClick={this.handleSubmit}>Submit</Button>{' '}
-					<Button color="danger">Delete Food Truck</Button>
+					<Button color="danger" onClick={this.handleRemoveTruck}>
+						Delete Food Truck
+					</Button>
 				</div>
 			</div>
 		);
@@ -280,6 +296,17 @@ export class EditFoodTruck extends React.Component {
 EditFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck))
+		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck)),
+		removeTruck: truck_id =>
+			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function(
+				result
+			) {
+				if (result) {
+					window.location.href = '/#/list-food-trucks';
+					window.alert('Deletion was successful!');
+				} else {
+					window.alert('Deletion was NOT successful!');
+				}
+			})
 	})
 )(EditFoodTruck);

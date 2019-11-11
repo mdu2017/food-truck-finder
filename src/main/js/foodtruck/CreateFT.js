@@ -514,6 +514,7 @@ CreateFoodTruck = connect(
 			dispatch(Axios.Actions.createFT(foodTruck))
 				// Success
 				.then(function() {
+					window.location.href = '/#/list-food-trucks';
 					window.alert('Creation of the Food Truck was successful!');
 				})
 				// Failed

@@ -19,6 +19,7 @@ export function createFoodTruck(foodTruck) {
 export function sendNotification(message, foodTruckId) {
 	console.log(message);
 	return axios.post('api/food-truck/send-notification?message=' + message + '&foodTruckId=' + foodTruckId);
+}
 
 // Deletes a FoodTruck in the Database
 export function removeFoodTruck(truck_id) {

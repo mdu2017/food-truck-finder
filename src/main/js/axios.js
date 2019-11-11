@@ -18,7 +18,12 @@ export function createFoodTruck(foodTruck) {
 // Multivalue axios post
 export function sendNotification(message, foodTruckId) {
 	console.log(message);
-	return axios.post('api/food-truck/send-notification?message=' + message + '&foodTruckId=' + foodTruckId);
+	return axios.post(
+		'api/food-truck/send-notification?message=' +
+			message +
+			'&foodTruckId=' +
+			foodTruckId
+	);
 }
 
 // Deletes a FoodTruck in the Database
@@ -50,9 +55,10 @@ export function getRecommendations(userlat, userlong) {
 }
 
 export function subscribe(foodtruckId, userId) {
-	return axios.post('api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId);
+	return axios.post(
+		'api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId
+	);
 }
-
 
 // export function makeFT(name, status) {
 // 	return axios({
@@ -166,6 +172,8 @@ Actions.createFT = foodTruck => {
 Actions.sendNotification = (message, foodTruckId) => {
 	return () => {
 		return sendNotification(message, foodTruckId);
+	};
+};
 
 //Delete food truck
 Actions.removeFoodFT = truck_id => {

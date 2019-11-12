@@ -76,7 +76,7 @@ export class Dashboard extends React.Component {
 											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink disabled href="#/search-trucks">
+											<NavLink href="#/search-trucks">
 												Search Food Trucks
 											</NavLink>
 										</NavItem>
@@ -86,7 +86,7 @@ export class Dashboard extends React.Component {
 											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink disabled href="#/about">
+											<NavLink href="#/about">
 												About Us
 											</NavLink>
 										</NavItem>

@@ -11,7 +11,7 @@ import { ForgotPassword } from './user/ForgotPassword';
 import { Login } from './user/Login';
 import { Notifications } from './user/Notifications';
 import { ViewEventDetails } from './user/ViewEventDetails';
-import { SearchTrucks } from './user/SearchTrucks';
+import {SearchFoodTrucks, SearchTrucks} from './SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
 import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
@@ -48,7 +48,7 @@ export default class Index extends React.Component {
 					<Route
 						exact
 						path="/search-trucks"
-						component={SearchTrucks}
+						component={SearchFoodTrucks}
 					/>
 					<Route
 						exact

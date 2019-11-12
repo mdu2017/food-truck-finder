@@ -1,8 +1,6 @@
 package foodtruckfinder.site.common.foodtruck;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.HashMap;
 import java.util.List;
@@ -12,10 +10,7 @@ import java.util.Optional;
 import java.util.*;
 
 import alloy.util.Tuple;
-import foodtruckfinder.site.common.user.UserDao;
-import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.dao.DataAccessException;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
 import org.springframework.jdbc.support.GeneratedKeyHolder;
@@ -486,5 +481,37 @@ public class FoodTruckDao {
 			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
         	jdbcTemplate.update(sql, params);
 		}
+	}
+
+	public Optional<Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
+		String sql = "SELECT st.LATITUDE, st.LONGITUDE " +
+				"FROM schedule AS sch, truck_stop AS st " +
+				"WHERE sch.STOP_ID = st.STOP_ID " +
+				"AND sch.TRUCK_ID = :truckid" +
+				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
+				"AND (TIME(st.end) > TIME(NOW()))";
+
+		String currDay = "U";
+		Calendar calendar = Calendar.getInstance();
+		switch(Calendar.DAY_OF_WEEK){
+			case 1: currDay = "U"; break;
+			case 2: currDay = "M"; break;
+			case 3: currDay = "T"; break;
+			case 4: currDay = "W"; break;
+			case 5: currDay = "H"; break;
+			case 6: currDay = "F"; break;
+			case 7: currDay = "S"; break;
+		}
+
+		Map<String, ?> params = _Maps.map("day", currDay, "truckid", foodTruckId);
+		Optional<Tuple.Pair<Double, Double>> location = jdbcTemplate.query(sql, params, rs -> {
+			Pair<Double, Double> loc = null;
+			if(rs.next()) {
+				loc = new Tuple2<Double, Double>(rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
+			}
+			return Optional.ofNullable(loc);
+		});
+
+		return location;
 	}
 }

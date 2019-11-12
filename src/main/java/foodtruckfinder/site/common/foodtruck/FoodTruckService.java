@@ -4,10 +4,9 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
-import foodtruckfinder.site.common.user.UserDto;
+import alloy.util.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * If this is your first time looking at Spring Services, check out the detailed explanation in UserService first.
@@ -56,7 +55,7 @@ public class FoodTruckService {
     /**
      * send a message to all the owner's subscribers
      * @param message what you want to say
-     * @param ownerID The owner's ID
+     * @param foodTruckId The food truck id
      */
 	public void sendNotification(String message, Long foodTruckId){
         foodTruckDao.sendNotification(message, foodTruckId);
@@ -66,4 +65,8 @@ public class FoodTruckService {
 														   double userlong) {
 		return foodTruckDao.getRecommendations(userlat, userlong);
 	}
+
+    public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
+		return foodTruckDao.getCurrentLocation(foodTruckId);
+    }
 }

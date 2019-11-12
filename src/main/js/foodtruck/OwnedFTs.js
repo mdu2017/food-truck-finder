@@ -31,7 +31,7 @@ export class OwnedFoodTrucks extends React.Component {
 
 	setMessage = notificationMessage => this.setState({ notificationMessage });
 
-	componentWillMount() {
+	componentDidMount() {
 		Axios.getFoodTrucksByOwner(this.state.owner_id).then(result => {
 			this.setState({ trucks: result });
 			result.map((truck, index) => (
@@ -40,9 +40,10 @@ export class OwnedFoodTrucks extends React.Component {
 		});
 	}
 
-	toggle() {
+	toggle(id) {
 		this.setState({
-			modal: !this.state.modal
+			modal: !this.state.modal,
+			foodTruckId: id
 		});
 	}
 
@@ -79,7 +80,7 @@ export class OwnedFoodTrucks extends React.Component {
 									<Button
 										color="info"
 										size="sm"
-										onClick={this.toggle}>
+										onClick={() => this.toggle(truck.id)}>
 										<img
 											src={Bell}
 											width={20}
@@ -125,7 +126,7 @@ export class OwnedFoodTrucks extends React.Component {
 								color="primary"
 								className="btn btn-primary"
 							/>
-							<Button color="danger" onClick={this.toggle}>
+							<Button color="danger" onClick={() => this.toggle(null)}>
 								Cancel
 							</Button>
 						</ModalFooter>

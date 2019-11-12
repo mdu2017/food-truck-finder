@@ -7,7 +7,7 @@ import ViewMarker from 'js/images/food_truck_existing.png';
 
 const style = {
 	width: '65%',
-	height: '65%'
+	height: '65%',
 };
 
 export class MapContainer extends React.Component {
@@ -16,6 +16,7 @@ export class MapContainer extends React.Component {
 
 		//State for info window/markers/selectedPlace
 		this.state = {
+
 			//Center
 			centerLat: 31.549701,
 			centerLng: -97.114305,
@@ -35,16 +36,14 @@ export class MapContainer extends React.Component {
 			ftLat: null,
 			ftLng: null,
 
-			loc: { lat: 31.538813002764755, lng: -97.14596871840052 },
+			loc: {lat: 31.538813002764755, lng: -97.14596871840052},
 
 			// TODO: Sample locations to test view nearby food truck (stores object object)
-			markers: [
-				{ lat: 31.538813002764755, lng: -97.14596871840052 },
-				{ lat: 31.532965359436357, lng: -97.11 },
-				{ lat: 31.532965359436357, lng: -97.12021951185756 },
-				{ lat: 31.580066500056425, lng: -97.15 },
-				{ lat: 31.5724617149029, lng: -97.06357125746302 }
-			]
+			markers: [{lat: 31.538813002764755, lng: -97.14596871840052},
+				{lat: 31.532965359436357, lng: -97.11},
+				{lat: 31.532965359436357, lng: -97.12021951185756},
+				{lat: 31.580066500056425, lng: -97.15},
+				{lat: 31.5724617149029, lng: -97.06357125746302}]
 		};
 
 		//Set user location

@@ -1,4 +1,5 @@
 import React from 'react';
+import Select from 'react-select';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
@@ -27,7 +28,9 @@ export class EditFoodTruck extends React.Component {
 			status: null,
 			foodtype: null,
 			truck: null,
-			ownerId: JSON.parse(Axios.getCookie('user')).id
+			ownerId: JSON.parse(Axios.getCookie('user')).id,
+			foodtypes: [],
+			statuses: []
 		};
 	}
 
@@ -58,7 +61,7 @@ export class EditFoodTruck extends React.Component {
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
-				foodtype: this.state.foodtype,
+				type: this.state.foodtype,
 				ownerId: this.state.ownerId
 			});
 			event.preventDefault();
@@ -67,42 +70,29 @@ export class EditFoodTruck extends React.Component {
 		}
 	};
 
-	componentWillMount() {
+	componentDidMount() {
 		const URLObject = this.props.match.params;
 		// Object Destruction
 		var { foodtruckId: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
-			this.setState({ id: result.id });
-			this.setState({ name: result.name });
-			this.setState({ price_low: result.price_low });
-			this.setState({ price_high: result.price_high });
-			this.setState({ truck: result });
+			this.setState({ id: result.id, name: result.name,
+				price_low: result.price_low, price_high: result.price_high,
+				truck: result, foodtype: result.type, status: result.status });
 		});
 		this.getFoodTypes();
 		this.getStatuses();
 	}
 
 	getFoodTypes() {
-		var self = this;
-		Axios.getFoodTypes().then(function(result) {
-			self.setState({ foodtype: result[0] });
-			var str = '';
-			result.forEach(function(type) {
-				str += '<option>' + type + '</option>';
-			});
-			document.getElementById('foodTypes').innerHTML = str;
+		Axios.getFoodTypes().then(result => {
+			this.setState({ foodtypes: result });
 		});
 	}
 
 	getStatuses() {
 		var self = this;
-		Axios.getStatuses().then(function(result) {
-			self.setState({ status: result[0] });
-			var str = '';
-			result.forEach(function(status) {
-				str += '<option>' + status + '</option>';
-			});
-			document.getElementById('statuses').innerHTML = str;
+		Axios.getStatuses().then(result => {
+			self.setState({ statuses: result });
 		});
 	}
 
@@ -163,6 +153,7 @@ export class EditFoodTruck extends React.Component {
 	}
 
 	render() {
+		console.log(this.state.foodtype + ' ' + this.state.status);
 		return (
 			<div>
 				<NavBars.CustomNavBar />
@@ -186,25 +177,19 @@ export class EditFoodTruck extends React.Component {
 								</FormGroup>
 								<FormGroup>
 									<Label for="statuses">Current Status</Label>
-									<Input
-										type="select"
-										name="status"
-										id="statuses"
-										onChange={e =>
-											this.setStatus(e.target.value)
-										}
-									/>
+									<select value={this.state.status} onChange={e => this.setStatus(e.target.value)}>
+										{this.state.statuses.map((status, index) => (
+											<option key={index}>{status}</option>
+										))}
+									</select>
 								</FormGroup>
 								<FormGroup>
 									<Label for="foodTypes">Food Type</Label>
-									<Input
-										type="select"
-										name="foodtype"
-										id="foodTypes"
-										onChange={e =>
-											this.setFoodType(e.target.value)
-										}
-									/>
+									<select value={this.state.foodtype} onChange={e => this.setFoodType(e.target.value)}>
+										{this.state.foodtypes.map((foodtype, index) => (
+											<option key={index}>{foodtype}</option>
+										))}
+									</select>
 								</FormGroup>
 							</Form>
 							<Form inline>

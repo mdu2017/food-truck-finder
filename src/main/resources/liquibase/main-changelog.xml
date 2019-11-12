@@ -50,11 +50,14 @@
             );
 
             CREATE TABLE `DEAL` (
+            `DEAL_ID` int(11) NOT NULL AUTO_INCREMENT,
             `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) DEFAULT NULL,
             `START` datetime NOT NULL,
             `END` datetime NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`)
+            PRIMARY KEY (`DEAL_ID`),
+            KEY `truck_id_idx` (`TRUCK_ID`),
+            CONSTRAINT `truck_id` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
             );
 
             CREATE TABLE `FOOD_TYPE` (
@@ -65,42 +68,39 @@
             );
 
             CREATE TABLE `MENU` (
-            `ITEM_ID` int(11) NOT NULL,
+            `ITEM_ID` int(11) NOT NULL AUTO_INCREMENT,
             `TRUCK_ID` int(11) NOT NULL,
             `NAME` varchar(45) NOT NULL,
             `DESCRIPTION` varchar(300) DEFAULT NULL,
             `PRICE` double NOT NULL,
-            PRIMARY KEY (`ITEM_ID`)
+            PRIMARY KEY (`ITEM_ID`),
+            KEY `truckid_idx` (`TRUCK_ID`),
+            CONSTRAINT `truckid` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
             );
 
             CREATE TABLE `NOTIFICATION` (
             `TRUCK_ID` int(11) NOT NULL,
             `USER_ID` int(11) NOT NULL,
-            `MESSAGE` varchar(300) NOT NULL,
             `SENT` datetime NOT NULL,
+            `MESSAGE` varchar(300) NOT NULL,
             `VIEWED` tinyint(4) NOT NULL DEFAULT '0',
-            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`,`SENT`),
+            KEY `userid_idx` (`USER_ID`),
+            KEY `useridnot_idx` (`USER_ID`),
+            CONSTRAINT `truckidnot` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
+            CONSTRAINT `useridnot` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
             );
 
             CREATE TABLE `REVIEW` (
             `USER_ID` int(11) NOT NULL,
+            `TRUCK_ID` int(11) NOT NULL,
             `MESSAGE` varchar(300) NOT NULL,
             `RATING` int(11) NOT NULL,
             `DATE` datetime NOT NULL,
-            PRIMARY KEY (`USER_ID`)
-            );
-
-            CREATE TABLE `SCHEDULE` (
-            `TRUCK_ID` int(11) NOT NULL,
-            `DAY` varchar(45) NOT NULL,
-            `STOP_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`)
-            );
-
-            CREATE TABLE `SUBSCRIPTIONS` (
-            `TRUCK_ID` int(11) NOT NULL,
-            `USER_ID` int(11) NOT NULL,
-            PRIMARY KEY (`TRUCK_ID`,`USER_ID`)
+            PRIMARY KEY (`USER_ID`,`TRUCK_ID`),
+            KEY `truckidrev_idx` (`TRUCK_ID`),
+            CONSTRAINT `truckidrev` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
+            CONSTRAINT `useridrev` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
             );
 
             CREATE TABLE `TRUCK_STOP` (
@@ -110,6 +110,25 @@
             `LATITUDE` double NOT NULL,
             `LONGITUDE` double NOT NULL,
             PRIMARY KEY (`STOP_ID`)
+            );
+
+            CREATE TABLE `SCHEDULE` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `DAY` varchar(45) NOT NULL,
+            `STOP_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`),
+            KEY `stopidsched_idx` (`STOP_ID`),
+            CONSTRAINT `stopidsched` FOREIGN KEY (`STOP_ID`) REFERENCES `truck_stop` (`STOP_ID`),
+            CONSTRAINT `truckidsched` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
+            );
+
+            CREATE TABLE `SUBSCRIPTIONS` (
+            `TRUCK_ID` int(11) NOT NULL,
+            `USER_ID` int(11) NOT NULL,
+            PRIMARY KEY (`TRUCK_ID`,`USER_ID`),
+            KEY `user_id_sub_idx` (`USER_ID`),
+            CONSTRAINT `truck_id_sub` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
+            CONSTRAINT `user_id_sub` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
             );
 
             CREATE TABLE `EVENT` (
@@ -146,6 +165,43 @@
             (11, 'VEGITARIAN'),
             (12, 'VEGAN'),
             (13, 'VIETNAMESE');
+
+            INSERT INTO user (USER_ID, USERNAME, PRINCIPAL, PASSWORD, IS_OWNER)
+            VALUES
+            (1, "owner", "owner@owner.com", "$2a$10$9M4Z1uLzU4wM447xl4Hyzuepi4IrqsZxYi0LpJkS715nvIRGwhZhK", 1);
+
+            INSERT INTO `food-truck-finder`.`food_truck` (`FOOD_TRUCK_ID`, `OWNER_ID`, `NAME`, `TYPE`, `TRUCK_IMAGE`, `PRICE_LOW`, `PRICE_HIGH`, `STATUS`, `DESCRIPTION`)
+            VALUES
+            (1, 1, "Baylor honey", 5, NULL, 2, 10, "OPEN", NULL),
+            (2, 1, "Torchies", 8, NULL, 1, 5, "OPEN", NULL),
+            (3, 1, "Free tank tops!", 12, NULL, 0.99, 3, "OPEN", NULL),
+            (4, 1, "Far away truck", 13, NULL, 100, 300, "OPEN", NULL),
+            (5, 1, "Closed truck", 0, NULL, 10000, 30000, "CLOSED", NULL);
+
+            INSERT INTO truck_stop
+            (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES
+            (1, "2019-10-29 0:00:48", "2019-10-29 23:56:48", 31.549605, -97.114995),
+            (2, "2019-10-29 0:00:12", "2019-10-29 23:58:12", 31.553196, -97.124797),
+            (3, "2019-10-29 0:00:46", "2019-10-29 23:58:46", 31.264332, -95.880037),
+            (4, "2019-10-29 0:00:42", "2019-10-29 23:03:42", 31.545743, -97.117805),
+            (5, "2019-10-29 04:09:02", "2019-10-29 04:10:59", 31.54621, -97.109094),
+            (6, "2019-10-29 0:00:48", "2019-10-29 23:56:48", 31.549605, -97.114995),
+            (7, "2019-10-29 0:00:12", "2019-10-29 23:58:12", 31.553196, -97.124797),
+            (8, "2019-10-29 0:00:46", "2019-10-29 23:58:46", 31.264332, -95.880037),
+            (9, "2019-10-29 0:00:42", "2019-10-29 23:03:42", 31.545743, -97.117805),
+            (10, "2019-10-29 0:00:48", "2019-10-29 23:56:48", 31.549605, -97.114995),
+            (11, "2019-10-29 0:00:12", "2019-10-29 23:58:12", 31.553196, -97.124797),
+            (12, "2019-10-29 0:00:46", "2019-10-29 23:58:46", 31.264332, -95.880037),
+            (13, "2019-10-29 0:00:42", "2019-10-29 23:03:42", 31.545743, -97.117805);
+
+            INSERT INTO schedule (TRUCK_ID, DAY, STOP_ID) VALUES
+            (1, "T", 1), (2, "T", 2), (3, "T", 4), (4, "T", 3), (5, "T", 5),
+            (1, "M", 6), (2, "M", 7), (3, "M", 9), (4, "M", 8),
+            (1, "W", 10), (2, "W", 11), (3, "W", 13), (4, "W", 12),
+            (1, "H", 10), (2, "H", 11), (3, "H", 13), (4, "H", 12),
+            (1, "F", 10), (2, "F", 11), (3, "F", 13), (4, "F", 12),
+            (1, "S", 10), (2, "S", 11), (3, "S", 13), (4, "S", 12),
+            (1, "U", 10), (2, "U", 11), (3, "U", 13), (4, "U", 12);
         </sql>
     </changeSet>
 </databaseChangeLog>

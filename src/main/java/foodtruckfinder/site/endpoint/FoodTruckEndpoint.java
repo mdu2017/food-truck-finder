@@ -37,13 +37,17 @@ public class FoodTruckEndpoint {
 		return foodTruckDto;
 	}
 
-	@PostMapping(value = "/getSubscribers/{id}", produces = "application/json")
-	public List<String> getSubscribers(@PathVariable("id") String id) {
-		return foodTruckService.getSubscribers(id);
-	}
+	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
+	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
 
-	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
-	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
+
+//	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
+//	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
+//		foodTruckService.subscribe(ftid, userid);
+//	}
+
+	@PostMapping(value = "/subscribe", produces = "application/json")
+	public void subscribe(Long ftid, Long userid) {
 		foodTruckService.subscribe(ftid, userid);
 	}
 
@@ -99,5 +103,11 @@ public class FoodTruckEndpoint {
 		System.out.println("Name in endpoint: " + ftName);
 
 		return foodTruckService.searchFoodTrucks(ftName);
+	}
+
+	@PostMapping(value = "/send-notification", produces = "application/json" )
+	public void sendNotification(String message, Long foodTruckId){
+		System.out.println(foodTruckId);
+		foodTruckService.sendNotification(message, foodTruckId);
 	}
 }

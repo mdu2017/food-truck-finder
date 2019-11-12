@@ -64,18 +64,6 @@ public class UserEndpoint {
 		return userService.findUserByPrincipal(principal);
 	}
 
-	@GetMapping(value = "/{username}", produces = "application/json")
-	public Optional<UserDto> viewUser(@PathVariable("username") String username) {
-		Optional<UserDto> temp = userService.findUserByUsername(username);
-
-		if(temp.isPresent()){
-			UserDto user = temp.get();
-			user.setPrincipal("");//protect email
-		}
-
-		return temp;
-	}
-
 	/**
 	 * Returns id = -1 for incorrect username, -2 for incorrect principle/email
 	 *
@@ -111,5 +99,10 @@ public class UserEndpoint {
 	@GetMapping(value = "/owner/getFoodTrucks", produces = "application/json")
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id){
 		return userService.getOwnedFoodTrucks(id);
+	}
+
+	@GetMapping(value = "/getNotifications", produces = "application/json")
+	public Optional<List<String>> getNotifications(Long userId){
+		return userService.getNotifications(userId);
 	}
 }

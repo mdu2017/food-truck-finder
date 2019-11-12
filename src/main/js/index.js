@@ -14,6 +14,7 @@ import { Notifications } from './user/Notifications';
 import { ViewEventDetails } from './user/ViewEventDetails';
 import {SearchFoodTrucks, SearchTrucks} from './SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
+import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
 import { Events } from './foodtruck/Events';
 import { CreateFoodTruck } from './foodtruck/CreateFT';
@@ -52,7 +53,7 @@ export default class Index extends React.Component {
 					/>
 					<Route
 						exact
-						path="/food-truck-details"
+						path="/food-truck-details/:foodtruckID"
 						component={ViewFoodTruckDetails}
 					/>
 					<Route exact path="/search-users" component={SearchUsers} />
@@ -90,8 +91,10 @@ export default class Index extends React.Component {
 					/>
 					<Route exact path="/page-1" component={Pages.Page1} />
 					<Route exact path="/hello" component={Pages.HelloSend} />
-					<Route exact path="/wolf" component={Pages.ViewUser} />
-
+					<Route exact
+						   path="/user/:username"
+						   component={ViewOtherProfile}
+					/>
 				</div>
 			</HashRouter>
 		);

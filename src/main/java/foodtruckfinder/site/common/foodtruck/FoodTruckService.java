@@ -4,8 +4,10 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.Optional;
 
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.RequestParam;
 
 /**
  * If this is your first time looking at Spring Services, check out the detailed explanation in UserService first.
@@ -33,8 +35,8 @@ public class FoodTruckService {
 	 * @param truck_id the truck id
 	 * @param user_id the user id
 	 */
-	public void subscribe(String truck_id, String user_id) {
-		foodTruckDao.subscribe(Long.parseLong(truck_id), Long.parseLong(user_id));
+	public void subscribe(Long truck_id, Long user_id) {
+		foodTruckDao.subscribe(truck_id, user_id);
 	}
 
 	/**
@@ -42,7 +44,7 @@ public class FoodTruckService {
 	 * @param id the truck id
 	 * @return the list of usernames of people who are subscribed
 	 */
-	public List<String> getSubscribers(String id) { return foodTruckDao.getSubscribers(Long.parseLong(id)); }
+	public List<String> getSubscribers(Long id) { return foodTruckDao.getSubscribers(id); }
 
 	/**
 	 * This returns a list of food trucks owned by the given owner id
@@ -58,5 +60,19 @@ public class FoodTruckService {
 		System.out.println("Name in FT service: " + name);
 //		return foodTruckDao.searchFoodTrucks(name);
 		return null;
+	}
+
+    /**
+     * send a message to all the owner's subscribers
+     * @param message what you want to say
+     * @param ownerID The owner's ID
+     */
+	public void sendNotification(String message, Long foodTruckId){
+        foodTruckDao.sendNotification(message, foodTruckId);
+	}
+
+	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
+														   double userlong) {
+		return foodTruckDao.getRecommendations(userlat, userlong);
 	}
 }

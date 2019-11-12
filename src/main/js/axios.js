@@ -15,12 +15,35 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+// Multivalue axios post
+export function sendNotification(message, foodTruckId) {
+	console.log(message);
+	return axios.post('api/food-truck/send-notification?message=' + message + '&foodTruckId=' + foodTruckId);
+}
+
 export function getFoodTypes() {
 	return axios.get('/api/food-truck/getFoodTypes');
 }
 
 export function getStatuses() {
 	return axios.get('/api/food-truck/getStatusNames');
+}
+
+export function viewUser(username) {
+	return axios.get('/unsecure/user/' + username);
+}
+
+export function getRecommendations(userlat, userlong) {
+	return axios.get('/unsecure/recommendations', {
+		params: {
+			userlat: userlat,
+			userlong: userlong
+		}
+	});
+}
+
+export function subscribe(foodtruckId, userId) {
+	return axios.post('api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId);
 }
 
 export function authenticate(username, password) {
@@ -125,6 +148,12 @@ Actions.createFT = foodTruck => {
 	};
 };
 
+Actions.sendNotification = (message, foodTruckId) => {
+	return () => {
+		return sendNotification(message, foodTruckId);
+	};
+};
+
 // Save food truck
 Actions.saveFoodFT = foodTruck => {
 	return () => {
@@ -215,6 +244,15 @@ Actions.setFoodTruck = foodTruck => {
 
 Actions.setUser = user => {
 	return { type: Actions.Types.SET_USER, user };
+};
+
+Actions.viewUser = username => {
+	return () => {
+		return viewUser(username).then(user => {
+			document.cookie = 'searchedUser=' + user + '; path=/';
+			window.alert(document.cookie);
+		});
+	};
 };
 
 export { Actions };

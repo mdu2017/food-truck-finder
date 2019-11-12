@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from 'react-select';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
@@ -21,6 +20,7 @@ export class EditFoodTruck extends React.Component {
 		this.state = {
 			id: null,
 			name: null,
+			description: null,
 			// menu: null,
 			// schedule: null,
 			price_low: null,
@@ -36,6 +36,7 @@ export class EditFoodTruck extends React.Component {
 
 	setID = id => this.setState({ id });
 	setName = name => this.setState({ name });
+	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
 	// setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
@@ -56,6 +57,7 @@ export class EditFoodTruck extends React.Component {
 			this.props.editTruck({
 				id: this.state.id,
 				name: this.state.name,
+				description: this.state.description,
 				// menu: this.state.menu,
 				// schedule: this.state.schedule,
 				price_low: this.state.price_low,
@@ -75,9 +77,15 @@ export class EditFoodTruck extends React.Component {
 		// Object Destruction
 		var { foodtruckId: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
-			this.setState({ id: result.id, name: result.name,
-				price_low: result.price_low, price_high: result.price_high,
-				truck: result, foodtype: result.type, status: result.status });
+			this.setState({
+				id: result.id,
+				name: result.name,
+				price_low: result.price_low,
+				price_high: result.price_high,
+				truck: result,
+				foodtype: result.type,
+				status: result.status
+			});
 		});
 		this.getFoodTypes();
 		this.getStatuses();
@@ -95,6 +103,13 @@ export class EditFoodTruck extends React.Component {
 			self.setState({ statuses: result });
 		});
 	}
+
+	handleRemoveTruck = event => {
+		this.props.removeTruck({
+			truck_id: this.state.id
+		});
+		event.preventDefault();
+	};
 
 	displayDayOfTheWeek(dayofTheWeek) {
 		return (
@@ -177,18 +192,34 @@ export class EditFoodTruck extends React.Component {
 								</FormGroup>
 								<FormGroup>
 									<Label for="statuses">Current Status</Label>
-									<select value={this.state.status} onChange={e => this.setStatus(e.target.value)}>
-										{this.state.statuses.map((status, index) => (
-											<option key={index}>{status}</option>
-										))}
+									<select
+										value={this.state.status}
+										onChange={e =>
+											this.setStatus(e.target.value)
+										}>
+										{this.state.statuses.map(
+											(status, index) => (
+												<option key={index}>
+													{status}
+												</option>
+											)
+										)}
 									</select>
 								</FormGroup>
 								<FormGroup>
 									<Label for="foodTypes">Food Type</Label>
-									<select value={this.state.foodtype} onChange={e => this.setFoodType(e.target.value)}>
-										{this.state.foodtypes.map((foodtype, index) => (
-											<option key={index}>{foodtype}</option>
-										))}
+									<select
+										value={this.state.foodtype}
+										onChange={e =>
+											this.setFoodType(e.target.value)
+										}>
+										{this.state.foodtypes.map(
+											(foodtype, index) => (
+												<option key={index}>
+													{foodtype}
+												</option>
+											)
+										)}
 									</select>
 								</FormGroup>
 							</Form>
@@ -240,6 +271,9 @@ export class EditFoodTruck extends React.Component {
 										name="description"
 										id="ftDescription"
 										placeholder="(Optional) Will be displayed on the Food Truck's page"
+										onChange={e =>
+											this.setDescription(e.target.value)
+										}
 									/>
 								</FormGroup>
 								<FormGroup>
@@ -263,15 +297,18 @@ export class EditFoodTruck extends React.Component {
 						</div>
 					) : null}
 					<legend>Schedule / Route</legend>
-					{this.displayDayOfTheWeek('Sunday')}
+					{/* AWAITING CreateFT's Schedule to be implemented. */}
+					{/* {this.displayDayOfTheWeek('Sunday')}
 					{this.displayDayOfTheWeek('Monday')}
 					{this.displayDayOfTheWeek('Tuesday')}
 					{this.displayDayOfTheWeek('Wednesday')}
 					{this.displayDayOfTheWeek('Thursday')}
 					{this.displayDayOfTheWeek('Friday')}
-					{this.displayDayOfTheWeek('Saturday')}
+					{this.displayDayOfTheWeek('Saturday')} */}
 					<Button onClick={this.handleSubmit}>Submit</Button>{' '}
-					<Button color="danger">Delete Food Truck</Button>
+					<Button color="danger" onClick={this.handleRemoveTruck}>
+						Delete Food Truck
+					</Button>
 				</div>
 			</div>
 		);
@@ -280,6 +317,17 @@ export class EditFoodTruck extends React.Component {
 EditFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck))
+		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck)),
+		removeTruck: truck_id =>
+			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function(
+				result
+			) {
+				if (result) {
+					window.location.href = '/#/list-food-trucks';
+					window.alert('Deletion was successful!');
+				} else {
+					window.alert('Deletion was NOT successful!');
+				}
+			})
 	})
 )(EditFoodTruck);

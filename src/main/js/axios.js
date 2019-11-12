@@ -15,10 +15,36 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+// Rates a FoodTruck in the Database
+export function rateFT(user_ID, truck_ID, message, rating) {
+	return axios.post(
+		'api/user/rate?user_ID=' +
+			user_ID +
+			'&truck_ID=' +
+			truck_ID +
+			'&message=' +
+			message +
+			'&rating=' +
+			rating
+	);
+}
+
 // Multivalue axios post
 export function sendNotification(message, foodTruckId) {
 	console.log(message);
-	return axios.post('api/food-truck/send-notification?message=' + message + '&foodTruckId=' + foodTruckId);
+	return axios.post(
+		'api/food-truck/send-notification?message=' +
+			message +
+			'&foodTruckId=' +
+			foodTruckId
+	);
+}
+
+// Deletes a FoodTruck in the Database
+export function removeFoodTruck(truck_id) {
+	return axios.post(
+		'/api/food-truck/removeTruck/?truck_id=' + truck_id.truck_id
+	);
 }
 
 export function getFoodTypes() {
@@ -42,26 +68,15 @@ export function getRecommendations(userlat, userlong) {
 	});
 }
 
-export function subscribe(foodtruckId, userId) {
-	return axios.post('api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId);
+export function getNotifications(userId) {
+	return axios.get('/api/user/getNotifications?userId=' + userId);
 }
 
-
-// export function makeFT(name, status) {
-// 	return axios({
-// 		method: 'post',
-// 		url: '/oauth/token',
-// 		params: {
-// 			grant_type: 'password',
-// 			name,
-// 			status
-// 		},
-// 		auth: {
-// 			username: 'food-truck-finder-app',
-// 			password: 'food-truck-finder-app-secret'
-// 		}
-// 	});
-// }
+export function subscribe(foodtruckId, userId) {
+	return axios.post(
+		'api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId
+	);
+}
 
 export function authenticate(username, password) {
 	return axios({
@@ -105,6 +120,23 @@ export function getFoodTrucksByOwner(id) {
 			owner_id: id
 		}
 	});
+}
+
+// TODO: get truck location
+export function getTruckLocation(id){
+	return axios.get('/api/food-truck/getCurrentLocation', {
+		params: {
+			owner_id: id
+		}
+	});
+}
+
+export function searchFoodTrucks(name){
+    return axios.get('/api/food-truck/searchFoodTrucks', {
+        params: {
+            name: name
+        }
+    });
 }
 
 export function getCookie(name) {
@@ -162,10 +194,24 @@ Actions.sendNotification = (message, foodTruckId) => {
 	};
 };
 
+//Delete food truck
+Actions.removeFoodFT = truck_id => {
+	return () => {
+		return removeFoodTruck(truck_id);
+	};
+};
+
 // Save food truck
 Actions.saveFoodFT = foodTruck => {
 	return () => {
 		return createFoodTruck(foodTruck);
+	};
+};
+
+// Rates a food truck
+Actions.rateFT = (user_ID, truck_ID, message, rating) => {
+	return () => {
+		return rateFT(user_ID, truck_ID, message, rating);
 	};
 };
 
@@ -178,6 +224,19 @@ Actions.getOwnerFoodTruckIDs = id => {
 Actions.getFoodTrucksByOwner = owner_id => {
 	return dispatch => {
 		return dispatch(getFoodTrucksByOwner(owner_id));
+	};
+};
+
+//TODO: Work in progress
+Actions.getTruckLocation = owner_id => {
+	return dispatch => {
+		return dispatch(getTruckLocation(owner_id));
+	};
+};
+
+Actions.searchFoodTrucks = name => {
+	return () => {
+		return searchFoodTrucks(name);
 	};
 };
 

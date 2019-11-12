@@ -28,12 +28,8 @@ export class SearchFoodTrucks extends React.Component {
 
     setName = name => this.setState({ name });
 
-    //TODO: Bug - search needs to be pressed twice to get results in array (from console.log?)
-    // Get details page working with searches
-    // Partial string searches??
-    // List of trucks with same name okay?
+    // TODO: Get details page working with searches
     // Search functionality not working if user isn't logged in (401 error unauthorized)
-    // minor Bug - if submit when empty (gives console errors - page is fine)
     //Submit handler
     handleSubmit = event => {
 

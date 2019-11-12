@@ -174,10 +174,17 @@ Actions.getFoodTrucksByOwner = owner_id => {
 };
 
 //TODO: Work in progress
+// Actions.searchFoodTrucks = name => {
+//     return dispatch => {
+//         return dispatch(searchFoodTrucks(name));
+//     };
+// };
+
+//TODO: Work in progress
 Actions.searchFoodTrucks = name => {
-    return dispatch => {
-        return dispatch(searchFoodTrucks(name));
-    };
+	return () => {
+		return searchFoodTrucks(name);
+	};
 };
 
 Actions.update = user => {

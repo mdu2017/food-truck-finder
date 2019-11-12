@@ -95,14 +95,7 @@ public class FoodTruckEndpoint {
 	 */
 	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
 	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
-
-		//Manually parse json
-		int startIndex = name.indexOf(":") + 2;
-		int endIndex = name.lastIndexOf("\"");
-		String ftName = name.substring(startIndex, endIndex);
-		System.out.println("Name in endpoint: " + ftName);
-
-		return foodTruckService.searchFoodTrucks(ftName);
+		return foodTruckService.searchFoodTrucks(name);
 	}
 
 	@PostMapping(value = "/send-notification", produces = "application/json" )

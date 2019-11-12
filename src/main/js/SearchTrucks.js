@@ -19,56 +19,58 @@ export class SearchFoodTrucks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
+            owner_id: JSON.parse(Axios.getCookie('user')).id,
             name: null,
-            // user_id: JSON.parse(Axios.getCookie('user')).id,
             trucks: []
         };
+        this.handleSubmit = this.handleSubmit.bind(this);
     }
 
     setName = name => this.setState({ name });
 
+    //TODO: Bug - search needs to be pressed twice to get results in array (from console.log?)
+    // Get details page working with searches
+    // Partial string searches??
+    // List of trucks with same name okay?
     //Submit handler
     handleSubmit = event => {
-        this.props.searchFoodTrucks({
-            name: this.state.name,
+        this.props.searchFoodTrucks(this.state.name).then(result => {
+            this.setState({trucks: result});
+            result.map((truck, index) => (
+                <li key={index}>{this.setState({ foodTruckId: truck.id })}</li>
+            ));
         });
-        console.log('Name in handleSubmit: ' + this.state.name);
         event.preventDefault();
+
+        console.log(this.state.trucks);
     };
 
-    // Get list of food trucks by name after search call
-    // componentWillMount() {
-    //     Axios.searchFoodTrucks(this.state.name).then(result => {
-    //         {console.log(result);}
-    //         this.setState({ trucks: result });
-    //     });
-    // }
     // Display list of food trucks after search
-    // renderFoodTrucks() {
-    //     return (
-    //         <div>
-    //             {this.state.trucks.length > 0 ? (
-    //                 <div>
-    //                     {this.state.trucks.map((truck, index) => (
-    //                         <ListGroup key={index}>
-    //                             <ListGroupItem>
-    //                                 <Link to={'/food-truck-details'}>
-    //                                     {truck.name}
-    //                                 </Link>
-    //                             </ListGroupItem>
-    //                         </ListGroup>
-    //                     ))}
-    //                 </div>
-    //             ) : (
-    //                 <div>
-    //                     <br/>
-    //                     <br/>
-    //                     <h6>No searches yet.</h6>
-    //                 </div>
-    //             )}
-    //         </div>
-    //     );
-    // }
+    renderFoodTrucks() {
+        return (
+            <div>
+                {this.state.trucks.length > 0 ? (
+                    <div>
+                        {this.state.trucks.map((truck, index) => (
+                            <ListGroup key={index}>
+                                <ListGroupItem>
+                                    <Link to={'/food-truck-details'}>
+                                        {truck.name}
+                                    </Link>
+                                </ListGroupItem>
+                            </ListGroup>
+                        ))}
+                    </div>
+                ) : (
+                    <div>
+                        <br/>
+                        <br/>
+                        <h6>No trucks with {this.state.name} found.</h6>
+                    </div>
+                )}
+            </div>
+        );
+    }
 
     render() {
         return (
@@ -93,7 +95,7 @@ export class SearchFoodTrucks extends React.Component {
                     <Button type="button" className="btn btn-info" onClick={this.handleSubmit}>Submit</Button>
 
                     {/*Display list of food trucks by name search*/}
-                    {/*{this.renderFoodTrucks()}*/}
+                    {this.renderFoodTrucks()}
 
                 </div>
             </div>
@@ -108,3 +110,11 @@ SearchFoodTrucks = connect(
             dispatch(Axios.Actions.searchFoodTrucks(name))
     })
 )(SearchFoodTrucks);
+
+// this.props.searchFoodTrucks({
+//     name: this.state.name,
+// });
+
+// Axios.searchFoodTrucks(this.state.name).then(result => {
+//     this.setState({ trucks: result });
+// });

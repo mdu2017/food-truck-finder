@@ -1,15 +1,18 @@
 package foodtruckfinder.site.test.unit;
 
+import foodtruckfinder.site.common.user.UserDao;
 import foodtruckfinder.site.common.user.UserDto;
 import org.junit.Test;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 public class UserTester {
     UserDto userDto = new UserDto();
+    UserDao userDao = new UserDao();
     boolean shouldBeTrue = true;
-    String username = "Username";
+    String username = "This is not a username";
     String principal = "potato@AOL.net";
 
     @Test
@@ -28,5 +31,15 @@ public class UserTester {
     public void testPassword(){
         userDto.setPrincipal(principal);
         assertEquals(userDto.getPrincipal(), "potato@AOL.net");
+    }
+
+    @Test
+    public void testBadPrincipal(){
+        assertNull(userDao.findUserByPrincipal(principal));
+    }
+
+    @Test
+    public void testBadUsername(){
+        assertNull(userDao.findUserByUsername(username));
     }
 }

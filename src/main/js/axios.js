@@ -122,7 +122,15 @@ export function getFoodTrucksByOwner(id) {
 	});
 }
 
-//TODO: Work in progress
+// TODO: get truck location
+export function getTruckLocation(id){
+	return axios.get('/api/food-truck/getCurrentLocation', {
+		params: {
+			owner_id: id
+		}
+	});
+}
+
 export function searchFoodTrucks(name){
     return axios.get('/api/food-truck/searchFoodTrucks', {
         params: {
@@ -220,13 +228,12 @@ Actions.getFoodTrucksByOwner = owner_id => {
 };
 
 //TODO: Work in progress
-// Actions.searchFoodTrucks = name => {
-//     return dispatch => {
-//         return dispatch(searchFoodTrucks(name));
-//     };
-// };
+Actions.getTruckLocation = owner_id => {
+	return dispatch => {
+		return dispatch(getTruckLocation(owner_id));
+	};
+};
 
-//TODO: Work in progress
 Actions.searchFoodTrucks = name => {
 	return () => {
 		return searchFoodTrucks(name);

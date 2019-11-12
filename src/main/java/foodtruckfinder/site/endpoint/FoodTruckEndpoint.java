@@ -11,6 +11,7 @@ import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
+import alloy.util.Tuple;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -115,7 +116,13 @@ public class FoodTruckEndpoint {
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
-	public void removeDeal(Long truckID){
-		foodTruckService.removeDeal(truckID);
+	public void removeDeal(Long truckID) {
+        foodTruckService.removeDeal(truckID);
+    }
+
+	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
+	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
+		return foodTruckService.getCurrentLocation(foodTruckId);
+
 	}
 }

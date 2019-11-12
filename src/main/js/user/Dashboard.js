@@ -95,7 +95,7 @@ export class Dashboard extends React.Component {
 										</NavItem>
 									</Nav>
 									<div>
-										<h4>Recommendations</h4>
+										<h4>Recommended/Nearby Food Trucks</h4>
 										{this.state.foodtrucks ? (
 											<Nav>
 												{this.state.foodtrucks.map((foodtruck, index) => {

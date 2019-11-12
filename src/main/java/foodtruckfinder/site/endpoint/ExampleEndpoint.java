@@ -32,4 +32,20 @@ public class ExampleEndpoint {
                                                            double userlong) {
         return unsecureFoodTruckService.getRecommendations(userlat, userlong);
     }
+
+    /**
+     * Search for a food truck by name
+     * @param name The food truck name
+     * @return the list of food trucks
+     */
+    @GetMapping(value = "/searchFoodTrucks", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+        return unsecureFoodTruckService.searchFoodTrucks(name);
+    }
+
+    // Take an id, and look up the corresponding foodtruck
+    @GetMapping(value = "/{id}", produces = "application/json")
+    public Optional<FoodTruckDto> getFoodTruck(@PathVariable("id") String id) {
+        return unsecureFoodTruckService.find(id);
+    }
 }

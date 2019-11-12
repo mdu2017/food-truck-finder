@@ -32,7 +32,6 @@ export class SearchFoodTrucks extends React.Component {
     // Search functionality not working if user isn't logged in (401 error unauthorized)
     //Submit handler
     handleSubmit = event => {
-
         this.props.searchFoodTrucks(this.state.name).then(result => {
             this.setState({trucks: result});
             result.map((truck, index) => (

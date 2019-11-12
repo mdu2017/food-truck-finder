@@ -110,7 +110,7 @@ export class Dashboard extends React.Component {
 						</Container>
 					</div>
                     {/*Render map*/}
-                    <MapContainer/>
+                    {/*<MapContainer/>*/}
 
 				</div>
 			</div>

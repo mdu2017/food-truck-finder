@@ -93,7 +93,6 @@ public class FoodTruckEndpoint {
 				.collect(Collectors.toList());
 	}
 
-	//TODO: WIP
 	/**
 	 * Search for a food truck by name
 	 * @param name The food truck name

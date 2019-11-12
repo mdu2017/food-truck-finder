@@ -650,7 +650,7 @@ public class FoodTruckDao {
 				":userlong, 2)) < 1)";
 
 		Map<String, ?> params = _Maps.map("userlat", userlat,
-				"userlong", userlong, "day", "Tue");
+				"userlong", userlong, "day", "T");
 		List<Long> ids = jdbcTemplate.query(sql, params,
 				(rs, rowNum) -> rs.getLong("TRUCK_ID"));
 

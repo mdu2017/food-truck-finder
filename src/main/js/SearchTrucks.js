@@ -32,30 +32,36 @@ export class SearchFoodTrucks extends React.Component {
     // Get details page working with searches
     // Partial string searches??
     // List of trucks with same name okay?
+    // Search page not loading when not logged in (works when logged in as user/owner)
+    // Bug - if submit when empty (gives console errors - page is fine)
     //Submit handler
     handleSubmit = event => {
+
         this.props.searchFoodTrucks(this.state.name).then(result => {
             this.setState({trucks: result});
             result.map((truck, index) => (
-                <li key={index}>{this.setState({ foodTruckId: truck.id })}</li>
+                <li key={index}>{this.setState({foodTruckId: truck.id})}</li>
             ));
         });
+
         event.preventDefault();
 
         console.log(this.state.trucks);
+
     };
 
     // Display list of food trucks after search
     renderFoodTrucks() {
         return (
             <div>
-                {this.state.trucks.length > 0 ? (
+                {/* This.state.trucks checks if not null*/}
+                {this.state.trucks && this.state.trucks.length > 0 ? (
                     <div>
                         {this.state.trucks.map((truck, index) => (
                             <ListGroup key={index}>
                                 <ListGroupItem>
                                     <Link to={'/food-truck-details'}>
-                                        {truck.name}
+                                        <h6>{truck.name} -- {truck.description}</h6>
                                     </Link>
                                 </ListGroupItem>
                             </ListGroup>
@@ -79,7 +85,7 @@ export class SearchFoodTrucks extends React.Component {
                 <div className="container padded">
                     <h1>Search for Food Truck</h1>
                     <br />
-                    <Form>
+                    <Form onSubmit={this.handleSubmit} >
                         <FormGroup>
                             <Label for="ftName">Name</Label>
                             <Input

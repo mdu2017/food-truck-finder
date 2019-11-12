@@ -172,11 +172,11 @@
 
             INSERT INTO `food-truck-finder`.`food_truck` (`FOOD_TRUCK_ID`, `OWNER_ID`, `NAME`, `TYPE`, `TRUCK_IMAGE`, `PRICE_LOW`, `PRICE_HIGH`, `STATUS`, `DESCRIPTION`)
             VALUES
-            (1, 1, "Baylor honey", 5, NULL, 2, 10, "OPEN", NULL),
-            (2, 1, "Torchies", 8, NULL, 1, 5, "OPEN", NULL),
-            (3, 1, "Free tank tops!", 12, NULL, 0.99, 3, "OPEN", NULL),
-            (4, 1, "Far away truck", 13, NULL, 100, 300, "OPEN", NULL),
-            (5, 1, "Closed truck", 0, NULL, 10000, 30000, "CLOSED", NULL);
+            (1, 1, "Baylor honey", 5, NULL, 2, 10, "OPEN", "honey here"),
+            (2, 1, "Torchies", 8, NULL, 1, 5, "OPEN", "Your favorite taco food truck"),
+            (3, 1, "Free tank tops!", 12, NULL, 0.99, 3, "OPEN", "Free tank tops for first 100 visitors"),
+            (4, 1, "Far away truck", 13, NULL, 100, 300, "OPEN", "Really far away, don't come"),
+            (5, 1, "Closed truck", 0, NULL, 10000, 30000, "CLOSED", "good luck getting here");
 
             INSERT INTO truck_stop
             (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES

@@ -1,7 +1,6 @@
 import React from 'react';
 import { HashRouter, Route } from 'react-router-dom';
 import * as Pages from './TestingPages';
-import { Link } from 'react-router-dom';
 
 // User Pages
 import { ViewProfile } from './user/ViewProfile';
@@ -12,7 +11,7 @@ import { ForgotPassword } from './user/ForgotPassword';
 import { Login } from './user/Login';
 import { Notifications } from './user/Notifications';
 import { ViewEventDetails } from './user/ViewEventDetails';
-import { SearchTrucks } from './user/SearchTrucks';
+import {SearchFoodTrucks, SearchTrucks} from './SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
 import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
@@ -49,7 +48,7 @@ export default class Index extends React.Component {
 					<Route
 						exact
 						path="/search-trucks"
-						component={SearchTrucks}
+						component={SearchFoodTrucks}
 					/>
 					<Route
 						exact
@@ -91,10 +90,7 @@ export default class Index extends React.Component {
 					/>
 					<Route exact path="/page-1" component={Pages.Page1} />
 					<Route exact path="/hello" component={Pages.HelloSend} />
-					<Route exact
-						   path="/user/:username"
-						   component={ViewOtherProfile}
-					/>
+					<Route exact path="/user/:username" component={ViewOtherProfile} />
 				</div>
 			</HashRouter>
 		);

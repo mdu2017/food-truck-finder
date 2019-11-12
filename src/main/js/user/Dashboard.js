@@ -16,7 +16,7 @@ export class Dashboard extends React.Component {
 		super(props);
 		this.state = {
 			authentication: Axios.getCookie('authentication'),
-			username: JSON.parse(Axios.getCookie('user')),
+			user: JSON.parse(Axios.getCookie('user')),
 			foodtrucks: []
 		};
 	}
@@ -26,7 +26,7 @@ export class Dashboard extends React.Component {
 			return (
 				<div>
 					{'Welcome, '}
-					{this.state.username.username}
+					{this.state.user.username}
 					{'!'}
 				</div>
 			);
@@ -76,7 +76,7 @@ export class Dashboard extends React.Component {
 											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink disabled href="#/search-trucks">
+											<NavLink href="#/search-trucks">
 												Search Food Trucks
 											</NavLink>
 										</NavItem>
@@ -86,7 +86,7 @@ export class Dashboard extends React.Component {
 											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink disabled href="#/about">
+											<NavLink href="#/about">
 												About Us
 											</NavLink>
 										</NavItem>
@@ -110,7 +110,7 @@ export class Dashboard extends React.Component {
 						</Container>
 					</div>
                     {/*Render map*/}
-                    <MapContainer/>
+                    {/*<MapContainer/>*/}
 
 				</div>
 			</div>

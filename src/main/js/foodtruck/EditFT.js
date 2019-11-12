@@ -1,5 +1,4 @@
 import React from 'react';
-import Select from 'react-select';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
@@ -78,9 +77,15 @@ export class EditFoodTruck extends React.Component {
 		// Object Destruction
 		var { foodtruckId: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
-			this.setState({ id: result.id, name: result.name,
-				price_low: result.price_low, price_high: result.price_high,
-				truck: result, foodtype: result.type, status: result.status });
+			this.setState({
+				id: result.id,
+				name: result.name,
+				price_low: result.price_low,
+				price_high: result.price_high,
+				truck: result,
+				foodtype: result.type,
+				status: result.status
+			});
 		});
 		this.getFoodTypes();
 		this.getStatuses();
@@ -187,18 +192,34 @@ export class EditFoodTruck extends React.Component {
 								</FormGroup>
 								<FormGroup>
 									<Label for="statuses">Current Status</Label>
-									<select value={this.state.status} onChange={e => this.setStatus(e.target.value)}>
-										{this.state.statuses.map((status, index) => (
-											<option key={index}>{status}</option>
-										))}
+									<select
+										value={this.state.status}
+										onChange={e =>
+											this.setStatus(e.target.value)
+										}>
+										{this.state.statuses.map(
+											(status, index) => (
+												<option key={index}>
+													{status}
+												</option>
+											)
+										)}
 									</select>
 								</FormGroup>
 								<FormGroup>
 									<Label for="foodTypes">Food Type</Label>
-									<select value={this.state.foodtype} onChange={e => this.setFoodType(e.target.value)}>
-										{this.state.foodtypes.map((foodtype, index) => (
-											<option key={index}>{foodtype}</option>
-										))}
+									<select
+										value={this.state.foodtype}
+										onChange={e =>
+											this.setFoodType(e.target.value)
+										}>
+										{this.state.foodtypes.map(
+											(foodtype, index) => (
+												<option key={index}>
+													{foodtype}
+												</option>
+											)
+										)}
 									</select>
 								</FormGroup>
 							</Form>

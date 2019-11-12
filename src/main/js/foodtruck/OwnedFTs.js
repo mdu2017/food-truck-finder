@@ -65,8 +65,14 @@ export class OwnedFoodTrucks extends React.Component {
 							<ListGroup key={index}>
 								<ListGroupItem>
 									{truck.name}{' '}
-									<Link to={`/edit-food-truck/${truck.id}`}>
+									<Link
+										to={`/food-truck-details/${truck.id}`}>
 										<Button color="primary" size="sm">
+											View
+										</Button>
+									</Link>{' '}
+									<Link to={`/edit-food-truck/${truck.id}`}>
+										<Button color="secondary" size="sm">
 											Edit
 										</Button>
 									</Link>{' '}

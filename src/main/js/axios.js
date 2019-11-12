@@ -15,6 +15,20 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
+// Rates a FoodTruck in the Database
+export function rateFT(user_ID, truck_ID, message, rating) {
+	return axios.post(
+		'api/user/rate?user_ID=' +
+			user_ID +
+			'&truck_ID=' +
+			truck_ID +
+			'&message=' +
+			message +
+			'&rating=' +
+			rating
+	);
+}
+
 // Multivalue axios post
 export function sendNotification(message, foodTruckId) {
 	console.log(message);
@@ -186,6 +200,13 @@ Actions.removeFoodFT = truck_id => {
 Actions.saveFoodFT = foodTruck => {
 	return () => {
 		return createFoodTruck(foodTruck);
+	};
+};
+
+// Rates a food truck
+Actions.rateFT = (user_ID, truck_ID, message, rating) => {
+	return () => {
+		return rateFT(user_ID, truck_ID, message, rating);
 	};
 };
 

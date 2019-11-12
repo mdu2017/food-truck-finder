@@ -153,11 +153,9 @@ public class UserDao {
 		Map<String, ?> params = _Maps.map("userId", userId);
 		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("message")));
 	}
-
+//"INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER) VALUES (:principal, :username, :password, :isOwner)";
 	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){
-		String sql = "INSERT INTO `food-truck-finder`.`review` (`USER_ID`," +
-				"`MESSAGE`, `RATING`, `DATE`) VALUES" +
-				"(:user_ID, :truck_ID, :message, :rating, NOW())";
+		String sql = "INSERT INTO REVIEW (TRUCK_ID, USER_ID, MESSAGE, RATING, DATE) VALUES(:truck_ID, :user_ID, :message, :rating, NOW())";
 		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "message", message, "rating", rating);
 
 		jdbcTemplate.update(sql, params);

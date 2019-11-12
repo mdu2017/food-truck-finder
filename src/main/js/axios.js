@@ -42,6 +42,10 @@ export function getRecommendations(userlat, userlong) {
 	});
 }
 
+export function getNotifications(userId) {
+	return axios.get('/api/user/getNotifications?userId=' + userId);
+}
+
 export function subscribe(foodtruckId, userId) {
 	return axios.post('api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId);
 }

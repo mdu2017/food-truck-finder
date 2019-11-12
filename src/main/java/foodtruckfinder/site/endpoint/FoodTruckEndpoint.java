@@ -4,12 +4,9 @@ import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import foodtruckfinder.site.common.foodtruck.Stop;
-import foodtruckfinder.site.common.user.UserDto;
-import foodtruckfinder.site.common.user.UserService;
+import alloy.util.Tuple;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.userdetails.User;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -86,5 +83,10 @@ public class FoodTruckEndpoint {
 	public void sendNotification(String message, Long foodTruckId){
 		System.out.println(foodTruckId);
 		foodTruckService.sendNotification(message, foodTruckId);
+	}
+
+	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
+	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
+		return foodTruckService.getCurrentLocation(foodTruckId);
 	}
 }

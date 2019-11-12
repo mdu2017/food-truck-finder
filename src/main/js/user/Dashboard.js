@@ -16,7 +16,7 @@ export class Dashboard extends React.Component {
 		super(props);
 		this.state = {
 			authentication: Axios.getCookie('authentication'),
-			username: JSON.parse(Axios.getCookie('user')),
+			user: JSON.parse(Axios.getCookie('user')),
 			foodtrucks: []
 		};
 	}
@@ -26,7 +26,7 @@ export class Dashboard extends React.Component {
 			return (
 				<div>
 					{'Welcome, '}
-					{this.state.username.username}
+					{this.state.user.username}
 					{'!'}
 				</div>
 			);

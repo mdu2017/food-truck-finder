@@ -84,7 +84,6 @@ public class FoodTruckEndpoint {
 
 	@PostMapping(value = "/send-notification", produces = "application/json" )
 	public void sendNotification(String message, Long foodTruckId){
-		System.out.println(foodTruckId);
 		foodTruckService.sendNotification(message, foodTruckId);
 	}
 }

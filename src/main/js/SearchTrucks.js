@@ -19,7 +19,7 @@ export class SearchFoodTrucks extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
-            owner_id: JSON.parse(Axios.getCookie('user')).id,
+            // owner_id: JSON.parse(Axios.getCookie('user')).id,
             name: null,
             trucks: []
         };
@@ -32,8 +32,8 @@ export class SearchFoodTrucks extends React.Component {
     // Get details page working with searches
     // Partial string searches??
     // List of trucks with same name okay?
-    // Search page not loading when not logged in (works when logged in as user/owner)
-    // Bug - if submit when empty (gives console errors - page is fine)
+    // Search functionality not working if user isn't logged in (401 error unauthorized)
+    // minor Bug - if submit when empty (gives console errors - page is fine)
     //Submit handler
     handleSubmit = event => {
 
@@ -54,6 +54,7 @@ export class SearchFoodTrucks extends React.Component {
     renderFoodTrucks() {
         return (
             <div>
+                <br/>
                 {/* This.state.trucks checks if not null*/}
                 {this.state.trucks && this.state.trucks.length > 0 ? (
                     <div>
@@ -69,9 +70,7 @@ export class SearchFoodTrucks extends React.Component {
                     </div>
                 ) : (
                     <div>
-                        <br/>
-                        <br/>
-                        <h6>No trucks with {this.state.name} found.</h6>
+                        <h6>No trucks found.</h6>
                     </div>
                 )}
             </div>
@@ -99,6 +98,7 @@ export class SearchFoodTrucks extends React.Component {
                     </Form>
 
                     <Button type="button" className="btn btn-info" onClick={this.handleSubmit}>Submit</Button>
+
 
                     {/*Display list of food trucks by name search*/}
                     {this.renderFoodTrucks()}

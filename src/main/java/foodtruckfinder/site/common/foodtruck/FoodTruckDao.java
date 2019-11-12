@@ -123,8 +123,9 @@ public class FoodTruckDao {
 
 		System.out.println("Name in DAO: " + name);
 
-		//Get all food trucks with matching name
-		String sql = "SELECT * FROM FOOD_TRUCK WHERE NAME = :foodTruckName";
+		//Get all food trucks with partial string match
+		String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:foodTruckName, food_truck.NAME) != 0";
+
 		Map<String, ?> parameters = _Maps.map("foodTruckName", name);
 
 		FoodTruckDto result = jdbcTemplate.query(sql, parameters, rs -> {
@@ -563,7 +564,9 @@ public class FoodTruckDao {
 
 		List<FoodTruckDto> trucks = null;
 		if (name != null && !name.isEmpty()) {
-			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE NAME = :name";
+
+			//Partial string match
+			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE LOCATE(:name, food_truck.NAME) != 0";
 
 			Map<String, ?> params = _Maps.map("name", name);
 			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));

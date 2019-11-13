@@ -59,6 +59,10 @@ export class MapContainer extends React.Component {
 		this.props.handleMapSelection(lat, long);
 	}
 
+	componentDidMount() {
+
+	}
+
 	// Sample function to display nearby food trucks
 	displayMarkers = () => {
 		return this.state.markers.map((marker, index) => {

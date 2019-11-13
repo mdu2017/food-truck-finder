@@ -46,10 +46,7 @@ export class ViewFoodTruckDetails extends React.Component {
 		Axios.getFoodTruckDetails(id).then(result => {
 			this.setState({
 				truck: result,
-				averagePrice: (
-					(result.price_high + result.price_low) /
-					2.0
-				).toFixed(2)
+				averagePrice: ((result.price_high + result.price_low) / 2.0).toFixed(2)
 			});
 		});
 	}
@@ -87,11 +84,9 @@ export class ViewFoodTruckDetails extends React.Component {
 						<br />
 						<Row>
 							<Col xs="auto">
-								<Button
-									color="primary"
-									onClick={this.subscribe()}>
+								<Button color="primary" onClick={this.subscribe()}>
 									Subscribe
-								</Button>
+				</Button>
 							</Col>
 							<Col xs="auto">
 								<legend>
@@ -101,24 +96,22 @@ export class ViewFoodTruckDetails extends React.Component {
 											{this.state.truck.status}
 										</span>
 									) : (
-										<span style={{ color: 'red' }}>
-											{this.state.truck.status}
-										</span>
-									)}
+											<span style={{ color: 'red' }}>
+												{this.state.truck.status}
+											</span>
+										)}
 								</legend>
 							</Col>
 							<Col xs="auto">
 								<legend>
 									Type:{' '}
-									<span style={{ color: 'blue' }}>
-										{this.state.truck.type}
-									</span>
+									<span style={{ color: 'blue' }}>{this.state.truck.type}</span>
 								</legend>
 							</Col>
 							<Col xs="auto">
 								<Button color="info" onClick={this.toggle}>
 									Write Review
-								</Button>
+				</Button>
 							</Col>
 						</Row>
 						<br />
@@ -127,15 +120,13 @@ export class ViewFoodTruckDetails extends React.Component {
 								<legend>Description</legend>
 								{this.state.truck.description ? (
 									<div>
-										<span>
-											{this.state.truck.description}
-										</span>
+										<span>{this.state.truck.description}</span>
 									</div>
 								) : (
-									<div>
-										<span>No Description Available</span>
-									</div>
-								)}
+										<div>
+											<span>No Description Available</span>
+										</div>
+									)}
 							</Col>
 							<Col xs="3">
 								<legend>Average Price</legend>
@@ -145,11 +136,7 @@ export class ViewFoodTruckDetails extends React.Component {
 							<Col xs="3">
 								<legend>Rating</legend>
 								<div className="text-left">5 of 5</div>
-								<Progress
-									value="5"
-									max="5"
-									style={{ width: 100 }}
-								/>
+								<Progress value="5" max="5" style={{ width: 100 }} />
 							</Col>
 						</Row>
 						<br />
@@ -210,7 +197,8 @@ export class ViewFoodTruckDetails extends React.Component {
 						isOpen={this.state.modal}
 						size="lg"
 						scrollable="true"
-						style={{ height: '400px', width: '425px' }}>
+						style={{ height: '400px', width: '425px' }}
+					>
 						<Form onSubmit={this.handleModalSubmit}>
 							<ModalHeader>Write Review</ModalHeader>
 							<ModalBody>
@@ -220,9 +208,8 @@ export class ViewFoodTruckDetails extends React.Component {
 										type="select"
 										name="rating"
 										id="rating"
-										onChange={e =>
-											this.setRating(e.target.value)
-										}>
+										onChange={e => this.setRating(e.target.value)}
+									>
 										<option>1</option>
 										<option>2</option>
 										<option>3</option>
@@ -237,9 +224,7 @@ export class ViewFoodTruckDetails extends React.Component {
 										name="review"
 										id="review"
 										placeholder="Limited to 500 or less characters"
-										onChange={e =>
-											this.setReview(e.target.value)
-										}
+										onChange={e => this.setReview(e.target.value)}
 									/>
 								</FormGroup>
 							</ModalBody>
@@ -252,7 +237,7 @@ export class ViewFoodTruckDetails extends React.Component {
 								/>
 								<Button color="danger" onClick={this.toggle}>
 									Cancel
-								</Button>
+				</Button>
 							</ModalFooter>
 						</Form>
 					</Modal>
@@ -274,7 +259,7 @@ ViewFoodTruckDetails = connect(
 				)
 			)
 				// Success
-				.then(function() {
+				.then(function () {
 					// window.location.href = '/#/list-food-trucks';
 					window.alert('Rating & Review Submission was successful!');
 				})

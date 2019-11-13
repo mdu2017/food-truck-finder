@@ -66,8 +66,7 @@ export class OwnedFoodTrucks extends React.Component {
 							<ListGroup key={index}>
 								<ListGroupItem>
 									{truck.name}{' '}
-									<Link
-										to={`/food-truck-details/${truck.id}`}>
+									<Link to={`/food-truck-details/${truck.id}`}>
 										<Button color="primary" size="sm">
 											View
 										</Button>
@@ -80,26 +79,22 @@ export class OwnedFoodTrucks extends React.Component {
 									<Button
 										color="info"
 										size="sm"
-										onClick={() => this.toggle(truck.id)}>
-										<img
-											src={Bell}
-											width={20}
-											height={20}
-											mode="fit"
-										/>
+										onClick={() => this.toggle(truck.id)}
+									>
+										<img src={Bell} width={20} height={20} mode="fit" />
 									</Button>
 								</ListGroupItem>
 							</ListGroup>
 						))}
 					</div>
 				) : (
-					<div>
-						<h6>No Food Trucks Created.</h6>
-						<Link to={'/create-food-truck'}>
-							<h6>Create One!</h6>
-						</Link>
-					</div>
-				)}
+						<div>
+							<h6>No Food Trucks Created.</h6>
+							<Link to={'/create-food-truck'}>
+								<h6>Create One!</h6>
+							</Link>
+						</div>
+					)}
 			</div>
 		);
 	}
@@ -160,7 +155,7 @@ OwnedFoodTrucks = connect(
 				)
 			)
 				// Success
-				.then(function(result) {
+				.then(function (result) {
 					window.alert('Notification was sent successfully!');
 				})
 				// Failed

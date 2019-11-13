@@ -319,13 +319,15 @@ EditFoodTruck = connect(
 	dispatch => ({
 		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck)),
 		removeTruck: truck_id =>
-			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function(
+			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function (
 				result
 			) {
 				if (result) {
+					console.log(result);
 					window.location.href = '/#/list-food-trucks';
 					window.alert('Deletion was successful!');
 				} else {
+					console.log(result);
 					window.alert('Deletion was NOT successful!');
 				}
 			})

@@ -9,8 +9,30 @@ export class ViewProfile extends React.Component {
 		this.state = {
 			principal: JSON.parse(Axios.getCookie('user')).principal,
 			username: JSON.parse(Axios.getCookie('user')).username,
-			owner: JSON.parse(Axios.getCookie('user')).isOwner
+			owner: JSON.parse(Axios.getCookie('user')).isOwner,
+			ownerId: JSON.parse(Axios.getCookie('user')).id,
+			reviews: [],
+			review: null,
+			rating: null
 		};
+	}
+
+	componentDidMount() {
+		Axios.getRatingByUser(this.state.ownerId).then(result => {
+			let individualReview = this.state.reviews;
+			result.forEach(truck => {
+				Axios.getFoodTruckDetails(truck.truck).then(result2 => {
+					individualReview.push([
+						{
+							name: result2.name,
+							rating: truck.rating,
+							review: truck.message
+						}
+					]);
+					this.setState({ reviews: individualReview });
+				});
+			});
+		});
 	}
 
 	isOwner() {
@@ -18,6 +40,25 @@ export class ViewProfile extends React.Component {
 			return 'Owner';
 		}
 		return 'Customer';
+	}
+
+	renderTruckReviews() {
+		let render = [];
+		{
+			this.state.reviews.map(truck => {
+				truck.forEach(individualReview => {
+					render.push(
+						<div>
+							<h6>Truck: {individualReview.name}</h6>
+							<h6>Rating: {individualReview.rating}</h6>
+							<h6>Review: {individualReview.review}</h6>
+							<br />
+						</div>
+					);
+				});
+			});
+		}
+		return render;
 	}
 
 	render() {
@@ -36,6 +77,7 @@ export class ViewProfile extends React.Component {
 							</Col>
 							<Col>
 								<h2>Ratings {'&'} Reviews</h2>
+								{this.renderTruckReviews()}
 							</Col>
 						</Row>
 					</Container>

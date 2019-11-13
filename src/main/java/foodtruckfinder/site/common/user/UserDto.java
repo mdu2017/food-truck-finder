@@ -23,7 +23,7 @@ public class UserDto implements Momento<String> {
 	}
 	public List<String> getRoles() { return roles; }
 	public String getPrincipal() { return principal; }
-	public String getUsername() { return username; }
+	public String getUsername() { return this.username; }
 	public boolean getIsOwner() { return isOwner; }
 
 	public void setRoles(List<String> roles) { this.roles = roles; }

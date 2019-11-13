@@ -4,8 +4,7 @@ import foodtruckfinder.site.common.user.UserDao;
 import foodtruckfinder.site.common.user.UserDto;
 import org.junit.Test;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNull;
+import static org.junit.Assert.*;
 
 
 public class UserTester {
@@ -24,7 +23,7 @@ public class UserTester {
     @Test
     public void testUsername(){
         userDto.setUsername(username);
-        assertEquals(userDto.getUsername(), "Username");
+        assertEquals(userDto.getUsername(), "This is not a username");
     }
 
     @Test
@@ -33,12 +32,12 @@ public class UserTester {
         assertEquals(userDto.getPrincipal(), "potato@AOL.net");
     }
 
-    @Test
+    @Test (expected = NullPointerException.class)
     public void testBadPrincipal(){
         assertNull(userDao.findUserByPrincipal(principal));
     }
 
-    @Test
+    @Test(expected = NullPointerException.class)
     public void testBadUsername(){
         assertNull(userDao.findUserByUsername(username));
     }

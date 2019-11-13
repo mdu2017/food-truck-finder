@@ -168,7 +168,8 @@
 
             INSERT INTO user (USER_ID, USERNAME, PRINCIPAL, PASSWORD, IS_OWNER)
             VALUES
-            (1, "owner", "owner@owner.com", "$2a$10$9M4Z1uLzU4wM447xl4Hyzuepi4IrqsZxYi0LpJkS715nvIRGwhZhK", 1);
+            (1, "owner", "owner@owner.com", "$2a$10$9M4Z1uLzU4wM447xl4Hyzuepi4IrqsZxYi0LpJkS715nvIRGwhZhK", 1),
+            (2, "user", "user@user.com", "$2a$10$/lzde7rRkfPNk6j.059cLO5NgLqph/shj5H/qDbpDMbNDaCvh8B5y", 0);
 
             INSERT INTO `food-truck-finder`.`food_truck` (`FOOD_TRUCK_ID`, `OWNER_ID`, `NAME`, `TYPE`, `TRUCK_IMAGE`, `PRICE_LOW`, `PRICE_HIGH`, `STATUS`, `DESCRIPTION`)
             VALUES

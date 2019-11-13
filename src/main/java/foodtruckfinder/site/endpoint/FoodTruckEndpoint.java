@@ -5,12 +5,13 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
+import alloy.util.Json;
 import foodtruckfinder.site.common.foodtruck.Stop;
 import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.security.core.userdetails.User;
+import alloy.util.Tuple;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -33,10 +34,10 @@ public class FoodTruckEndpoint {
 
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
-    public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
-        foodTruckService.save(foodTruckDto);
-        return foodTruckDto;
-    }
+	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+		foodTruckService.save(foodTruckDto);
+		return foodTruckDto;
+	}
 
     @PostMapping(value = "/removeTruck", produces = "application/json")
 	public boolean removeTruck(Long truck_id){
@@ -45,6 +46,7 @@ public class FoodTruckEndpoint {
 
 	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
+
 
 //	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
 //	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
@@ -58,34 +60,48 @@ public class FoodTruckEndpoint {
 
 	/**
 	 * This function returns a list of food trucks based on an owner id
+	 *
 	 * @param owner_id the owner to retrieve food trucks for
 	 * @return A list of food trucks
 	 */
 	@GetMapping(value = "/getFoodTrucksByOwner", produces = "application/json")
-	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id){
+	public Optional<List<FoodTruckDto>> getFoodTrucksByOwner(Long owner_id) {
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
 	}
 
 	/**
 	 * This function gets a string list of food types
+	 *
 	 * @return the string list of food types
 	 */
 	@GetMapping(value = "/getFoodTypes", produces = "application/json")
-	public List<String> getFoodTypes(){
+	public List<String> getFoodTypes() {
 		return Arrays.stream(FoodTruckDto.FoodType.values())
-				     .map(FoodTruckDto.FoodType::name)
-				     .collect(Collectors.toList());
+				.map(FoodTruckDto.FoodType::name)
+				.collect(Collectors.toList());
 	}
+
 
 	/**
 	 * This function gets a string list of the status
+	 *
 	 * @return the string list of the status
 	 */
 	@GetMapping(value = "/getStatusNames", produces = "application/json")
-	public List<String> getStatusNames(){
+	public List<String> getStatusNames() {
 		return Arrays.stream(FoodTruckDto.FTStatus.values())
-                     .map(FoodTruckDto.FTStatus::name)
-                     .collect(Collectors.toList());
+				.map(FoodTruckDto.FTStatus::name)
+				.collect(Collectors.toList());
+	}
+
+	/**
+	 * Search for a food truck by name
+	 * @param name The food truck name
+	 * @return the list of food trucks
+	 */
+	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
+	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
+		return foodTruckService.searchFoodTrucks(name);
 	}
 
 	@PostMapping(value = "/send-notification", produces = "application/json" )
@@ -100,7 +116,13 @@ public class FoodTruckEndpoint {
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
-	public void removeDeal(Long truckID){
-		foodTruckService.removeDeal(truckID);
+	public void removeDeal(Long truckID) {
+        foodTruckService.removeDeal(truckID);
+    }
+
+	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
+	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
+		return foodTruckService.getCurrentLocation(foodTruckId);
+
 	}
 }

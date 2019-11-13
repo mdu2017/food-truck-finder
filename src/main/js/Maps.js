@@ -2,6 +2,7 @@ import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
 import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import ViewMarker from 'js/images/food_truck_existing.png';
+import * as Axios from 'js/axios';
 
 // Currently in dashboard and Create food truck page
 

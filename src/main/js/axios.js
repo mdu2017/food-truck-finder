@@ -19,19 +19,22 @@ export function createFoodTruck(foodTruck) {
 export function rateFT(user_ID, truck_ID, message, rating) {
 	return axios.post(
 		'api/user/rate?user_ID=' +
-		user_ID +
-		'&truck_ID=' +
-		truck_ID +
-		'&message=' +
-		message +
-		'&rating=' +
-		rating
+			user_ID +
+			'&truck_ID=' +
+			truck_ID +
+			'&message=' +
+			message +
+			'&rating=' +
+			rating
 	);
 }
 
 export function getRatingByUser(user_ID) {
-	console.log(user_ID);
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
+}
+
+export function getRatingByTruck(truck_ID) {
+	return axios.get('unsecure/getRatingByTruck?truck_ID=' + truck_ID);
 }
 
 // Multivalue axios post
@@ -39,9 +42,9 @@ export function sendNotification(message, foodTruckId) {
 	console.log(message);
 	return axios.post(
 		'api/food-truck/send-notification?message=' +
-		message +
-		'&foodTruckId=' +
-		foodTruckId
+			message +
+			'&foodTruckId=' +
+			foodTruckId
 	);
 }
 
@@ -63,6 +66,10 @@ export function getStatuses() {
 
 export function viewUser(username) {
 	return axios.get('/unsecure/user/' + username);
+}
+
+export function viewUserByID(id) {
+	return axios.get('/unsecure/user/id/' + id);
 }
 
 export function getRecommendations(userlat, userlong) {
@@ -107,7 +114,7 @@ export function getUserDetails() {
 
 // Gets a Food Truck's Details from the Database
 export function getFoodTruckDetails(id) {
-	return axios.get(`/api/food-truck/${id}`);
+	return axios.get(`/unsecure/food-truck/${id}`);
 }
 
 // Gets a list of FT IDs owned by an owner from the Database
@@ -129,7 +136,7 @@ export function getFoodTrucksByOwner(id) {
 }
 
 // TODO: get truck location
-export function getTruckLocation(id){
+export function getTruckLocation(id) {
 	return axios.get('/api/food-truck/getCurrentLocation', {
 		params: {
 			owner_id: id
@@ -137,12 +144,12 @@ export function getTruckLocation(id){
 	});
 }
 
-export function searchFoodTrucks(name){
-    return axios.get('/api/food-truck/searchFoodTrucks', {
-        params: {
-            name: name
-        }
-    });
+export function searchFoodTrucks(name) {
+	return axios.get('/api/food-truck/searchFoodTrucks', {
+		params: {
+			name: name
+		}
+	});
 }
 
 export function getCookie(name) {
@@ -151,7 +158,8 @@ export function getCookie(name) {
 	for (var i = 0; i < ca.length; i++) {
 		var c = ca[i];
 		while (c.charAt(0) === ' ') c = c.substring(1, c.length);
-		if (c.indexOf(nameEQ) === 0) return c.substring(nameEQ.length, c.length);
+		if (c.indexOf(nameEQ) === 0)
+			return c.substring(nameEQ.length, c.length);
 	}
 	return null;
 }
@@ -179,7 +187,9 @@ Actions.Types = {
 Actions.register = user => {
 	return dispatch => {
 		return register(user).then(() => {
-			return dispatch(Actions.authenticate(user.principal, user.password));
+			return dispatch(
+				Actions.authenticate(user.principal, user.password)
+			);
 		});
 	};
 };
@@ -246,7 +256,9 @@ Actions.searchFoodTrucks = name => {
 Actions.update = user => {
 	return dispatch => {
 		return update(user).then(() => {
-			return dispatch(Actions.authenticate(user.principal, user.password));
+			return dispatch(
+				Actions.authenticate(user.principal, user.password)
+			);
 		});
 	};
 };
@@ -257,11 +269,14 @@ Actions.authenticate = (username, password) => {
 			.then(authentication => {
 				dispatch(Actions.setAuthentication(authentication));
 				document.cookie =
-					'authentication=' + JSON.stringify(authentication) + '; path=/';
+					'authentication=' +
+					JSON.stringify(authentication) +
+					'; path=/';
 
 				return getUserDetails().then(user => {
 					dispatch(Actions.setUser(user));
-					document.cookie = 'user=' + JSON.stringify(user) + '; path=/';
+					document.cookie =
+						'user=' + JSON.stringify(user) + '; path=/';
 
 					if (getCookie('user') != null) {
 						window.location.href = '/#/';
@@ -273,7 +288,9 @@ Actions.authenticate = (username, password) => {
 				});
 			})
 			.catch(() =>
-				alert('Email and password combination is invalid, please try again')
+				alert(
+					'Email and password combination is invalid, please try again'
+				)
 			);
 	};
 };

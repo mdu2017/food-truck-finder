@@ -82,6 +82,29 @@ public class UserDao {
 		return Optional.ofNullable(result);
 	}
 
+	public Optional<UserDto> findUserByID(Long user_ID) {
+		String sql = "SELECT * FROM USER WHERE USER_ID = :user_ID";
+
+		Map<String, ?> parameters = _Maps.map("user_ID", user_ID);
+
+		UserDto result = jdbcTemplate.query(sql, parameters, rs -> {
+			if(rs.next()) {
+				UserDto userDto = new UserDto();
+				userDto.setId(rs.getLong("USER_ID"));
+				userDto.setPrincipal(rs.getString("PRINCIPAL"));
+				userDto.setUsername(rs.getString("USERNAME"));
+				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
+				userDto.setRoles(_Lists.list("ROLE_USER"));
+
+				return userDto;
+			} else {
+				return null;
+			}
+		});
+
+		return Optional.ofNullable(result);
+	}
+
 	/**
 	 * This function saves a user to the database, and if it doesn't have an id, it creates one and inserts it into the database.
 	 *
@@ -175,25 +198,6 @@ public class UserDao {
 			temp.setMessage(rs.getString("MESSAGE"));
 			temp.setRating(rs.getInt("RATING"));
 
-
-			return temp;
-		});
-
-		return r;
-	}
-
-	public List<Rating> getRatingByTruck(Long truck_ID){
-		String sql = "SELECT * FROM REVIEW WHERE TRUCK_ID = :truck_ID";
-		Map<String, ?> params = _Maps.map("truck_ID", truck_ID);
-
-		List<Rating> r = jdbcTemplate.query(sql, params, (rs, rownum) -> {
-			Rating temp = new Rating();
-
-			temp.setTruck(truck_ID);
-			temp.setUser(rs.getLong("USER_ID"));
-			temp.setDate(rs.getTimestamp("DATE").toLocalDateTime());
-			temp.setMessage(rs.getString("MESSAGE"));
-			temp.setRating(rs.getInt("RATING"));
 
 			return temp;
 		});

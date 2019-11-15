@@ -11,6 +11,7 @@ import java.util.Optional;
 import java.util.*;
 
 import alloy.util.Tuple;
+import foodtruckfinder.site.common.External.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -729,6 +730,25 @@ public class FoodTruckDao {
 		});
 
 		return location;
+	}
+
+	public List<Rating> getRatingByTruck(Long truck_ID){
+		String sql = "SELECT * FROM REVIEW WHERE TRUCK_ID = :truck_ID";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID);
+
+		List<Rating> r = jdbcTemplate.query(sql, params, (rs, rownum) -> {
+			Rating temp = new Rating();
+
+			temp.setTruck(truck_ID);
+			temp.setUser(rs.getLong("USER_ID"));
+			temp.setDate(rs.getTimestamp("DATE").toLocalDateTime());
+			temp.setMessage(rs.getString("MESSAGE"));
+			temp.setRating(rs.getInt("RATING"));
+
+			return temp;
+		});
+
+		return r;
 	}
 
 }

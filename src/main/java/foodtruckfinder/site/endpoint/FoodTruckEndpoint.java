@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import alloy.util.Json;
+import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.foodtruck.Stop;
 import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
@@ -27,10 +28,10 @@ public class FoodTruckEndpoint {
 	private FoodTruckService foodTruckService;
 
 	// Take an id, and look up the corresponding foodtruck
-	@GetMapping(value = "/{id}", produces = "application/json")
-	public Optional<FoodTruckDto> getFoodTruck(@PathVariable("id") String id) {
-		return foodTruckService.find(id);
-	}
+//	@GetMapping(value = "/{id}", produces = "application/json")
+//	public Optional<FoodTruckDto> getFoodTruck(@PathVariable("id") String id) {
+//		return foodTruckService.find(id);
+//	}
 
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
@@ -123,6 +124,5 @@ public class FoodTruckEndpoint {
 	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
 	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
 		return foodTruckService.getCurrentLocation(foodTruckId);
-
 	}
 }

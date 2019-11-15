@@ -79,9 +79,10 @@ export class ViewFoodTruckDetails extends React.Component {
 		try {
 			const URLObject = this.props.match.params;
 			let { foodtruckID: id } = URLObject;
-			let promise = Axios.subscribe(
-				id,
-				JSON.parse(Axios.getCookie('user')).id
+			Axios.subscribe(id, JSON.parse(Axios.getCookie('user')).id).then(
+				function() {
+					window.alert('You are successfully subscribed!');
+				}
 			);
 		} catch (error) {
 			this.setState({ notLoggedIn: true });

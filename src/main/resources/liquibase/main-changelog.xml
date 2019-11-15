@@ -5,7 +5,7 @@
         xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog
          http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-3.0.xsd">
 
-    <changeSet author="jlutteringer" id="create initial tables">
+    <changeSet author="etdickey" id="create initial tables">
         <sql>
             <!--CREATE TABLE USER
             (
@@ -94,8 +94,8 @@
             CREATE TABLE `REVIEW` (
             `TRUCK_ID` int(11) NOT NULL,
             `USER_ID` int(11) NOT NULL,
-            `MESSAGE` varchar(300) NOT NULL,
-            `RATING` int(11) NOT NULL,
+            `MESSAGE` varchar(500) NOT NULL,
+            `RATING` float NOT NULL,
             `DATE` datetime NOT NULL,
             PRIMARY KEY (`USER_ID`,`TRUCK_ID`),
             KEY `truckidrev_idx` (`TRUCK_ID`),
@@ -133,7 +133,7 @@
 
             CREATE TABLE `EVENT` (
             `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT,
-            `DESCRIPTION` varchar(300) NOT NULL,
+            `DESCRIPTION` varchar(500) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
             PRIMARY KEY (`EVENT_ID`),
             KEY `Stop_idx` (`STOP_ID`),
@@ -168,16 +168,24 @@
 
             INSERT INTO user (USER_ID, USERNAME, PRINCIPAL, PASSWORD, IS_OWNER)
             VALUES
+            (7, "adminasdfghjkl", "admin@asdfhash.com", "$2a$10$DNzQLTTd9lA6LFRhFSD.pu3aYdWTpMwZqy40pjgwKk/7lSC6visy2", 1),
             (1, "owner", "owner@owner.com", "$2a$10$9M4Z1uLzU4wM447xl4Hyzuepi4IrqsZxYi0LpJkS715nvIRGwhZhK", 1),
-            (2, "user", "user@user.com", "$2a$10$/lzde7rRkfPNk6j.059cLO5NgLqph/shj5H/qDbpDMbNDaCvh8B5y", 0);
+            (2, "user", "user@user.com", "$2a$10$/lzde7rRkfPNk6j.059cLO5NgLqph/shj5H/qDbpDMbNDaCvh8B5y", 0),
+            (3, "cust", "customer@customer.com", "$2a$10$SYcSvNwqR2LKPS7eLodv0uciWospRzZiSWLtqoSzYHnX6E2uXiLUi", 0),
+            (4, "goat", "goat@munchies.com", "$2a$10$.7tm.kZmN8vei94g68IMgOIYhUlPQF7FqT4RW9EXDfWspsMsQ/Umy", 0),
+            (5, "bee", "bzz@bzzz.com", "$2a$10$.GeunneQDE83aNak0Pa.T.Bd6FPLX46i3c64cG0.8ikEZ8qHpE2By", 0),
+            (6, "nomnom", "nom@noms.com", "$2a$10$fEiBGhlMvqWMpV5eSRmYk.jPRty/h7Rm/i0.TXUuP37q8By.1AXlC", 0);
 
-            INSERT INTO `food-truck-finder`.`food_truck` (`FOOD_TRUCK_ID`, `OWNER_ID`, `NAME`, `TYPE`, `TRUCK_IMAGE`, `PRICE_LOW`, `PRICE_HIGH`, `STATUS`, `DESCRIPTION`)
+            INSERT INTO food_truck (FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS, DESCRIPTION)
             VALUES
             (1, 1, "Baylor honey", 5, NULL, 2, 10, "OPEN", "honey here"),
             (2, 1, "Torchies", 8, NULL, 1, 5, "OPEN", "Your favorite taco food truck"),
             (3, 1, "Free tank tops!", 12, NULL, 0.99, 3, "OPEN", "Free tank tops for first 100 visitors"),
             (4, 1, "Far away truck", 13, NULL, 100, 300, "OPEN", "Really far away, don't come"),
-            (5, 1, "Closed truck", 0, NULL, 10000, 30000, "CLOSED", "good luck getting here");
+            (5, 1, "Closed truck", 0, NULL, 10000, 30000, "CLOSED", "good luck getting here"),
+            (6, 7, "{All Users}", 0, NULL, 0, 0, "OPEN", "This is the system food truck!  All users get notifications through this truck!"),
+            (7, 7, "{All Customers}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all customers!"),
+            (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!");
 
             INSERT INTO truck_stop
             (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES
@@ -203,6 +211,30 @@
             (1, "F", 10), (2, "F", 11), (3, "F", 13), (4, "F", 12),
             (1, "S", 10), (2, "S", 11), (3, "S", 13), (4, "S", 12),
             (1, "U", 10), (2, "U", 11), (3, "U", 13), (4, "U", 12);
+
+            INSERT INTO subscriptions (TRUCK_ID, USER_ID) VALUES
+            (6, 7), (7, 7), (8, 7),
+            (6, 1), (8, 1),
+            (6, 2), (7, 2),
+            (6, 3), (7, 3),
+            (6, 4), (7, 4), (3, 4),
+            (6, 5), (7, 5), (1, 5),
+            (6, 6), (7, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6);
+
+            INSERT INTO review (TRUCK_ID, USER_ID, MESSAGE, RATING, DATE) VALUES
+            (1, 5, "bzzzzzz", 5, "2019-11-14 23:50:24"),
+            (1, 6, "Some real good honey here.  Come and get some!", 5, "2019-11-14 23:50:24"),
+            (2, 6, "Too hot to handle", 1.2, "2019-11-14 23:50:24"),
+            (3, 4, "Shirt tastes real good this time of year!", 4.5, "2019-11-14 23:50:24"),
+            (3, 6, "These are some lit tank tops!", 5, "2019-11-14 23:50:24"),
+            (4, 6, "Man this place is so hard to find! Great food though", 3.5, "2019-11-14 23:50:24"),
+            (5, 6, "Maaaan what tha!  This place is always closed except at like 4am! (Even then only for like a minute!)", 0.1, "2019-11-14 23:50:24"),
+            (6, 3, "Lit place, great user interface!", 5, "2019-11-14 23:50:24"),
+            (6, 2, "It's not the highest quality, but it's definitely better than the rest of the groups!", 4.5, "2019-11-14 23:50:24"),
+            (6, 6, "Cool tank tops bro", 5, "2019-11-14 23:50:24"),
+            (3, 3, "Cuz, you know, what good city doesn't have a food truck that sells tank tops?", 4, "2019-11-14 23:50:24"),
+            (2, 2, "It's trucks like this that take away from local businesses!", 0, "2019-11-14 23:50:24");
+
         </sql>
     </changeSet>
 </databaseChangeLog>

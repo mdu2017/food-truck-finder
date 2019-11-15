@@ -146,6 +146,14 @@ public class UserDao {
 
 			BigInteger key = (BigInteger) keyHolder.getKey();
 			userAuthentication.getUser().setId(key.longValue());
+
+			//Now insert subscriptions to their appropriate food trucks
+			sql = "INSERT INTO subscriptions (TRUCK_ID, USER_ID) VALUES (6, :userid), (:custown, :userid)";
+			int custown = (userAuthentication.getUser().getIsOwner() ? 8: 7);
+			parameters = _Maps.map("userid", userAuthentication.getUser().getId(), "custown", custown);
+
+			jdbcTemplate.update(sql, parameters);
+
 			return userAuthentication;
 		}
 	}
@@ -196,7 +204,7 @@ public class UserDao {
 			temp.setUser(user_ID);
 			temp.setDate(rs.getTimestamp("DATE").toLocalDateTime());
 			temp.setMessage(rs.getString("MESSAGE"));
-			temp.setRating(rs.getInt("RATING"));
+			temp.setRating(rs.getFloat("RATING"));
 
 
 			return temp;

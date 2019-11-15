@@ -33,10 +33,10 @@
             "error",
             "always"
         ],
-        "no-unused-vars": "warn",
-        "no-console": "warn",
+        "no-unused-vars": "off",
+        "no-console": 0,
         "no-class-assign": "off",
-        "react/jsx-uses-vars": "error",
+        "react/jsx-uses-vars": "off",
         "no-mixed-spaces-and-tabs": "off"
     }
 }

@@ -1,0 +1,10 @@
+.gradle
+.idea
+build
+node_modules
+out
+.moowork
+.eslintrc
+application.yml
+src/main/resources/application.yml
+settings.json

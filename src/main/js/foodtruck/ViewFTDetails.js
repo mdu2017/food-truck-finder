@@ -1,12 +1,12 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import * as NavBars from 'js/navBars';
+import User from 'js/images/user_icon.png';
 import {
 	Progress,
 	Row,
 	Col,
 	Button,
-	Media,
 	Modal,
 	ModalHeader,
 	ModalBody,
@@ -14,7 +14,6 @@ import {
 	Form,
 	FormGroup,
 	Input,
-	FormText,
 	Label
 } from 'reactstrap';
 import * as Axios from 'js/axios';
@@ -30,7 +29,8 @@ export class ViewFoodTruckDetails extends React.Component {
 			modal: false,
 			rating: -1,
 			review: '',
-			notLoggedIn: false
+			notLoggedIn: false,
+			previousReviews: []
 		};
 		this.toggle = this.toggle.bind(this);
 		this.handleModalSubmit = this.handleModalSubmit.bind(this);
@@ -52,6 +52,63 @@ export class ViewFoodTruckDetails extends React.Component {
 				).toFixed(2)
 			});
 		});
+		Axios.getRatingByTruck(id).then(result => {
+			let individualReview = this.state.previousReviews;
+			result.forEach(review => {
+				Axios.viewUserByID(review.user).then(user => {
+					individualReview.push([
+						{
+							message: review.message,
+							date_year: review.date[0],
+							date_month: review.date[1],
+							date_day: review.date[2],
+							rating: review.rating,
+							user: user.username
+						}
+					]);
+					this.setState({ previousReviews: individualReview });
+				});
+			});
+		});
+	}
+
+	renderTruckReviews() {
+		let render = [];
+		{
+			this.state.previousReviews.map(truck => {
+				truck.forEach(individualReview => {
+					render.push(
+						<div>
+							<h6
+								style={{
+									fontWeight: 'bold',
+									fontSize: 'small'
+								}}
+							>
+								{individualReview.date_month}
+								{'/'}
+								{individualReview.date_day}
+								{'/'}
+								{individualReview.date_year}
+							</h6>
+							<h6>
+								<img
+									src={User}
+									width={20}
+									height={20}
+									mode="center"
+								/>
+								{individualReview.user}{' '}
+								{individualReview.rating} {'/ 5'}
+							</h6>
+							<h6>{individualReview.message}</h6>
+							<br />
+						</div>
+					);
+				});
+			});
+		}
+		return render;
 	}
 
 	toggle() {
@@ -214,9 +271,14 @@ export class ViewFoodTruckDetails extends React.Component {
 								</Row>
 							</Col>
 						</Row>
+						<br />
 						<Row>
-							<Col xs="auto">
+							<Col xs="6">
 								<legend>Route</legend>
+							</Col>
+							<Col xs="auto">
+								<legend>Ratings {'&'} Reviews</legend>
+								{this.renderTruckReviews()}
 							</Col>
 						</Row>
 					</div>

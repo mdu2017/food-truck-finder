@@ -30,8 +30,11 @@ export function rateFT(user_ID, truck_ID, message, rating) {
 }
 
 export function getRatingByUser(user_ID) {
-	console.log(user_ID);
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
+}
+
+export function getRatingByTruck(truck_ID) {
+	return axios.get('unsecure/getRatingByTruck?truck_ID=' + truck_ID);
 }
 
 // Multivalue axios post
@@ -63,6 +66,10 @@ export function getStatuses() {
 
 export function viewUser(username) {
 	return axios.get('/unsecure/user/' + username);
+}
+
+export function viewUserByID(id) {
+	return axios.get('/unsecure/user/id/' + id);
 }
 
 export function getRecommendations(userlat, userlong) {
@@ -107,7 +114,7 @@ export function getUserDetails() {
 
 // Gets a Food Truck's Details from the Database
 export function getFoodTruckDetails(id) {
-	return axios.get(`/unsecure/${id}`);
+	return axios.get(`/unsecure/food-truck/${id}`);
 }
 
 // Gets a list of FT IDs owned by an owner from the Database

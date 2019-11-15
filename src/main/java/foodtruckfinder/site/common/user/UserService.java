@@ -38,6 +38,10 @@ public class UserService {
 		return userDao.findUserByUsername(username);
 	}
 
+	public Optional<UserDto> findUserByID(Long user_ID) {
+		return userDao.findUserByID(user_ID);
+	}
+
 	public static class RegistrationRequest {
 		private String principal;
 		private String password;
@@ -221,9 +225,5 @@ public class UserService {
 
 	public List<Rating> getRatingByUser(Long user_ID){
 		return userDao.getRatingByUser(user_ID);
-	}
-
-	public List<Rating> getRatingByTruck(Long truck_ID){
-		return userDao.getRatingByTruck(truck_ID);
 	}
 }

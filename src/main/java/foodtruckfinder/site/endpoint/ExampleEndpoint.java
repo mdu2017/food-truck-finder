@@ -1,5 +1,6 @@
 package foodtruckfinder.site.endpoint;
 
+import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import foodtruckfinder.site.common.user.UserDto;
@@ -22,9 +23,12 @@ public class ExampleEndpoint {
 
     @GetMapping(value = "/user/{username}", produces = "application/json")
     public Optional<UserDto> viewUser(@PathVariable("username") String username) {
-        Optional<UserDto> ret = unsecureUserService.findUserByUsername(username);
-        System.out.println(ret);
-        return ret;
+        return unsecureUserService.findUserByUsername(username);
+    }
+
+    @GetMapping(value = "/user/id/{id}", produces = "application/json")
+    public Optional<UserDto> viewUserByID(@PathVariable("id") Long user_ID) {
+        return unsecureUserService.findUserByID(user_ID);
     }
 
     @GetMapping(value = "/recommendations", produces = "application/json")
@@ -44,8 +48,13 @@ public class ExampleEndpoint {
     }
 
     // Take an id, and look up the corresponding foodtruck
-    @GetMapping(value = "/{id}", produces = "application/json")
+    @GetMapping(value = "/food-truck/{id}", produces = "application/json")
     public Optional<FoodTruckDto> getFoodTruck(@PathVariable("id") String id) {
         return unsecureFoodTruckService.find(id);
+    }
+
+    @GetMapping(value = "/getRatingByTruck", produces = "application/json")
+    public List<Rating> getRatingByTruck(Long truck_ID){
+        return unsecureFoodTruckService.getRatingByTruck(truck_ID);
     }
 }

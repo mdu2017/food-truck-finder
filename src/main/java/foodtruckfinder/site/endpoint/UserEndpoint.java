@@ -116,9 +116,4 @@ public class UserEndpoint {
 	public List<Rating> getRatingByUser(Long user_ID){
 		return userService.getRatingByUser(user_ID);
 	}
-
-	@GetMapping(value = "/getRatingByTruck", produces = "application/json")
-	public List<Rating> getRatingByTruck(Long truck_ID){
-		return userService.getRatingByTruck(truck_ID);
-	}
 }

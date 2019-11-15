@@ -6,6 +6,7 @@ import java.util.List;
 import java.util.Optional;
 
 import alloy.util.Tuple;
+import foodtruckfinder.site.common.External.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -93,4 +94,8 @@ public class FoodTruckService {
     public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
 		return foodTruckDao.getCurrentLocation(foodTruckId);
     }
+
+	public List<Rating> getRatingByTruck(Long truck_ID){
+		return foodTruckDao.getRatingByTruck(truck_ID);
+	}
 }

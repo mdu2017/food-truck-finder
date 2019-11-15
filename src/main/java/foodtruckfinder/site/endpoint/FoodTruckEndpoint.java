@@ -6,6 +6,7 @@ import java.util.*;
 import java.util.stream.Collectors;
 
 import alloy.util.Json;
+import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.foodtruck.Stop;
 import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
@@ -123,6 +124,5 @@ public class FoodTruckEndpoint {
 	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
 	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
 		return foodTruckService.getCurrentLocation(foodTruckId);
-
 	}
 }

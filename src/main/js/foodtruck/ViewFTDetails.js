@@ -26,11 +26,11 @@ export class ViewFoodTruckDetails extends React.Component {
 		this.state = {
 			truck: null,
 			averagePrice: 'N/A',
-			userId: JSON.parse(Axios.getCookie('user')).id,
 			foodTruckId: null,
 			modal: false,
 			rating: -1,
-			review: ''
+			review: '',
+			notLoggedIn: false
 		};
 		this.toggle = this.toggle.bind(this);
 		this.handleModalSubmit = this.handleModalSubmit.bind(this);
@@ -46,21 +46,28 @@ export class ViewFoodTruckDetails extends React.Component {
 		Axios.getFoodTruckDetails(id).then(result => {
 			this.setState({
 				truck: result,
-				averagePrice: ((result.price_high + result.price_low) / 2.0).toFixed(2)
+				averagePrice: (
+					(result.price_high + result.price_low) /
+					2.0
+				).toFixed(2)
 			});
 		});
 	}
 
 	toggle() {
-		this.setState({
-			modal: !this.state.modal
-		});
+		if (JSON.parse(Axios.getCookie('user') === null)) {
+			this.setState({ notLoggedIn: true });
+		} else {
+			this.setState({
+				modal: !this.state.modal
+			});
+		}
 	}
 
 	handleModalSubmit = event => {
 		this.toggle();
 		this.props.rateFT({
-			userId: this.state.userId,
+			userId: JSON.parse(Axios.getCookie('user')).id,
 			truckId: this.state.truck.id,
 			review: this.state.review,
 			rating: this.state.rating
@@ -69,12 +76,22 @@ export class ViewFoodTruckDetails extends React.Component {
 	};
 
 	subscribe() {
-		const URLObject = this.props.match.params;
-		let { foodtruckID: id } = URLObject;
-		let promise = Axios.subscribe(1, 2);
+		try {
+			const URLObject = this.props.match.params;
+			let { foodtruckID: id } = URLObject;
+			let promise = Axios.subscribe(
+				id,
+				JSON.parse(Axios.getCookie('user')).id
+			);
+		} catch (error) {
+			this.setState({ notLoggedIn: true });
+		}
 	}
 
 	render() {
+		if (this.state.notLoggedIn) {
+			window.alert('Please login to Rate/Review a Truck');
+		}
 		return (
 			<div>
 				<NavBars.CustomNavBar />
@@ -84,9 +101,12 @@ export class ViewFoodTruckDetails extends React.Component {
 						<br />
 						<Row>
 							<Col xs="auto">
-								<Button color="primary" onClick={this.subscribe()}>
+								<Button
+									color="primary"
+									onClick={() => this.subscribe()}
+								>
 									Subscribe
-				</Button>
+								</Button>
 							</Col>
 							<Col xs="auto">
 								<legend>
@@ -96,22 +116,24 @@ export class ViewFoodTruckDetails extends React.Component {
 											{this.state.truck.status}
 										</span>
 									) : (
-											<span style={{ color: 'red' }}>
-												{this.state.truck.status}
-											</span>
-										)}
+										<span style={{ color: 'red' }}>
+											{this.state.truck.status}
+										</span>
+									)}
 								</legend>
 							</Col>
 							<Col xs="auto">
 								<legend>
 									Type:{' '}
-									<span style={{ color: 'blue' }}>{this.state.truck.type}</span>
+									<span style={{ color: 'blue' }}>
+										{this.state.truck.type}
+									</span>
 								</legend>
 							</Col>
 							<Col xs="auto">
 								<Button color="info" onClick={this.toggle}>
 									Write Review
-				</Button>
+								</Button>
 							</Col>
 						</Row>
 						<br />
@@ -120,13 +142,15 @@ export class ViewFoodTruckDetails extends React.Component {
 								<legend>Description</legend>
 								{this.state.truck.description ? (
 									<div>
-										<span>{this.state.truck.description}</span>
+										<span>
+											{this.state.truck.description}
+										</span>
 									</div>
 								) : (
-										<div>
-											<span>No Description Available</span>
-										</div>
-									)}
+									<div>
+										<span>No Description Available</span>
+									</div>
+								)}
 							</Col>
 							<Col xs="3">
 								<legend>Average Price</legend>
@@ -136,7 +160,11 @@ export class ViewFoodTruckDetails extends React.Component {
 							<Col xs="3">
 								<legend>Rating</legend>
 								<div className="text-left">5 of 5</div>
-								<Progress value="5" max="5" style={{ width: 100 }} />
+								<Progress
+									value="5"
+									max="5"
+									style={{ width: 100 }}
+								/>
 							</Col>
 						</Row>
 						<br />
@@ -208,7 +236,9 @@ export class ViewFoodTruckDetails extends React.Component {
 										type="select"
 										name="rating"
 										id="rating"
-										onChange={e => this.setRating(e.target.value)}
+										onChange={e =>
+											this.setRating(e.target.value)
+										}
 									>
 										<option>1</option>
 										<option>2</option>
@@ -224,7 +254,9 @@ export class ViewFoodTruckDetails extends React.Component {
 										name="review"
 										id="review"
 										placeholder="Limited to 500 or less characters"
-										onChange={e => this.setReview(e.target.value)}
+										onChange={e =>
+											this.setReview(e.target.value)
+										}
 									/>
 								</FormGroup>
 							</ModalBody>
@@ -237,7 +269,7 @@ export class ViewFoodTruckDetails extends React.Component {
 								/>
 								<Button color="danger" onClick={this.toggle}>
 									Cancel
-				</Button>
+								</Button>
 							</ModalFooter>
 						</Form>
 					</Modal>
@@ -259,7 +291,7 @@ ViewFoodTruckDetails = connect(
 				)
 			)
 				// Success
-				.then(function () {
+				.then(function() {
 					// window.location.href = '/#/list-food-trucks';
 					window.alert('Rating & Review Submission was successful!');
 				})

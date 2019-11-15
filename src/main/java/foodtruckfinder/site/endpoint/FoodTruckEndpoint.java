@@ -27,10 +27,10 @@ public class FoodTruckEndpoint {
 	private FoodTruckService foodTruckService;
 
 	// Take an id, and look up the corresponding foodtruck
-	@GetMapping(value = "/{id}", produces = "application/json")
-	public Optional<FoodTruckDto> getFoodTruck(@PathVariable("id") String id) {
-		return foodTruckService.find(id);
-	}
+//	@GetMapping(value = "/{id}", produces = "application/json")
+//	public Optional<FoodTruckDto> getFoodTruck(@PathVariable("id") String id) {
+//		return foodTruckService.find(id);
+//	}
 
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")

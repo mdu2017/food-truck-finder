@@ -550,7 +550,7 @@ public class FoodTruckDao {
 	/**
 	 * Gets the list of subscribers to a particular food truck
 	 *
-	 * @param truck_id the truck to retrieve subscribers for
+	 * @param foodTruckId the truck to retrieve subscribers for
 	 * @return the list of subscribers to a particular food truck
 	 */
 	public List<String> getSubscribers(Long foodTruckId) {

@@ -74,7 +74,9 @@ export class ViewFoodTruckDetails extends React.Component {
 					this.setState({ previousReviews: individualReview });
 				});
 			});
-			this.setState({ averageRating: avg / reviewCount });
+			if (reviewCount > 0) {
+				this.setState({ averageRating: avg / reviewCount });
+			}
 		});
 	}
 
@@ -224,8 +226,14 @@ export class ViewFoodTruckDetails extends React.Component {
 							<Col xs="3">
 								<legend>Rating</legend>
 								<div className="text-left">
-									{this.state.averageRating}
-									{' of 5'}
+									{this.state.averageRating !== 0 ? (
+										<div>
+											{this.state.averageRating}
+											{' of 5'}
+										</div>
+									) : (
+										<div>{'No Ratings Available'}</div>
+									)}
 								</div>
 								<Progress
 									value={this.state.averageRating}
@@ -364,8 +372,8 @@ ViewFoodTruckDetails = connect(
 			)
 				// Success
 				.then(function() {
-					// window.location.href = '/#/list-food-trucks';
 					window.alert('Rating & Review Submission was successful!');
+					window.location.reload();
 				})
 				// Failed
 				.catch(() => window.alert('Rating & Review Submission failed!'))

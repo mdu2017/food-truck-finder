@@ -30,7 +30,8 @@ export class ViewFoodTruckDetails extends React.Component {
 			rating: -1,
 			review: '',
 			notLoggedIn: false,
-			previousReviews: []
+			previousReviews: [],
+			averageRating: 0
 		};
 		this.toggle = this.toggle.bind(this);
 		this.handleModalSubmit = this.handleModalSubmit.bind(this);
@@ -54,7 +55,11 @@ export class ViewFoodTruckDetails extends React.Component {
 		});
 		Axios.getRatingByTruck(id).then(result => {
 			let individualReview = this.state.previousReviews;
+			let avg = this.state.averageRating;
+			let reviewCount = 0;
 			result.forEach(review => {
+				reviewCount++;
+				avg += review.rating;
 				Axios.viewUserByID(review.user).then(user => {
 					individualReview.push([
 						{
@@ -69,6 +74,7 @@ export class ViewFoodTruckDetails extends React.Component {
 					this.setState({ previousReviews: individualReview });
 				});
 			});
+			this.setState({ averageRating: avg / reviewCount });
 		});
 	}
 
@@ -217,9 +223,12 @@ export class ViewFoodTruckDetails extends React.Component {
 							</Col>
 							<Col xs="3">
 								<legend>Rating</legend>
-								<div className="text-left">5 of 5</div>
+								<div className="text-left">
+									{this.state.averageRating}
+									{' of 5'}
+								</div>
 								<Progress
-									value="5"
+									value={this.state.averageRating}
 									max="5"
 									style={{ width: 100 }}
 								/>

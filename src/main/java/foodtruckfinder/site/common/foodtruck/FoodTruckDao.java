@@ -743,7 +743,7 @@ public class FoodTruckDao {
 			temp.setUser(rs.getLong("USER_ID"));
 			temp.setDate(rs.getTimestamp("DATE").toLocalDateTime());
 			temp.setMessage(rs.getString("MESSAGE"));
-			temp.setRating(rs.getInt("RATING"));
+			temp.setRating(rs.getFloat("RATING"));
 
 			return temp;
 		});

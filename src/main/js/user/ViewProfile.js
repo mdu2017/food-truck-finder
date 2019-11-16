@@ -1,7 +1,8 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import { Col, Row, Container } from 'reactstrap';
+import { Col, Row, Container, Button } from 'reactstrap';
 
 export class ViewProfile extends React.Component {
 	constructor(props) {
@@ -10,26 +11,42 @@ export class ViewProfile extends React.Component {
 			principal: JSON.parse(Axios.getCookie('user')).principal,
 			username: JSON.parse(Axios.getCookie('user')).username,
 			owner: JSON.parse(Axios.getCookie('user')).isOwner,
-			ownerId: JSON.parse(Axios.getCookie('user')).id,
+			userId: JSON.parse(Axios.getCookie('user')).id,
 			reviews: [],
 			review: null,
-			rating: null
+			rating: null,
+			subscriptions: []
 		};
 	}
 
 	componentDidMount() {
-		Axios.getRatingByUser(this.state.ownerId).then(result => {
+		Axios.getRatingByUser(this.state.userId).then(result => {
 			let individualReview = this.state.reviews;
 			result.forEach(truck => {
 				Axios.getFoodTruckDetails(truck.truck).then(result2 => {
 					individualReview.push([
 						{
+							id: result2.id,
 							name: result2.name,
 							rating: truck.rating,
 							review: truck.message
 						}
 					]);
 					this.setState({ reviews: individualReview });
+				});
+			});
+		});
+		Axios.getSubscriptions(this.state.userId).then(result => {
+			let sub = this.state.subscriptions;
+			result.forEach(truck_id => {
+				Axios.getFoodTruckDetails(truck_id).then(result2 => {
+					sub.push([
+						{
+							id: result2.id,
+							name: result2.name
+						}
+					]);
+					this.setState({ subscriptions: sub });
 				});
 			});
 		});
@@ -49,9 +66,45 @@ export class ViewProfile extends React.Component {
 				truck.forEach(individualReview => {
 					render.push(
 						<div>
-							<h6>Truck: {individualReview.name}</h6>
-							<h6>Rating: {individualReview.rating}</h6>
+							<h6>
+								<Link
+									to={`/food-truck-details/${individualReview.id}`}
+								>
+									<Button color="link" size="md">
+										{individualReview.name}
+									</Button>
+								</Link>{' '}
+								<span
+									style={{
+										fontWeight: 'bold',
+										fontSize: 'small'
+									}}
+								>
+									{individualReview.rating} / 5
+								</span>
+							</h6>
 							<h6>Review: {individualReview.review}</h6>
+							<br />
+						</div>
+					);
+				});
+			});
+		}
+		return render;
+	}
+
+	renderSubscriptionList() {
+		let render = [];
+		{
+			this.state.subscriptions.map(truck => {
+				truck.forEach(sub => {
+					render.push(
+						<div>
+							<Link to={`/food-truck-details/${sub.id}`}>
+								<Button color="link" size="md">
+									{sub.name}
+								</Button>
+							</Link>{' '}
 							<br />
 						</div>
 					);
@@ -74,6 +127,9 @@ export class ViewProfile extends React.Component {
 								<h6>Username: {this.state.username}</h6>
 								<h6>Email: {this.state.principal}</h6>
 								<h6>Account Type: {this.isOwner()}</h6>
+								<br />
+								<h2>Subscriptions</h2>
+								{this.renderSubscriptionList()}
 							</Col>
 							<Col>
 								<h2>Ratings {'&'} Reviews</h2>

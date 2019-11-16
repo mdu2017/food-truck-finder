@@ -33,6 +33,10 @@ export function getRatingByUser(user_ID) {
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
 }
 
+export function getSubscriptions(id) {
+	return axios.get('/api/user/getSubscriptions/' + id);
+}
+
 export function getRatingByTruck(truck_ID) {
 	return axios.get('unsecure/getRatingByTruck?truck_ID=' + truck_ID);
 }

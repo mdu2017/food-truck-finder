@@ -211,7 +211,7 @@ public class UserService {
 
 	}
 
-	public List<String> getSubscriptions(String id) { return userDao.getSubscriptions(Long.parseLong(id)); }
+	public List<Long> getSubscriptions(String id) { return userDao.getSubscriptions(Long.parseLong(id)); }
 
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id) { return userDao.getOwnedFoodTrucks(id); }
 

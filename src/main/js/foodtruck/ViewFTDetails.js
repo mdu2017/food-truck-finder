@@ -31,7 +31,8 @@ export class ViewFoodTruckDetails extends React.Component {
 			review: '',
 			notLoggedIn: false,
 			previousReviews: [],
-			averageRating: 0
+			averageRating: 0,
+			alreadySubscribed: false
 		};
 		this.toggle = this.toggle.bind(this);
 		this.handleModalSubmit = this.handleModalSubmit.bind(this);

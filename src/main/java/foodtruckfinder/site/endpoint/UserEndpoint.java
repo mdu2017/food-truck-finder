@@ -79,8 +79,8 @@ public class UserEndpoint {
 	@PostMapping(value = "/register")
 	public UserDto register(@RequestBody RegistrationRequest request) { return userService.register(request); }
 
-	@PostMapping(value = "/getSubscriptions/{id}", produces = "application/json")
-	public List<String> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
+	@GetMapping(value = "/getSubscriptions/{id}", produces = "application/json")
+	public List<Long> getSubscriptions(@PathVariable("id") String id) { return userService.getSubscriptions(id); }
 
 	/**
 	 * Updates a user based on the passed in user

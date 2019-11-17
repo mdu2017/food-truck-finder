@@ -38,16 +38,12 @@ export class SearchFoodTrucks extends React.Component {
 		});
 
 		event.preventDefault();
-
-		console.log(this.state.trucks);
 	};
 
-	// Display list of food trucks after search
 	renderFoodTrucks() {
 		return (
 			<div>
 				<br />
-				{/* This.state.trucks checks if not null*/}
 				{this.state.trucks && this.state.trucks.length > 0 ? (
 					<div>
 						{this.state.trucks.map((truck, index) => (

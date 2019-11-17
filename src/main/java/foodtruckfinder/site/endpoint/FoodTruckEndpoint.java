@@ -49,10 +49,7 @@ public class FoodTruckEndpoint {
 	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
 
 
-//	@PostMapping(value = "/subscribe/{foodtruckid}/{userid}", produces = "application/json")
-//	public void subscribe(@PathVariable("foodtruckid") String ftid, @PathVariable("userid") String userid) {
-//		foodTruckService.subscribe(ftid, userid);
-//	}
+
 
 	@PostMapping(value = "/subscribe", produces = "application/json")
 	public void subscribe(Long ftid, Long userid) {

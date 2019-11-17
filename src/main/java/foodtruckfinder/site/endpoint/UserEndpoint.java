@@ -128,4 +128,9 @@ public class UserEndpoint {
 		userService.removeReview(truck_ID, user_ID);
 		return;
 	}
+
+	@PostMapping(value = "/notificationStatus", produces = "application/json")
+	public Boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
+		return userService.changeNotificationStatus(user_ID, truck_ID, sent);
+	}
 }

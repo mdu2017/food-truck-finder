@@ -1,6 +1,7 @@
 package foodtruckfinder.site.common.user;
 
 import java.math.BigInteger;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
@@ -222,5 +223,13 @@ public class UserDao {
 		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
 		jdbcTemplate.update(sql, params);
 		return;
+	}
+
+	public boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
+		Timestamp time = Timestamp.valueOf(sent);
+		String sql = "UPDATE NOTIFICATION SET VIEWED = 1 WHERE USER_ID = :user_ID AND TRUCK_ID = :truck_ID AND SENT = :sent";
+		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "sent", time);
+		jdbcTemplate.update(sql, params);
+		return true;
 	}
 }

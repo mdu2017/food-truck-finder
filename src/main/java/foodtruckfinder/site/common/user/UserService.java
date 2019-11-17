@@ -236,4 +236,8 @@ public class UserService {
 		userDao.removeReview(truck_ID, user_ID);
 		return;
 	}
+
+	public boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
+		return userDao.changeNotificationStatus(user_ID, truck_ID, sent);
+	}
 }

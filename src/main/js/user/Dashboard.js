@@ -2,8 +2,8 @@ import React from 'react';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import MapContainer from 'js/Maps';
-import {Badge, Col, Container, Nav, NavItem, NavLink, Row} from 'reactstrap';
-import {getRecommendations} from 'js/axios';
+import { Badge, Col, Container, Nav, NavItem, NavLink, Row } from 'reactstrap';
+import { getRecommendations } from 'js/axios';
 
 // const divStyle = {
 // 	flex: 1,
@@ -17,7 +17,8 @@ export class Dashboard extends React.Component {
 		this.state = {
 			authentication: Axios.getCookie('authentication'),
 			user: JSON.parse(Axios.getCookie('user')),
-			foodtrucks: []
+			foodtrucks: [],
+			notifications: []
 		};
 	}
 
@@ -36,16 +37,24 @@ export class Dashboard extends React.Component {
 
 	componentDidMount() {
 		navigator.geolocation.getCurrentPosition(position => {
-			Axios.getRecommendations(position.coords.latitude, position.coords.longitude).then(
-				result => {
-					this.setState({foodtrucks: result});
-				}
-			);
+			Axios.getRecommendations(
+				position.coords.latitude,
+				position.coords.longitude
+			).then(result => {
+				this.setState({ foodtrucks: result });
+			});
 		});
+		if (this.state.user) {
+			Axios.getNotifications(this.state.user.id).then(result => {
+				this.setState({
+					notifications: result
+				});
+			});
+		}
 	}
 
 	render() {
-		if(!this.state.foodtrucks) {
+		if (!this.state.foodtrucks) {
 			return <div />;
 		}
 
@@ -62,17 +71,29 @@ export class Dashboard extends React.Component {
 									<hr />
 									<Nav vertical>
 										<NavItem>
-											<NavLink href="#/">Dashboard</NavLink>
+											<NavLink href="#/">
+												Dashboard
+											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink href="#/events">Events</NavLink>
+											<NavLink href="#/events">
+												Events
+											</NavLink>
 										</NavItem>
 										<NavItem>
 											<NavLink
 												hidden={!this.state.user}
-												href="#/notifications">
+												href="#/notifications"
+											>
 												Notifications{' '}
-												<Badge color="secondary">4</Badge>
+												<Badge color="secondary">
+													{this.state.notifications
+														.length > 0
+														? this.state
+																.notifications
+																.length
+														: null}
+												</Badge>
 											</NavLink>
 										</NavItem>
 										<NavItem>
@@ -81,7 +102,10 @@ export class Dashboard extends React.Component {
 											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink disabled href="#/search-users">
+											<NavLink
+												disabled
+												href="#/search-users"
+											>
 												Search Users
 											</NavLink>
 										</NavItem>
@@ -91,17 +115,30 @@ export class Dashboard extends React.Component {
 											</NavLink>
 										</NavItem>
 										<NavItem>
-											<NavLink href="#/page-1">Page 1</NavLink>
+											<NavLink href="#/page-1">
+												Page 1
+											</NavLink>
 										</NavItem>
 									</Nav>
 									<div>
 										<h4>Recommended/Nearby Food Trucks</h4>
 										{this.state.foodtrucks ? (
 											<Nav>
-												{this.state.foodtrucks.map((foodtruck, index) => {
-													return <NavLink key={index}
-																	href={'/#/food-truck-details/' + foodtruck.id}>{foodtruck.name}</NavLink>;
-												})}
+												{this.state.foodtrucks.map(
+													(foodtruck, index) => {
+														return (
+															<NavLink
+																key={index}
+																href={
+																	'/#/food-truck-details/' +
+																	foodtruck.id
+																}
+															>
+																{foodtruck.name}
+															</NavLink>
+														);
+													}
+												)}
 											</Nav>
 										) : null}
 									</div>
@@ -109,9 +146,8 @@ export class Dashboard extends React.Component {
 							</Row>
 						</Container>
 					</div>
-                    {/*Render map*/}
-                    {/*<MapContainer/>*/}
-
+					{/*Render map*/}
+					{/*<MapContainer/>*/}
 				</div>
 			</div>
 		);

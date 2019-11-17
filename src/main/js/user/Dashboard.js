@@ -20,7 +20,7 @@ export class Dashboard extends React.Component {
 			user: JSON.parse(Axios.getCookie('user')),
 			foodtrucks: [],
 			notifications: [],
-			loading: false
+			loading: true
 		};
 	}
 
@@ -38,16 +38,24 @@ export class Dashboard extends React.Component {
 	}
 
 	componentDidMount() {
-		this.setState({ loading: true }, () => {
-			navigator.geolocation.getCurrentPosition(position => {
-				Axios.getRecommendations(
-					position.coords.latitude,
-					position.coords.longitude
-				).then(result =>
-					this.setState({ loading: false, foodtrucks: result })
-				);
-			});
-		});
+		setTimeout(
+			function() {
+				this.setState({ loading: true }, () => {
+					navigator.geolocation.getCurrentPosition(position => {
+						Axios.getRecommendations(
+							position.coords.latitude,
+							position.coords.longitude
+						).then(result =>
+							this.setState({
+								loading: false,
+								foodtrucks: result
+							})
+						);
+					});
+				});
+			}.bind(this),
+			1000
+		);
 		if (this.state.user) {
 			Axios.getNotifications(this.state.user.id).then(result => {
 				this.setState({

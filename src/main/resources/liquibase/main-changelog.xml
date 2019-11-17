@@ -7,20 +7,6 @@
 
     <changeSet author="etdickey" id="create initial tables">
         <sql>
-            <!--CREATE TABLE USER
-            (
-            USER_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            PRINCIPAL VARCHAR(255),
-            PASSWORD VARCHAR(255)
-            );
-
-            CREATE TABLE FOOD_TRUCK
-            (
-            FOOD_TRUCK_ID INT NOT NULL AUTO_INCREMENT PRIMARY KEY,
-            NAME VARCHAR(255),
-            TYPE VARCHAR(255)
-            );-->
-
             CREATE TABLE `USER` (
             `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
             `USERNAME` varchar(20) NOT NULL,
@@ -57,7 +43,7 @@
             `END` datetime NOT NULL,
             PRIMARY KEY (`DEAL_ID`),
             KEY `truck_id_idx` (`TRUCK_ID`),
-            CONSTRAINT `truck_id` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
+            CONSTRAINT `truck_id` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `FOOD_TYPE` (
@@ -75,7 +61,7 @@
             `PRICE` double NOT NULL,
             PRIMARY KEY (`ITEM_ID`),
             KEY `truckid_idx` (`TRUCK_ID`),
-            CONSTRAINT `truckid` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
+            CONSTRAINT `truckid` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `NOTIFICATION` (
@@ -87,8 +73,8 @@
             PRIMARY KEY (`TRUCK_ID`,`USER_ID`,`SENT`),
             KEY `userid_idx` (`USER_ID`),
             KEY `useridnot_idx` (`USER_ID`),
-            CONSTRAINT `truckidnot` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
-            CONSTRAINT `useridnot` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
+            CONSTRAINT `truckidnot` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+            CONSTRAINT `useridnot` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `REVIEW` (
@@ -99,8 +85,8 @@
             `DATE` datetime NOT NULL,
             PRIMARY KEY (`USER_ID`,`TRUCK_ID`),
             KEY `truckidrev_idx` (`TRUCK_ID`),
-            CONSTRAINT `truckidrev` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
-            CONSTRAINT `useridrev` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
+            CONSTRAINT `truckidrev` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+            CONSTRAINT `useridrev` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `TRUCK_STOP` (
@@ -118,8 +104,8 @@
             `STOP_ID` int(11) NOT NULL,
             PRIMARY KEY (`TRUCK_ID`,`DAY`,`STOP_ID`),
             KEY `stopidsched_idx` (`STOP_ID`),
-            CONSTRAINT `stopidsched` FOREIGN KEY (`STOP_ID`) REFERENCES `truck_stop` (`STOP_ID`),
-            CONSTRAINT `truckidsched` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`)
+            CONSTRAINT `stopidsched` FOREIGN KEY (`STOP_ID`) REFERENCES `truck_stop` (`STOP_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+            CONSTRAINT `truckidsched` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `SUBSCRIPTIONS` (
@@ -127,8 +113,8 @@
             `USER_ID` int(11) NOT NULL,
             PRIMARY KEY (`TRUCK_ID`,`USER_ID`),
             KEY `user_id_sub_idx` (`USER_ID`),
-            CONSTRAINT `truck_id_sub` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`),
-            CONSTRAINT `user_id_sub` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`)
+            CONSTRAINT `truck_id_sub` FOREIGN KEY (`TRUCK_ID`) REFERENCES `food_truck` (`FOOD_TRUCK_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION,
+            CONSTRAINT `user_id_sub` FOREIGN KEY (`USER_ID`) REFERENCES `user` (`USER_ID`) ON DELETE NO ACTION ON UPDATE NO ACTION
             );
 
             CREATE TABLE `EVENT` (

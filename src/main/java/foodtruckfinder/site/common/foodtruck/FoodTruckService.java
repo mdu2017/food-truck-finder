@@ -87,8 +87,9 @@ public class FoodTruckService {
 	}
 
 	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-														   double userlong) {
-		return foodTruckDao.getRecommendations(userlat, userlong);
+														   double userlong,
+														   double radius) {
+		return foodTruckDao.getRecommendations(userlat, userlong, radius);
 	}
 
     public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {

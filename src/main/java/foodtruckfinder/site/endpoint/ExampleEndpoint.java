@@ -33,8 +33,9 @@ public class ExampleEndpoint {
 
     @GetMapping(value = "/recommendations", produces = "application/json")
     public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-                                                           double userlong) {
-        return unsecureFoodTruckService.getRecommendations(userlat, userlong);
+                                                           double userlong,
+                                                           double radius) {
+        return unsecureFoodTruckService.getRecommendations(userlat, userlong, radius);
     }
 
     /**

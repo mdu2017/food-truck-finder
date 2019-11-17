@@ -24,6 +24,7 @@ export class ViewFoodTruckDetails extends React.Component {
 		super(props);
 		this.state = {
 			truck: null,
+			user: JSON.parse(Axios.getCookie('user')),
 			averagePrice: 'N/A',
 			foodTruckId: null,
 			modal: false,
@@ -79,6 +80,13 @@ export class ViewFoodTruckDetails extends React.Component {
 				this.setState({ averageRating: avg / reviewCount });
 			}
 		});
+		if (this.state.user) {
+			Axios.getSubscriptions(this.state.user.id).then(result => {
+				if (result.indexOf(this.state.truck.id) !== -1) {
+					this.setState({ alreadySubscribed: true });
+				}
+			});
+		}
 	}
 
 	renderTruckReviews() {
@@ -148,6 +156,7 @@ export class ViewFoodTruckDetails extends React.Component {
 			Axios.subscribe(id, JSON.parse(Axios.getCookie('user')).id).then(
 				function() {
 					window.alert('You are successfully subscribed!');
+					window.location.reload();
 				}
 			);
 		} catch (error) {
@@ -168,12 +177,16 @@ export class ViewFoodTruckDetails extends React.Component {
 						<br />
 						<Row>
 							<Col xs="auto">
-								<Button
-									color="primary"
-									onClick={() => this.subscribe()}
-								>
-									Subscribe
-								</Button>
+								{this.state.alreadySubscribed ? (
+									<Button disabled>Unsubscribe</Button>
+								) : (
+									<Button
+										color="primary"
+										onClick={() => this.subscribe()}
+									>
+										Subscribe
+									</Button>
+								)}
 							</Col>
 							<Col xs="auto">
 								<legend>
@@ -294,7 +307,7 @@ export class ViewFoodTruckDetails extends React.Component {
 							<Col xs="6">
 								<legend>Route</legend>
 							</Col>
-							<Col xs="auto">
+							<Col xs="6">
 								<legend>Ratings {'&'} Reviews</legend>
 								{this.renderTruckReviews()}
 							</Col>

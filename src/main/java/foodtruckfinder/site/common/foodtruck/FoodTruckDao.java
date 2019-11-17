@@ -73,8 +73,8 @@ public class FoodTruckDao {
 //				foodTruckDto.setMenu(menu);
 
 				//schedule
-				String schedsql = "SELECT day, start, end, latitude, longitude, truck_stop.stop_id AS stop_id FROM truck_stop, schedule " +
-						"WHERE truck_id = :foodTruckId AND schedule.stop_id = truck_stop.stop_id";
+				String schedsql = "SELECT DAY, START, END, LATITUDE, LONGITUDE, TRUCK_STOP.STOP_ID AS STOP_ID FROM TRUCK_STOP, SCHEDULE " +
+						"WHERE TRUCK_ID = :foodTruckId AND SCHEDULE.STOP_ID = TRUCK_STOP.STOP_ID";
 
 				Map<String, List<Stop>> schedule = jdbcTemplate.query(schedsql, parameters, (ResultSet schedrs) -> {
 					Map<String, List<Stop>> results = new HashMap<>();
@@ -105,13 +105,13 @@ public class FoodTruckDao {
 				foodTruckDto.setTruck_image(null);
 
 				//type
-				String typesql = "SELECT food_type.type FROM food_type, food_truck " +
-						"WHERE food_truck_id = :foodTruckId AND food_truck.type = food_type.type_id";
+				String typesql = "SELECT FOOD_TYPE.TYPE FROM FOOD_TYPE, FOOD_TRUCK " +
+						"WHERE FOOD_TRUCK_ID = :foodTruckId AND FOOD_TRUCK.TYPE = FOOD_TYPE.TYPE_ID";
 				String type = jdbcTemplate.query(typesql, parameters, typers -> {
 					if (typers.next()) {
-						return typers.getString("type");
+						return typers.getString("TYPE");
 					} else {
-						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
+						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but guarantee that it will be a valid set
 					}
 				});
 				foodTruckDto.setType(type);
@@ -131,7 +131,7 @@ public class FoodTruckDao {
 		System.out.println("Name in DAO: " + name);
 
 		//Get all food trucks with partial string match
-		String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:foodTruckName, food_truck.NAME) != 0";
+		String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:foodTruckName, FOOD_TRUCK.NAME) != 0";
 
 		Map<String, ?> parameters = _Maps.map("foodTruckName", name);
 
@@ -152,7 +152,7 @@ public class FoodTruckDao {
 				/**
 				 * "Default menu" (take down when done)
 				long truckID = foodTruckDto.getId();
-				String menusql = "SELECT ITEM_ID, name, description, price FROM MENU WHERE TRUCK_ID = :truckID";
+				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :truckID";
 
 				long num = 10;
 
@@ -169,7 +169,7 @@ public class FoodTruckDao {
 				menu.add(item);
 				 */
 
-//				String menusql = "SELECT ITEM_ID, name, description, price FROM MENU WHERE TRUCK_ID = :foodTruckId";
+//				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :foodTruckId";
 //
 //				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
 //					Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
@@ -186,8 +186,8 @@ public class FoodTruckDao {
 				foodTruckDto.setMenu(null);
 
 				//schedule
-//				String schedsql = "SELECT day, start, end, latitude, longitude FROM truck_stop, schedule " +
-//						"WHERE truck_id = :foodTruckId AND schedule.stop_id = truck_stop.stop_id";
+//				String schedsql = "SELECT DAY, START, END, LATITUDE, LONGITUDE FROM TRUCK_STOP, SCHEDULE " +
+//						"WHERE TRUCK_ID = :foodTruckId AND SCHEDULE.STOP_ID = TRUCK_STOP.STOP_ID";
 //
 //				Map<String, Stop> schedule = jdbcTemplate.query(schedsql, parameters, (ResultSet schedrs) -> {
 //					Map<String, Stop> results = new HashMap<>();
@@ -210,11 +210,11 @@ public class FoodTruckDao {
 				foodTruckDto.setTruck_image(null);
 
 				//type
-				String typesql = "SELECT food_type.type FROM food_type, food_truck " +
-						"WHERE food_truck.NAME = :foodTruckName AND food_truck.type = food_type.type_id";
+				String typesql = "SELECT FOOD_TYPE.TYPE FROM FOOD_TYPE, FOOD_TRUCK " +
+						"WHERE FOOD_TRUCK.NAME = :foodTruckName AND FOOD_TRUCK.TYPE = FOOD_TYPE.TYPE_ID";
 				String type = jdbcTemplate.query(typesql, parameters, typers -> {
 					if (typers.next()) {
-						return typers.getString("type");
+						return typers.getString("TYPE");
 					} else {
 						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
 					}
@@ -283,7 +283,7 @@ public class FoodTruckDao {
             //Need to remove any stops not still present -- do this by removing all tuples associated with the
             // food truck then adding them all back :)
             String deleteSql = "DELETE FROM TRUCK_STOP as ts, SCHEDULE as s " +
-                    "WHERE ts.stop_id = s.stop_id AND s.truck_id = :truckid";
+                    "WHERE ts.STOP_ID = s.STOP_ID AND s.TRUCK_ID = :truckid";
             Map<String, ?> deleteparams = _Maps.map("truckid", foodTruck.getId());
             jdbcTemplate.update(deleteSql, deleteparams);
 
@@ -555,11 +555,11 @@ public class FoodTruckDao {
 	 * @return the list of subscribers to a particular food truck
 	 */
 	public List<String> getSubscribers(Long foodTruckId) {
-		String sql = "SELECT username FROM SUBSCRIPTIONS, USER WHERE " +
+		String sql = "SELECT USERNAME FROM SUBSCRIPTIONS, USER WHERE " +
 				"SUBSCRIPTIONS.USER_ID = USER.USER_ID AND TRUCK_ID = :foodTruckId";
 
 		Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId);
-		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("username"));
+		return jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("USERNAME"));
 	}
 
 	/**
@@ -606,7 +606,7 @@ public class FoodTruckDao {
 		if (name != null && !name.isEmpty()) {
 
 			//Partial string match
-			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE LOCATE(:name, food_truck.NAME) != 0";
+			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE LOCATE(:name, FOOD_TRUCK.NAME) != 0";
 
 			Map<String, ?> params = _Maps.map("name", name);
 			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
@@ -640,10 +640,10 @@ public class FoodTruckDao {
 		List<FoodTruckDto> trucks = null;
 
 		String sql = "SELECT sch.TRUCK_ID " +
-				"FROM schedule AS sch, truck_stop AS st " +
+				"FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
 				"WHERE sch.STOP_ID = st.STOP_ID " +
-				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
-				"AND (TIME(st.end) > TIME(NOW())) " +
+				"AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
+				"AND (TIME(st.END) > TIME(NOW())) " +
 				"AND ((POW(st.LATITUDE - :userlat, 2) + POW(st.LONGITUDE - " +
 				":userlong, 2)) < :radius)";
 
@@ -666,12 +666,44 @@ public class FoodTruckDao {
 		return Optional.ofNullable(trucks);
 	}
 
+    public Optional<List<FoodTruckDto>> getNearby(double userlat,
+                                                           double userlong,
+                                                           double radiusInMiles) {
+        List<FoodTruckDto> trucks = null;
+
+        String sql = "SELECT sch.TRUCK_ID " +
+                "FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
+                "WHERE sch.STOP_ID = st.STOP_ID " +
+                "AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
+                "AND (TIME(st.END) > TIME(NOW())) " +
+                "AND ((POW(st.LATITUDE - :userlat, 2) + POW(st.LONGITUDE - " +
+                ":userlong, 2)) < :radius)";
+
+        Map<String, ?> params = _Maps.map("userlat", userlat,
+                "userlong", userlong, "day", "T", "radius", radiusInMiles);
+        List<Long> ids = jdbcTemplate.query(sql, params,
+                (rs, rowNum) -> rs.getLong("TRUCK_ID"));
+
+        if (ids != null) {
+            trucks = new ArrayList<>();
+            for (Long ft : ids) {
+                //get each food truck
+                Optional<FoodTruckDto> temp = this.find(ft + "");
+                if (temp.isPresent()) {
+                    trucks.add(temp.get());
+                }
+            }
+        }
+
+        return Optional.ofNullable(trucks);
+    }
+
 	public void sendNotification(String message, Long foodTruckId) {
 		LocalDateTime sent;
 		Long userID;
 		String sql = "INSERT INTO NOTIFICATION " +
 				"(TRUCK_ID, USER_ID, MESSAGE, SENT) VALUES " +
-				"(:foodTruckId, (SELECT User_ID FROM User WHERE username = :username), :message, NOW())";
+				"(:foodTruckId, (SELECT USER_ID FROM USER WHERE USERNAME = :username), :message, NOW())";
 
 		List<String> subscribers = getSubscribers(foodTruckId);
 		for (String subscriber : subscribers) {
@@ -703,11 +735,11 @@ public class FoodTruckDao {
 
 	public Optional<Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
 		String sql = "SELECT st.LATITUDE, st.LONGITUDE " +
-				"FROM schedule AS sch, truck_stop AS st " +
+				"FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
 				"WHERE sch.STOP_ID = st.STOP_ID " +
 				"AND sch.TRUCK_ID = :truckid" +
-				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
-				"AND (TIME(st.end) > TIME(NOW()))";
+				"AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
+				"AND (TIME(st.END) > TIME(NOW()))";
 
 		String currDay = "U";
 		Calendar calendar = Calendar.getInstance();

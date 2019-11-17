@@ -1,8 +1,25 @@
 import React from 'react';
+import { connect } from 'react-redux';
+import { Link } from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import MapContainer from 'js/Maps';
-import { Badge, Col, Container, Nav, NavItem, NavLink, Row } from 'reactstrap';
+import {
+	Badge,
+	Col,
+	Container,
+	Nav,
+	NavItem,
+	NavLink,
+	Row,
+	Form,
+	FormGroup,
+	Input,
+	Button,
+	Label,
+	ListGroup,
+	ListGroupItem
+} from 'reactstrap';
 import { getRecommendations } from 'js/axios';
 import Spinner from 'js/images/spinner.gif';
 
@@ -20,34 +37,28 @@ export class Dashboard extends React.Component {
 			user: JSON.parse(Axios.getCookie('user')),
 			foodtrucks: [],
 			notifications: [],
-			loading: true
+			searchFT: null,
+			searchResults: [],
+			loadingSearch: false,
+			loadingRecommended: true
 		};
+		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
-	displayCustomWelcome() {
-		if (this.state.authentication) {
-			return (
-				<div>
-					{'Welcome, '}
-					{this.state.user.username}
-					{'!'}
-				</div>
-			);
-		}
-		return <div>{'Welcome!'} </div>;
-	}
+	setSearchFT = searchFT => this.setState({ searchFT });
 
 	componentDidMount() {
 		setTimeout(
 			function() {
-				this.setState({ loading: true }, () => {
+				this.setState({ loadingRecommended: true }, () => {
 					navigator.geolocation.getCurrentPosition(position => {
 						Axios.getRecommendations(
 							position.coords.latitude,
-							position.coords.longitude
+							position.coords.longitude,
+							0.5
 						).then(result =>
 							this.setState({
-								loading: false,
+								loadingRecommended: false,
 								foodtrucks: result
 							})
 						);
@@ -65,11 +76,77 @@ export class Dashboard extends React.Component {
 		}
 	}
 
-	render() {
-		if (!this.state.foodtrucks) {
-			return <div />;
-		}
+	handleSubmit = event => {
+		this.setState({ loadingSearch: true });
+		setTimeout(
+			function() {
+				this.setState({ loadingSearch: true }, () => {
+					this.props
+						.searchFoodTrucks(this.state.searchFT)
+						.then(result =>
+							this.setState({
+								loadingSearch: false,
+								searchResults: result
+							})
+						);
+				});
+			}.bind(this),
+			1000
+		);
+		event.preventDefault();
+	};
 
+	displayCustomWelcome() {
+		if (this.state.authentication) {
+			return (
+				<div>
+					{'Welcome, '}
+					{this.state.user.username}
+					{'!'}
+				</div>
+			);
+		}
+		return <div>{'Welcome!'} </div>;
+	}
+
+	renderSearchResults() {
+		return (
+			<div>
+				{this.state.loadingSearch ? (
+					<img src={Spinner} width={70} height={70} mode="fit" />
+				) : (
+					<div>
+						<br />
+						{this.state.searchResults &&
+						this.state.searchResults.length > 0 ? (
+							<div>
+								{this.state.searchResults.map(
+									(truck, index) => (
+										<ListGroup key={index}>
+											<ListGroupItem>
+												<Link
+													to={`/food-truck-details/${truck.id}`}
+												>
+													<h6>{truck.name}</h6>
+												</Link>
+												<h8>{truck.description}</h8>
+											</ListGroupItem>
+										</ListGroup>
+									)
+								)}
+							</div>
+						) : this.state.searchFT ? (
+							<div>
+								<h6>No trucks found.</h6>
+							</div>
+						) : null}
+					</div>
+				)}
+			</div>
+		);
+	}
+
+	render() {
 		return (
 			<div>
 				<NavBars.CustomNavBar />
@@ -78,63 +155,134 @@ export class Dashboard extends React.Component {
 					<div>
 						<Container>
 							<Row>
+								<Col xs="2">
+									<Row>
+										<h4>Quick Links</h4>
+										<hr />
+										<Nav vertical>
+											<NavItem>
+												<NavLink href="#/">
+													Dashboard
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink href="#/events">
+													Events
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink
+													hidden={!this.state.user}
+													href="#/notifications"
+												>
+													Notifications{' '}
+													<Badge color="secondary">
+														{this.state
+															.notifications
+															.length > 0
+															? this.state
+																	.notifications
+																	.length
+															: null}
+													</Badge>
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink
+													disabled
+													href="#/search-users"
+												>
+													Search Users
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink href="#/about">
+													About Us
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink href="#/page-1">
+													Page 1
+												</NavLink>
+											</NavItem>
+										</Nav>
+									</Row>
+									<br />
+									<Row>
+										<div>
+											<h4>Nearby</h4>
+											<hr />
+											{this.state.loadingRecommended ? (
+												<img
+													src={Spinner}
+													width={70}
+													height={70}
+													mode="fit"
+												/>
+											) : this.state.foodtrucks ? (
+												<Nav>
+													<NavItem>
+														{this.state.foodtrucks.map(
+															(
+																foodtruck,
+																index
+															) => {
+																return (
+																	<NavLink
+																		key={
+																			index
+																		}
+																		href={
+																			'/#/food-truck-details/' +
+																			foodtruck.id
+																		}
+																	>
+																		{
+																			foodtruck.name
+																		}
+																	</NavLink>
+																);
+															}
+														)}
+													</NavItem>
+												</Nav>
+											) : null}
+										</div>
+									</Row>
+								</Col>
+								<Col>
+									<Row>
+										<Col
+											sm="12"
+											md={{ size: 6, offset: 3 }}
+										>
+											<Form
+												onSubmit={this.handleSubmit}
+												inline
+											>
+												<FormGroup inline>
+													<Input
+														type="text"
+														name="searchFT"
+														id="searchFT"
+														placeholder="Search Food Trucks"
+														onChange={e =>
+															this.setSearchFT(
+																e.target.value
+															)
+														}
+													/>
+												</FormGroup>
+											</Form>
+											{this.renderSearchResults()}
+										</Col>
+									</Row>
+								</Col>
 								<Col xs="3">
-									<h4>Quick Links</h4>
-									<hr />
-									<Nav vertical>
-										<NavItem>
-											<NavLink href="#/">
-												Dashboard
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/events">
-												Events
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink
-												hidden={!this.state.user}
-												href="#/notifications"
-											>
-												Notifications{' '}
-												<Badge color="secondary">
-													{this.state.notifications
-														.length > 0
-														? this.state
-																.notifications
-																.length
-														: null}
-												</Badge>
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/search-trucks">
-												Search Food Trucks
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink
-												disabled
-												href="#/search-users"
-											>
-												Search Users
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/about">
-												About Us
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/page-1">
-												Page 1
-											</NavLink>
-										</NavItem>
-									</Nav>
 									<div>
-										<h4>Recommended/Nearby Food Trucks</h4>
-										{this.state.loading ? (
+										<h4>Recommended</h4>
+										<hr />
+										{this.state.loadingRecommended ? (
 											<img
 												src={Spinner}
 												width={70}
@@ -143,21 +291,25 @@ export class Dashboard extends React.Component {
 											/>
 										) : this.state.foodtrucks ? (
 											<Nav>
-												{this.state.foodtrucks.map(
-													(foodtruck, index) => {
-														return (
-															<NavLink
-																key={index}
-																href={
-																	'/#/food-truck-details/' +
-																	foodtruck.id
-																}
-															>
-																{foodtruck.name}
-															</NavLink>
-														);
-													}
-												)}
+												<NavItem>
+													{this.state.foodtrucks.map(
+														(foodtruck, index) => {
+															return (
+																<NavLink
+																	key={index}
+																	href={
+																		'/#/food-truck-details/' +
+																		foodtruck.id
+																	}
+																>
+																	{
+																		foodtruck.name
+																	}
+																</NavLink>
+															);
+														}
+													)}
+												</NavItem>
 											</Nav>
 										) : null}
 									</div>
@@ -172,3 +324,10 @@ export class Dashboard extends React.Component {
 		);
 	}
 }
+Dashboard = connect(
+	() => ({}),
+	dispatch => ({
+		searchFoodTrucks: searchFT =>
+			dispatch(Axios.Actions.searchFoodTrucks(searchFT))
+	})
+)(Dashboard);

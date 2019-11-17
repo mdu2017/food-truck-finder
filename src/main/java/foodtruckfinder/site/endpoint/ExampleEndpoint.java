@@ -38,6 +38,13 @@ public class ExampleEndpoint {
         return unsecureFoodTruckService.getRecommendations(userlat, userlong, radius);
     }
 
+    @GetMapping(value = "/nearby", produces = "application/json")
+    public Optional<List<FoodTruckDto>> getNearby(double userlat,
+                                                           double userlong,
+                                                           double radius) {
+        return unsecureFoodTruckService.getNearby(userlat, userlong, radius);
+    }
+
     /**
      * Search for a food truck by name
      * @param name The food truck name

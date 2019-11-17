@@ -152,7 +152,7 @@
             (12, 'VEGAN'),
             (13, 'VIETNAMESE');
 
-            INSERT INTO user (USER_ID, USERNAME, PRINCIPAL, PASSWORD, IS_OWNER)
+            INSERT INTO USER (USER_ID, USERNAME, PRINCIPAL, PASSWORD, IS_OWNER)
             VALUES
             (7, "adminasdfghjkl", "admin@asdfhash.com", "$2a$10$DNzQLTTd9lA6LFRhFSD.pu3aYdWTpMwZqy40pjgwKk/7lSC6visy2", 1),
             (1, "owner", "owner@owner.com", "$2a$10$9M4Z1uLzU4wM447xl4Hyzuepi4IrqsZxYi0LpJkS715nvIRGwhZhK", 1),
@@ -162,7 +162,7 @@
             (5, "bee", "bzz@bzzz.com", "$2a$10$.GeunneQDE83aNak0Pa.T.Bd6FPLX46i3c64cG0.8ikEZ8qHpE2By", 0),
             (6, "nomnom", "nom@noms.com", "$2a$10$fEiBGhlMvqWMpV5eSRmYk.jPRty/h7Rm/i0.TXUuP37q8By.1AXlC", 0);
 
-            INSERT INTO food_truck (FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS, DESCRIPTION)
+            INSERT INTO FOOD_TRUCK (FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS, DESCRIPTION)
             VALUES
             (1, 1, "Baylor honey", 5, NULL, 2, 10, "OPEN", "honey here"),
             (2, 1, "Torchies", 8, NULL, 1, 5, "OPEN", "Your favorite taco food truck"),
@@ -173,7 +173,7 @@
             (7, 7, "{All Customers}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all customers!"),
             (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!");
 
-            INSERT INTO truck_stop
+            INSERT INTO TRUCK_STOP
             (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES
             (1, "2019-10-29 0:00:48", "2019-10-29 23:56:48", 31.549605, -97.114995),
             (2, "2019-10-29 0:00:12", "2019-10-29 23:58:12", 31.553196, -97.124797),
@@ -189,7 +189,7 @@
             (12, "2019-10-29 0:00:46", "2019-10-29 23:58:46", 31.264332, -95.880037),
             (13, "2019-10-29 0:00:42", "2019-10-29 23:03:42", 31.545743, -97.117805);
 
-            INSERT INTO schedule (TRUCK_ID, DAY, STOP_ID) VALUES
+            INSERT INTO SCHEDULE (TRUCK_ID, DAY, STOP_ID) VALUES
             (1, "T", 1), (2, "T", 2), (3, "T", 4), (4, "T", 3), (5, "T", 5),
             (1, "M", 6), (2, "M", 7), (3, "M", 9), (4, "M", 8),
             (1, "W", 10), (2, "W", 11), (3, "W", 13), (4, "W", 12),
@@ -198,7 +198,7 @@
             (1, "S", 10), (2, "S", 11), (3, "S", 13), (4, "S", 12),
             (1, "U", 10), (2, "U", 11), (3, "U", 13), (4, "U", 12);
 
-            INSERT INTO subscriptions (TRUCK_ID, USER_ID) VALUES
+            INSERT INTO SUBSCRIPTIONS (TRUCK_ID, USER_ID) VALUES
             (6, 7), (7, 7), (8, 7),
             (6, 1), (8, 1),
             (6, 2), (7, 2),
@@ -207,7 +207,7 @@
             (6, 5), (7, 5), (1, 5),
             (6, 6), (7, 6), (1, 6), (2, 6), (3, 6), (4, 6), (5, 6);
 
-            INSERT INTO review (TRUCK_ID, USER_ID, MESSAGE, RATING, DATE) VALUES
+            INSERT INTO REVIEW (TRUCK_ID, USER_ID, MESSAGE, RATING, DATE) VALUES
             (1, 5, "bzzzzzz", 5, "2019-11-14 23:50:24"),
             (1, 6, "Some real good honey here.  Come and get some!", 5, "2019-11-14 23:50:24"),
             (2, 6, "Too hot to handle", 1.2, "2019-11-14 23:50:24"),

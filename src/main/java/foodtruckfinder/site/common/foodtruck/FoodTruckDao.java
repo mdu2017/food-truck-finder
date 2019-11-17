@@ -635,7 +635,8 @@ public class FoodTruckDao {
 
 
 	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-														   double userlong) {
+														   double userlong,
+														   double radius) {
 		List<FoodTruckDto> trucks = null;
 
 		String sql = "SELECT sch.TRUCK_ID " +
@@ -644,10 +645,10 @@ public class FoodTruckDao {
 				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
 				"AND (TIME(st.end) > TIME(NOW())) " +
 				"AND ((POW(st.LATITUDE - :userlat, 2) + POW(st.LONGITUDE - " +
-				":userlong, 2)) < 1)";
+				":userlong, 2)) < :radius)";
 
 		Map<String, ?> params = _Maps.map("userlat", userlat,
-				"userlong", userlong, "day", "T");
+				"userlong", userlong, "day", "T", "radius", radius);
 		List<Long> ids = jdbcTemplate.query(sql, params,
 				(rs, rowNum) -> rs.getLong("TRUCK_ID"));
 

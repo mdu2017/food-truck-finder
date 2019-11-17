@@ -116,4 +116,10 @@ public class UserEndpoint {
 	public List<Rating> getRatingByUser(Long user_ID){
 		return userService.getRatingByUser(user_ID);
 	}
+
+	@PostMapping(value = "/unsubscribe", produces = "application/json")
+	public void unsubscribe(Long user_ID, Long truck_ID){
+		userService.unsubscribe(user_ID, truck_ID);
+		return;
+	}
 }

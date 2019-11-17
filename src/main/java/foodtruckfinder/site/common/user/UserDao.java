@@ -209,4 +209,11 @@ public class UserDao {
 
 		return r;
 	}
+
+	public void unsubscribe(Long user_ID, Long truck_ID){
+		String sql = "DELETE FROM subscriptions WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
+		jdbcTemplate.update(sql, params);
+		return;
+	}
 }

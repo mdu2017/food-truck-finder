@@ -16,6 +16,7 @@ public class FoodTruckDto implements Momento<Long> {
 	private FoodType type;
 	private List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu;
 	private BufferedImage truck_image = null;
+//	private List<String, Stop> schedule; //new change that needs to be implemented
 	private Map<String, List<Stop>> schedule;
 	private Double price_low, price_high;
 	private FTStatus status;

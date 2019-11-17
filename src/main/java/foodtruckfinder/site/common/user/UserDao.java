@@ -150,7 +150,7 @@ public class UserDao {
 			userAuthentication.getUser().setId(key.longValue());
 
 			//Now insert subscriptions to their appropriate food trucks
-			sql = "INSERT INTO subscriptions (TRUCK_ID, USER_ID) VALUES (6, :userid), (:custown, :userid)";
+			sql = "INSERT INTO SUBSCRIPTIONS (TRUCK_ID, USER_ID) VALUES (6, :userid), (:custown, :userid)";
 			int custown = (userAuthentication.getUser().getIsOwner() ? 8: 7);
 			parameters = _Maps.map("userid", userAuthentication.getUser().getId(), "custown", custown);
 
@@ -177,8 +177,8 @@ public class UserDao {
 	}
 
 	public Optional<List<String>> getNotifications(Long userId){
-		String sql = "SELECT NAME, MESSAGE FROM NOTIFICATION, food_truck WHERE " +
-				"food_truck.food_truck_id = notification.truck_id AND USER_ID = " +
+		String sql = "SELECT NAME, MESSAGE FROM NOTIFICATION, FOOD_TRUCK WHERE " +
+				"FOOD_TRUCK.FOOD_TRUCK_ID = NOTIFICATION.TRUCK_ID AND USER_ID = " +
 				":userId";
 
 		Map<String, ?> params = _Maps.map("userId", userId);
@@ -195,7 +195,6 @@ public class UserDao {
 		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "message", message, "rating", rating);
 
 		jdbcTemplate.update(sql, params);
-		return;
 	}
 
 	public List<Rating> getRatingByUser(Long user_ID){
@@ -219,16 +218,14 @@ public class UserDao {
 	}
 
 	public void unsubscribe(Long user_ID, Long truck_ID){
-		String sql = "DELETE FROM subscriptions WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
+		String sql = "DELETE FROM SUBSCRIPTIONS WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
 		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
 		jdbcTemplate.update(sql, params);
-		return;
 	}
 
 	public void removeReview(Long truck_ID, Long user_ID){
-		String sql = "DELETE FROM review WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
+		String sql = "DELETE FROM REVIEW WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
 		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
 		jdbcTemplate.update(sql, params);
-		return;
 	}
 }

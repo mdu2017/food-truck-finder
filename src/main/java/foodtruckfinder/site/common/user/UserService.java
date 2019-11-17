@@ -215,7 +215,7 @@ public class UserService {
 
 	public Optional<List<Long>> getOwnedFoodTrucks(Long id) { return userDao.getOwnedFoodTrucks(id); }
 
-	public Optional<List<String>> getNotifications(Long userId){
+	public Optional<List<String>> getNotifications(Long userId) {
 		return userDao.getNotifications(userId);
 	}
 
@@ -225,5 +225,15 @@ public class UserService {
 
 	public List<Rating> getRatingByUser(Long user_ID){
 		return userDao.getRatingByUser(user_ID);
+	}
+
+	public void unsubscribe(Long user_ID, Long truck_ID){
+		userDao.unsubscribe(user_ID, truck_ID);
+		return;
+	}
+
+	public void removeReview(Long truck_ID, Long user_ID){
+		userDao.removeReview(truck_ID, user_ID);
+		return;
 	}
 }

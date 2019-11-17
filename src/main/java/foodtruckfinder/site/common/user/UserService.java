@@ -231,4 +231,9 @@ public class UserService {
 		userDao.unsubscribe(user_ID, truck_ID);
 		return;
 	}
+
+	public void removeReview(Long truck_ID, Long user_ID){
+		userDao.removeReview(truck_ID, user_ID);
+		return;
+	}
 }

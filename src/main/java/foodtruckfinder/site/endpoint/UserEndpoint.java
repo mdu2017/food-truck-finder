@@ -122,4 +122,10 @@ public class UserEndpoint {
 		userService.unsubscribe(user_ID, truck_ID);
 		return;
 	}
+
+	@PostMapping(value = "/removeReview", produces = "application/json")
+	public void removeReview(Long truck_ID, Long user_ID){
+		userService.removeReview(truck_ID, user_ID);
+		return;
+	}
 }

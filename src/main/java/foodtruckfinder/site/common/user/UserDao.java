@@ -216,4 +216,11 @@ public class UserDao {
 		jdbcTemplate.update(sql, params);
 		return;
 	}
+
+	public void removeReview(Long truck_ID, Long user_ID){
+		String sql = "DELETE FROM review WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
+		jdbcTemplate.update(sql, params);
+		return;
+	}
 }

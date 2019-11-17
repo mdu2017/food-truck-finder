@@ -666,6 +666,38 @@ public class FoodTruckDao {
 		return Optional.ofNullable(trucks);
 	}
 
+    public Optional<List<FoodTruckDto>> getNearby(double userlat,
+                                                           double userlong,
+                                                           double radiusInMiles) {
+        List<FoodTruckDto> trucks = null;
+
+        String sql = "SELECT sch.TRUCK_ID " +
+                "FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
+                "WHERE sch.STOP_ID = st.STOP_ID " +
+                "AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
+                "AND (TIME(st.END) > TIME(NOW())) " +
+                "AND ((POW(st.LATITUDE - :userlat, 2) + POW(st.LONGITUDE - " +
+                ":userlong, 2)) < :radius)";
+
+        Map<String, ?> params = _Maps.map("userlat", userlat,
+                "userlong", userlong, "day", "T", "radius", radiusInMiles);
+        List<Long> ids = jdbcTemplate.query(sql, params,
+                (rs, rowNum) -> rs.getLong("TRUCK_ID"));
+
+        if (ids != null) {
+            trucks = new ArrayList<>();
+            for (Long ft : ids) {
+                //get each food truck
+                Optional<FoodTruckDto> temp = this.find(ft + "");
+                if (temp.isPresent()) {
+                    trucks.add(temp.get());
+                }
+            }
+        }
+
+        return Optional.ofNullable(trucks);
+    }
+
 	public void sendNotification(String message, Long foodTruckId) {
 		LocalDateTime sent;
 		Long userID;

@@ -92,6 +92,12 @@ public class FoodTruckService {
 		return foodTruckDao.getRecommendations(userlat, userlong, radius);
 	}
 
+	public Optional<List<FoodTruckDto>> getNearby(double userlat,
+														   double userlong,
+														   double radius) {
+		return foodTruckDao.getNearby(userlat, userlong, radius);
+	}
+
     public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
 		return foodTruckDao.getCurrentLocation(foodTruckId);
     }

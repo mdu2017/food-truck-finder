@@ -17,11 +17,11 @@ import {
 	Container,
 	Row,
 	Col,
-	Badge, ListGroup, ListGroupItem
+	Badge,
+	ListGroup,
+	ListGroupItem
 } from 'reactstrap';
 import { connect } from 'react-redux';
-
-
 
 export class CustomNavBar extends React.Component {
 	constructor(props) {
@@ -34,17 +34,6 @@ export class CustomNavBar extends React.Component {
 	}
 
 	logout = () => this.props.logout();
-
-	displayLoginButton() {
-		if (!this.state.user) {
-			return (
-				<NavLink tag={Link} to="/login">
-					Login
-				</NavLink>
-			);
-		}
-		return null;
-	}
 
 	displayViewProfile() {
 		if (this.state.user) {
@@ -63,13 +52,15 @@ export class CustomNavBar extends React.Component {
 						<DropdownItem
 							tag={Link}
 							to="/list-food-trucks"
-							hidden={this.state.user.isOwner !== true}>
+							hidden={this.state.user.isOwner !== true}
+						>
 							Manage Trucks
 						</DropdownItem>
 						<DropdownItem
 							tag={Link}
 							to="/create-food-truck"
-							hidden={this.state.user.isOwner !== true}>
+							hidden={this.state.user.isOwner !== true}
+						>
 							Add Food Truck
 						</DropdownItem>
 						<DropdownItem divider />
@@ -92,17 +83,38 @@ export class CustomNavBar extends React.Component {
 	render() {
 		return (
 			<div>
-				<Navbar style={{backgroundColor: '#00CF69'}} light expand="md">
+				<Navbar
+					style={{ backgroundColor: '#00CF69' }}
+					light
+					expand="md"
+				>
 					<NavbarBrand href="/">Food Truck Finder</NavbarBrand>
 					<img src={Logo} width={30} height={30} mode="fit" />
 					<NavbarToggler onClick={this.toggleProfile} />
 					<Collapse isOpen={this.state.viewProfileDrop} navbar>
-						<Nav className="ml-auto" navbar>
-							<UncontrolledDropdown nav innavbar="true">
-								{this.displayViewProfile()}
-							</UncontrolledDropdown>
-							<NavItem>{this.displayLoginButton()}</NavItem>
-						</Nav>
+						{!this.state.user ? (
+							<Nav className="ml-auto" navbar>
+								<NavItem>
+									<NavLink tag={Link} to="/register">
+										Become a Member
+									</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink disabled>{' | '}</NavLink>
+								</NavItem>
+								<NavItem>
+									<NavLink tag={Link} to="/login">
+										Login
+									</NavLink>
+								</NavItem>
+							</Nav>
+						) : (
+							<Nav className="ml-auto" navbar>
+								<UncontrolledDropdown nav innavbar="true">
+									{this.displayViewProfile()}
+								</UncontrolledDropdown>
+							</Nav>
+						)}
 					</Collapse>
 				</Navbar>
 			</div>
@@ -124,11 +136,13 @@ export class SidebarNav extends React.Component {
 	}
 
 	showPosition(position) {
-		Axios.getRecommendations(position.coords.latitude, position.coords.longitude).then(
-			function(result) {
-				document.cookie = 'recommendations=' + JSON.stringify(result) + '; path=/';
-			}
-		);
+		Axios.getRecommendations(
+			position.coords.latitude,
+			position.coords.longitude
+		).then(function(result) {
+			document.cookie =
+				'recommendations=' + JSON.stringify(result) + '; path=/';
+		});
 	}
 
 	componentDidMount() {
@@ -143,8 +157,7 @@ export class SidebarNav extends React.Component {
 	}
 
 	render() {
-
-		if(!this.state.foodtrucks) {
+		if (!this.state.foodtrucks) {
 			return <div />;
 		}
 
@@ -165,7 +178,8 @@ export class SidebarNav extends React.Component {
 								<NavItem>
 									<NavLink
 										hidden={!this.state.user}
-										href="#/notifications">
+										href="#/notifications"
+									>
 										Notifications{' '}
 										<Badge color="secondary">4</Badge>
 									</NavLink>
@@ -181,9 +195,7 @@ export class SidebarNav extends React.Component {
 									</NavLink>
 								</NavItem>
 								<NavItem>
-									<NavLink href="#/about">
-										About Us
-									</NavLink>
+									<NavLink href="#/about">About Us</NavLink>
 								</NavItem>
 								<NavItem>
 									<NavLink href="#/page-1">Page 1</NavLink>
@@ -193,10 +205,21 @@ export class SidebarNav extends React.Component {
 								<h4>Recommendations</h4>
 								{this.state.foodtrucks ? (
 									<Nav>
-										{this.state.foodtrucks.map((foodtruck, index) => {
-											return <NavLink key={index}
-															href={'/#/food-truck-details/' + foodtruck.id}>{foodtruck.name}</NavLink>;
-										})}
+										{this.state.foodtrucks.map(
+											(foodtruck, index) => {
+												return (
+													<NavLink
+														key={index}
+														href={
+															'/#/food-truck-details/' +
+															foodtruck.id
+														}
+													>
+														{foodtruck.name}
+													</NavLink>
+												);
+											}
+										)}
 									</Nav>
 								) : null}
 							</div>

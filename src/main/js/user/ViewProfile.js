@@ -52,13 +52,6 @@ export class ViewProfile extends React.Component {
 		});
 	}
 
-	isOwner() {
-		if (this.state.owner === true) {
-			return 'Owner';
-		}
-		return 'Customer';
-	}
-
 	renderTruckReviews() {
 		let render = [];
 		{
@@ -81,7 +74,10 @@ export class ViewProfile extends React.Component {
 									}}
 								>
 									{individualReview.rating} / 5
-								</span>
+								</span>{' '}
+								<Button color="danger" size="sm">
+									Remove
+								</Button>
 							</h6>
 							<h6>Review: {individualReview.review}</h6>
 							<br />
@@ -126,7 +122,10 @@ export class ViewProfile extends React.Component {
 								<h2>Account Details</h2>
 								<h6>Username: {this.state.username}</h6>
 								<h6>Email: {this.state.principal}</h6>
-								<h6>Account Type: {this.isOwner()}</h6>
+								<h6>
+									Account Type:{' '}
+									{this.state.owner ? 'Owner' : 'Customer'}
+								</h6>
 								<br />
 								<h2>Subscriptions</h2>
 								{this.renderSubscriptionList()}

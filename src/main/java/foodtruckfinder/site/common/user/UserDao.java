@@ -2,12 +2,14 @@ package foodtruckfinder.site.common.user;
 
 import java.math.BigInteger;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -175,11 +177,17 @@ public class UserDao {
 	}
 
 	public Optional<List<String>> getNotifications(Long userId){
-		String sql = "SELECT message FROM NOTIFICATION WHERE " +
-					 "USER_ID = :userId";
+		String sql = "SELECT NAME, MESSAGE FROM NOTIFICATION, food_truck WHERE " +
+				"food_truck.food_truck_id = notification.truck_id AND USER_ID = " +
+				":userId";
 
 		Map<String, ?> params = _Maps.map("userId", userId);
-		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("message")));
+
+		List<String> truckAndMessage = jdbcTemplate.query(sql, params,
+				(rs, rowNum) -> rs.getString("NAME") + ": " +
+						rs.getString("MESSAGE"));
+
+		return Optional.ofNullable(truckAndMessage);
 	}
 //"INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER) VALUES (:principal, :username, :password, :isOwner)";
 	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){

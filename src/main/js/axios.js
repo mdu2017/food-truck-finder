@@ -76,11 +76,12 @@ export function viewUserByID(id) {
 	return axios.get('/unsecure/user/id/' + id);
 }
 
-export function getRecommendations(userlat, userlong) {
+export function getRecommendations(userlat, userlong, radius) {
 	return axios.get('/unsecure/recommendations', {
 		params: {
 			userlat: userlat,
-			userlong: userlong
+			userlong: userlong,
+			radius: radius
 		}
 	});
 }
@@ -149,7 +150,7 @@ export function getTruckLocation(id) {
 }
 
 export function searchFoodTrucks(name) {
-	return axios.get('/api/food-truck/searchFoodTrucks', {
+	return axios.get('/unsecure/searchFoodTrucks', {
 		params: {
 			name: name
 		}

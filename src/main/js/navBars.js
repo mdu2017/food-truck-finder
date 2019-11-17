@@ -96,7 +96,7 @@ export class CustomNavBar extends React.Component {
 							<Nav className="ml-auto" navbar>
 								<NavItem>
 									<NavLink tag={Link} to="/register">
-										Become a Member
+										Sign Up
 									</NavLink>
 								</NavItem>
 								<NavItem>

@@ -54,7 +54,8 @@ export class Dashboard extends React.Component {
 					navigator.geolocation.getCurrentPosition(position => {
 						Axios.getRecommendations(
 							position.coords.latitude,
-							position.coords.longitude
+							position.coords.longitude,
+							0.5
 						).then(result =>
 							this.setState({
 								loadingRecommended: false,
@@ -155,59 +156,99 @@ export class Dashboard extends React.Component {
 						<Container>
 							<Row>
 								<Col xs="2">
-									<h4>Quick Links</h4>
-									<hr />
-									<Nav vertical>
-										<NavItem>
-											<NavLink href="#/">
-												Dashboard
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/events">
-												Events
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink
-												hidden={!this.state.user}
-												href="#/notifications"
-											>
-												Notifications{' '}
-												<Badge color="secondary">
-													{this.state.notifications
-														.length > 0
-														? this.state
-																.notifications
-																.length
-														: null}
-												</Badge>
-											</NavLink>
-										</NavItem>
-										{/* <NavItem>
-											<NavLink href="#/search-trucks">
-												Search Food Trucks
-											</NavLink>
-										</NavItem> */}
-										<NavItem>
-											<NavLink
-												disabled
-												href="#/search-users"
-											>
-												Search Users
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/about">
-												About Us
-											</NavLink>
-										</NavItem>
-										<NavItem>
-											<NavLink href="#/page-1">
-												Page 1
-											</NavLink>
-										</NavItem>
-									</Nav>
+									<Row>
+										<h4>Quick Links</h4>
+										<hr />
+										<Nav vertical>
+											<NavItem>
+												<NavLink href="#/">
+													Dashboard
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink href="#/events">
+													Events
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink
+													hidden={!this.state.user}
+													href="#/notifications"
+												>
+													Notifications{' '}
+													<Badge color="secondary">
+														{this.state
+															.notifications
+															.length > 0
+															? this.state
+																	.notifications
+																	.length
+															: null}
+													</Badge>
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink
+													disabled
+													href="#/search-users"
+												>
+													Search Users
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink href="#/about">
+													About Us
+												</NavLink>
+											</NavItem>
+											<NavItem>
+												<NavLink href="#/page-1">
+													Page 1
+												</NavLink>
+											</NavItem>
+										</Nav>
+									</Row>
+									<br />
+									<Row>
+										<div>
+											<h4>Nearby</h4>
+											<hr />
+											{this.state.loadingRecommended ? (
+												<img
+													src={Spinner}
+													width={70}
+													height={70}
+													mode="fit"
+												/>
+											) : this.state.foodtrucks ? (
+												<Nav>
+													<NavItem>
+														{this.state.foodtrucks.map(
+															(
+																foodtruck,
+																index
+															) => {
+																return (
+																	<NavLink
+																		key={
+																			index
+																		}
+																		href={
+																			'/#/food-truck-details/' +
+																			foodtruck.id
+																		}
+																	>
+																		{
+																			foodtruck.name
+																		}
+																	</NavLink>
+																);
+															}
+														)}
+													</NavItem>
+												</Nav>
+											) : null}
+										</div>
+									</Row>
 								</Col>
 								<Col>
 									<Row>
@@ -220,9 +261,6 @@ export class Dashboard extends React.Component {
 												inline
 											>
 												<FormGroup inline>
-													<Label for="ftName">
-														Search:
-													</Label>{' '}
 													<Input
 														type="text"
 														name="searchFT"
@@ -240,12 +278,9 @@ export class Dashboard extends React.Component {
 										</Col>
 									</Row>
 								</Col>
-							</Row>
-							<br />
-							<Row>
 								<Col xs="3">
 									<div>
-										<h4>Recommended/Nearby</h4>
+										<h4>Recommended</h4>
 										<hr />
 										{this.state.loadingRecommended ? (
 											<img

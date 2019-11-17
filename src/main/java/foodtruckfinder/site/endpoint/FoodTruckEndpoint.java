@@ -95,16 +95,6 @@ public class FoodTruckEndpoint {
 				.collect(Collectors.toList());
 	}
 
-	/**
-	 * Search for a food truck by name
-	 * @param name The food truck name
-	 * @return the list of food trucks
-	 */
-	@GetMapping(value = "/searchFoodTrucks", produces = "application/json")
-	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
-		return foodTruckService.searchFoodTrucks(name);
-	}
-
 	@PostMapping(value = "/send-notification", produces = "application/json" )
 	public void sendNotification(String message, Long foodTruckId){
 		foodTruckService.sendNotification(message, foodTruckId);

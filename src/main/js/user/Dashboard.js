@@ -4,6 +4,7 @@ import * as NavBars from 'js/navBars';
 import MapContainer from 'js/Maps';
 import { Badge, Col, Container, Nav, NavItem, NavLink, Row } from 'reactstrap';
 import { getRecommendations } from 'js/axios';
+import Spinner from 'js/images/spinner.gif';
 
 // const divStyle = {
 // 	flex: 1,
@@ -18,7 +19,8 @@ export class Dashboard extends React.Component {
 			authentication: Axios.getCookie('authentication'),
 			user: JSON.parse(Axios.getCookie('user')),
 			foodtrucks: [],
-			notifications: []
+			notifications: [],
+			loading: false
 		};
 	}
 
@@ -36,12 +38,14 @@ export class Dashboard extends React.Component {
 	}
 
 	componentDidMount() {
-		navigator.geolocation.getCurrentPosition(position => {
-			Axios.getRecommendations(
-				position.coords.latitude,
-				position.coords.longitude
-			).then(result => {
-				this.setState({ foodtrucks: result });
+		this.setState({ loading: true }, () => {
+			navigator.geolocation.getCurrentPosition(position => {
+				Axios.getRecommendations(
+					position.coords.latitude,
+					position.coords.longitude
+				).then(result =>
+					this.setState({ loading: false, foodtrucks: result })
+				);
 			});
 		});
 		if (this.state.user) {
@@ -122,7 +126,14 @@ export class Dashboard extends React.Component {
 									</Nav>
 									<div>
 										<h4>Recommended/Nearby Food Trucks</h4>
-										{this.state.foodtrucks ? (
+										{this.state.loading ? (
+											<img
+												src={Spinner}
+												width={70}
+												height={70}
+												mode="fit"
+											/>
+										) : this.state.foodtrucks ? (
 											<Nav>
 												{this.state.foodtrucks.map(
 													(foodtruck, index) => {

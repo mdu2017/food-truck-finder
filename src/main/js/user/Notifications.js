@@ -1,8 +1,14 @@
 import React from 'react';
 import * as NavBars from 'js/navBars';
 import * as Axios from 'js/axios';
-import {Button, ListGroup, ListGroupItem} from 'reactstrap';
-import Bell from 'js/images/notificationBell.png';
+import {
+	Button,
+	ListGroup,
+	ListGroupItem,
+	Row,
+	Col,
+	Container
+} from 'reactstrap';
 
 export class Notifications extends React.Component {
 	constructor(props) {
@@ -16,7 +22,6 @@ export class Notifications extends React.Component {
 
 	componentDidMount() {
 		Axios.getNotifications(this.state.user.id).then(result => {
-			console.log(result);
 			this.setState({
 				notifications: result
 			});
@@ -26,26 +31,43 @@ export class Notifications extends React.Component {
 	render() {
 		return (
 			<div>
-				<NavBars.CustomNavBar/>
+				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Notifications</h1>
-					{this.state.notifications ? (this.state.notifications.map((note, index) => (
-						<ListGroup key={index}>
-							<ListGroupItem>
-								{note}
-								<Button
-									color="danger"
-									size="sm"
-								>
-									<img
-										src={Bell}
-										width={20}
-										height={20}
-									/>
-								</Button>
-							</ListGroupItem>
-						</ListGroup>
-					))) : null}
+					<br />
+
+					{this.state.notifications.length > 0 ? (
+						this.state.notifications.map((note, index) => (
+							<ListGroup key={index}>
+								<ListGroupItem>
+									<Container>
+										<Row>{note}</Row>
+										<br />
+										<Row>
+											<Col sm={{ size: 'auto' }}>
+												<Button
+													color="primary"
+													size="sm"
+												>
+													Mark as Read
+												</Button>
+											</Col>
+											<Col sm={{ size: 'auto' }}>
+												<Button
+													color="danger"
+													size="sm"
+												>
+													Dismiss
+												</Button>
+											</Col>
+										</Row>
+									</Container>
+								</ListGroupItem>
+							</ListGroup>
+						))
+					) : (
+						<h6>All Notifications have been read. =)</h6>
+					)}
 				</div>
 			</div>
 		);

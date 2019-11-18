@@ -92,7 +92,13 @@ export function getNotifications(userId) {
 
 export function subscribe(foodtruckId, userId) {
 	return axios.post(
-		'api/food-truck/subscribe?ftid=' + foodtruckId + '&userid=' + userId
+		'api/user/subscribe?ftid=' + foodtruckId + '&userid=' + userId
+	);
+}
+
+export function unsubscribe(userId, foodtruckId) {
+	return axios.post(
+		'api/user/unsubscribe?user_ID=' + userId + '&truck_ID=' + foodtruckId
 	);
 }
 

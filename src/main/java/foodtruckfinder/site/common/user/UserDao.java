@@ -218,6 +218,21 @@ public class UserDao {
 		return r;
 	}
 
+	/**
+	 * This function subscribes a user to a food truck, checking if the relationship exists first
+	 * This is achieved with "Insert ignore", which checks if the tuple exists before inserting it
+	 *
+	 * @param truck_id the truck id
+	 * @param user_id  the user id
+	 */
+	public void subscribe(Long truck_id, Long user_id) { //todo:: check if truck and user ids are valid
+		String sql = "INSERT IGNORE INTO SUBSCRIPTIONS " +
+				"(TRUCK_ID, USER_ID) VALUES (:truck_id, :user_id)";
+
+		Map<String, ?> params = _Maps.map("truck_id", truck_id, "user_id", user_id);
+		jdbcTemplate.update(sql, params);
+	}
+
 	public void unsubscribe(Long user_ID, Long truck_ID){
 		String sql = "DELETE FROM SUBSCRIPTIONS WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
 		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);

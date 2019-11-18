@@ -49,6 +49,7 @@ public class ExampleEndpoint {
      * Search for a food truck by name
      * @param name The food truck name
      * @return the list of food trucks
+     *
      */
     @GetMapping(value = "/searchFoodTrucks", produces = "application/json")
     public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {

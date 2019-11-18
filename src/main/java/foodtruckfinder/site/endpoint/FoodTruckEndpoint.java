@@ -48,14 +48,6 @@ public class FoodTruckEndpoint {
 	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
 	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
 
-
-
-
-	@PostMapping(value = "/subscribe", produces = "application/json")
-	public void subscribe(Long ftid, Long userid) {
-		foodTruckService.subscribe(ftid, userid);
-	}
-
 	/**
 	 * This function returns a list of food trucks based on an owner id
 	 *

@@ -117,16 +117,19 @@ public class UserEndpoint {
 		return userService.getRatingByUser(user_ID);
 	}
 
+	@PostMapping(value = "/subscribe", produces = "application/json")
+	public void subscribe(Long ftid, Long userid) {
+		userService.subscribe(ftid, userid);
+	}
+
 	@PostMapping(value = "/unsubscribe", produces = "application/json")
 	public void unsubscribe(Long user_ID, Long truck_ID){
 		userService.unsubscribe(user_ID, truck_ID);
-		return;
 	}
 
 	@PostMapping(value = "/removeReview", produces = "application/json")
 	public void removeReview(Long truck_ID, Long user_ID){
 		userService.removeReview(truck_ID, user_ID);
-		return;
 	}
 
 	@PostMapping(value = "/notificationStatus", produces = "application/json")

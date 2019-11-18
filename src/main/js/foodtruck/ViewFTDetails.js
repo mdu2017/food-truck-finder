@@ -116,7 +116,7 @@ export class ViewFoodTruckDetails extends React.Component {
 									mode="center"
 								/>
 								{individualReview.user}{' '}
-								{individualReview.rating} {'/ 5'}
+								{individualReview.rating.toFixed(2)} {'/ 5'}
 							</h6>
 							<h6>{individualReview.message}</h6>
 							<br />
@@ -164,6 +164,21 @@ export class ViewFoodTruckDetails extends React.Component {
 		}
 	}
 
+	unsubscribe() {
+		try {
+			const URLObject = this.props.match.params;
+			let { foodtruckID: id } = URLObject;
+			Axios.unsubscribe(JSON.parse(Axios.getCookie('user')).id, id).then(
+				function() {
+					window.alert('You are successfully unsubscribed!');
+					window.location.reload();
+				}
+			);
+		} catch (error) {
+			this.setState({ notLoggedIn: true });
+		}
+	}
+
 	render() {
 		if (this.state.notLoggedIn) {
 			window.alert('Please login to Rate/Review a Truck');
@@ -178,7 +193,12 @@ export class ViewFoodTruckDetails extends React.Component {
 						<Row>
 							<Col xs="auto">
 								{this.state.alreadySubscribed ? (
-									<Button disabled>Unsubscribe</Button>
+									<Button
+										color="danger"
+										onClick={() => this.unsubscribe()}
+									>
+										Unsubscribe
+									</Button>
 								) : (
 									<Button
 										color="primary"

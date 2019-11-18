@@ -48,15 +48,6 @@ public class FoodTruckService {
 	}
 
 	/**
-	 * This function subscribes a user to a food truck
-	 * @param truck_id the truck id
-	 * @param user_id the user id
-	 */
-	public void subscribe(Long truck_id, Long user_id) {
-		foodTruckDao.subscribe(truck_id, user_id);
-	}
-
-	/**
 	 * This function gets the list of subscribers to a particular food truck
 	 * @param id the truck id
 	 * @return the list of usernames of people who are subscribed

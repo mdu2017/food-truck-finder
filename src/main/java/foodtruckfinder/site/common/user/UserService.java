@@ -227,6 +227,15 @@ public class UserService {
 		return userDao.getRatingByUser(user_ID);
 	}
 
+	/**
+	 * This function subscribes a user to a food truck
+	 * @param truck_id the truck id
+	 * @param user_id the user id
+	 */
+	public void subscribe(Long truck_id, Long user_id) {
+		userDao.subscribe(truck_id, user_id);
+	}
+
 	public void unsubscribe(Long user_ID, Long truck_ID){
 		userDao.unsubscribe(user_ID, truck_ID);
 		return;

@@ -102,6 +102,12 @@ export function unsubscribe(userId, foodtruckId) {
 	);
 }
 
+export function removeReview(foodtruckId, userId) {
+	return axios.post(
+		'api/user/removeReview?truck_ID=' + foodtruckId + '&user_ID=' + userId
+	);
+}
+
 export function authenticate(username, password) {
 	return axios({
 		method: 'post',

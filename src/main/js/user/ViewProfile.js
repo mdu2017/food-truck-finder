@@ -52,6 +52,13 @@ export class ViewProfile extends React.Component {
 		});
 	}
 
+	removeReview(foodtruckId) {
+		Axios.removeReview(foodtruckId, this.state.userId).then(result => {
+			window.alert('Rating & Review Submission was successful removed!');
+			window.location.reload();
+		});
+	}
+
 	renderTruckReviews() {
 		let render = [];
 		{
@@ -75,7 +82,13 @@ export class ViewProfile extends React.Component {
 								>
 									{individualReview.rating} / 5
 								</span>{' '}
-								<Button color="danger" size="sm">
+								<Button
+									color="danger"
+									size="sm"
+									onClick={() =>
+										this.removeReview(individualReview.id)
+									}
+								>
 									Remove
 								</Button>
 							</h6>
@@ -85,6 +98,13 @@ export class ViewProfile extends React.Component {
 					);
 				});
 			});
+			if (this.state.reviews.length === 0) {
+				render.push(
+					<div>
+						<h6>No Ratings Available</h6>
+					</div>
+				);
+			}
 		}
 		return render;
 	}
@@ -106,6 +126,13 @@ export class ViewProfile extends React.Component {
 					);
 				});
 			});
+			if (this.state.subscriptions.length === 0) {
+				render.push(
+					<div>
+						<h6>No Subscriptions Available</h6>
+					</div>
+				);
+			}
 		}
 		return render;
 	}

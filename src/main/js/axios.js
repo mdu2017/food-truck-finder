@@ -85,6 +85,15 @@ export function getRecommendations(userlat, userlong) {
 	});
 }
 
+export function viewNearbyFT(userlat, userlong) {
+	return axios.get('/unsecure/viewNearbyTrucks', {
+		params: {
+			userlat: userlat,
+			userlong: userlong
+		}
+	});
+}
+
 export function getNotifications(userId) {
 	return axios.get('/api/user/getNotifications?userId=' + userId);
 }
@@ -135,15 +144,6 @@ export function getFoodTrucksByOwner(id) {
 	return axios.get('/api/food-truck/getFoodTrucksByOwner', {
 		params: {
 			owner_id: id
-		}
-	});
-}
-
-// TODO: get truck location (check corectness)
-export function getTruckLocation(truck_id) {
-	return axios.get('/api/food-truck/getCurrentLocation', {
-		params: {
-			foodTruckId: truck_id
 		}
 	});
 }
@@ -244,10 +244,9 @@ Actions.getFoodTrucksByOwner = owner_id => {
 	};
 };
 
-//TODO: get Truck location (check correctness)
-Actions.getTruckLocation = truck_id => {
+Actions.getTruckLocation = (userlat, userlong) => {
 	return dispatch => {
-		return dispatch(getTruckLocation(truck_id));
+		return dispatch(viewNearbyFT(userlat, userlong));
 	};
 };
 

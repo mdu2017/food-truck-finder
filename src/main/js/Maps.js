@@ -3,6 +3,7 @@ import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import ViewMarker from 'js/images/food_truck_existing.png';
 import * as Axios from 'js/axios';
+import {viewNearbyFT} from 'js/axios';
 
 // Currently in dashboard and Create food truck page
 
@@ -51,7 +52,7 @@ export class MapContainer extends React.Component {
             // truckIDs: [],
 
             //Locations of all nearby trucks
-            viewNearbyTrucks: [],
+            nearbyTrucks: [],
 		};
 
 		//binds status of click on map
@@ -59,30 +60,21 @@ export class MapContainer extends React.Component {
 	}
 
 	// View nearby trucks when loading map
+    //TODO: WIP
 	componentDidMount(){
+        Axios.viewNearbyFT(this.state.centerLat, this.state.centerLng).then(result => {
 
-	    //Get nearby trucks
-        Axios.getRecommendations(this.state.centerLat, this.state.centerLng).then(result => {
-            // this.setState({
-            //     truckIDs: result
-            // });
+            // For each coordinate, set lat and lng values
+            result.forEach(tuple => {
 
-            console.log('recommended');
-            console.log(result);
-
-            // Get locations of each nearby truck
-            result.forEach(truck => {
-                console.log('Truck in loop');
-                console.log(truck);
-                Axios.getTruckLocation(truck.id).then(result2 => {
-                    let loc = {lat: result2.first, lng: result2.second};
-                    this.setState(state => {
-                        const viewNearbyTrucks = state.viewNearbyTrucks.concat(loc);
-                        return{
-                            viewNearbyTrucks,
-                            value: loc
-                        };
-                    });
+                //Location pair values (because tuple object doesnt work)
+                let loc = {lat: tuple.first, lng: tuple.second};
+                this.setState(state => {
+                    const nearbyTrucks = state.nearbyTrucks.concat(loc);
+                    return {
+                        nearbyTrucks,
+                        value: loc
+                    };
                 });
             });
         });
@@ -101,20 +93,25 @@ export class MapContainer extends React.Component {
 
 	// Sample function to display nearby food trucks
 	displayMarkers = () => {
-		return this.state.viewNearbyTrucks.map((marker, index) => {
-			return (
-				<Marker
-					onClick={this.onMarkerClick}
-					key={index}
-					icon={ViewMarker}
-					position={{
-						lat: marker.lat,
-						lng: marker.lng
-					}}
-					name={'Food truck ' + index}
-				/>
-			);
-		});
+	    try {
+            return this.state.nearbyTrucks.map((marker, index) => {
+                return (
+                    <Marker
+                        onClick={this.onMarkerClick}
+                        key={index}
+                        icon={ViewMarker}
+                        position={{
+                            lat: marker.lat,
+                            lng: marker.lng
+                        }}
+                        name={'Food truck ' + index}
+                    />
+                );
+            });
+        }
+        catch(error){
+	        console.error('Error in display markers');
+        }
 	};
 
 	// Gets and sets users current location
@@ -250,6 +247,8 @@ export class MapContainer extends React.Component {
 						</div>
 					</InfoWindow>
 				</Map>
+
+                {console.log(this.state.nearbyTrucks)}
 
                 {/*{this.displayMarkers()}*/}
 

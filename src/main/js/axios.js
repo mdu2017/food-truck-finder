@@ -86,6 +86,16 @@ export function getRecommendations(userlat, userlong, radius) {
 	});
 }
 
+export function getNearby(userlat, userlong, radius) {
+	return axios.get('/unsecure/nearby', {
+		params: {
+			userlat: userlat,
+			userlong: userlong,
+			radius: radius
+		}
+	});
+}
+
 export function getNotifications(userId) {
 	return axios.get('/api/user/getNotifications?userId=' + userId);
 }

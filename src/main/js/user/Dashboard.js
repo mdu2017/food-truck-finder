@@ -36,26 +36,37 @@ export class Dashboard extends React.Component {
 		this.state = {
 			authentication: Axios.getCookie('authentication'),
 			user: JSON.parse(Axios.getCookie('user')),
-			foodtrucks: [],
+			recommendedFoodTrucks: [],
+			nearbyFoodTrucks: [],
 			notifications: [],
 			searchFT: null,
 			searchResults: [],
 			loadingSearch: false,
 			loadingRecommended: true,
-			recommendationRadius: 0.5
+			loadingNearby: true,
+			recommendationRadius: 0.5,
+			nearbyRadius: 0.5
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	setSearchFT = searchFT => this.setState({ searchFT });
+
 	setRecommendationRadius = recommendationRadius => {
 		this.setState({ loadingRecommended: true });
 		this.setState({ recommendationRadius: recommendationRadius });
 		this.updateRecommendedDistance();
 	};
 
+	setNearbyRadius = nearbyRadius => {
+		this.setState({ loadingNearby: true });
+		this.setState({ nearbyRadius: nearbyRadius });
+		this.updateNearbyDistance();
+	};
+
 	componentDidMount() {
 		this.updateRecommendedDistance();
+		this.updateNearbyDistance();
 		if (this.state.user) {
 			Axios.getNotifications(this.state.user.id).then(result => {
 				this.setState({
@@ -80,7 +91,7 @@ export class Dashboard extends React.Component {
 						);
 				});
 			}.bind(this),
-			1000
+			250
 		);
 		event.preventDefault();
 	};
@@ -110,13 +121,35 @@ export class Dashboard extends React.Component {
 						).then(result =>
 							this.setState({
 								loadingRecommended: false,
-								foodtrucks: result
+								recommendedFoodTrucks: result
 							})
 						);
 					});
 				});
 			}.bind(this),
-			500
+			250
+		);
+	}
+
+	updateNearbyDistance() {
+		setTimeout(
+			function() {
+				this.setState({ loadingNearby: true }, () => {
+					navigator.geolocation.getCurrentPosition(position => {
+						Axios.getNearby(
+							position.coords.latitude,
+							position.coords.longitude,
+							this.state.nearbyRadius
+						).then(result =>
+							this.setState({
+								loadingNearby: false,
+								nearbyFoodTrucks: result
+							})
+						);
+					});
+				});
+			}.bind(this),
+			250
 		);
 	}
 
@@ -223,17 +256,62 @@ export class Dashboard extends React.Component {
 										<div>
 											<h4>Nearby</h4>
 											<hr />
-											{this.state.loadingRecommended ? (
+											<Button
+												color="info"
+												size="sm"
+												onClick={() => {
+													if (
+														this.state
+															.nearbyRadius -
+															0.143 <
+														0
+													) {
+														this.setNearbyRadius(0);
+													} else {
+														this.setNearbyRadius(
+															this.state
+																.nearbyRadius -
+																0.143
+														);
+													}
+												}}
+											>
+												-
+											</Button>{' '}
+											<h8>
+												Radius:{' '}
+												{(
+													this.state.nearbyRadius * 70
+												).toFixed(0)}{' '}
+												mi
+											</h8>{' '}
+											<Button
+												color="info"
+												size="sm"
+												onClick={() =>
+													this.setNearbyRadius(
+														this.state
+															.nearbyRadius +
+															0.143
+													)
+												}
+											>
+												+
+											</Button>
+											<br />
+											{this.state.loadingNearby ? (
 												<img
 													src={Spinner}
 													width={70}
 													height={70}
 													mode="fit"
 												/>
-											) : this.state.foodtrucks ? (
+											) : this.state.nearbyFoodTrucks &&
+											  this.state.nearbyFoodTrucks
+													.length > 0 ? (
 												<Nav>
 													<NavItem>
-														{this.state.foodtrucks.map(
+														{this.state.nearbyFoodTrucks.map(
 															(
 																foodtruck,
 																index
@@ -257,7 +335,9 @@ export class Dashboard extends React.Component {
 														)}
 													</NavItem>
 												</Nav>
-											) : null}
+											) : (
+												<span>No Results</span>
+											)}
 										</div>
 									</Row>
 								</Col>
@@ -351,11 +431,12 @@ export class Dashboard extends React.Component {
 												height={70}
 												mode="fit"
 											/>
-										) : this.state.foodtrucks &&
-										  this.state.foodtrucks.length > 0 ? (
+										) : this.state.recommendedFoodTrucks &&
+										  this.state.recommendedFoodTrucks
+												.length > 0 ? (
 											<Nav>
 												<NavItem>
-													{this.state.foodtrucks.map(
+													{this.state.recommendedFoodTrucks.map(
 														(foodtruck, index) => {
 															return (
 																<NavLink

@@ -15,6 +15,9 @@ export class MapContainer extends React.Component {
 	constructor(props) {
 		super(props);
 
+        //TODO: set current location before map loads
+        this.getLocation();
+
 		//State for info window/markers/selectedPlace
 		this.state = {
 
@@ -31,41 +34,74 @@ export class MapContainer extends React.Component {
 			locations: [],
 
 			//One click for location
-			alreadyClicked: false,
+            alreadyClicked: false,
 
 			//Food truck location when clicked
 			ftLat: null,
 			ftLng: null,
 
-			loc: {lat: 31.538813002764755, lng: -97.14596871840052},
-
 			// TODO: Sample locations to test view nearby food truck (stores object object)
-			markers: [{lat: 31.538813002764755, lng: -97.14596871840052},
-				{lat: 31.532965359436357, lng: -97.11},
-				{lat: 31.532965359436357, lng: -97.12021951185756},
-				{lat: 31.580066500056425, lng: -97.15},
-				{lat: 31.5724617149029, lng: -97.06357125746302}]
-		};
+			// markers: [{lat: 31.538813002764755, lng: -97.14596871840052},
+			// 	{lat: 31.532965359436357, lng: -97.11},
+			// 	{lat: 31.532965359436357, lng: -97.12021951185756},
+			// 	{lat: 31.580066500056425, lng: -97.15},
+			// 	{lat: 31.5724617149029, lng: -97.06357125746302}]
 
-		//Set user location
-		this.getLocation();
+            //List of truck IDs to pass to nearby trucks function
+            // truckIDs: [],
+
+            //Locations of all nearby trucks
+            viewNearbyTrucks: [],
+		};
 
 		//binds status of click on map
 		this.onMapClicked = this.onMapClicked.bind(this);
 	}
 
+	// View nearby trucks when loading map
+	componentDidMount(){
+
+	    //Get nearby trucks
+        Axios.getRecommendations(this.state.centerLat, this.state.centerLng).then(result => {
+            // this.setState({
+            //     truckIDs: result
+            // });
+
+            console.log('recommended');
+            console.log(result);
+
+            // Get locations of each nearby truck
+            result.forEach(truck => {
+                console.log('Truck in loop');
+                console.log(truck);
+                Axios.getTruckLocation(truck.id).then(result2 => {
+                    let loc = {lat: result2.first, lng: result2.second};
+                    this.setState(state => {
+                        const viewNearbyTrucks = state.viewNearbyTrucks.concat(loc);
+                        return{
+                            viewNearbyTrucks,
+                            value: loc
+                        };
+                    });
+                });
+            });
+        });
+    }
+
 	// Passes the selected Location back to caller
-	handleSelection(lat, long) {
-		this.props.handleMapSelection(lat, long);
-	}
-
-	componentDidMount() {
-
-	}
+    // TODO: if not caught, marker onClick doesnt close info window
+    handleSelection(lat, long) {
+	    try {
+	        this.props.handleMapSelection(lat, long);
+        }
+        catch(error){
+	        console.error('handleMapSelection Not Used');
+        }
+    }
 
 	// Sample function to display nearby food trucks
 	displayMarkers = () => {
-		return this.state.markers.map((marker, index) => {
+		return this.state.viewNearbyTrucks.map((marker, index) => {
 			return (
 				<Marker
 					onClick={this.onMarkerClick}
@@ -100,15 +136,6 @@ export class MapContainer extends React.Component {
 			centerLat: lat,
 			centerLng: lng
 		});
-
-		// {
-		// 	console.log(
-		// 		'user lat: ' +
-		// 			this.state.centerLat +
-		// 			' | user lng: ' +
-		// 			this.state.centerLng
-		// 	);
-		// }
 	};
 
 	//Map click logic
@@ -147,7 +174,7 @@ export class MapContainer extends React.Component {
 	};
 
 	//Opens info window when marker clicked
-	onMarkerClick = (props, marker, evt) => {
+	onMarkerClick = (props, marker, e) => {
 		this.setState({
 			selectedPlace: props,
 			activeMarker: marker,
@@ -180,19 +207,14 @@ export class MapContainer extends React.Component {
 				<Map
 					google={this.props.google}
 					style={style}
-					zoom={12}
-					initialCenter={{
-						lat: this.state.centerLat,
-						lng: this.state.centerLng
-					}}
+					zoom={14}
+					initialCenter={{lat: this.state.centerLat, lng: this.state.centerLng}}
 					onClick={this.onMapClicked}
 					scrollwheel={true}
 					scaleControl={true}>
-					{/*Info marker working*/}
-					<Marker
-						onClick={this.onMarkerClick}
-						name={'Current location'}
-					/>
+
+                    {/*Current location marker*/}
+                    <Marker onClick={this.onMarkerClick} name={'Current Location'}/>
 
 					{/* Add marker on click */}
 					{this.state.locations.map((location, index) => {
@@ -214,7 +236,7 @@ export class MapContainer extends React.Component {
 						);
 					})}
 
-					{/* TODO: Display nearby food trucks*/}
+					{/*Display nearby food trucks*/}
 					{this.displayMarkers()}
 
 					{/*Generates info windows for all markers (must be put after displayMarkers*/}
@@ -229,10 +251,15 @@ export class MapContainer extends React.Component {
 					</InfoWindow>
 				</Map>
 
+                {/*{this.displayMarkers()}*/}
+
+                {/*{this.getNearbyTrucks()}*/}
+                {/*{console.log(this.state.viewNearbyTrucks)}*/}
+
 				{/*Test truck lat (WORKS) */}
 				{/*{console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}*/}
 
-				{/*Test user location (WORKS)*/}
+				{/*Test user location (doesnt work before map loads)*/}
 				{/*{console.log('user lat: ' + this.state.centerLat + ' | user lng: ' + this.state.centerLng)}*/}
 			</div>
 		);

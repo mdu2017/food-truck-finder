@@ -122,7 +122,8 @@ public class FoodTruckEndpoint {
     }
 
 	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
-	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
-		return foodTruckService.getCurrentLocation(foodTruckId);
+	public Optional<Tuple.Pair<Double, Double>> getTruckLocation(Long foodTruckId){
+		System.out.println("ft id in end pt: " + foodTruckId);
+		return foodTruckService.getTruckLocation(foodTruckId);
 	}
 }

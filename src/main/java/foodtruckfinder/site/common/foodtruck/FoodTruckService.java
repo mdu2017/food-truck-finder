@@ -91,8 +91,14 @@ public class FoodTruckService {
 		return foodTruckDao.getRecommendations(userlat, userlong);
 	}
 
-    public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
-		return foodTruckDao.getCurrentLocation(foodTruckId);
+	/**
+	 * Get a truck's location in latitude and longitude
+	 * @param foodTruckId
+	 * @return
+	 */
+    public Optional<Tuple.Pair<Double, Double>> getTruckLocation(Long foodTruckId) {
+		System.out.println("FT ID in service " + foodTruckId);
+		return foodTruckDao.getTruckLocation(foodTruckId);
     }
 
 	public List<Rating> getRatingByTruck(Long truck_ID){

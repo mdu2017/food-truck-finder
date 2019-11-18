@@ -700,11 +700,14 @@ public class FoodTruckDao {
 	}
 
 
-	public Optional<Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
+	public Optional<Pair<Double, Double>> getTruckLocation(Long foodTruckId) {
+
+		System.out.println("FT ID in DAO: " + foodTruckId);
+
 		String sql = "SELECT st.LATITUDE, st.LONGITUDE " +
 				"FROM schedule AS sch, truck_stop AS st " +
 				"WHERE sch.STOP_ID = st.STOP_ID " +
-				"AND sch.TRUCK_ID = :truckid" +
+				"AND sch.TRUCK_ID = :truckid " +
 				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
 				"AND (TIME(st.end) > TIME(NOW()))";
 

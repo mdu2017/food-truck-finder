@@ -18,7 +18,8 @@ import {
 	Button,
 	Label,
 	ListGroup,
-	ListGroupItem
+	ListGroupItem,
+	CustomInput
 } from 'reactstrap';
 import { getRecommendations } from 'js/axios';
 import Spinner from 'js/images/spinner.gif';
@@ -40,33 +41,21 @@ export class Dashboard extends React.Component {
 			searchFT: null,
 			searchResults: [],
 			loadingSearch: false,
-			loadingRecommended: true
+			loadingRecommended: true,
+			recommendationRadius: 0.5
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
 
 	setSearchFT = searchFT => this.setState({ searchFT });
+	setRecommendationRadius = recommendationRadius => {
+		this.setState({ loadingRecommended: true });
+		this.setState({ recommendationRadius: recommendationRadius });
+		this.updateRecommendedDistance();
+	};
 
 	componentDidMount() {
-		setTimeout(
-			function() {
-				this.setState({ loadingRecommended: true }, () => {
-					navigator.geolocation.getCurrentPosition(position => {
-						Axios.getRecommendations(
-							position.coords.latitude,
-							position.coords.longitude,
-							0.5
-						).then(result =>
-							this.setState({
-								loadingRecommended: false,
-								foodtrucks: result
-							})
-						);
-					});
-				});
-			}.bind(this),
-			1000
-		);
+		this.updateRecommendedDistance();
 		if (this.state.user) {
 			Axios.getNotifications(this.state.user.id).then(result => {
 				this.setState({
@@ -107,6 +96,28 @@ export class Dashboard extends React.Component {
 			);
 		}
 		return <div>{'Welcome!'} </div>;
+	}
+
+	updateRecommendedDistance() {
+		setTimeout(
+			function() {
+				this.setState({ loadingRecommended: true }, () => {
+					navigator.geolocation.getCurrentPosition(position => {
+						Axios.getRecommendations(
+							position.coords.latitude,
+							position.coords.longitude,
+							this.state.recommendationRadius
+						).then(result =>
+							this.setState({
+								loadingRecommended: false,
+								foodtrucks: result
+							})
+						);
+					});
+				});
+			}.bind(this),
+			500
+		);
 	}
 
 	renderSearchResults() {
@@ -282,6 +293,57 @@ export class Dashboard extends React.Component {
 									<div>
 										<h4>Recommended</h4>
 										<hr />
+										<Container>
+											<Col md={{ offset: 1 }}>
+												<Button
+													color="info"
+													size="sm"
+													onClick={() => {
+														if (
+															this.state
+																.recommendationRadius -
+																0.143 <
+															0
+														) {
+															this.setRecommendationRadius(
+																0
+															);
+														} else {
+															this.setRecommendationRadius(
+																this.state
+																	.recommendationRadius -
+																	0.143
+															);
+														}
+													}}
+												>
+													-
+												</Button>{' '}
+												<h8>
+													Radius:{' '}
+													{(
+														this.state
+															.recommendationRadius *
+														70
+													).toFixed(0)}{' '}
+													mi
+												</h8>{' '}
+												<Button
+													color="info"
+													size="sm"
+													onClick={() =>
+														this.setRecommendationRadius(
+															this.state
+																.recommendationRadius +
+																0.143
+														)
+													}
+												>
+													+
+												</Button>
+											</Col>
+											<br />
+										</Container>
 										{this.state.loadingRecommended ? (
 											<img
 												src={Spinner}
@@ -289,7 +351,8 @@ export class Dashboard extends React.Component {
 												height={70}
 												mode="fit"
 											/>
-										) : this.state.foodtrucks ? (
+										) : this.state.foodtrucks &&
+										  this.state.foodtrucks.length > 0 ? (
 											<Nav>
 												<NavItem>
 													{this.state.foodtrucks.map(
@@ -311,7 +374,9 @@ export class Dashboard extends React.Component {
 													)}
 												</NavItem>
 											</Nav>
-										) : null}
+										) : (
+											<span>No Results</span>
+										)}
 									</div>
 								</Col>
 							</Row>

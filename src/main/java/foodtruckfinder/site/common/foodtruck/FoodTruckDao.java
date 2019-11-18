@@ -702,8 +702,6 @@ public class FoodTruckDao {
 
 	public Optional<List<Pair<Double, Double>>> viewNearbyTrucks(double userlat, double userlong) {
 
-//		System.out.println("loc in DAO: " + userlat + " " + userlong);
-
 		/** Grab all nearby food trucks **/
 		List<FoodTruckDto> nearbyTrucks = null;
 

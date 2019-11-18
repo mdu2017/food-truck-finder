@@ -61,7 +61,6 @@ public class ExampleEndpoint {
 
     @GetMapping(value = "/viewNearbyTrucks", produces = "application/json")
     public Optional<List<Tuple.Pair<Double, Double>>> viewNearbyTrucks(double userlat, double userlong){
-//        System.out.println("loc in endpt: " + userlat + " " + userlong);
         return unsecureFoodTruckService.viewNearbyTrucks(userlat, userlong);
     }
 }

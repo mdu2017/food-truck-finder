@@ -3,7 +3,6 @@ import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import ViewMarker from 'js/images/food_truck_existing.png';
 import * as Axios from 'js/axios';
-import {viewNearbyFT} from 'js/axios';
 
 // Currently in dashboard and Create food truck page
 
@@ -64,6 +63,12 @@ export class MapContainer extends React.Component {
 	componentDidMount(){
         Axios.viewNearbyFT(this.state.centerLat, this.state.centerLng).then(result => {
 
+
+            //TODO: Maybe needed for food truck details on info window
+            // result.map((truck, index) => (
+            //     <li key={index}>{this.setState({ foodTruckId: truck.id })}</li>
+            // ));
+
             // For each coordinate, set lat and lng values
             result.forEach(tuple => {
 
@@ -75,6 +80,7 @@ export class MapContainer extends React.Component {
                         nearbyTrucks,
                         value: loc
                     };
+
                 });
             });
         });
@@ -243,7 +249,7 @@ export class MapContainer extends React.Component {
 						visible={this.state.showingInfoWindow}>
 						<div>
 							<h3>{this.state.selectedPlace.name}</h3>
-							<a href={'#'}>Visit Info Page</a>
+							<a href={'/food-truck-details/:foodtruckID'}>Visit Info Page</a>
 						</div>
 					</InfoWindow>
 				</Map>

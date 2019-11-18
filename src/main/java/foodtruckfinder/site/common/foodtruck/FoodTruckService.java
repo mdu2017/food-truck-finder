@@ -97,7 +97,6 @@ public class FoodTruckService {
 	 * @return
 	 */
     public Optional<List<Tuple.Pair<Double, Double>>> viewNearbyTrucks(double userlat, double userlong) {
-//		System.out.println("loc in service: " + userlat + " " + userlong);
 		return foodTruckDao.viewNearbyTrucks(userlat, userlong);
     }
 

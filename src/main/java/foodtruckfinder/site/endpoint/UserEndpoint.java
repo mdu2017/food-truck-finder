@@ -108,13 +108,6 @@ public class UserEndpoint {
 		return userService.getNotifications(userId);
 	}
 
-//	@PostMapping(value = "/markReadNotification", produces = "application/json")
-//	public Optional<Notification> markReadNotification(Long userId,
-//													   Long truckId,
-//													   LocalDateTime sent) {
-//
-//	}
-
 	@PostMapping(value = "/rate", produces = "application/json")
 	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){
 		userService.rateTruck(user_ID, truck_ID, message, rating);
@@ -142,6 +135,7 @@ public class UserEndpoint {
 
 	@PostMapping(value = "/notificationStatus", produces = "application/json")
 	public Boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
+		System.out.println("Got here");
 		return userService.changeNotificationStatus(user_ID, truck_ID, sent);
 	}
 }

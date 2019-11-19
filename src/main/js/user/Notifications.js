@@ -9,6 +9,7 @@ import {
 	Col,
 	Container
 } from 'reactstrap';
+import {update} from 'js/axios';
 
 export class Notifications extends React.Component {
 	constructor(props) {
@@ -29,8 +30,12 @@ export class Notifications extends React.Component {
 		});
 	}
 
-	markAsRead() {
-
+	markAsRead(userId, truckId, sent, index) {
+		Axios.changeNotificationStatus(userId, truckId, sent).then(result => {
+			this.setState({
+				notifications: update(this.state.notifications, {index: {viewed: true}})
+			});
+		});
 	}
 
 	render() {
@@ -54,6 +59,7 @@ export class Notifications extends React.Component {
 												<Button
 													color="primary"
 													size="sm"
+													onClick={() => this.markAsRead(this.state.user.id, note.truckId, note.sent, index)}
 												>
 													Mark as Read
 												</Button>

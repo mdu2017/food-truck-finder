@@ -178,10 +178,9 @@ public class UserDao {
 	}
 
 	public Optional<List<Notification>> getNotifications(Long userId){
-		String sql = "SELECT NAME, MESSAGE, NOTIFICATION.TRUCK_ID, " +
-				"SENT FROM NOTIFICATION, FOOD_TRUCK WHERE " +
-				"FOOD_TRUCK.FOOD_TRUCK_ID = NOTIFICATION.TRUCK_ID AND " +
-				"USER_ID = :userId";
+		String sql = "SELECT NAME, MESSAGE, TRUCK_ID, " +
+				"SENT, VIEWED FROM NOTIFICATION, FOOD_TRUCK WHERE " +
+				"FOOD_TRUCK_ID = TRUCK_ID AND USER_ID = :userId";
 
 		Map<String, ?> params = _Maps.map("userId", userId);
 
@@ -191,6 +190,8 @@ public class UserDao {
 			noti.setMessage(rs.getString("MESSAGE"));
 			noti.setSent(rs.getTimestamp("SENT").toLocalDateTime());
 			noti.setFrom(rs.getString("NAME"));
+			noti.setTruckID(rs.getLong("TRUCK_ID"));
+			noti.setViewed(rs.getBoolean("VIEWED"));
 			return noti;
 		});
 
@@ -252,6 +253,7 @@ public class UserDao {
 	}
 
 	public boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
+		System.out.println("Got here");
 		Timestamp time = Timestamp.valueOf(sent);
 		String sql = "UPDATE NOTIFICATION SET VIEWED = 1 WHERE USER_ID = :user_ID AND TRUCK_ID = :truck_ID AND SENT = :sent";
 		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "sent", time);

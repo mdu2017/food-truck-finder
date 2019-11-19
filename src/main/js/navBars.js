@@ -17,9 +17,7 @@ import {
 	Container,
 	Row,
 	Col,
-	Badge,
-	ListGroup,
-	ListGroupItem
+	Badge
 } from 'reactstrap';
 import { connect } from 'react-redux';
 

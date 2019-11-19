@@ -16,12 +16,9 @@ import {
 	FormGroup,
 	Input,
 	Button,
-	Label,
 	ListGroup,
-	ListGroupItem,
-	CustomInput
+	ListGroupItem
 } from 'reactstrap';
-import { getRecommendations } from 'js/axios';
 import Spinner from 'js/images/spinner.gif';
 
 // const divStyle = {
@@ -232,10 +229,7 @@ export class Dashboard extends React.Component {
 												</NavLink>
 											</NavItem>
 											<NavItem>
-												<NavLink
-													disabled
-													href="#/search-users"
-												>
+												<NavLink href="#/search-users">
 													Search Users
 												</NavLink>
 											</NavItem>
@@ -343,29 +337,30 @@ export class Dashboard extends React.Component {
 								</Col>
 								<Col>
 									<Row>
-										<Col
-											sm="12"
-											md={{ size: 6, offset: 3 }}
-										>
-											<Form
-												onSubmit={this.handleSubmit}
-												inline
-											>
-												<FormGroup inline>
-													<Input
-														type="text"
-														name="searchFT"
-														id="searchFT"
-														placeholder="Search Food Trucks"
-														onChange={e =>
-															this.setSearchFT(
-																e.target.value
-															)
-														}
-													/>
-												</FormGroup>
-											</Form>
-											{this.renderSearchResults()}
+										{/* md={{ size: 6, offset: 3 }} */}
+										<Col sm="12">
+											<div>
+												<Form
+													onSubmit={this.handleSubmit}
+													inline
+												>
+													<FormGroup inline>
+														<Input
+															type="text"
+															name="searchFT"
+															id="searchFT"
+															placeholder="Search Food Trucks"
+															onChange={e =>
+																this.setSearchFT(
+																	e.target
+																		.value
+																)
+															}
+														/>
+													</FormGroup>
+												</Form>
+												{this.renderSearchResults()}
+											</div>
 										</Col>
 									</Row>
 								</Col>

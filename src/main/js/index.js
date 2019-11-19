@@ -11,7 +11,7 @@ import { ForgotPassword } from './user/ForgotPassword';
 import { Login } from './user/Login';
 import { Notifications } from './user/Notifications';
 import { ViewEventDetails } from './user/ViewEventDetails';
-import {SearchFoodTrucks, SearchTrucks} from './SearchTrucks';
+import { SearchFoodTrucks } from './SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
 import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
@@ -90,7 +90,11 @@ export default class Index extends React.Component {
 					/>
 					<Route exact path="/page-1" component={Pages.Page1} />
 					<Route exact path="/hello" component={Pages.HelloSend} />
-					<Route exact path="/user/:username" component={ViewOtherProfile} />
+					<Route
+						exact
+						path="/user/:username"
+						component={ViewOtherProfile}
+					/>
 				</div>
 			</HashRouter>
 		);

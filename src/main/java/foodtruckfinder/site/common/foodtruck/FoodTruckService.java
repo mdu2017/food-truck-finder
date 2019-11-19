@@ -89,8 +89,13 @@ public class FoodTruckService {
 		return foodTruckDao.getNearby(userlat, userlong, radius);
 	}
 
-    public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
-		return foodTruckDao.getCurrentLocation(foodTruckId);
+	/**
+	 * Get a truck's location in latitude and longitude
+	 * @param userlat, userlong
+	 * @return
+	 */
+    public Optional<List<Tuple.Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
+		return foodTruckDao.viewNearbyTrucks(userlat, userlong);
     }
 
 	public List<Rating> getRatingByTruck(Long truck_ID){

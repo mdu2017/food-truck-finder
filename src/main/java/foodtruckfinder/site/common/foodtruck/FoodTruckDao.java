@@ -717,37 +717,78 @@ public class FoodTruckDao {
 		jdbcTemplate.update(sql, params);
 	}
 
+	public Optional<List<Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
 
-	public Optional<Pair<Double, Double>> getCurrentLocation(Long foodTruckId) {
-		String sql = "SELECT st.LATITUDE, st.LONGITUDE " +
-				"FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
+		/** Grab all nearby food trucks **/
+		List<FoodTruckDto> nearbyTrucks = null;
+
+		String nearbySQL = "SELECT sch.TRUCK_ID " +
+				"FROM schedule AS sch, truck_stop AS st " +
 				"WHERE sch.STOP_ID = st.STOP_ID " +
-				"AND sch.TRUCK_ID = :truckid" +
-				"AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
-				"AND (TIME(st.END) > TIME(NOW()))";
+				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
+				"AND (TIME(st.end) > TIME(NOW())) " +
+				"AND ((POW(st.LATITUDE - :userlat, 2) + POW(st.LONGITUDE - " +
+				":userlong, 2)) < 1)";
 
-		String currDay = "U";
-		Calendar calendar = Calendar.getInstance();
-		switch(Calendar.DAY_OF_WEEK){
-			case 1: currDay = "U"; break;
-			case 2: currDay = "M"; break;
-			case 3: currDay = "T"; break;
-			case 4: currDay = "W"; break;
-			case 5: currDay = "H"; break;
-			case 6: currDay = "F"; break;
-			case 7: currDay = "S"; break;
+		Map<String, ?> nearbyParams = _Maps.map("userlat", userlat,
+				"userlong", userlong, "day", "T");
+		List<Long> ids = jdbcTemplate.query(nearbySQL, nearbyParams,
+				(rs, rowNum) -> rs.getLong("TRUCK_ID"));
+
+		if (ids != null) {
+			nearbyTrucks = new ArrayList<>();
+			for (Long ft : ids) {
+				//get each food truck
+				Optional<FoodTruckDto> temp = this.find(ft + "");
+				if (temp.isPresent()) {
+					nearbyTrucks.add(temp.get());
+					System.out.print(""); //so IDE doesnt scream duplicate code
+//					for(FoodTruckDto tempTruck : nearbyTrucks){
+//						System.out.println(tempTruck.getName() + " " + tempTruck.getId());
+//					}
+				}
+			}
 		}
 
-		Map<String, ?> params = _Maps.map("day", currDay, "truckid", foodTruckId);
-		Optional<Tuple.Pair<Double, Double>> location = jdbcTemplate.query(sql, params, rs -> {
-			Pair<Double, Double> loc = null;
-			if(rs.next()) {
-				loc = new Tuple2<Double, Double>(rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
-			}
-			return Optional.ofNullable(loc);
-		});
+		//Array of locations for all nearby food trucks
+		List<Triple<Double, Double, FoodTruckDto>> locations = new ArrayList<>();
 
-		return location;
+		/**For all nearby trucks grab their locations**/
+		for(FoodTruckDto nearbyFT : nearbyTrucks){
+			long truckid = nearbyFT.getId();
+
+			String sql = "SELECT st.LATITUDE, st.LONGITUDE " +
+					"FROM schedule AS sch, truck_stop AS st " +
+					"WHERE sch.STOP_ID = st.STOP_ID " +
+					"AND sch.TRUCK_ID = :truckid " +
+					"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
+					"AND (TIME(st.end) > TIME(NOW()))";
+
+			String currDay = "U";
+			Calendar calendar = Calendar.getInstance();
+			switch(Calendar.DAY_OF_WEEK){
+				case 1: currDay = "U"; break;
+				case 2: currDay = "M"; break;
+				case 3: currDay = "T"; break;
+				case 4: currDay = "W"; break;
+				case 5: currDay = "H"; break;
+				case 6: currDay = "F"; break;
+				case 7: currDay = "S"; break;
+			}
+
+			Map<String, ?> params = _Maps.map("day", currDay, "truckid", truckid);
+			Optional<Tuple.Triple<Double, Double, FoodTruckDto>>location = jdbcTemplate.query(sql, params, rs -> {
+				Triple<Double, Double, FoodTruckDto> loc = null;
+				if(rs.next()) {
+					loc = new Tuple3<Double, Double, FoodTruckDto>(
+							rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"), nearbyFT);
+					locations.add(loc);
+				}
+				return Optional.ofNullable(loc);
+			});
+		}
+
+		return Optional.ofNullable(locations);
 	}
 
 	public List<Rating> getRatingByTruck(Long truck_ID){
@@ -768,5 +809,4 @@ public class FoodTruckDao {
 
 		return r;
 	}
-
 }

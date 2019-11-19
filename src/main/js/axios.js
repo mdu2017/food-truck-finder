@@ -96,6 +96,15 @@ export function getNearby(userlat, userlong, radius) {
 	});
 }
 
+export function viewNearbyFT(userlat, userlong) {
+	return axios.get('/unsecure/viewNearbyTrucks', {
+		params: {
+			userlat: userlat,
+			userlong: userlong
+		}
+	});
+}
+
 export function getNotifications(userId) {
 	return axios.get('/api/user/getNotifications?userId=' + userId);
 }
@@ -163,15 +172,6 @@ export function getOwnerFoodTruckIDs(owner_id) {
 // Get a list of Foods Trucks by Owner
 export function getFoodTrucksByOwner(id) {
 	return axios.get('/api/food-truck/getFoodTrucksByOwner', {
-		params: {
-			owner_id: id
-		}
-	});
-}
-
-// TODO: get truck location
-export function getTruckLocation(id) {
-	return axios.get('/api/food-truck/getCurrentLocation', {
 		params: {
 			owner_id: id
 		}
@@ -274,10 +274,9 @@ Actions.getFoodTrucksByOwner = owner_id => {
 	};
 };
 
-//TODO: Work in progress
-Actions.getTruckLocation = owner_id => {
+Actions.getTruckLocation = (userlat, userlong) => {
 	return dispatch => {
-		return dispatch(getTruckLocation(owner_id));
+		return dispatch(viewNearbyFT(userlat, userlong));
 	};
 };
 

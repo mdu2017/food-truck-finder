@@ -699,8 +699,7 @@ public class FoodTruckDao {
 		jdbcTemplate.update(sql, params);
 	}
 
-
-	public Optional<List<Pair<Double, Double>>> viewNearbyTrucks(double userlat, double userlong) {
+	public Optional<List<Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
 
 		/** Grab all nearby food trucks **/
 		List<FoodTruckDto> nearbyTrucks = null;
@@ -734,7 +733,7 @@ public class FoodTruckDao {
 		}
 
 		//Array of locations for all nearby food trucks
-		List<Pair<Double, Double>> locations = new ArrayList<>();
+		List<Triple<Double, Double, FoodTruckDto>> locations = new ArrayList<>();
 
 
 		/**For all nearby trucks grab their locations**/
@@ -761,10 +760,11 @@ public class FoodTruckDao {
 			}
 
 			Map<String, ?> params = _Maps.map("day", currDay, "truckid", truckid);
-			Optional<Tuple.Pair<Double, Double>> location = jdbcTemplate.query(sql, params, rs -> {
-				Pair<Double, Double> loc = null;
+			Optional<Tuple.Triple<Double, Double, FoodTruckDto>>location = jdbcTemplate.query(sql, params, rs -> {
+				Triple<Double, Double, FoodTruckDto> loc = null;
 				if(rs.next()) {
-					loc = new Tuple2<Double, Double>(rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
+					loc = new Tuple3<Double, Double, FoodTruckDto>(
+							rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"), nearbyFT);
 					locations.add(loc);
 				}
 				return Optional.ofNullable(loc);
@@ -792,5 +792,5 @@ public class FoodTruckDao {
 
 		return r;
 	}
-
 }
+

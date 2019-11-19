@@ -96,7 +96,7 @@ public class FoodTruckService {
 	 * @param userlat, userlong
 	 * @return
 	 */
-    public Optional<List<Tuple.Pair<Double, Double>>> viewNearbyTrucks(double userlat, double userlong) {
+    public Optional<List<Tuple.Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
 		return foodTruckDao.viewNearbyTrucks(userlat, userlong);
     }
 

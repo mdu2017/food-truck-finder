@@ -60,7 +60,7 @@ public class ExampleEndpoint {
     }
 
     @GetMapping(value = "/viewNearbyTrucks", produces = "application/json")
-    public Optional<List<Tuple.Pair<Double, Double>>> viewNearbyTrucks(double userlat, double userlong){
+    public Optional<List<Tuple.Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong){
         return unsecureFoodTruckService.viewNearbyTrucks(userlat, userlong);
     }
 }

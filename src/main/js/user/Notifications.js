@@ -9,7 +9,6 @@ import {
 	Col,
 	Container
 } from 'reactstrap';
-import {update} from 'js/axios';
 
 export class Notifications extends React.Component {
 	constructor(props) {
@@ -32,8 +31,19 @@ export class Notifications extends React.Component {
 
 	markAsRead(userId, truckId, sent, index) {
 		Axios.changeNotificationStatus(userId, truckId, sent).then(result => {
-			this.setState({
-				notifications: update(this.state.notifications, {index: {viewed: true}})
+			this.setState(state => {
+				const notifications = state.notifications.map((note, i) => {
+					if(i === index) {
+						note.viewed = true;
+						return note;
+					} else {
+						return note;
+					}
+				});
+
+				return {
+					notifications,
+				};
 			});
 		});
 	}
@@ -49,7 +59,7 @@ export class Notifications extends React.Component {
 					{this.state.notifications.length > 0 ? (
 						this.state.notifications.map((note, index) => (
 							<ListGroup key={index}>
-								<ListGroupItem>
+								<ListGroupItem disabled={note.viewed}>
 									<Container>
 										<Row>{note.from + ': ' + note.message}</Row>
 										<Row>{note.sent[1] + '/' + note.sent[2] + '/' + note.sent[0]}</Row>
@@ -59,7 +69,8 @@ export class Notifications extends React.Component {
 												<Button
 													color="primary"
 													size="sm"
-													onClick={() => this.markAsRead(this.state.user.id, note.truckId, note.sent, index)}
+													onClick={() => this.markAsRead(this.state.user.id, note.truckID, note.sent, index)}
+													disabled={note.viewed}
 												>
 													Mark as Read
 												</Button>

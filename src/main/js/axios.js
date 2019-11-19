@@ -101,9 +101,10 @@ export function getNotifications(userId) {
 }
 
 export function changeNotificationStatus(userId, truckId, sent) {
-	console.log(JSON.stringify(sent));
-	return axios.post('/api/user/notificationStatus?userId=' + userId +
-		'&truckId=' + truckId + '&sent=' + JSON.stringify(sent));
+	console.log(sent);
+	console.log(userId + ' ' + truckId);
+	return axios.post('/api/user/notificationStatus?user_ID=' + userId +
+		'&truck_ID=' + truckId + '&sent=' + sent);
 }
 
 export function subscribe(foodtruckId, userId) {

@@ -134,8 +134,11 @@ public class UserEndpoint {
 	}
 
 	@PostMapping(value = "/notificationStatus", produces = "application/json")
-	public Boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
-		System.out.println("Got here");
-		return userService.changeNotificationStatus(user_ID, truck_ID, sent);
+	public Boolean changeNotificationStatus(Long user_ID, Long truck_ID,
+											Integer[] sent){
+		System.out.println(user_ID + " " + truck_ID);
+		LocalDateTime time = LocalDateTime.of(sent[0], sent[1], sent[2],
+				sent[3], sent[4], sent[5]);
+		return userService.changeNotificationStatus(user_ID, truck_ID, time);
 	}
 }

@@ -35,7 +35,7 @@ export class Dashboard extends React.Component {
 			user: JSON.parse(Axios.getCookie('user')),
 			recommendedFoodTrucks: [],
 			nearbyFoodTrucks: [],
-			notifications: [],
+			notifications: null,
 			searchFT: null,
 			searchResults: [],
 			loadingSearch: false,
@@ -66,8 +66,14 @@ export class Dashboard extends React.Component {
 		this.updateNearbyDistance();
 		if (this.state.user) {
 			Axios.getNotifications(this.state.user.id).then(result => {
+				let notes = 0;
+				result.forEach(note => {
+					if(note.viewed === false) {
+						notes++;
+					}
+				});
 				this.setState({
-					notifications: result
+					notifications: notes
 				});
 			});
 		}
@@ -220,10 +226,8 @@ export class Dashboard extends React.Component {
 													<Badge color="secondary">
 														{this.state
 															.notifications
-															.length > 0
 															? this.state
 																	.notifications
-																	.length
 															: null}
 													</Badge>
 												</NavLink>

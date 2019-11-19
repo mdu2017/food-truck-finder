@@ -5,6 +5,7 @@ import ViewMarker from 'js/images/food_truck_existing.png';
 import * as Axios from 'js/axios';
 import {Button, ListGroup, ListGroupItem} from 'reactstrap';
 import {Link} from 'react-router-dom';
+import {Router} from 'react-router-dom';
 
 // Currently in dashboard and Create food truck page
 const style = {
@@ -265,34 +266,34 @@ export class MapContainer extends React.Component {
 					{this.state.nearbyTrucks.map((marker, index) => {
 						return (
 							<Marker
+								id={index}
 								onClick={this.onMarkerClick}
 								key={`marker-${index}`}
 								icon={ViewMarker}
+								description={this.state.trucks[index].description}
+								// url={`/food-truck-details/${this.state.trucks[index].id}`}
 								position={{
 									lat: marker.lat,
 									lng: marker.lng
 								}}
 								name={this.state.trucks[index].name}>
-
-								{/*<InfoWindow*/}
-								{/*	id={'ftWindow'}*/}
-								{/*	// key={`infoWindow-${index}`}*/}
-								{/*	marker={this.state.activeMarker}*/}
-								{/*	visible={this.state.showingInfoWindow}>*/}
-								{/*</InfoWindow>*/}
 							</Marker>
 
 						);
 					})}
 
-					<InfoWindow
-						marker={this.state.activeMarker}
-						visible={this.state.showingInfoWindow}>
-						<div>
-							<h3>{this.state.selectedPlace.name}</h3>
-							{/*<a href={'/food-truck-details/:index'}>Visit Info Page</a>*/}
-						</div>
-					</InfoWindow>
+					{/*TODO: Click details page from the info window*/}
+					{this.state.trucks.map((marker, index) => {
+						return (
+							<InfoWindow
+								marker={this.state.activeMarker}
+								visible={this.state.showingInfoWindow}>
+								<h3>{this.state.selectedPlace.name}</h3>
+								<h6>{this.state.selectedPlace.description}</h6>
+								<a href={`/food-truck-details/${this.state.trucks[index].id}`}>View Details Page</a>
+							</InfoWindow>
+						);
+					})}
 
 					{/*Display nearby food trucks*/}
 					{/*{this.displayMarkers()}*/}

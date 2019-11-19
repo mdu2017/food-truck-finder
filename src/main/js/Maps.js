@@ -3,9 +3,6 @@ import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import ViewMarker from 'js/images/food_truck_existing.png';
 import * as Axios from 'js/axios';
-import {Button, ListGroup, ListGroupItem} from 'reactstrap';
-import {Link} from 'react-router-dom';
-import {Router} from 'react-router-dom';
 
 // Currently in dashboard and Create food truck page
 const style = {
@@ -61,7 +58,6 @@ export class MapContainer extends React.Component {
 	}
 
 	// View nearby trucks when loading map
-    //TODO: WIP
 	componentDidMount(){
         Axios.viewNearbyFT(this.state.centerLat, this.state.centerLng).then(result => {
 
@@ -70,10 +66,6 @@ export class MapContainer extends React.Component {
 
             	//Food truck DTOs
             	this.state.trucks.push(tuple.third);
-
-                // console.log('third is ');
-                // console.log(tuple.third.name);
-                // console.log(tuple.third.id);
 
                 //Location pair values (because tuple object doesnt work)
                 let loc = {lat: tuple.first, lng: tuple.second};
@@ -89,7 +81,8 @@ export class MapContainer extends React.Component {
     }
 
 	// Passes the selected Location back to caller
-    // TODO: if not caught, marker onClick doesnt close info window
+    // TODO: if not caught, clicking map doesn't close info window
+    // TODO: Bug - infowindow opening 3 times
     handleSelection(lat, long) {
 	    try {
 	        this.props.handleMapSelection(lat, long);
@@ -98,50 +91,6 @@ export class MapContainer extends React.Component {
 	        console.error('handleMapSelection Not Used');
         }
     }
-
-	// Sample function to display nearby food trucks
-	// displayMarkers = () => {
-	// 	return this.state.nearbyTrucks.map((marker, index) => {
-	// 		return (
-	// 			<Marker
-	// 				onClick={this.onMarkerClick}
-	// 				key={`marker-${index}`}
-	// 				icon={ViewMarker}
-	// 				position={{
-	// 					lat: marker.lat,
-	// 					lng: marker.lng
-	// 				}}
-	// 				name={this.state.trucks[index].name}
-	// 			>
-	// 				<InfoWindow
-	// 					id={'ftWindow'}
-	// 					key={`infoWindow-${index}`}
-	// 					marker={this.state.activeMarker}
-	// 					visible={this.state.showingInfoWindow}>
-	// 				</InfoWindow>
-	// 			</Marker>
-	// 		);
-	// 	});
-	// };
-
-
-	// Sample function to display nearby food trucks
-	// displayMarkers = () => {
-	// 	return this.state.nearbyTrucks.map((marker, index) => {
-	// 		return (
-	// 			<Marker
-	// 				onClick={this.onMarkerClick}
-	// 				key={index}
-	// 				icon={ViewMarker}
-	// 				position={{
-	// 					lat: marker.lat,
-	// 					lng: marker.lng
-	// 				}}
-	// 				name={'Food truck ' + index}
-	// 			/>
-	// 		);
-	// 	});
-	// };
 
 	// Gets and sets users current location
 	getLocation() {
@@ -201,11 +150,11 @@ export class MapContainer extends React.Component {
 
 	//Opens info window when marker clicked
 	onMarkerClick = (props, marker, e) => {
-		this.setState({
-			selectedPlace: props,
-			activeMarker: marker,
-			showingInfoWindow: true
-		});
+        this.setState({
+            selectedPlace: props,
+            activeMarker: marker,
+            showingInfoWindow: true
+        });
 	};
 
 	// TODO: Set location when marker is dragged (modify for multiple markers??)
@@ -271,7 +220,6 @@ export class MapContainer extends React.Component {
 								key={`marker-${index}`}
 								icon={ViewMarker}
 								description={this.state.trucks[index].description}
-								// url={`/food-truck-details/${this.state.trucks[index].id}`}
 								position={{
 									lat: marker.lat,
 									lng: marker.lng
@@ -282,7 +230,7 @@ export class MapContainer extends React.Component {
 						);
 					})}
 
-					{/*TODO: Click details page from the info window*/}
+					{/* Set infoWindows for each marker */}
 					{this.state.trucks.map((marker, index) => {
 						return (
 							<InfoWindow
@@ -290,47 +238,12 @@ export class MapContainer extends React.Component {
 								visible={this.state.showingInfoWindow}>
 								<h3>{this.state.selectedPlace.name}</h3>
 								<h6>{this.state.selectedPlace.description}</h6>
-								<a href={`/food-truck-details/${this.state.trucks[index].id}`}>View Details Page</a>
+								<a href={`#/food-truck-details/${this.state.selectedPlace.id+1}`}>View Details Page</a>
 							</InfoWindow>
 						);
 					})}
 
-					{/*Display nearby food trucks*/}
-					{/*{this.displayMarkers()}*/}
-
-					{/*{this.displayInfoWindows()}*/}
-
-					{/*Generates info windows for all markers (must be put after displayMarkers*/}
-					{/*{this.state.nearbyTrucks.map((truck, index) => {*/}
-					{/*	return(*/}
-					{/*		<InfoWindow*/}
-					{/*			id={'ftWindow'}*/}
-					{/*			marker={this.state.activeMarker}*/}
-					{/*			key={index}*/}
-					{/*			visible={this.state.showingInfoWindow}>*/}
-					{/*			<div>*/}
-					{/*				<h3>{this.state.selectedPlace.name}</h3>*/}
-					{/*				<h6>{this.state.trucks[index].name}</h6>*/}
-					{/*				/!*<a href={'/food-truck-details/:index'}>Visit Info Page</a>*!/*/}
-					{/*			</div>*/}
-					{/*		</InfoWindow>*/}
-					{/*	);*/}
-					{/*})}*/}
 				</Map>
-
-			{/* {console.log(this.state.nearbyTrucks)}*/}
-				{console.log(this.state.trucks)}
-
-			{/*{this.displayMarkers()}*/}
-
-			{/*{this.getNearbyTrucks()}*/}
-			{/*{console.log(this.state.viewNearbyTrucks)}*/}
-
-			{/*Test truck lat (WORKS) */}
-			{/*{console.log('truck lat: ' + this.state.ftLat + '\n' + 'truck lng: ' + this.state.ftLng)}*/}
-
-			{/*Test user location (doesnt work before map loads)*/}
-			{/*{console.log('user lat: ' + this.state.centerLat + ' | user lng: ' + this.state.centerLng)}*/}
 			</div>
 		);
 	}

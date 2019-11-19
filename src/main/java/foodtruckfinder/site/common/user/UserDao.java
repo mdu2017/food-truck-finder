@@ -177,16 +177,22 @@ public class UserDao {
 		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID")));
 	}
 
-	public Optional<List<String>> getNotifications(Long userId){
-		String sql = "SELECT NAME, MESSAGE FROM NOTIFICATION, FOOD_TRUCK WHERE " +
-				"FOOD_TRUCK.FOOD_TRUCK_ID = NOTIFICATION.TRUCK_ID AND USER_ID = " +
-				":userId";
+	public Optional<List<Notification>> getNotifications(Long userId){
+		String sql = "SELECT NAME, MESSAGE, NOTIFICATION.TRUCK_ID, " +
+				"SENT FROM NOTIFICATION, FOOD_TRUCK WHERE " +
+				"FOOD_TRUCK.FOOD_TRUCK_ID = NOTIFICATION.TRUCK_ID AND " +
+				"USER_ID = :userId";
 
 		Map<String, ?> params = _Maps.map("userId", userId);
 
-		List<String> truckAndMessage = jdbcTemplate.query(sql, params,
-				(rs, rowNum) -> rs.getString("NAME") + ": " +
-						rs.getString("MESSAGE"));
+		List<Notification> truckAndMessage = jdbcTemplate.query(sql, params,
+				(rs, rowNum) -> {
+			Notification noti = new Notification();
+			noti.setMessage(rs.getString("MESSAGE"));
+			noti.setSent(rs.getTimestamp("SENT").toLocalDateTime());
+			noti.setFrom(rs.getString("NAME"));
+			return noti;
+		});
 
 		return Optional.ofNullable(truckAndMessage);
 	}

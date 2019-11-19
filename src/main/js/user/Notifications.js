@@ -22,10 +22,15 @@ export class Notifications extends React.Component {
 
 	componentDidMount() {
 		Axios.getNotifications(this.state.user.id).then(result => {
+			console.log(result);
 			this.setState({
 				notifications: result
 			});
 		});
+	}
+
+	markAsRead() {
+
 	}
 
 	render() {
@@ -41,7 +46,8 @@ export class Notifications extends React.Component {
 							<ListGroup key={index}>
 								<ListGroupItem>
 									<Container>
-										<Row>{note}</Row>
+										<Row>{note.from + ': ' + note.message}</Row>
+										<Row>{note.sent[1] + '/' + note.sent[2] + '/' + note.sent[0]}</Row>
 										<br />
 										<Row>
 											<Col sm={{ size: 'auto' }}>

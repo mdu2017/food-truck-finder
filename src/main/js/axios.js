@@ -100,6 +100,10 @@ export function getNotifications(userId) {
 	return axios.get('/api/user/getNotifications?userId=' + userId);
 }
 
+export function markAsRead(userId, truckId, sent) {
+
+}
+
 export function subscribe(foodtruckId, userId) {
 	return axios.post(
 		'api/user/subscribe?ftid=' + foodtruckId + '&userid=' + userId

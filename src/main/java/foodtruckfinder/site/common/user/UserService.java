@@ -1,6 +1,7 @@
 package foodtruckfinder.site.common.user;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -9,6 +10,7 @@ import java.util.Optional;
 
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -143,6 +145,43 @@ public class UserService {
 		private long id;
 		private Map<String, Object> attributes;
 
+		//User preferences
+		private double prefDistance = 0.5;
+		private List<FoodTruckDto.FoodType> prefFoodTypes = new ArrayList<FoodTruckDto.FoodType>();
+		private double prefHigh = 1000.0;
+		private double prefLow = 0.0;
+
+		public double getPrefDistance() {
+			return prefDistance;
+		}
+
+		public void setPrefDistance(double prefDistance) {
+			this.prefDistance = prefDistance;
+		}
+
+		public List<FoodTruckDto.FoodType> getPrefFoodTypes() {
+			return prefFoodTypes;
+		}
+
+		public void setPrefFoodTypes(List<FoodTruckDto.FoodType> prefFoodTypes) {
+			this.prefFoodTypes = prefFoodTypes;
+		}
+
+		public double getPrefHigh() {
+			return prefHigh;
+		}
+
+		public void setPrefHigh(double prefHigh) {
+			this.prefHigh = prefHigh;
+		}
+
+		public double getPrefLow() {
+			return prefLow;
+		}
+
+		public void setPrefLow(double prefLow) {
+			this.prefLow = prefLow;
+		}
 
 		public String getPrincipal() {
 			return principal;
@@ -200,6 +239,9 @@ public class UserService {
 		userDto.setIsOwner(request.getOwner());
 		userDto.setRoles(_Lists.list("ROLE_USER"));
 		userDto.setId(request.getId());
+		userDto.setPrefDistance(request.getPrefDistance());
+		userDto.setPrefHigh(request.getPrefHigh());
+		userDto.setPrefLow(request.getPrefLow());
 
 		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
 		userAuthenticationDto.setUser(userDto);

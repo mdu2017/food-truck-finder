@@ -1,9 +1,11 @@
 package foodtruckfinder.site.common.user;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 
 import foodtruckfinder.site.common.External.Notification;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import alloy.util.Momento;
@@ -17,6 +19,43 @@ public class UserDto implements Momento<String> {
 	private String principal;
 	private String username;
 	private boolean isOwner;
+
+	private List<FoodTruckDto.FoodType> prefFoodTypes = new ArrayList<FoodTruckDto.FoodType>();
+	private double prefDistance = 0.5;
+	private double prefHigh = 1000;
+	private double prefLow = 0;
+
+	public List<FoodTruckDto.FoodType> getPrefFoodTypes() {
+		return prefFoodTypes;
+	}
+
+	public void setPrefFoodTypes(List<FoodTruckDto.FoodType> prefFoodTypes) {
+		this.prefFoodTypes = prefFoodTypes;
+	}
+
+	public double getPrefDistance() {
+		return prefDistance;
+	}
+
+	public void setPrefDistance(double prefDistance) {
+		this.prefDistance = prefDistance;
+	}
+
+	public double getPrefHigh() {
+		return prefHigh;
+	}
+
+	public void setPrefHigh(double prefHigh) {
+		this.prefHigh = prefHigh;
+	}
+
+	public double getPrefLow() {
+		return prefLow;
+	}
+
+	public void setPrefLow(double prefLow) {
+		this.prefLow = prefLow;
+	}
 
 	public Long getId() {
 		return id;

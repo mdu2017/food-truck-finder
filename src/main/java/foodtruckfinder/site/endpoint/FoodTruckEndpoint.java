@@ -99,9 +99,4 @@ public class FoodTruckEndpoint {
 	public void removeDeal(Long truckID) {
         foodTruckService.removeDeal(truckID);
     }
-
-	@GetMapping(value = "/getCurrentLocation", produces = "application/json")
-	public Optional<Tuple.Pair<Double, Double>> getCurrentLocation(Long foodTruckId){
-		return foodTruckService.getCurrentLocation(foodTruckId);
-	}
 }

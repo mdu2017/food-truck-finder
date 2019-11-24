@@ -1,5 +1,6 @@
 package foodtruckfinder.site.endpoint;
 
+import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -65,5 +66,10 @@ public class ExampleEndpoint {
     @GetMapping(value = "/getRatingByTruck", produces = "application/json")
     public List<Rating> getRatingByTruck(Long truck_ID){
         return unsecureFoodTruckService.getRatingByTruck(truck_ID);
+    }
+
+    @GetMapping(value = "/viewNearbyTrucks", produces = "application/json")
+    public Optional<List<Tuple.Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong){
+        return unsecureFoodTruckService.viewNearbyTrucks(userlat, userlong);
     }
 }

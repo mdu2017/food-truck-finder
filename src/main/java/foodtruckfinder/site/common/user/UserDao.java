@@ -177,16 +177,23 @@ public class UserDao {
 		return Optional.ofNullable(jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID")));
 	}
 
-	public Optional<List<String>> getNotifications(Long userId){
-		String sql = "SELECT NAME, MESSAGE FROM NOTIFICATION, FOOD_TRUCK WHERE " +
-				"FOOD_TRUCK.FOOD_TRUCK_ID = NOTIFICATION.TRUCK_ID AND USER_ID = " +
-				":userId";
+	public Optional<List<Notification>> getNotifications(Long userId){
+		String sql = "SELECT NAME, MESSAGE, TRUCK_ID, " +
+				"SENT, VIEWED FROM NOTIFICATION, FOOD_TRUCK WHERE " +
+				"FOOD_TRUCK_ID = TRUCK_ID AND USER_ID = :userId";
 
 		Map<String, ?> params = _Maps.map("userId", userId);
 
-		List<String> truckAndMessage = jdbcTemplate.query(sql, params,
-				(rs, rowNum) -> rs.getString("NAME") + ": " +
-						rs.getString("MESSAGE"));
+		List<Notification> truckAndMessage = jdbcTemplate.query(sql, params,
+				(rs, rowNum) -> {
+			Notification noti = new Notification();
+			noti.setMessage(rs.getString("MESSAGE"));
+			noti.setSent(rs.getTimestamp("SENT").toLocalDateTime());
+			noti.setFrom(rs.getString("NAME"));
+			noti.setTruckID(rs.getLong("TRUCK_ID"));
+			noti.setViewed(rs.getBoolean("VIEWED"));
+			return noti;
+		});
 
 		return Optional.ofNullable(truckAndMessage);
 	}
@@ -246,6 +253,7 @@ public class UserDao {
 	}
 
 	public boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
+		System.out.println("Got here");
 		Timestamp time = Timestamp.valueOf(sent);
 		String sql = "UPDATE NOTIFICATION SET VIEWED = 1 WHERE USER_ID = :user_ID AND TRUCK_ID = :truck_ID AND SENT = :sent";
 		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "sent", time);

@@ -80,12 +80,13 @@ export class Dashboard extends React.Component {
 				this.setState({ loadingSearch: true }, () => {
 					this.props
 						.searchFoodTrucks(this.state.searchFT)
-						.then(result =>
+						.then(result => {
 							this.setState({
 								loadingSearch: false,
 								searchResults: result
-							})
-						);
+							});
+							// window.location.href = '/#/search-trucks';
+						});
 				});
 			}.bind(this),
 			250
@@ -341,7 +342,7 @@ export class Dashboard extends React.Component {
 										<Col sm="12">
 											<div>
 												<Form
-													onSubmit={this.handleSubmit}
+													onChange={this.handleSubmit}
 													inline
 												>
 													<FormGroup inline>

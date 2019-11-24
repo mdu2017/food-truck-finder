@@ -342,6 +342,11 @@ public class FoodTruckDao {
 		}
 	}
 
+    /**
+     * Remove a food truck
+     * @param truck_id the id to remove
+     * @return success
+     */
 	public boolean remove(Long truck_id){
 		try {
 			String sql = "DELETE FROM FOOD_TRUCK WHERE FOOD_TRUCK_ID = :truck_id";

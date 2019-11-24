@@ -10,6 +10,7 @@ import java.util.Optional;
 import java.util.stream.Collectors;
 
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.External.Notification;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;

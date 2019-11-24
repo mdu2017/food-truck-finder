@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.user.Notification;
+import foodtruckfinder.site.common.External.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;

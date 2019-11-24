@@ -142,7 +142,9 @@ public class UserEndpoint {
 	}
 
 	@PostMapping(value = "/removeNotification", produces = "application/json")
-	public void removeNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
-		userService.deleteNotification(user_ID, truck_ID, sent);
+	public void removeNotification(Long user_ID, Long truck_ID, Integer[] sent){
+		LocalDateTime time = LocalDateTime.of(sent[0], sent[1], sent[2],
+				sent[3], sent[4], sent[5]);
+		userService.deleteNotification(user_ID, truck_ID, time);
 	}
 }

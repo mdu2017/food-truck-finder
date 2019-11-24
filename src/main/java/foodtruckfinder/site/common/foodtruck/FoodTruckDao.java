@@ -73,32 +73,8 @@ public class FoodTruckDao {
 //				foodTruckDto.setMenu(menu);
 
 				//schedule
-				String schedsql = "SELECT DAY, START, END, LATITUDE, LONGITUDE, TRUCK_STOP.STOP_ID AS STOP_ID FROM TRUCK_STOP, SCHEDULE " +
-						"WHERE TRUCK_ID = :foodTruckId AND SCHEDULE.STOP_ID = TRUCK_STOP.STOP_ID";
 
-				Map<String, List<Stop>> schedule = jdbcTemplate.query(schedsql, parameters, (ResultSet schedrs) -> {
-					Map<String, List<Stop>> results = new HashMap<>();
-					while (schedrs.next()) {
-						Stop s1 = new Stop();
-						s1.setStart(schedrs.getTimestamp("START").toLocalDateTime());
-						s1.setEnd(schedrs.getTimestamp("END").toLocalDateTime());
-						s1.setLat(schedrs.getDouble("LATITUDE"));
-						s1.setLog(schedrs.getDouble("LONGITUDE"));
-                        s1.setId(schedrs.getLong("STOP_ID"));
-
-						//add it to the list/map
-						String day = schedrs.getString("DAY");
-						if(results.containsKey(day)){
-						    results.get(day).add(s1);
-                        } else {
-						    List<Stop> l = new ArrayList<>();
-						    l.add(s1);
-                            results.put(day, l);
-                        }
-					}
-					return results;
-				});
-				foodTruckDto.setSchedule(schedule);
+				foodTruckDto.setSchedule(getSchedule(Long.valueOf(id)));
 
 				//TODO::truck_image
 				//not right now
@@ -149,26 +125,6 @@ public class FoodTruckDao {
 
 				//need to get menu, schedule, truck_image, and type
 				//For menu, get a list
-				/**
-				 * "Default menu" (take down when done)
-				long truckID = foodTruckDto.getId();
-				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :truckID";
-
-				long num = 10;
-
-				//Triple tuple
-				Triple<String, String, Double> temp = new Tuple3<>("a", "b", 3.14);
-
-				//Pair tuple
-				Pair<Long, Triple<String, String, Double>> item =
-						new Tuple2<Long, Triple<String, String, Double>>(num, temp);
-
-				//Menu list
-				List<Pair<Long, Triple<String, String, Double>>> menu =
-						new ArrayList<>();
-				menu.add(item);
-				 */
-
 //				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :foodTruckId";
 //
 //				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
@@ -186,24 +142,8 @@ public class FoodTruckDao {
 				foodTruckDto.setMenu(null);
 
 				//schedule
-//				String schedsql = "SELECT DAY, START, END, LATITUDE, LONGITUDE FROM TRUCK_STOP, SCHEDULE " +
-//						"WHERE TRUCK_ID = :foodTruckId AND SCHEDULE.STOP_ID = TRUCK_STOP.STOP_ID";
-//
-//				Map<String, Stop> schedule = jdbcTemplate.query(schedsql, parameters, (ResultSet schedrs) -> {
-//					Map<String, Stop> results = new HashMap<>();
-//					while (schedrs.next()) {
-//						Stop s1 = new Stop();
-//						s1.setStart(schedrs.getTimestamp("START").toLocalDateTime());
-//						s1.setEnd(schedrs.getTimestamp("END").toLocalDateTime());
-//						s1.setLat(schedrs.getDouble("LATITUDE"));
-//						s1.setLog(schedrs.getDouble("LONGITUDE"));
-//						results.put(schedrs.getString("DAY"), s1);
-//					}
-//					return results;
-//				});
+				foodTruckDto.setSchedule(getSchedule(foodTruckDto.getId()));
 
-				//Temporary schedule
-				foodTruckDto.setSchedule(null);
 
 				//TODO::truck_image
 				//not right now
@@ -280,36 +220,7 @@ public class FoodTruckDao {
 			}
 
 			//Update schedule in database
-            //Need to remove any stops not still present -- do this by removing all tuples associated with the
-            // food truck then adding them all back :)
-            String deleteSql = "DELETE FROM TRUCK_STOP as ts, SCHEDULE as s " +
-                    "WHERE ts.STOP_ID = s.STOP_ID AND s.TRUCK_ID = :truckid";
-            Map<String, ?> deleteparams = _Maps.map("truckid", foodTruck.getId());
-            jdbcTemplate.update(deleteSql, deleteparams);
-
-			String schedsql;
-			Map<String, List<Stop>> schedule = foodTruck.getSchedule();
-			if(schedule != null){
-				String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
-				for (String key : keys) {//todo:: check if stop exists before adding
-					//add each item to the database
-					schedsql = "INSERT IGNORE INTO SCHEDULE (TRUCK_ID, DAY, STOP_ID) VALUES " +
-							"(:foodTruckid, :day, :stopid )";
-
-					for(Stop s : schedule.get(key)){
-						//update the stops table
-						insertStop(s);
-
-						//update the schedule table after the stops table has been updated
-						Map<String, ?> schedparams = _Maps.map(
-								"foodTruckId", foodTruck.getId(),
-								"day", key,
-								"stopid", s.getId());
-
-						jdbcTemplate.update(schedsql, schedparams);
-					}
-				}
-			}
+            updateSchedule(foodTruck);
 
 			//type stuff
 			int typeid = getFoodTypeId(foodTruck.getType());
@@ -346,10 +257,10 @@ public class FoodTruckDao {
 				);
 			}
 
-
+			//Do it!
 			jdbcTemplate.update(sql, parameters);
 			return foodTruck;
-		} else {
+		} else { //new food truck
 			//todo:: check if the owner exists
 			//Add the menu to the database
 			String menusql;
@@ -381,10 +292,10 @@ public class FoodTruckDao {
 			//overall insert food truck
 			String sql = "INSERT INTO FOOD_TRUCK " +
 					"(OWNER_ID, NAME, TYPE, PRICE_LOW, PRICE_HIGH, STATUS" +
-					(foodTruck.getDescription() != null ? ", DESCRIPTION" : "") +
+					(foodTruck.getDescription() != null ? ", DESCRIPTION" : " ") +
 					") VALUES " +
 					"(:owner_id, :name, :type, :price_low, :price_high, :status" +
-					(foodTruck.getDescription() != null ? ", :desc" : "") +
+					(foodTruck.getDescription() != null ? ", :desc" : " ") +
 					")";
 
 			Map<String, ?> parameters;
@@ -413,29 +324,8 @@ public class FoodTruckDao {
 			jdbcTemplate.update(sql, new MapSqlParameterSource(parameters), keyHolder);
 			foodTruck.setId(keyHolder.getKey().longValue());
 
-			// TODO: Implement Schedule in front end
 			//Insert schedule in database
-			String schedsql = "INSERT INTO SCHEDULE " +
-					"(TRUCK_ID, DAY, STOP_ID) VALUES " +
-					"(:foodTruckId, :day, :stopid)";
-			Map<String, List<Stop>> schedule = foodTruck.getSchedule();
-			if(schedule != null){
-				String[] keys = foodTruck.getSchedule().keySet().toArray(new String[0]);
-				for (String key : keys) {
-					//Add each stop to the database
-					for(Stop s : schedule.get(key)){
-						Long stopid = insertStop(s);
-
-						//add each item to the database
-						Map<String, ?> schedparams = _Maps.map(
-								"foodTruckId", foodTruck.getId(),
-								"day", key,
-								"stopid", stopid);
-
-						jdbcTemplate.update(schedsql, new MapSqlParameterSource(schedparams));
-					}
-				}
-			}
+			updateSchedule(foodTruck);
 //			String sql = "INSERT INTO FOOD_TRUCK (NAME, TYPE) VALUES (:name, :type)";
 //
 //			Map<String, ?> parameters = _Maps.map(
@@ -577,8 +467,6 @@ public class FoodTruckDao {
 		return Optional.ofNullable(trucks);
 	}
 
-	//TODO: WIP
-
 	/**
 	 * Searches for food trucks by name in the database
 	 *
@@ -718,7 +606,6 @@ public class FoodTruckDao {
 	}
 
 	public Optional<List<Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
-
 		/** Grab all nearby food trucks **/
 		List<FoodTruckDto> nearbyTrucks = null;
 
@@ -742,10 +629,6 @@ public class FoodTruckDao {
 				Optional<FoodTruckDto> temp = this.find(ft + "");
 				if (temp.isPresent()) {
 					nearbyTrucks.add(temp.get());
-					System.out.print(""); //so IDE doesnt scream duplicate code
-//					for(FoodTruckDto tempTruck : nearbyTrucks){
-//						System.out.println(tempTruck.getName() + " " + tempTruck.getId());
-//					}
 				}
 			}
 		}
@@ -777,7 +660,7 @@ public class FoodTruckDao {
 			}
 
 			Map<String, ?> params = _Maps.map("day", currDay, "truckid", truckid);
-			Optional<Tuple.Triple<Double, Double, FoodTruckDto>>location = jdbcTemplate.query(sql, params, rs -> {
+			Optional<Tuple.Triple<Double, Double, FoodTruckDto>> location = jdbcTemplate.query(sql, params, rs -> {
 				Triple<Double, Double, FoodTruckDto> loc = null;
 				if(rs.next()) {
 					loc = new Tuple3<Double, Double, FoodTruckDto>(
@@ -808,5 +691,50 @@ public class FoodTruckDao {
 		});
 
 		return r;
+	}
+
+	private List<Tuple.Pair<String, Stop>> getSchedule(Long ftID){
+		Map<String, ?> parameters = _Maps.map("foodTruckId", ftID);
+		String schedsql = "SELECT DAY, START, END, LATITUDE, LONGITUDE, TRUCK_STOP.STOP_ID AS STOP_ID FROM TRUCK_STOP, SCHEDULE " +
+				"WHERE TRUCK_ID = :foodTruckId AND SCHEDULE.STOP_ID = TRUCK_STOP.STOP_ID";
+
+        return jdbcTemplate.query(schedsql, parameters, (schedrs, rownum) -> {
+            Stop s1 = new Stop();
+            s1.setStart(schedrs.getTimestamp("START").toLocalDateTime());
+            s1.setEnd(schedrs.getTimestamp("END").toLocalDateTime());
+            s1.setLat(schedrs.getDouble("LATITUDE"));
+            s1.setLog(schedrs.getDouble("LONGITUDE"));
+            s1.setId(schedrs.getLong("STOP_ID"));
+
+            String day = schedrs.getString("DAY");
+            return new Tuple2<String, Stop>(day, s1);
+        });
+	}
+
+	private void updateSchedule(FoodTruckDto foodTruck){
+		//Need to remove any stops not still present -- do this by removing all tuples associated with the
+		// food truck then adding them all back :)
+		String deleteSql = "DELETE FROM TRUCK_STOP as ts, SCHEDULE as s " +
+				"WHERE ts.STOP_ID = s.STOP_ID AND s.TRUCK_ID = :truckid";
+		Map<String, ?> deleteparams = _Maps.map("truckid", foodTruck.getId());
+		jdbcTemplate.update(deleteSql, deleteparams);
+
+		String schedsql= "INSERT IGNORE INTO SCHEDULE (TRUCK_ID, DAY, STOP_ID) VALUES " +
+				"(:foodTruckid, :day, :stopid)";
+		List<Tuple.Pair<String, Stop>> schedule = foodTruck.getSchedule();
+		if(schedule != null){
+			for(Tuple.Pair<String, Stop> s : schedule){//add each item to the database
+				//update the stops table
+				insertStop(s.getSecond());
+
+				//update the schedule table after the stops table has been updated
+				Map<String, ?> schedparams = _Maps.map(
+						"foodTruckId", foodTruck.getId(),
+						"day", s.getFirst(),
+						"stopid", s.getSecond().getId());
+
+				jdbcTemplate.update(schedsql, schedparams);
+			}
+		}
 	}
 }

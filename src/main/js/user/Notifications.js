@@ -48,6 +48,16 @@ export class Notifications extends React.Component {
 		});
 	}
 
+	removeNotification(userId, truckId, sent, index) {
+		Axios.removeNotification(userId, truckId, sent).then(result => {
+			let array = this.state.notifications;
+			array.splice(index, 1);
+			this.setState({
+				notifications: array
+			});
+		});
+	}
+
 	render() {
 		return (
 			<div>
@@ -79,6 +89,7 @@ export class Notifications extends React.Component {
 												<Button
 													color="danger"
 													size="sm"
+													onClick={() => this.removeNotification(this.state.user.id, note.truckID, note.sent, index)}
 												>
 													Dismiss
 												</Button>

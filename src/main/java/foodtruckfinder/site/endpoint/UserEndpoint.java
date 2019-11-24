@@ -5,7 +5,7 @@ import java.util.List;
 import java.util.Optional;
 
 import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.user.Notification;
+import foodtruckfinder.site.common.External.Notification;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
@@ -136,9 +136,16 @@ public class UserEndpoint {
 	@PostMapping(value = "/notificationStatus", produces = "application/json")
 	public Boolean changeNotificationStatus(Long user_ID, Long truck_ID,
 											Integer[] sent){
-		System.out.println(user_ID + " " + truck_ID);
 		LocalDateTime time = LocalDateTime.of(sent[0], sent[1], sent[2],
 				sent[3], sent[4], sent[5]);
 		return userService.changeNotificationStatus(user_ID, truck_ID, time);
+	}
+
+	@PostMapping(value = "/removeNotification", produces = "application/json")
+
+	public boolean removeNotification(Long user_ID, Long truck_ID, Integer[] sent){
+		LocalDateTime time = LocalDateTime.of(sent[0], sent[1], sent[2],
+				sent[3], sent[4], sent[5]);
+		return userService.deleteNotification(user_ID, truck_ID, time);
 	}
 }

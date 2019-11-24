@@ -157,11 +157,12 @@ export class Dashboard extends React.Component {
 		);
 	}
 
+	//Display search results
 	renderSearchResults() {
 		return (
 			<div>
 				{this.state.loadingSearch ? (
-					<img src={Spinner} width={70} height={70} mode="fit" />
+					<img src={Spinner} width={60} height={60} mode="fit" />
 				) : (
 					<div>
 						<br />

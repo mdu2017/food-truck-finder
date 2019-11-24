@@ -38,6 +38,10 @@ public class UserService {
 		return userDao.findUserByUsername(username);
 	}
 
+	public Optional<List<UserDto>> searchUsers(String username) {
+		return userDao.searchUsers(username);
+	}
+
 	public Optional<UserDto> findUserByID(Long user_ID) {
 		return userDao.findUserByID(user_ID);
 	}

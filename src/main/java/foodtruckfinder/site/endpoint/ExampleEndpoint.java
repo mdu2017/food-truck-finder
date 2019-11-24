@@ -27,6 +27,12 @@ public class ExampleEndpoint {
         return unsecureUserService.findUserByUsername(username);
     }
 
+    @GetMapping(value = "/user/searchUsers", produces = "application/json")
+    public Optional<List<UserDto>> searchUsers(String username) {
+        System.out.println("SEARCH USERS is called: " + username);
+        return unsecureUserService.searchUsers(username);
+    }
+
     @GetMapping(value = "/user/id/{id}", produces = "application/json")
     public Optional<UserDto> viewUserByID(@PathVariable("id") Long user_ID) {
         return unsecureUserService.findUserByID(user_ID);

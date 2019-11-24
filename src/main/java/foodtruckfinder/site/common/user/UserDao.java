@@ -61,9 +61,40 @@ public class UserDao {
 		return Optional.ofNullable(result);
 	}
 
+	//Search user by username
+	public Optional<List<UserDto>> searchUsers(String username) {
+
+		System.out.println("SEARCH USERS IN DAO: " + username);
+
+		System.out.println();
+		List<UserDto> users = null;
+		if (username != null && !username.isEmpty()) {
+
+			//Partial string match
+			String sql = "SELECT * FROM USER WHERE LOCATE(:username, USER.USERNAME) != 0";
+
+			Map<String, ?> params = _Maps.map("username", username);
+			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("username"));
+
+			//If name of food truck found, run findByName
+			if (!names.isEmpty()) {
+				users = new ArrayList<>();
+				for (String ft : names) {
+					//get each food truck
+					Optional<UserDto> temp = findUserByUsername(ft);
+					if (temp.isPresent()) {
+						users.add(temp.get());
+					}
+				}
+			}
+		}
+
+		return Optional.ofNullable(users);
+	}
+
     /*Same as findUserByPrincipal but searches by Username*/
 	public Optional<UserDto> findUserByUsername(String username) {
-		String sql = "SELECT * FROM USER WHERE USERNAME = :username";
+		String sql = "SELECT * FROM USER WHERE LOCATE(:username, USER.USERNAME) != 0";
 
 		Map<String, ?> parameters = _Maps.map("username", username);
 

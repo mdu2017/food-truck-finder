@@ -39,13 +39,6 @@ export class MapContainer extends React.Component {
 			ftLat: null,
 			ftLng: null,
 
-			// TODO: Sample locations to test view nearby food truck (stores object object)
-			// markers: [{lat: 31.538813002764755, lng: -97.14596871840052},
-			// 	{lat: 31.532965359436357, lng: -97.11},
-			// 	{lat: 31.532965359436357, lng: -97.12021951185756},
-			// 	{lat: 31.580066500056425, lng: -97.15},
-			// 	{lat: 31.5724617149029, lng: -97.06357125746302}]
-
 			// Locations of all nearby trucks
 			nearbyTrucks: [],
 

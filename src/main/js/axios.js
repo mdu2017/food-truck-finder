@@ -186,6 +186,15 @@ export function searchFoodTrucks(name) {
 	});
 }
 
+//TODO: search user by username WIP
+export function searchUsers(username){
+	return axios.get('/unsecure/user/searchUsers', {
+		params: {
+			username: username
+		}
+	});
+}
+
 export function getCookie(name) {
 	var nameEQ = name + '=';
 	var ca = document.cookie.split(';');
@@ -283,6 +292,13 @@ Actions.getTruckLocation = (userlat, userlong) => {
 Actions.searchFoodTrucks = name => {
 	return () => {
 		return searchFoodTrucks(name);
+	};
+};
+
+//TODO: Search user by username WIP
+Actions.searchUsers = username => {
+	return () => {
+		return searchUsers(username);
 	};
 };
 

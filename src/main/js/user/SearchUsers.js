@@ -3,7 +3,6 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import MapContainer from 'js/Maps';
 import {
 	Badge,
 	Col,
@@ -36,24 +35,27 @@ export class SearchUsers extends React.Component {
 
 	handleSubmit = event => {
 		this.setState({ loadingSearch: true });
+
 		setTimeout(
-			function() {
-				this.setState({ loadingSearch: true }, () => {
-					this.props
-						.searchFoodTrucks(this.state.searchFT)
-						.then(result =>
-							this.setState({
-								loadingSearch: false,
-								searchResults: result
-							})
-						);
+			function () {
+				this.setState({loadingSearch: true}, () => {
+					Axios.searchUsers(this.state.searchUser).then(result => {
+						this.setState({
+							loadingSearch: false,
+							searchResults: result
+						});
+						console.log(result);
+					});
 				});
 			}.bind(this),
 			250
 		);
+
+
 		event.preventDefault();
 	};
 
+	//TODO: Get reviews/ratings and user's list of subscribed food trucks
 	renderSearchResults() {
 		return (
 			<div>
@@ -66,23 +68,22 @@ export class SearchUsers extends React.Component {
 						this.state.searchResults.length > 0 ? (
 							<div>
 								{this.state.searchResults.map(
-									(truck, index) => (
+									(user, index) => (
 										<ListGroup key={index}>
 											<ListGroupItem>
 												<Link
-													to={`/food-truck-details/${truck.id}`}
+													to={'#'}
 												>
-													<h6>{truck.name}</h6>
+													<h6>{user.username}</h6>
 												</Link>
-												<h8>{truck.description}</h8>
 											</ListGroupItem>
 										</ListGroup>
 									)
 								)}
 							</div>
-						) : this.state.searchFT ? (
+						) : this.state.searchUser ? (
 							<div>
-								<h6>No trucks found.</h6>
+								<h6>No users found.</h6>
 							</div>
 						) : null}
 					</div>
@@ -120,7 +121,7 @@ export class SearchUsers extends React.Component {
 SearchUsers = connect(
 	() => ({}),
 	dispatch => ({
-		searchFoodTrucks: searchFT =>
-			dispatch(Axios.Actions.searchFoodTrucks(searchFT))
+		searchUsers: searchUsers =>
+			dispatch(Axios.Actions.searchUsers(searchUsers))
 	})
 )(SearchUsers);

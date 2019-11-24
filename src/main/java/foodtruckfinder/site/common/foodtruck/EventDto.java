@@ -1,7 +1,10 @@
 package foodtruckfinder.site.common.foodtruck;
 
+import java.util.Map;
+
 public class EventDto {
     public int event_ID;
+    public Map<Long, String> attendingFTs;
     public String description;
     public Stop stop;
 
@@ -33,5 +36,13 @@ public class EventDto {
 
     public void setStop(Stop stop) {
         this.stop = stop;
+    }
+
+    public Map<Long, String> getAttendingFTs() {
+        return attendingFTs;
+    }
+
+    public void setAttendingFTs(Map<Long, String> attendingFTs) {
+        this.attendingFTs = attendingFTs;
     }
 }

@@ -244,10 +244,14 @@ public class UserService {
 
 	public void removeReview(Long truck_ID, Long user_ID){
 		userDao.removeReview(truck_ID, user_ID);
-		return;
 	}
 
 	public boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
 		return userDao.changeNotificationStatus(user_ID, truck_ID, sent);
 	}
+
+	public void deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
+		userDao.deleteNotification(user_ID, truck_ID, sent);
+	}
 }
+

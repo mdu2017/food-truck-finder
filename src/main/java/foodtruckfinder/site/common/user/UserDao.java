@@ -261,4 +261,11 @@ public class UserDao {
 		jdbcTemplate.update(sql, params);
 		return true;
 	}
+
+	public void deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
+		String sql = "DELETE FROM NOTIFICATION WHERE TRUCK_ID = :truck_ID " +
+				"AND USER_ID = :user_ID AND SENT = :sent";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID, "sent", Timestamp.valueOf(sent));
+		jdbcTemplate.update(sql, params);
+	}
 }

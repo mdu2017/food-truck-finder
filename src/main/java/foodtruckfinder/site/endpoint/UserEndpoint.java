@@ -140,4 +140,9 @@ public class UserEndpoint {
 				sent[3], sent[4], sent[5]);
 		return userService.changeNotificationStatus(user_ID, truck_ID, time);
 	}
+
+	@PostMapping(value = "/removeNotification", produces = "application/json")
+	public void removeNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
+		userService.deleteNotification(user_ID, truck_ID, sent);
+	}
 }

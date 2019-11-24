@@ -250,8 +250,8 @@ public class UserService {
 		return userDao.changeNotificationStatus(user_ID, truck_ID, sent);
 	}
 
-	public void deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
-		userDao.deleteNotification(user_ID, truck_ID, sent);
+	public boolean deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
+		return userDao.deleteNotification(user_ID, truck_ID, sent);
 	}
 }
 

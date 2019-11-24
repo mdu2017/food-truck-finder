@@ -5,7 +5,6 @@ import alloy.util.Tuple;
 
 import java.awt.image.BufferedImage;
 import java.util.List;
-import java.util.Map;
 
 /**
  * Created by jlutteringer on 8/23/17.
@@ -16,8 +15,7 @@ public class FoodTruckDto implements Momento<Long> {
 	private FoodType type;
 	private List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu;
 	private BufferedImage truck_image = null;
-//	private List<String, Stop> schedule; //new change that needs to be implemented
-	private Map<String, List<Stop>> schedule;
+	private List<Tuple.Pair<String, Stop>> schedule; //new change that needs to be implemented
 	private Double price_low, price_high;
 	private FTStatus status;
 
@@ -27,7 +25,7 @@ public class FoodTruckDto implements Momento<Long> {
 	public FoodType getType() { return type; }
 	public List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> getMenu() { return menu; }
 	public BufferedImage getTruck_image() { return truck_image; }
-    public Map<String, List<Stop>> getSchedule() { return schedule; }
+	public List<Tuple.Pair<String, Stop>> getSchedule() { return schedule; }
     public double getPrice_low() { return price_low; }
     public double getPrice_high() { return price_high; }
     public FTStatus getStatus() { return status; }
@@ -41,7 +39,7 @@ public class FoodTruckDto implements Momento<Long> {
 	public void setType(String type) { this.type = FoodType.valueOf(type.toUpperCase()); }
 	public void setMenu(List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu) { this.menu = menu; }
 	public void setTruck_image(BufferedImage truck_image) { this.truck_image = truck_image; }
-	public void setSchedule(Map<String, List<Stop>> schedule) { this.schedule = schedule; }
+	public void setSchedule(List<Tuple.Pair<String, Stop>> schedule) { this.schedule = schedule; }
 	public void setPrice_low(Double price_low) { this.price_low = price_low; }
 	public void setPrice_high(Double price_high) { this.price_high = price_high; }
 	public void setStatus(FTStatus status) { this.status = status; }

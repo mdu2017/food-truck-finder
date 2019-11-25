@@ -7,7 +7,7 @@
 
     <changeSet author="etdickey" id="create initial tables">
         <sql>
-            CREATE TABLE `user` (
+            CREATE TABLE `USER` (
             `USER_ID` int(11) NOT NULL AUTO_INCREMENT,
             `USERNAME` varchar(20) NOT NULL,
             `PRINCIPAL` varchar(255) NOT NULL,

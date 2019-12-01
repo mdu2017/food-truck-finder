@@ -110,9 +110,12 @@ export function getNotifications(userId) {
 }
 
 export function changeNotificationStatus(userId, truckId, sent) {
-	console.log(sent);
-	console.log(userId + ' ' + truckId);
 	return axios.post('/api/user/notificationStatus?user_ID=' + userId +
+		'&truck_ID=' + truckId + '&sent=' + sent);
+}
+
+export function removeNotification(userId, truckId, sent) {
+	return axios.post('/api/user/removeNotification?user_ID=' + userId +
 		'&truck_ID=' + truckId + '&sent=' + sent);
 }
 

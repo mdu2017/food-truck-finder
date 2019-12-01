@@ -15,7 +15,7 @@ export class MapContainer extends React.Component {
 		super(props);
 
         //TODO: set current location before map loads
-        this.getLocation();
+		this.getLocation();
 
 		//State for info window/markers/selectedPlace
 		this.state = {
@@ -33,7 +33,7 @@ export class MapContainer extends React.Component {
 			locations: [],
 
 			//One click for location
-            alreadyClicked: false,
+			alreadyClicked: false,
 
 			//Food truck location when clicked
 			ftLat: null,
@@ -52,38 +52,38 @@ export class MapContainer extends React.Component {
 
 	// View nearby trucks when loading map
 	componentDidMount(){
-        Axios.viewNearbyFT(this.state.centerLat, this.state.centerLng).then(result => {
+		Axios.viewNearbyFT(this.state.centerLat, this.state.centerLng).then(result => {
 
             // For each coordinate, set lat and lng values
-            result.forEach(tuple => {
+			result.forEach(tuple => {
 
             	//Food truck DTOs
             	this.state.trucks.push(tuple.third);
 
                 //Location pair values (because tuple object doesnt work)
-                let loc = {lat: tuple.first, lng: tuple.second};
-                this.setState(state => {
-                    const nearbyTrucks = state.nearbyTrucks.concat(loc);
-                    return {
-                        nearbyTrucks,
-                        value: loc
-                    };
-                });
-            });
-        });
-    }
+				let loc = {lat: tuple.first, lng: tuple.second};
+				this.setState(state => {
+					const nearbyTrucks = state.nearbyTrucks.concat(loc);
+					return {
+						nearbyTrucks,
+						value: loc
+					};
+				});
+			});
+		});
+	}
 
 	// Passes the selected Location back to caller
     // TODO: if not caught, clicking map doesn't close info window
     // TODO: Bug - infowindow opening 3 times
-    handleSelection(lat, long) {
+	handleSelection(lat, long) {
 	    try {
 	        this.props.handleMapSelection(lat, long);
-        }
-        catch(error){
+	    }
+	    catch(error){
 	        console.error('handleMapSelection Not Used');
-        }
-    }
+	    }
+	}
 
 	// Gets and sets users current location
 	getLocation() {
@@ -143,11 +143,11 @@ export class MapContainer extends React.Component {
 
 	//Opens info window when marker clicked
 	onMarkerClick = (props, marker, e) => {
-        this.setState({
-            selectedPlace: props,
-            activeMarker: marker,
-            showingInfoWindow: true
-        });
+		this.setState({
+			selectedPlace: props,
+			activeMarker: marker,
+			showingInfoWindow: true
+		});
 	};
 
 	// TODO: Set location when marker is dragged (modify for multiple markers??)

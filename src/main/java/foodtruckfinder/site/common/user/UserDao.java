@@ -9,7 +9,11 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.stream.Collectors;
 
+import alloy.util.Tuple;
+import com.google.common.collect.Maps;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.External.Notification;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import org.elasticsearch.index.query.QueryBuilders;
 import org.elasticsearch.search.builder.SearchSourceBuilder;
@@ -139,6 +143,20 @@ public class UserDao {
 		return Optional.ofNullable(result);
 	}
 
+	private void setPrefFoodTypes(List<FoodTruckDto.FoodType> favorites, Long userID) {
+		//Remove all existing preference for a given user
+		String sql = "DELETE FROM PREFERENCES WHERE USER_ID = :userID";
+		Map<String,?> params = _Maps.map("userID", userID);
+		jdbcTemplate.update(sql, params);
+
+		//Add the new food type preferences
+		for(FoodTruckDto.FoodType favorite : favorites){
+			sql = "INSERT INTO PREFERENCES (FOOD_TYPE_ID, USER_ID) VALUES (:favorite, :userID)";
+			params = _Maps.map("favorite", favorite, "userID", userID);
+			jdbcTemplate.update(sql, params);
+		}
+	}
+
 	/**
 	 * This function saves a user to the database, and if it doesn't have an id, it creates one and inserts it into the database.
 	 *
@@ -153,26 +171,34 @@ public class UserDao {
 					"PASSWORD = :password, " +
 					"USERNAME = :username, " +
 					"IS_OWNER = :owner " +
+					"PREF_DISTANCE = :prefDistance " +
+					"PREF_HIGH = :prefHigh " +
+					"PREF_LOW = :prefLow " +
 					"WHERE USER_ID = :userId";
 
-			Map<String, ?> parameters = _Maps.map(
-					"principal", userAuthentication.getUser().getPrincipal(),
-					"username", userAuthentication.getUser().getUsername(),
-					"password", userAuthentication.getPassword(),
-					"userId", userAuthentication.getUser().getId(),
-					"owner", userAuthentication.getUser().getIsOwner());
+			Map<String, ?> parameters = _Maps.mapPairs(
+					new Tuple.Tuple2<>("principal", userAuthentication.getUser().getPrincipal()),
+					new Tuple.Tuple2<>("username", userAuthentication.getUser().getUsername()),
+					new Tuple.Tuple2<>("password", userAuthentication.getPassword()),
+					new Tuple.Tuple2<>("userId", userAuthentication.getUser().getId()),
+					new Tuple.Tuple2<>("prefDistance", userAuthentication.getUser().getPrefDistance()),
+					new Tuple.Tuple2<>("prefHigh", userAuthentication.getUser().getPrefHigh()),
+					new Tuple.Tuple2<>("prefLow", userAuthentication.getUser().getPrefLow()),
+					new Tuple.Tuple2<>("owner", userAuthentication.getUser().getIsOwner()));
 
 			jdbcTemplate.update(sql, parameters);
-			return userAuthentication;
 		}
 		else {
-			String sql = "INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER) VALUES (:principal, :username, :password, :isOwner)";
+			String sql = "INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER, PREF_DISTANCE, PREF_HIGH, PREF_LOW) VALUES (:principal, :username, :password, :isOwner, :prefDistance, :prefHigh, :prefLow)";
 
-			Map<String, ?> parameters = _Maps.map(
-					"principal", userAuthentication.getUser().getPrincipal(),
-					"password", userAuthentication.getPassword(),
-					"username", userAuthentication.getUser().getUsername(),
-					"isOwner", userAuthentication.getUser().getIsOwner());
+			Map<String, ?> parameters = _Maps.mapPairs(
+					new Tuple.Tuple2<>("principal", userAuthentication.getUser().getPrincipal()),
+					new Tuple.Tuple2<>("username", userAuthentication.getUser().getUsername()),
+					new Tuple.Tuple2<>("password", userAuthentication.getPassword()),
+					new Tuple.Tuple2<>("prefDistance", userAuthentication.getUser().getPrefDistance()),
+					new Tuple.Tuple2<>("prefHigh", userAuthentication.getUser().getPrefHigh()),
+					new Tuple.Tuple2<>("prefLow", userAuthentication.getUser().getPrefLow()),
+					new Tuple.Tuple2<>("owner", userAuthentication.getUser().getIsOwner()));
 
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 
@@ -188,8 +214,9 @@ public class UserDao {
 
 			jdbcTemplate.update(sql, parameters);
 
-			return userAuthentication;
 		}
+		setPrefFoodTypes(userAuthentication.getUser().getPrefFoodTypes(), userAuthentication.getUser().getId());
+		return userAuthentication;
 	}
 
 	public List<Long> getSubscriptions(Long user_id){
@@ -290,5 +317,18 @@ public class UserDao {
 		Map<String, ?> params = _Maps.map("user_ID", user_ID, "truck_ID", truck_ID, "sent", time);
 		jdbcTemplate.update(sql, params);
 		return true;
+	}
+
+	public boolean deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
+		try{
+			String sql = "DELETE FROM NOTIFICATION WHERE TRUCK_ID = :truck_ID " +
+					"AND USER_ID = :user_ID AND SENT = :sent";
+			Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID, "sent", Timestamp.valueOf(sent));
+			jdbcTemplate.update(sql, params);
+			return true;
+		} catch(Exception e) {
+			return false;
+		}
+
 	}
 }

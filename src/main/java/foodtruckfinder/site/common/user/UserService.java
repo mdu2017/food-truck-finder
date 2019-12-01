@@ -1,6 +1,7 @@
 package foodtruckfinder.site.common.user;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -8,7 +9,9 @@ import java.util.Optional;
 // import javax.jws.soap.SOAPBinding.Use;
 
 import alloy.util.Tuple;
+import foodtruckfinder.site.common.External.Notification;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -147,6 +150,43 @@ public class UserService {
 		private long id;
 		private Map<String, Object> attributes;
 
+		//User preferences
+		private double prefDistance = 0.5;
+		private List<FoodTruckDto.FoodType> prefFoodTypes = new ArrayList<FoodTruckDto.FoodType>();
+		private double prefHigh = 1000.0;
+		private double prefLow = 0.0;
+
+		public double getPrefDistance() {
+			return prefDistance;
+		}
+
+		public void setPrefDistance(double prefDistance) {
+			this.prefDistance = prefDistance;
+		}
+
+		public List<FoodTruckDto.FoodType> getPrefFoodTypes() {
+			return prefFoodTypes;
+		}
+
+		public void setPrefFoodTypes(List<FoodTruckDto.FoodType> prefFoodTypes) {
+			this.prefFoodTypes = prefFoodTypes;
+		}
+
+		public double getPrefHigh() {
+			return prefHigh;
+		}
+
+		public void setPrefHigh(double prefHigh) {
+			this.prefHigh = prefHigh;
+		}
+
+		public double getPrefLow() {
+			return prefLow;
+		}
+
+		public void setPrefLow(double prefLow) {
+			this.prefLow = prefLow;
+		}
 
 		public String getPrincipal() {
 			return principal;
@@ -204,6 +244,9 @@ public class UserService {
 		userDto.setIsOwner(request.getOwner());
 		userDto.setRoles(_Lists.list("ROLE_USER"));
 		userDto.setId(request.getId());
+		userDto.setPrefDistance(request.getPrefDistance());
+		userDto.setPrefHigh(request.getPrefHigh());
+		userDto.setPrefLow(request.getPrefLow());
 
 		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
 		userAuthenticationDto.setUser(userDto);
@@ -247,10 +290,14 @@ public class UserService {
 
 	public void removeReview(Long truck_ID, Long user_ID){
 		userDao.removeReview(truck_ID, user_ID);
-		return;
 	}
 
 	public boolean changeNotificationStatus(Long user_ID, Long truck_ID, LocalDateTime sent){
 		return userDao.changeNotificationStatus(user_ID, truck_ID, sent);
 	}
+
+	public boolean deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
+		return userDao.deleteNotification(user_ID, truck_ID, sent);
+	}
 }
+

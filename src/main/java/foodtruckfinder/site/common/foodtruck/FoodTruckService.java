@@ -24,7 +24,6 @@ public class FoodTruckService {
 		return foodTruckDao.find(id);
 	}
 
-	//TODO: function to get food truck by name
 
 	public void save(FoodTruckDto foodTruckDto) throws SQLException {
 //        foodTruckDao.testFT(foodTruckDto);
@@ -41,6 +40,11 @@ public class FoodTruckService {
 
 	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
 		foodTruckDao.addDeal(message, truckID, start, end);
+		Optional<FoodTruckDto> ft = foodTruckDao.find(truckID + "");
+		if(ft.isPresent()){
+			String notifMessage = "[" +  ft.get().getName() + "]: " + message;
+			foodTruckDao.sendNotification(notifMessage, truckID);
+		}
 	}
 
 	public void removeDeal(Long truckID){

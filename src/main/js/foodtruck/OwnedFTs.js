@@ -91,11 +91,11 @@ export class OwnedFoodTrucks extends React.Component {
 										/>
 									</Button>{' '}
 									<Button
-										color="warning"
+										color="success"
 										size="sm"
 										onClick={() => this.toggle(truck.id)}
 									>
-										???
+										$$$
 									</Button>
 								</ListGroupItem>
 							</ListGroup>

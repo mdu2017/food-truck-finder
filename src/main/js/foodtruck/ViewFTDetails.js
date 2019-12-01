@@ -28,7 +28,7 @@ export class ViewFoodTruckDetails extends React.Component {
 			averagePrice: 'N/A',
 			foodTruckId: null,
 			modal: false,
-			rating: -1,
+			rating: 1,
 			review: '',
 			notLoggedIn: false,
 			previousReviews: [],
@@ -262,7 +262,9 @@ export class ViewFoodTruckDetails extends React.Component {
 								<div className="text-left">
 									{this.state.averageRating !== 0 ? (
 										<div>
-											{this.state.averageRating}
+											{this.state.averageRating.toFixed(
+												1
+											)}
 											{' of 5'}
 										</div>
 									) : (

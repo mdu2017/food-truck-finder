@@ -38,6 +38,13 @@ public class UserDao {
 	@Autowired
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
+	private Optional<List<FoodTruckDto.FoodType>> getUserPreferences(Long user_ID){
+		String sql = "SELECT TYPE FROM PREFERENCES WHERE USER_ID = :user_ID";
+		Map<String, ?> params = _Maps.map("user_ID", user_ID);
+		List<FoodTruckDto.FoodType> types = jdbcTemplate.query(sql, params, (rs, rowNum) -> FoodTruckDto.FoodType.values()[rs.getInt("FOOD_TYPE_ID")]);
+		return Optional.ofNullable(types);
+	}
+
 	public Optional<UserAuthenticationDto> findUserByPrincipal(String principal) { // == get user
 		String sql = "SELECT * FROM `USER` WHERE PRINCIPAL = :principal";
 		Map<String, ?> parameters = _Maps.map("principal", principal);
@@ -79,7 +86,10 @@ public class UserDao {
 				userDto.setUsername(rs.getString("USERNAME"));
 				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
                 userDto.setRoles(_Lists.list("ROLE_USER"));
-
+                userDto.setPrefDistance(rs.getDouble("PREF_DISTANCE"));
+                userDto.setPrefLow(rs.getDouble("PREF_LOW"));
+                userDto.setPrefHigh(rs.getDouble("PREF_HIGH"));
+                userDto.setPrefFoodTypes(getUserPreferences(userDto.getId()).get());
 				return userDto;
 			} else {
 				return null;
@@ -102,7 +112,10 @@ public class UserDao {
 				userDto.setUsername(rs.getString("USERNAME"));
 				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
 				userDto.setRoles(_Lists.list("ROLE_USER"));
-
+				userDto.setPrefDistance(rs.getDouble("PREF_DISTANCE"));
+				userDto.setPrefLow(rs.getDouble("PREF_LOW"));
+				userDto.setPrefHigh(rs.getDouble("PREF_HIGH"));
+				userDto.setPrefFoodTypes(getUserPreferences(userDto.getId()).get());
 				return userDto;
 			} else {
 				return null;
@@ -120,7 +133,7 @@ public class UserDao {
 
 		//Add the new food type preferences
 		for(FoodTruckDto.FoodType favorite : favorites){
-			sql = "INSERT INTO PREFERENCES (FOOD_TYPE_ID, USER_ID) VALUES (:favorite, :userID)";
+			sql = "INSERT IGNORE INTO PREFERENCES (FOOD_TYPE_ID, USER_ID) VALUES (:favorite, :userID)";
 			params = _Maps.map("favorite", favorite, "userID", userID);
 			jdbcTemplate.update(sql, params);
 		}

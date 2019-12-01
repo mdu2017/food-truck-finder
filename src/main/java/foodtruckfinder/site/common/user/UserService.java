@@ -295,5 +295,9 @@ public class UserService {
 	public boolean deleteNotification(Long user_ID, Long truck_ID, LocalDateTime sent){
 		return userDao.deleteNotification(user_ID, truck_ID, sent);
 	}
+
+	public void setPrefFoodTypes(List<FoodTruckDto.FoodType> types, Long user_ID){
+		userDao.setPrefFoodTypes(types, user_ID);
+	}
 }
 

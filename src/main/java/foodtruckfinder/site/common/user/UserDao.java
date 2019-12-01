@@ -125,7 +125,7 @@ public class UserDao {
 		return Optional.ofNullable(result);
 	}
 
-	private void setPrefFoodTypes(List<FoodTruckDto.FoodType> favorites, Long userID) {
+	public void setPrefFoodTypes(List<FoodTruckDto.FoodType> favorites, Long userID) {
 		//Remove all existing preference for a given user
 		String sql = "DELETE FROM PREFERENCES WHERE USER_ID = :userID";
 		Map<String,?> params = _Maps.map("userID", userID);

@@ -1,7 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from 'js/images/foodtruck.png';
-import Hamburger from 'js/images/Hamburger.png';
+import Hamburger from 'js/images/hamburger.png';
 import * as Axios from 'js/axios';
 import {
 	Collapse,

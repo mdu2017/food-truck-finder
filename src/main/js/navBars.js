@@ -1,6 +1,7 @@
 import React from 'react';
 import { Link } from 'react-router-dom';
 import Logo from 'js/images/foodtruck.png';
+import Hamburger from 'js/images/Hamburger.png';
 import * as Axios from 'js/axios';
 import {
 	Collapse,
@@ -17,7 +18,8 @@ import {
 	Container,
 	Row,
 	Col,
-	Badge
+	Badge,
+	toggleNavbar
 } from 'reactstrap';
 import { connect } from 'react-redux';
 
@@ -27,11 +29,30 @@ export class CustomNavBar extends React.Component {
 		this.toggleProfile = this.toggleProfile.bind(this);
 		this.state = {
 			viewProfileDrop: props.viewProfileDrop,
+			viewHamburger: false,
+			notificationsNumber: null,
 			user: JSON.parse(Axios.getCookie('user'))
 		};
+		this.getNotifications();
 	}
 
 	logout = () => this.props.logout();
+
+	getNotifications() {
+		if (this.state.user) {
+			Axios.getNotifications(this.state.user.id).then(result => {
+				let notes = 0;
+				result.forEach(note => {
+					if (note.viewed === false) {
+						notes++;
+					}
+				});
+				this.setState({
+					notifications: notes
+				});
+			});
+		}
+	}
 
 	displayViewProfile() {
 		if (this.state.user) {
@@ -72,9 +93,85 @@ export class CustomNavBar extends React.Component {
 		return null;
 	}
 
+	displayHamburger() {
+		return (
+			<div>
+				<DropdownToggle nav>
+					<img src={Hamburger} width={30} height={30} mode="fit" />
+					<Badge color="primary">
+						{this.state.notifications
+							? this.state.notifications
+							: null}
+					</Badge>
+				</DropdownToggle>
+				<DropdownMenu right>
+					<DropdownItem
+						hidden={!this.state.user}
+						tag={Link}
+						to="/view-profile"
+					>
+						View Profile
+					</DropdownItem>
+					<DropdownItem
+						hidden={!this.state.user}
+						href="#/notifications"
+					>
+						Notifications{' '}
+						<Badge color="primary">
+							{this.state.notifications
+								? this.state.notifications
+								: null}
+						</Badge>
+					</DropdownItem>
+					<DropdownItem
+						hidden={!this.state.user}
+						tag={Link}
+						to="/edit-user"
+					>
+						Manage Account
+					</DropdownItem>
+					{this.state.user && (
+						<DropdownItem
+							tag={Link}
+							to="/list-food-trucks"
+							hidden={this.state.user.isOwner !== true}
+						>
+							Manage Trucks
+						</DropdownItem>
+					)}
+					{this.state.user && (
+						<DropdownItem
+							tag={Link}
+							to="/create-food-truck"
+							hidden={this.state.user.isOwner !== true}
+						>
+							Add Food Truck
+						</DropdownItem>
+					)}
+					<DropdownItem hidden={!this.state.user} divider />
+					<DropdownItem href="#/">Dashboard</DropdownItem>
+					<DropdownItem href="#/events">Events</DropdownItem>
+					<DropdownItem href="#/search-users">
+						Search Users
+					</DropdownItem>
+					<DropdownItem href="#/about">About Us</DropdownItem>
+					<DropdownItem href="#/page-1">Page 1</DropdownItem>
+					<DropdownItem divider />
+					<DropdownItem onClick={this.logout}>Logout</DropdownItem>
+				</DropdownMenu>
+			</div>
+		);
+	}
+
 	toggleProfile() {
 		this.setState({
 			viewProfileDrop: !this.state.viewProfileDrop
+		});
+	}
+
+	toggleHamburger() {
+		this.setState({
+			viewHamburger: !this.state.viewHamburger
 		});
 	}
 
@@ -105,11 +202,17 @@ export class CustomNavBar extends React.Component {
 										Login
 									</NavLink>
 								</NavItem>
+								<UncontrolledDropdown nav innavbar="true">
+									{this.displayHamburger()}
+								</UncontrolledDropdown>
 							</Nav>
 						) : (
 							<Nav className="ml-auto" navbar>
-								<UncontrolledDropdown nav innavbar="true">
+								{/* <UncontrolledDropdown nav innavbar="true">
 									{this.displayViewProfile()}
+								</UncontrolledDropdown> */}
+								<UncontrolledDropdown nav innavbar="true">
+									{this.displayHamburger()}
 								</UncontrolledDropdown>
 							</Nav>
 						)}

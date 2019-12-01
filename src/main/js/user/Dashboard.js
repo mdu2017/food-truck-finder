@@ -68,7 +68,7 @@ export class Dashboard extends React.Component {
 			Axios.getNotifications(this.state.user.id).then(result => {
 				let notes = 0;
 				result.forEach(note => {
-					if(note.viewed === false) {
+					if (note.viewed === false) {
 						notes++;
 					}
 				});
@@ -204,7 +204,7 @@ export class Dashboard extends React.Component {
 						<Container>
 							<Row>
 								<Col xs="2">
-									<Row>
+									{/* <Row>
 										<h4>Quick Links</h4>
 										<hr />
 										<Nav vertical>
@@ -250,7 +250,7 @@ export class Dashboard extends React.Component {
 											</NavItem>
 										</Nav>
 									</Row>
-									<br />
+									<br /> */}
 									<Row>
 										<div>
 											<h4>Nearby</h4>
@@ -463,15 +463,11 @@ export class Dashboard extends React.Component {
 							</Row>
 						</Container>
 					</div>
-
 				</div>
 
 				{/*Render map*/}
-				<MapContainer/>
-
+				<MapContainer />
 			</div>
-
-
 		);
 	}
 }

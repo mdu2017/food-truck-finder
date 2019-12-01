@@ -389,7 +389,7 @@ public class FoodTruckDao {
 	 * @param s the stop to insert
 	 * @return The stop's ID as set in the database
 	 */
-	private Long insertStop(Stop s){
+	public Long insertStop(Stop s){
 		if(s != null){
 		    if(s.getId() != null){
                 String sql = "REPLACE INTO TRUCK_STOP " +

@@ -10,7 +10,6 @@ import { CreateAccount } from './user/CreateAccount';
 import { ForgotPassword } from './user/ForgotPassword';
 import { Login } from './user/Login';
 import { Notifications } from './user/Notifications';
-import { ViewEventDetails } from './user/ViewEventDetails';
 import { SearchFoodTrucks } from './SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
 import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
@@ -26,6 +25,7 @@ import { ViewFoodTruckDetails } from './foodtruck/ViewFTDetails';
 // System Pages
 import { HelpPage } from './HelpPage';
 import { AboutUs } from './AboutUs';
+import { EventDetails } from 'js/EventDetails';
 
 export default class Index extends React.Component {
 	render() {
@@ -36,7 +36,6 @@ export default class Index extends React.Component {
 					<Route exact path="/register" component={CreateAccount} />
 					<Route exact path="/login" component={Login} />
 					<Route exact path="/events" component={Events} />
-					<Route exact path="/event" component={ViewEventDetails} />
 					<Route exact path="/help" component={HelpPage} />
 					<Route
 						exact
@@ -95,6 +94,7 @@ export default class Index extends React.Component {
 						path="/user/:username"
 						component={ViewOtherProfile}
 					/>
+					<Route exact path="/events/:eventname" component={EventDetails}/>
 				</div>
 			</HashRouter>
 		);

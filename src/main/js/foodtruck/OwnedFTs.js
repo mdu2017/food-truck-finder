@@ -12,7 +12,10 @@ import {
 	ModalHeader,
 	ModalBody,
 	ModalFooter,
-	Input
+	Input,
+	Form,
+	FormGroup,
+	Label
 } from 'reactstrap';
 
 export class OwnedFoodTrucks extends React.Component {
@@ -176,6 +179,56 @@ export class OwnedFoodTrucks extends React.Component {
 					<form onSubmit={this.handleDealModalSubmit}>
 						<ModalHeader>New Deal</ModalHeader>
 						<ModalBody>
+							<Form inline>
+								<FormGroup>
+									<Label for="exampleDate">Date</Label>
+									<Input
+										type="date"
+										name="date"
+										id="exampleDate"
+										placeholder="date placeholder"
+										onChange={e =>
+											console.log(
+												JSON.stringify(e.target.value)
+											)
+										}
+									/>
+								</FormGroup>
+								<FormGroup>
+									<Label for="exampleTime">Time</Label>
+									<Input
+										type="time"
+										name="time"
+										id="exampleTime"
+										placeholder="time placeholder"
+									/>
+								</FormGroup>
+							</Form>
+							<Form inline>
+								<FormGroup>
+									<Label for="exampleDate">Date</Label>
+									<Input
+										type="date"
+										name="date"
+										id="exampleDate"
+										placeholder="date placeholder"
+										onChange={e =>
+											console.log(
+												JSON.stringify(e.target.value)
+											)
+										}
+									/>
+								</FormGroup>
+								<FormGroup>
+									<Label for="exampleTime">Time</Label>
+									<Input
+										type="time"
+										name="time"
+										id="exampleTime"
+										placeholder="time placeholder"
+									/>
+								</FormGroup>
+							</Form>
 							<Input
 								type="textarea"
 								name="text"

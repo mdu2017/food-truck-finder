@@ -5,14 +5,9 @@ import java.time.LocalDateTime;
 import java.util.*;
 import java.util.stream.Collectors;
 
-import alloy.util.Json;
-import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.foodtruck.Stop;
-import foodtruckfinder.site.common.user.UserDto;
-import foodtruckfinder.site.common.user.UserService;
+import foodtruckfinder.site.common.foodtruck.Deal;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
-import alloy.util.Tuple;
 
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import foodtruckfinder.site.common.foodtruck.FoodTruckService;
@@ -99,4 +94,10 @@ public class FoodTruckEndpoint {
 	public void removeDeal(Long truckID) {
         foodTruckService.removeDeal(truckID);
     }
+
+    @PostMapping(value = "/getDeal", produces = "application/json")
+	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
+
+	@PostMapping(value = "/getAllDeals", produces = "application/json")
+	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
 }

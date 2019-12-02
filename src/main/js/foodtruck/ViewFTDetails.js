@@ -116,7 +116,7 @@ export class ViewFoodTruckDetails extends React.Component {
 									mode="center"
 								/>
 								{individualReview.user}{' '}
-								{individualReview.rating.toFixed(2)} {'/ 5'}
+								{individualReview.rating} {'/ 5'}
 							</h6>
 							<h6>{individualReview.message}</h6>
 							<br />

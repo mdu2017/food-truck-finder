@@ -66,7 +66,7 @@ export class CustomNavBar extends React.Component {
 							View Profile
 						</DropdownItem>
 						<DropdownItem tag={Link} to="/edit-user">
-							Manage Account
+							Edit Account
 						</DropdownItem>
 						<DropdownItem
 							tag={Link}

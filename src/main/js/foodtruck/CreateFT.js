@@ -82,7 +82,7 @@ export class CreateFoodTruck extends React.Component {
 				name: this.state.name,
 				description: this.state.description,
 				// menu: this.state.menu,
-				// schedule: this.state.schedule,
+				schedule: this.state.schedule,
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,

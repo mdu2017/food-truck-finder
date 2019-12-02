@@ -231,7 +231,7 @@ export class ViewFoodTruckDetails extends React.Component {
 								</legend>
 							</Col>
 							<Col xs="auto">
-								<Button color="info" onClick={this.toggle}>
+								<Button color="info" onClick={this.toggle} disabled={this.state.user.isOwner}>
 									Write Review
 								</Button>
 							</Col>

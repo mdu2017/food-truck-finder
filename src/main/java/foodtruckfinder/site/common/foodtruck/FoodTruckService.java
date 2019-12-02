@@ -105,4 +105,8 @@ public class FoodTruckService {
 	public List<Rating> getRatingByTruck(Long truck_ID){
 		return foodTruckDao.getRatingByTruck(truck_ID);
 	}
+
+	public Optional<Deal> getDeal(Long dealID) { return foodTruckDao.getDeal(dealID); }
+
+	public List<Deal> getAllDeals(Long truckID) { return foodTruckDao.getAllDeals(truckID); }
 }

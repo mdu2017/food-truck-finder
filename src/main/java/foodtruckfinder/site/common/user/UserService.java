@@ -263,7 +263,9 @@ public class UserService {
 	}
 
 	public void rateTruck(Long user_ID, Long truck_ID, String message, int rating){
-		userDao.rateTruck(user_ID, truck_ID, message, rating);
+		if(!userDao.findUserByID(user_ID).get().getIsOwner()){
+			userDao.rateTruck(user_ID, truck_ID, message, rating);
+		}
 	}
 
 	public List<Rating> getRatingByUser(Long user_ID){

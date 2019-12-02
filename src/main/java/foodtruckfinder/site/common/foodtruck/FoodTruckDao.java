@@ -1,9 +1,7 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.sql.ResultSet;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -92,6 +90,9 @@ public class FoodTruckDao {
 				});
 				foodTruckDto.setType(type);
 
+				//Deal
+				foodTruckDto.setDeals(getAllDeals(foodTruckDto.getId()));
+
 				return foodTruckDto;
 			} else {
 				return null;
@@ -153,6 +154,11 @@ public class FoodTruckDao {
 
 			//type stuff
 			int typeid = getFoodTypeId(foodTruck.getType());
+
+			//deal stuff
+			for(Deal d : foodTruck.getDeals()){
+				insertDeal(d);
+			}
 
 			//overall update in database
 			String sql = "UPDATE FOOD_TRUCK SET " +
@@ -255,6 +261,12 @@ public class FoodTruckDao {
 
 			//Insert schedule in database
 			updateSchedule(foodTruck);
+
+			//deal stuff
+			for(Deal d : foodTruck.getDeals()){
+				insertDeal(d);
+			}
+
 //			String sql = "INSERT INTO FOOD_TRUCK (NAME, TYPE) VALUES (:name, :type)";
 //
 //			Map<String, ?> parameters = _Maps.map(
@@ -522,15 +534,53 @@ public class FoodTruckDao {
 		}
 	}
 
-	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
-		Timestamp startTime = Timestamp.valueOf(start);
-		Timestamp endTime = Timestamp.valueOf(end);
-		String sql = "INSERT INTO DEAL " +
-				"(TRUCK_ID, MESSAGE, START, END) VALUES " +
-				"(:truckID, :message, :startTime, :endTime);";
-		Map<String, ?> params = _Maps.map("truckID", truckID, "message", message, "start", startTime, "end", endTime);
+	public Deal addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+		Deal d = new Deal();
+		d.setStart(start);
+		d.setEnd(end);
+		d.setMessage(message);
+		d.setTruck_id(truckID);
 
-		jdbcTemplate.update(sql, params);
+		insertDeal(d);
+
+		return d;
+	}
+
+	private Long insertDeal(Deal d){
+		if(d != null){
+			if(d.getDeal_id() != null){
+				String sql = "REPLACE INTO DEAL " +
+						"(DEAL_ID, TRUCK_ID, MESSAGE, START, END) VALUES " +
+						"(:dealID, :truckID, :message, :startTime, :endTime);";
+
+				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
+						"message", d.getMessage(),
+						"start", d.getStartSql(),
+						"end", d.getEndSql(),
+						"dealID", d.getDeal_id());
+
+				jdbcTemplate.update(sql, params);
+				return d.getDeal_id();
+			} else {
+				String sql = "INSERT INTO DEAL " +
+						"(TRUCK_ID, MESSAGE, START, END) VALUES " +
+						"(:truckID, :message, :startTime, :endTime);";
+
+
+				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
+						"message", d.getMessage(),
+						"start", d.getStartSql(),
+						"end", d.getEndSql());
+
+				KeyHolder keyHolder = new GeneratedKeyHolder();
+				jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder);
+
+				d.setDeal_id(keyHolder.getKey().longValue());
+				return keyHolder.getKey().longValue();
+			}
+		} else {
+			return (long) -1;
+		}
 	}
 
 	public void removeDeal(Long truckID){
@@ -670,5 +720,32 @@ public class FoodTruckDao {
 				jdbcTemplate.update(schedsql, schedparams);
 			}
 		}
+	}
+
+	public Optional<Deal> getDeal(Long dealID) {
+		String sql = "SELECT * FROM DEAL WHERE DEAL_ID = :id";
+		Map<String, ?> params = _Maps.map("id", dealID);
+		Deal deal = jdbcTemplate.query(sql, params, rs -> {
+			if(rs.next()){
+				Deal d = new Deal();
+				d.setDeal_id(dealID);
+				d.setMessage(rs.getString("MESSAGE"));
+				d.setTruck_id(rs.getLong("TRUCK_ID"));
+				d.setStart(rs.getTimestamp("START").toLocalDateTime());
+				d.setEnd(rs.getTimestamp("END").toLocalDateTime());
+				return d;
+			} else {
+				return null;
+			}
+		});
+		return Optional.ofNullable(deal);
+	}
+
+	public List<Deal> getAllDeals(Long truckID) {
+		String sql = "SELECT DEAL_ID FROM DEAL WHERE TRUCK_ID = :truckid";
+		Map<String, ?> params = _Maps.map("truckid", truckID);
+		List<Deal> deals = jdbcTemplate.query(sql, params, (rs, rownum) -> getDeal(rs.getLong("DEAL_ID")).get());
+
+		return deals;
 	}
 }

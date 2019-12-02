@@ -18,6 +18,7 @@ public class FoodTruckDto implements Momento<Long> {
 	private List<Tuple.Pair<String, Stop>> schedule; //new change that needs to be implemented
 	private Double price_low, price_high;
 	private FTStatus status;
+	private List<Deal> deals;
 
     //Getters
 	public Long getId() { return id; }
@@ -31,6 +32,7 @@ public class FoodTruckDto implements Momento<Long> {
     public FTStatus getStatus() { return status; }
 	public Long getOwnerId() { return ownerId; }
 	public String getDescription() { return description; }
+	public List<Deal> getDeals() { return deals; }
 
 	//Setters
     public void setId(Long id) { this.id = id; }
@@ -46,6 +48,7 @@ public class FoodTruckDto implements Momento<Long> {
 	public void setStatus(String status){ this.status = FTStatus.valueOf(status.toUpperCase()); }
 	public void setOwnerId(Long ownerId) { this.ownerId = ownerId; }
 	public void setDescription(String description) { this.description = description; }
+	public void setDeals(List<Deal> deals) { this.deals = deals; }
 
 	@Override
 	public String toString() {

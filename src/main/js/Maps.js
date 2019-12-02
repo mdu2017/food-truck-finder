@@ -211,7 +211,7 @@ export class MapContainer extends React.Component {
 								id={index}
 								onClick={this.onMarkerClick}
 								key={`marker-${index}`}
-								icon={ViewMarker}
+								icon={LogoMarker}
 								description={this.state.trucks[index].description}
 								position={{
 									lat: marker.lat,

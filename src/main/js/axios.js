@@ -189,7 +189,23 @@ export function searchFoodTrucks(name) {
 	});
 }
 
-//TODO: search user by username WIP
+export function searchFoodTrucksByType(type){
+	return axios.get('/unsecure/searchFoodTrucksByType', {
+		params: {
+			type: type
+		}
+	});
+}
+
+//TODO: Search by price
+export function searchTrucksByPrice(maxPrice){
+	return axios.get('/unsecure/searchTrucksByPrice', {
+		params: {
+			maxPrice: maxPrice
+		}
+	});
+}
+
 export function searchUsers(username){
 	return axios.get('/unsecure/user/searchUsers', {
 		params: {
@@ -298,7 +314,19 @@ Actions.searchFoodTrucks = name => {
 	};
 };
 
-//TODO: Search user by username WIP
+Actions.searchFoodTrucksByType = type => {
+	return () => {
+		return searchFoodTrucksByType(type);
+	};
+};
+
+//TODO: Search by price
+Actions.searchTrucksByPrice = maxPrice => {
+	return () => {
+		return searchTrucksByPrice(maxPrice);
+	};
+};
+
 Actions.searchUsers = username => {
 	return () => {
 		return searchUsers(username);

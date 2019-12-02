@@ -29,7 +29,6 @@ public class ExampleEndpoint {
 
     @GetMapping(value = "/user/searchUsers", produces = "application/json")
     public Optional<List<UserDto>> searchUsers(String username) {
-        System.out.println("SEARCH USERS is called: " + username);
         return unsecureUserService.searchUsers(username);
     }
 
@@ -61,6 +60,18 @@ public class ExampleEndpoint {
     @GetMapping(value = "/searchFoodTrucks", produces = "application/json")
     public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
         return unsecureFoodTruckService.searchFoodTrucks(name);
+    }
+
+    /** Search food truck by type */
+    @GetMapping(value = "/searchFoodTrucksByType", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchFoodTrucksByType(String type) {
+        return unsecureFoodTruckService.searchFoodTrucksByType(type);
+    }
+
+    //TODO: search by price
+    @GetMapping(value = "/searchTrucksByPrice", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
+        return unsecureFoodTruckService.searchTrucksByPrice(maxPrice);
     }
 
     // Take an id, and look up the corresponding foodtruck

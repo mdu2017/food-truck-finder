@@ -72,9 +72,9 @@ export class SearchUsers extends React.Component {
 										<ListGroup key={index}>
 											<ListGroupItem>
 												<Link
-													to={'#'}
+													to={`/user/${user.username}`}
 												>
-													<h6>{user.username}</h6>
+													<h6>Username: {user.username}</h6>
 												</Link>
 											</ListGroupItem>
 										</ListGroup>

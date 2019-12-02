@@ -63,9 +63,19 @@ public class FoodTruckService {
 		return foodTruckDao.getByOwner(owner_id);
 	}
 
-	//TODO: WIP
+	/** Search food truck */
 	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
 		return foodTruckDao.searchFoodTrucks(name);
+	}
+
+	/** Search food truck */
+	public Optional<List<FoodTruckDto>> searchFoodTrucksByType(String type) {
+		return foodTruckDao.searchFoodTrucksByType(type);
+	}
+
+	public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
+//		return foodTruckDao.searchFoodTrucksByType(maxPrice);
+		return null;
 	}
 
     /**

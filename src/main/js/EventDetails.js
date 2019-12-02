@@ -1,12 +1,12 @@
 import React from 'react';
-import * as NavBars from "js/navBars";
+import * as NavBars from 'js/navBars';
 
 export class EventDetails extends React.Component {
     constructor(props) {
         super(props);
         this.state = {
             event: null
-        }
+        };
     }
 
     render() {

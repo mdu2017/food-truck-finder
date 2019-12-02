@@ -101,77 +101,6 @@ public class FoodTruckDao {
 		return Optional.ofNullable(result);
 	}
 
-	//TODO: Find food truck by name
-	public Optional<FoodTruckDto> findByName(String name) {
-
-		System.out.println("Name in DAO: " + name);
-
-		//Get all food trucks with partial string match
-		String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:foodTruckName, FOOD_TRUCK.NAME) != 0";
-
-		Map<String, ?> parameters = _Maps.map("foodTruckName", name);
-
-		FoodTruckDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			if (rs.next()) {
-
-				FoodTruckDto foodTruckDto = new FoodTruckDto(); //9 fields to set
-				foodTruckDto.setId(rs.getLong("FOOD_TRUCK_ID"));
-				foodTruckDto.setName(rs.getString("NAME"));
-				foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
-				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
-				foodTruckDto.setStatus(rs.getString("STATUS"));
-				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
-				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
-
-				//need to get menu, schedule, truck_image, and type
-				//For menu, get a list
-//				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :foodTruckId";
-//
-//				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
-//					Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
-//							menurs.getLong("ITEM_ID"),
-//							new Tuple3<>(
-//									menurs.getString("NAME"),
-//									menurs.getString("DESCRIPTION"),
-//									menurs.getDouble("PRICE"))
-//					);
-//					return item;
-//				});
-
-				//Temporary menu
-				foodTruckDto.setMenu(null);
-
-				//schedule
-				foodTruckDto.setSchedule(getSchedule(foodTruckDto.getId()));
-
-
-				//TODO::truck_image
-				//not right now
-				foodTruckDto.setTruck_image(null);
-
-				//type
-				String typesql = "SELECT FOOD_TYPE.TYPE FROM FOOD_TYPE, FOOD_TRUCK " +
-						"WHERE FOOD_TRUCK.NAME = :foodTruckName AND FOOD_TRUCK.TYPE = FOOD_TYPE.TYPE_ID";
-				String type = jdbcTemplate.query(typesql, parameters, typers -> {
-					if (typers.next()) {
-						return typers.getString("TYPE");
-					} else {
-						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
-					}
-				});
-
-				//Set Type
-				foodTruckDto.setType(type);
-
-				return foodTruckDto;
-			} else {
-				return null;
-			}
-		});
-
-		return Optional.ofNullable(result);
-	}
-
 	/**
 	 * This function saves a food truck's updates, if any.  If it doesn't have an id associated with it, it adds the
 	 * food truck to the database
@@ -484,20 +413,20 @@ public class FoodTruckDao {
 		if (name != null && !name.isEmpty()) {
 
 			//Partial string match
-			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE LOCATE(:name, FOOD_TRUCK.NAME) != 0";
+			String sql = "SELECT FOOD_TRUCK_ID FROM FOOD_TRUCK WHERE LOCATE(:name, FOOD_TRUCK.NAME) != 0";
 
 			Map<String, ?> params = _Maps.map("name", name);
-			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
+			List<Long> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("FOOD_TRUCK_ID"));
 
 			System.out.println("List of food trucks matching " + name + "\n" + names);
 
 			//If name of food truck found, run findByName
 			if (names != null) {
 				trucks = new ArrayList<>();
-				for (String ft : names) {
+				for (Long ft : names) {
 					//get each food truck
 					//TODO: need to edit find to search for name instead of ID
-					Optional<FoodTruckDto> temp = findByName(ft);
+					Optional<FoodTruckDto> temp = find(ft + "");//findByName(ft);
 					if (temp.isPresent()) {
 						trucks.add(temp.get());
 					}
@@ -719,7 +648,7 @@ public class FoodTruckDao {
 	private void updateSchedule(FoodTruckDto foodTruck){
 		//Need to remove any stops not still present -- do this by removing all tuples associated with the
 		// food truck then adding them all back :)
-		String deleteSql = "DELETE FROM TRUCK_STOP as ts, SCHEDULE as s " +
+		String deleteSql = "DELETE ts.*, s.* FROM TRUCK_STOP as ts, SCHEDULE as s " +
 				"WHERE ts.STOP_ID = s.STOP_ID AND s.TRUCK_ID = :truckid";
 		Map<String, ?> deleteparams = _Maps.map("truckid", foodTruck.getId());
 		jdbcTemplate.update(deleteSql, deleteparams);

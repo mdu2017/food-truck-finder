@@ -23,6 +23,29 @@ export class Notifications extends React.Component {
 	componentDidMount() {
 		Axios.getNotifications(this.state.user.id).then(result => {
 			console.log(result);
+			result.sort(function(a, b) {
+				if(a.sent[0] === b.sent[0]) {
+					if(a.sent[1] === b.sent[1]) {
+						if(a.sent[2] === b.sent[2]) {
+							if(a.sent[3] === b.sent[3]) {
+								if(a.sent[4] === b.sent[4]) {
+									return a.sent[5] - b.sent[5];
+								} else {
+									return a.sent[4] - b.sent[4];
+								}
+							} else {
+								return a.sent[3] - b.sent[3];
+							}
+						} else {
+							return a.sent[2] - b.sent[2];
+						}
+					} else {
+						return a.sent[1] - b.sent[1];
+					}
+				} else {
+					return a.sent[0] - b.sent[0];
+				}
+			});
 			this.setState({
 				notifications: result
 			});

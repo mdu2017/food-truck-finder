@@ -920,6 +920,21 @@ public class FoodTruckDao {
 		}
 	}
 
+	public List<EventDto> getAllEvents(){
+		String sql = "SELECT EVENT_ID FROM EVENT";
+		List<EventDto> events = jdbcTemplate.query(sql, (rs, rownum) -> {
+			Long id = rs.getLong("EVENT_ID");
+			Optional<EventDto> e = this.getEventById(id);
+
+			if(e.isPresent()){
+				return e.get();
+			} else {
+				return null;
+			}
+		});
+		return events;
+	}
+
 	public Optional<Deal> getDeal(Long dealID) {
 		String sql = "SELECT * FROM DEAL WHERE DEAL_ID = :id";
 		Map<String, ?> params = _Maps.map("id", dealID);

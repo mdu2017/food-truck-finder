@@ -173,11 +173,12 @@ public class FoodTruckDao {
 //	}
 
 
+    //TODO: fixing bug
 	public Optional<FoodTruckDto> findByType(int typeID, String type) {
 
 		System.out.println("Type in DAO: " + typeID);
 
-		//Get all food trucks with partial string match
+		//Find by type
 		String sql = "SELECT * FROM FOOD_TRUCK WHERE :typeID = FOOD_TRUCK.TYPE";
 
 		Map<String, ?> parameters = _Maps.map("typeID", typeID);
@@ -571,26 +572,28 @@ public class FoodTruckDao {
 
 		List<FoodTruckDto> trucks = null;
 		String fType = type.toUpperCase();
+        System.out.println(fType);
 
 		if (!type.isEmpty() && type != null) {
 
-			String sql = "SELECT TYPE_ID FROM FOOD_TYPE WHERE FOOD_TYPE.TYPE = :fType";
-
+			String sql = "SELECT * FROM FOOD_TRUCK, " +
+                    "(SELECT TYPE_ID FROM FOOD_TYPE WHERE :fType = FOOD_TYPE.TYPE) AS TRUCKTYPE " +
+                    "WHERE TRUCKTYPE.TYPE_ID = FOOD_TRUCK.TYPE";
 			Map<String, ?> params = _Maps.map("fType", fType);
-			List<Integer> typeIDs = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("TYPE_ID"));
-			System.out.println(typeIDs);
+			List<Integer> truckIDs = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("FOOD_TRUCK_ID"));
+			System.out.println(truckIDs);
 
-			//If name of food truck found, run findByName
-			if (typeIDs != null) {
-				trucks = new ArrayList<>();
-				for (int ids : typeIDs) {
+			//If type is found, get all food trucks with that type
+			if (truckIDs != null) {
+                    trucks = new ArrayList<>();
+                    for (Integer ftID : truckIDs) {
+                        //Get each food truck
+                        Optional<FoodTruckDto> temp = find(ftID.toString());
+                        if (temp.isPresent()) {
+                            trucks.add(temp.get());
+                        }
+                    }
 
-					//Get each food truck
-					Optional<FoodTruckDto> temp = findByType(ids, type);
-					if (temp.isPresent()) {
-						trucks.add(temp.get());
-					}
-				}
 			}
 		}
 

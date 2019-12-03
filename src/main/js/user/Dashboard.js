@@ -151,7 +151,7 @@ export class Dashboard extends React.Component {
 			);
 		}
 		//TODO: use nearby location algorithm in backend
-		else if(this.state.dropdownValue === 'Location'){
+		else if(this.state.dropdownValue === 'Distance'){
 			console.log(' ');
 		}
 
@@ -371,7 +371,7 @@ export class Dashboard extends React.Component {
 															<DropdownItem onClick={this.select}>Truck Name</DropdownItem>
 															<DropdownItem onClick={this.select}>Food Type</DropdownItem>
 															<DropdownItem onClick={this.select}>Price</DropdownItem>
-															<DropdownItem onClick={this.select}>Location</DropdownItem>
+															<DropdownItem onClick={this.select}>Distance</DropdownItem>
 														</DropdownMenu>
 													</ButtonDropdown>
 

@@ -105,4 +105,35 @@ public class FoodTruckService {
 	public List<Rating> getRatingByTruck(Long truck_ID){
 		return foodTruckDao.getRatingByTruck(truck_ID);
 	}
+
+	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
+    	Stop temp = new Stop();
+    	temp.setStart(start);
+    	temp.setEnd(end);
+    	temp.setLog(log);
+    	temp.setLat(lat);
+    	Long stop_ID = foodTruckDao.insertStop(temp);
+    	foodTruckDao.addEvent(details, stop_ID);
+	}
+
+	public void removeEvent(Long event_ID){
+    	foodTruckDao.removeEvent(event_ID);
+	}
+
+	public void signUpForEvent(Long truck_ID, Long event_ID){
+    	foodTruckDao.signUpForEvent(truck_ID, event_ID);
+	}
+
+	public void cancelEventSignup(Long truck_ID, Long event_ID){
+    	foodTruckDao.cancelEventSignup(truck_ID, event_ID);
+    	return;
+	}
+
+	public Optional<EventDto> getEventById(Long event_ID){
+    	return foodTruckDao.getEventById(event_ID);
+	}
+
+	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+    	return foodTruckDao.getAttendingTrucks(event_ID);
+	}
 }

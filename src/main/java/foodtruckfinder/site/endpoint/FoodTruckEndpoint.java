@@ -7,6 +7,7 @@ import java.util.stream.Collectors;
 
 import alloy.util.Json;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.foodtruck.EventDto;
 import foodtruckfinder.site.common.foodtruck.Stop;
 import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
@@ -99,4 +100,36 @@ public class FoodTruckEndpoint {
 	public void removeDeal(Long truckID) {
         foodTruckService.removeDeal(truckID);
     }
+
+    @PostMapping(value = "/addEvent", produces = "application/json")
+	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
+		foodTruckService.addEvent(details, start, end, log, lat);
+		return;
+	}
+
+	@PostMapping(value = "removeDeal", produces = "application/json")
+	public void removeEvent(Long event_ID){
+		foodTruckService.removeEvent(event_ID);
+		return;
+	}
+
+	@PostMapping(value = "/signUpForEvent", produces = "application/json")
+	public void signUpForEvent(Long event_ID, Long truck_ID){
+		foodTruckService.signUpForEvent(event_ID, truck_ID);
+		return;
+	}
+
+	@PostMapping(value = "/cancelEventSignup", produces = "application/json")
+	public void cancelEventSignup(Long truck_ID, Long event_ID){
+		foodTruckService.cancelEventSignup(truck_ID, event_ID);
+		return;
+	}
+
+	@GetMapping(value = "getEventById", produces = "application/json")
+	public Optional<EventDto> getEventById(Long event_ID){
+		return foodTruckService.getEventById(event_ID);
+	}
+
+	@GetMapping(value = "getAttendingTrucks", produces = "application/json")
+	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
 }

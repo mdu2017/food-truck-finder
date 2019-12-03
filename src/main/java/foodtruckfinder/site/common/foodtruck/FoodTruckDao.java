@@ -671,4 +671,81 @@ public class FoodTruckDao {
 			}
 		}
 	}
+
+	public void addEvent(String details, Long stop_ID){
+		String sql = "INSERT INTO EVENT (DESCRIPTION, STOP_ID) VALUES (:details, :stop_ID)";
+		Map<String, ?> params = _Maps.map("details", details, "stop_ID", stop_ID);
+		jdbcTemplate.update(sql, params);
+		return;
+	}
+
+	public void removeEvent(Long event_ID){
+		String sql = "DELETE FROM EVENT WHERE EVENT_ID = :event_ID";
+		Map<String, ?> params = _Maps.map("event_ID", event_ID);
+		jdbcTemplate.update(sql, params);
+	}
+
+	public void signUpForEvent(Long truck_ID, Long event_ID){
+		String sql = "INSERT INTO ATTENDING_EVENT (TRUCK_ID, EVENT_ID) VALUES (:truck_ID, :event_ID)";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "event_ID", event_ID);
+		jdbcTemplate.update(sql, params);
+		return;
+	}
+
+	public void cancelEventSignup(Long truck_ID, Long event_ID){
+		String sql = "DELETE FROM ATTENDING_EVENT WHERE TRUCK_ID = :truck_ID AND EVENT_ID = :event_ID";
+		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "event_ID", event_ID);
+		jdbcTemplate.update(sql, params);
+		return;
+	}
+
+	public Optional<EventDto> getEventById(Long event_ID){
+		String sql = "SELECT * FROM EVENT WHERE EVENT_ID = :event_ID";
+		Map<String, ?> params = _Maps.map("event_ID", event_ID);
+		jdbcTemplate.query(sql, params, (rs) -> {
+			if(rs.next()){
+				EventDto temp = new EventDto();
+				temp.setEvent_ID(event_ID);
+				temp.setDescription(rs.getString("DESCRIPTION"));
+				String tempSql = "SELECT * FROM TRUCK_STOP WHERE STOP_ID = :stop_id";
+				Map<String, ?> tempParams = _Maps.map("stop_id", rs.getLong("STOP_ID"));
+				jdbcTemplate.query(tempSql, tempParams, (resultSet) ->{
+					if(resultSet.next()){
+						Stop eventStop = new Stop();
+						eventStop.setLat(resultSet.getDouble("LATITUDE"));
+						eventStop.setLog(resultSet.getDouble("LONGITUDE"));
+						eventStop.setStart(resultSet.getTimestamp("START").toLocalDateTime());
+						eventStop.setEnd(resultSet.getTimestamp("END").toLocalDateTime());
+						eventStop.setId(rs.getLong("STOP_ID"));
+						temp.setStop(eventStop);
+					}
+					else{
+						temp.setStop(null);
+					}
+				});
+				return temp;
+			}
+			else{
+				return null;
+			}
+		});
+		return null;
+	}
+
+	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+		String sql = "SELECT TRUCK_ID FROM ATTENDING_EVENT WHERE EVENT_ID = :event_ID";
+		Map<String, ?> params = _Maps.map("event_ID", event_ID);
+		List<Long> ids = new ArrayList<>();
+		jdbcTemplate.query(sql, params, (rs) -> {
+			if(rs.next()){
+				ids.add(rs.getLong("TRUCK_ID"));
+			}
+		});
+		if(ids.size() > 0){
+			return Optional.ofNullable(ids);
+		}
+		else{
+			return null;
+		}
+	}
 }

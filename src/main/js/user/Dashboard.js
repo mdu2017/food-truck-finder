@@ -97,7 +97,7 @@ export class Dashboard extends React.Component {
 		}
 	}
 
-	//TODO: Different search by filter
+	//Search feature
 	handleSubmit = event => {
 		this.setState({ loadingSearch: true });
 
@@ -134,7 +134,6 @@ export class Dashboard extends React.Component {
 				250
 			);
 		}
-		//TODO: do max price
 		else if(this.state.dropdownValue === 'Price'){
 			setTimeout(
 				function () {
@@ -150,7 +149,6 @@ export class Dashboard extends React.Component {
 				250
 			);
 		}
-		//TODO: use nearby location algorithm in backend??
 		else if(this.state.dropdownValue === 'Distance'){
 			setTimeout(
 				function () {

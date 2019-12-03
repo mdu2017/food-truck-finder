@@ -102,75 +102,75 @@ public class FoodTruckDao {
 	}
 
 	/** Find food truck by name */
-	public Optional<FoodTruckDto> findByName(String name) {
-
-		System.out.println("Name in DAO: " + name);
-
-		//Get all food trucks with partial string match
-		String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:foodTruckName, FOOD_TRUCK.NAME) != 0";
-
-		Map<String, ?> parameters = _Maps.map("foodTruckName", name);
-
-		FoodTruckDto result = jdbcTemplate.query(sql, parameters, rs -> {
-			if (rs.next()) {
-
-				FoodTruckDto foodTruckDto = new FoodTruckDto(); //9 fields to set
-				foodTruckDto.setId(rs.getLong("FOOD_TRUCK_ID"));
-				foodTruckDto.setName(rs.getString("NAME"));
-				foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
-				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
-				foodTruckDto.setStatus(rs.getString("STATUS"));
-				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
-				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
-
-				//need to get menu, schedule, truck_image, and type
-				//For menu, get a list
-//				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :foodTruckId";
+//	public Optional<FoodTruckDto> findByName(String name) {
 //
-//				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
-//					Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
-//							menurs.getLong("ITEM_ID"),
-//							new Tuple3<>(
-//									menurs.getString("NAME"),
-//									menurs.getString("DESCRIPTION"),
-//									menurs.getDouble("PRICE"))
-//					);
-//					return item;
+//		System.out.println("Name in DAO: " + name);
+//
+//		//Get all food trucks with partial string match
+//		String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:foodTruckName, FOOD_TRUCK.NAME) != 0";
+//
+//		Map<String, ?> parameters = _Maps.map("foodTruckName", name);
+//
+//		FoodTruckDto result = jdbcTemplate.query(sql, parameters, rs -> {
+//			if (rs.next()) {
+//
+//				FoodTruckDto foodTruckDto = new FoodTruckDto(); //9 fields to set
+//				foodTruckDto.setId(rs.getLong("FOOD_TRUCK_ID"));
+//				foodTruckDto.setName(rs.getString("NAME"));
+//				foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
+//				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
+//				foodTruckDto.setStatus(rs.getString("STATUS"));
+//				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
+//				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
+//
+//				//need to get menu, schedule, truck_image, and type
+//				//For menu, get a list
+////				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :foodTruckId";
+////
+////				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
+////					Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
+////							menurs.getLong("ITEM_ID"),
+////							new Tuple3<>(
+////									menurs.getString("NAME"),
+////									menurs.getString("DESCRIPTION"),
+////									menurs.getDouble("PRICE"))
+////					);
+////					return item;
+////				});
+//
+//				//Temporary menu
+//				foodTruckDto.setMenu(null);
+//
+//				//schedule
+//				foodTruckDto.setSchedule(getSchedule(foodTruckDto.getId()));
+//
+//
+//				//TODO::truck_image
+//				//not right now
+//				foodTruckDto.setTruck_image(null);
+//
+//				//type
+//				String typesql = "SELECT FOOD_TYPE.TYPE FROM FOOD_TYPE, FOOD_TRUCK " +
+//						"WHERE FOOD_TRUCK.NAME = :foodTruckName AND FOOD_TRUCK.TYPE = FOOD_TYPE.TYPE_ID";
+//				String type = jdbcTemplate.query(typesql, parameters, typers -> {
+//					if (typers.next()) {
+//						return typers.getString("TYPE");
+//					} else {
+//						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
+//					}
 //				});
-
-				//Temporary menu
-				foodTruckDto.setMenu(null);
-
-				//schedule
-				foodTruckDto.setSchedule(getSchedule(foodTruckDto.getId()));
-
-
-				//TODO::truck_image
-				//not right now
-				foodTruckDto.setTruck_image(null);
-
-				//type
-				String typesql = "SELECT FOOD_TYPE.TYPE FROM FOOD_TYPE, FOOD_TRUCK " +
-						"WHERE FOOD_TRUCK.NAME = :foodTruckName AND FOOD_TRUCK.TYPE = FOOD_TYPE.TYPE_ID";
-				String type = jdbcTemplate.query(typesql, parameters, typers -> {
-					if (typers.next()) {
-						return typers.getString("TYPE");
-					} else {
-						return FoodTruckDto.FoodType.AMERICAN.name();//default to american food, but garuntee that it will be a valid set
-					}
-				});
-
-				//Set Type
-				foodTruckDto.setType(type);
-
-				return foodTruckDto;
-			} else {
-				return null;
-			}
-		});
-
-		return Optional.ofNullable(result);
-	}
+//
+//				//Set Type
+//				foodTruckDto.setType(type);
+//
+//				return foodTruckDto;
+//			} else {
+//				return null;
+//			}
+//		});
+//
+//		return Optional.ofNullable(result);
+//	}
 
 
 	public Optional<FoodTruckDto> findByType(int typeID, String type) {
@@ -231,66 +231,6 @@ public class FoodTruckDao {
 
 		return Optional.ofNullable(result);
 	}
-
-	//TODO: search by price
-//	public Optional<FoodTruckDto> findByPrice(double maxPrice) {
-//
-//		System.out.println("Type in DAO: " + typeID);
-//
-//		//Get all food trucks with partial string match
-//		String sql = "SELECT * FROM FOOD_TRUCK WHERE :typeID = FOOD_TRUCK.TYPE";
-//
-//		Map<String, ?> parameters = _Maps.map("typeID", typeID);
-//
-//		FoodTruckDto result = jdbcTemplate.query(sql, parameters, rs -> {
-//			if (rs.next()) {
-//
-//				FoodTruckDto foodTruckDto = new FoodTruckDto(); //9 fields to set
-//				foodTruckDto.setId(rs.getLong("FOOD_TRUCK_ID"));
-//				foodTruckDto.setName(rs.getString("NAME"));
-//				foodTruckDto.setPrice_high(rs.getDouble("PRICE_HIGH"));
-//				foodTruckDto.setPrice_low(rs.getDouble("PRICE_LOW"));
-//				foodTruckDto.setStatus(rs.getString("STATUS"));
-//				foodTruckDto.setOwnerId(rs.getLong("OWNER_ID"));
-//				foodTruckDto.setDescription(rs.getString("DESCRIPTION"));
-//
-//				//need to get menu, schedule, truck_image, and type
-//				//For menu, get a list
-////				String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :foodTruckId";
-////
-////				List<Pair<Long, Triple<String, String, Double>>> menu = jdbcTemplate.query(menusql, parameters, (menurs, rowNum) -> {
-////					Pair<Long, Triple<String, String, Double>> item = new Tuple2<>(
-////							menurs.getLong("ITEM_ID"),
-////							new Tuple3<>(
-////									menurs.getString("NAME"),
-////									menurs.getString("DESCRIPTION"),
-////									menurs.getDouble("PRICE"))
-////					);
-////					return item;
-////				});
-//
-//				//Temporary menu
-//				foodTruckDto.setMenu(null);
-//
-//				//schedule
-//				foodTruckDto.setSchedule(getSchedule(foodTruckDto.getId()));
-//
-//
-//				//TODO::truck_image
-//				//not right now
-//				foodTruckDto.setTruck_image(null);
-//
-//				//Set Type
-//				foodTruckDto.setType(type);
-//
-//				return foodTruckDto;
-//			} else {
-//				return null;
-//			}
-//		});
-//
-//		return Optional.ofNullable(result);
-//	}
 
 	/**
 	 * This function saves a food truck's updates, if any.  If it doesn't have an id associated with it, it adds the
@@ -604,34 +544,29 @@ public class FoodTruckDao {
 		if (name != null && !name.isEmpty()) {
 
 			//Partial string match
-			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE LOCATE(:name, FOOD_TRUCK.NAME) != 0";
+			String sql = "SELECT * FROM FOOD_TRUCK WHERE LOCATE(:name, FOOD_TRUCK.NAME) != 0";
 
 			Map<String, ?> params = _Maps.map("name", name);
 			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
+            List<Integer> ftIDs = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("FOOD_TRUCK_ID"));
 
 			System.out.println("List of food trucks matching " + name + "\n" + names);
 
 			//If name of food truck found, run findByName
-			if (names != null) {
-				trucks = new ArrayList<>();
-				for (String ft : names) {
-					//get each food truck
-					//TODO: need to edit find to search for name instead of ID
-					Optional<FoodTruckDto> temp = findByName(ft);
-					if (temp.isPresent()) {
-						trucks.add(temp.get());
-					}
-				}
-			}
+            if (names != null && ftIDs != null) {
+                trucks = new ArrayList<>();
+                for (Integer ftID : ftIDs) {
+                    Optional<FoodTruckDto> temp = find(ftID.toString());
+                    if (temp.isPresent()) {
+                        trucks.add(temp.get());
+                    }
+                }
+            }
 		}
-
-		System.out.print("Truck list should be: ");
-		System.out.println(trucks);
 
 		return Optional.ofNullable(trucks);
 	}
 
-//	TODO: search by type
 	public Optional<List<FoodTruckDto>> searchFoodTrucksByType(String type) {
 
 		List<FoodTruckDto> trucks = null;
@@ -639,14 +574,7 @@ public class FoodTruckDao {
 
 		if (!type.isEmpty() && type != null) {
 
-			//Partial string match
-//			String sql = "SELECT NAME FROM FOOD_TRUCK WHERE LOCATE(" +
-//					"(SELECT FOOD_TYPE_ID FROM FOOD_TYPE " +
-//					"WHERE NAME = :type)" +
-//					", FOOD_TRUCK.TYPE) != 0";
-
-
-			String sql = "SELECT TYPE_ID FROM FOOD_TYPE WHERE TYPE = :fType";
+			String sql = "SELECT TYPE_ID FROM FOOD_TYPE WHERE FOOD_TYPE.TYPE = :fType";
 
 			Map<String, ?> params = _Maps.map("fType", fType);
 			List<Integer> typeIDs = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("TYPE_ID"));
@@ -666,11 +594,33 @@ public class FoodTruckDao {
 			}
 		}
 
-//		System.out.print("Truck list should be: ");
-//		System.out.println(trucks);
-
 		return Optional.ofNullable(trucks);
 	}
+
+    public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
+
+        List<FoodTruckDto> trucks = null;
+
+        //Get all food trucks with the price range
+        if (maxPrice >= 0.0) {
+            String sql = "SELECT * FROM FOOD_TRUCK WHERE FOOD_TRUCK.PRICE_HIGH <= :maxPrice";
+
+            Map<String, ?> params = _Maps.map("maxPrice", maxPrice);
+            List<Integer> ids = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("FOOD_TRUCK_ID"));
+
+            if (ids != null) {
+                trucks = new ArrayList<>();
+                for (Integer id : ids) {
+                    Optional<FoodTruckDto> temp = find(id.toString());
+                    if (temp.isPresent()) {
+                        trucks.add(temp.get());
+                    }
+                }
+            }
+        }
+
+        return Optional.ofNullable(trucks);
+    }
 
 
 	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,

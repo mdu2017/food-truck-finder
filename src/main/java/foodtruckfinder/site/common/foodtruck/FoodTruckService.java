@@ -74,8 +74,7 @@ public class FoodTruckService {
 	}
 
 	public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
-//		return foodTruckDao.searchFoodTrucksByType(maxPrice);
-		return null;
+		return foodTruckDao.searchTrucksByPrice(maxPrice);
 	}
 
     /**

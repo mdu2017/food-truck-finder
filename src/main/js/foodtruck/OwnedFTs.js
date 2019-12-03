@@ -28,6 +28,10 @@ export class OwnedFoodTrucks extends React.Component {
 			dealModal: false,
 			notificationMessage: null,
 			dealMessage: null,
+			dealStartDate: null,
+			dealEndDate: null,
+			dealStartTime: null,
+			dealEndTime: null,
 			foodTruckId: null
 		};
 		this.toggleNotify = this.toggleNotify.bind(this);
@@ -38,6 +42,10 @@ export class OwnedFoodTrucks extends React.Component {
 
 	setMessage = notificationMessage => this.setState({ notificationMessage });
 	setDealMessage = dealMessage => this.setState({ dealMessage });
+	setDealStartTime = dealStartTime => this.setState({dealStartTime});
+	setDealEndTime = dealEndTime => this.setState({ dealEndTime });
+	setDealStartDate = dealStartDate => this.setState({ dealStartDate });
+	setDealEndDate = dealEndDate => this.setState({ dealEndDate });
 
 	componentDidMount() {
 		Axios.getFoodTrucksByOwner(this.state.owner_id).then(result => {
@@ -71,10 +79,13 @@ export class OwnedFoodTrucks extends React.Component {
 		event.preventDefault();
 	};
 
-	handleDealModalSubmit = event => {
+	handleDealModalSubmit = () => {
 		this.toggleDeal();
 		console.log('HEY');
-		event.preventDefault();
+		this.state.dealDate.preventDefault();
+		this.state.dealEndTime.preventDefault();
+		this.state.dealStartTime.preventDefault();
+		this.state.dealMessage.preventDefault();
 	};
 
 	renderFoodTrucks() {
@@ -188,9 +199,7 @@ export class OwnedFoodTrucks extends React.Component {
 										id="exampleDate"
 										placeholder="date placeholder"
 										onChange={e =>
-											console.log(
-												JSON.stringify(e.target.value)
-											)
+											this.setDealStartDate(e.target.value)
 										}
 									/>
 								</FormGroup>
@@ -201,6 +210,7 @@ export class OwnedFoodTrucks extends React.Component {
 										name="time"
 										id="exampleTime"
 										placeholder="time placeholder"
+										onChange={e => this.setDealStartTime(e.target.value)}
 									/>
 								</FormGroup>
 							</Form>
@@ -213,9 +223,7 @@ export class OwnedFoodTrucks extends React.Component {
 										id="exampleDate"
 										placeholder="date placeholder"
 										onChange={e =>
-											console.log(
-												JSON.stringify(e.target.value)
-											)
+											this.setDealEndDate(e.target.value)
 										}
 									/>
 								</FormGroup>
@@ -226,6 +234,7 @@ export class OwnedFoodTrucks extends React.Component {
 										name="time"
 										id="exampleTime"
 										placeholder="time placeholder"
+										onChange={e => this.setDealEndTime(e.target.value)}
 									/>
 								</FormGroup>
 							</Form>

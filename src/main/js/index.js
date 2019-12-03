@@ -14,7 +14,7 @@ import { SearchFoodTrucks } from './SearchTrucks';
 import { SearchUsers } from './user/SearchUsers';
 import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
-import { Events } from './foodtruck/Events';
+import { Events } from './Events';
 import { CreateFoodTruck } from './foodtruck/CreateFT';
 import { OwnedFoodTrucks } from './foodtruck/OwnedFTs';
 import { EditFoodTruck } from './foodtruck/EditFT';

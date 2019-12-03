@@ -2,15 +2,15 @@ import React from 'react';
 import * as NavBars from 'js/navBars';
 
 export class EventDetails extends React.Component {
-    constructor(props) {
-        super(props);
-        this.state = {
-            event: null
-        };
-    }
+	constructor(props) {
+		super(props);
+		this.state = {
+			event: null
+		};
+	}
 
-    render() {
-        return (
+	render() {
+		return (
             <div>
                 <NavBars.CustomNavBar />
                 <div className="container padded">
@@ -21,6 +21,6 @@ export class EventDetails extends React.Component {
                     <h3>Location</h3>
                 </div>
             </div>
-        );
-    }
+		);
+	}
 }

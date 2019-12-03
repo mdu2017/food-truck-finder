@@ -197,11 +197,21 @@ export function searchFoodTrucksByType(type){
 	});
 }
 
-//TODO: Search by price
 export function searchTrucksByPrice(maxPrice){
 	return axios.get('/unsecure/searchTrucksByPrice', {
 		params: {
 			maxPrice: maxPrice
+		}
+	});
+}
+
+//TODO: WIP
+export function searchTrucksByDistance(userLat, userLng, maxDistance){
+	return axios.get('/unsecure/searchTrucksByDistance', {
+		params: {
+			userLat: userLat,
+			userLng: userLng,
+			maxDistance: maxDistance
 		}
 	});
 }
@@ -320,10 +330,16 @@ Actions.searchFoodTrucksByType = type => {
 	};
 };
 
-//TODO: Search by price
 Actions.searchTrucksByPrice = maxPrice => {
 	return () => {
 		return searchTrucksByPrice(maxPrice);
+	};
+};
+
+//TODO: WIP
+Actions.searchTrucksByDistance = (userLat, userLng, maxDistance) => {
+	return () => {
+		return searchTrucksByDistance(userLat, userLng, maxDistance);
 	};
 };
 

@@ -68,10 +68,15 @@ public class ExampleEndpoint {
         return unsecureFoodTruckService.searchFoodTrucksByType(type);
     }
 
-    //TODO: search by price
     @GetMapping(value = "/searchTrucksByPrice", produces = "application/json")
     public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
         return unsecureFoodTruckService.searchTrucksByPrice(maxPrice);
+    }
+
+    //TODO: search by max distance
+    @GetMapping(value = "/searchTrucksByDistance", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchTrucksByDistance(double userLat, double userLng, double maxDistance) {
+        return unsecureFoodTruckService.searchTrucksByDistance(userLat, userLng, maxDistance);
     }
 
     // Take an id, and look up the corresponding foodtruck

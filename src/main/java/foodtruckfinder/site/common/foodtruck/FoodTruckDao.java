@@ -625,6 +625,61 @@ public class FoodTruckDao {
         return Optional.ofNullable(trucks);
     }
 
+    //TODO: WIP (convert to miles DONE)
+    public Optional<List<FoodTruckDto>> searchTrucksByDistance(double userLat, double userLng, double maxDistance){
+
+	    final int COORD_FACTOR = 69;
+
+	    List<FoodTruckDto> trucks = null;
+        List<Long> goodTruckIDs = new ArrayList<>();
+
+        String sql = "SELECT * " +
+                "FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
+                "WHERE sch.STOP_ID = st.STOP_ID " +
+                "AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
+                "AND (TIME(st.END) > TIME(NOW())) " +
+                "AND ((POW(st.LATITUDE - :userLat, 2) + POW(st.LONGITUDE - " +
+                ":userLng, 2)) < :maxDistance)";
+
+        Map<String, ?> params = _Maps.map("userLat", userLat,
+                "userLng", userLng, "day", "T", "maxDistance", maxDistance);
+        List<Long> ids = jdbcTemplate.query(sql, params,
+                (rs, rowNum) -> rs.getLong("TRUCK_ID"));
+
+        //Stores all latitudes and longitudes of all trucks
+        List<Double> lats = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getDouble("LATITUDE"));
+        List<Double> longs = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getDouble("LONGITUDE"));
+
+        //Do mile conversion and add to good trucks
+        for(int i = 0; i < lats.size(); i++){
+            double xDiff = userLat - lats.get(i);
+            double yDiff = userLng - longs.get(i);
+            double geoDist = Math.sqrt(Math.pow(xDiff, 2.0) + Math.pow(yDiff, 2.0));
+
+            double distInMiles = geoDist * COORD_FACTOR;
+            System.out.print("Dist in miles between truck " + ids.get(i) + " is ");
+            System.out.format("%.2f\n", distInMiles);
+
+            if(distInMiles <= maxDistance){
+                goodTruckIDs.add(ids.get(i));
+            }
+        }
+
+        //If trucks are within distance, fill info for the DTOs
+        if (!goodTruckIDs.isEmpty()) {
+            trucks = new ArrayList<>();
+            for (Long ft : goodTruckIDs) {
+                //get each food truck
+                Optional<FoodTruckDto> temp = this.find(ft.toString());
+                if (temp.isPresent()) {
+                    trucks.add(temp.get());
+                }
+            }
+        }
+
+        return Optional.ofNullable(trucks);
+    }
+
 
 	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
 														   double userlong,

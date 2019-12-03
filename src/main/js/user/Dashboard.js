@@ -150,9 +150,27 @@ export class Dashboard extends React.Component {
 				250
 			);
 		}
-		//TODO: use nearby location algorithm in backend
+		//TODO: use nearby location algorithm in backend??
 		else if(this.state.dropdownValue === 'Distance'){
-			console.log(' ');
+			setTimeout(
+				function () {
+					this.setState({loadingSearch: true}, () => {
+						navigator.geolocation.getCurrentPosition(position => {
+							Axios.searchTrucksByDistance(
+								position.coords.latitude,
+								position.coords.longitude,
+								this.state.searchFT
+							).then(result =>
+								this.setState({
+									loadingSearch: false,
+									searchResults: result
+								})
+							);
+						});
+					});
+				}.bind(this),
+				250
+			);
 		}
 
 		event.preventDefault();

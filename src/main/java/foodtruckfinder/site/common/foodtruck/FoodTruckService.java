@@ -67,10 +67,26 @@ public class FoodTruckService {
 		return foodTruckDao.getByOwner(owner_id);
 	}
 
-	//TODO: WIP
+	/** Search food truck by name */
 	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
 		return foodTruckDao.searchFoodTrucks(name);
 	}
+
+	/** Search food truck by type */
+	public Optional<List<FoodTruckDto>> searchFoodTrucksByType(String type) {
+		return foodTruckDao.searchFoodTrucksByType(type);
+	}
+
+	/** Search truck by price */
+	public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
+		return foodTruckDao.searchTrucksByPrice(maxPrice);
+	}
+
+    /** Search truck by distance */
+    public Optional<List<FoodTruckDto>> searchTrucksByDistance(double userLat, double userLng, double maxDistance) {
+        System.out.println("Max distance of " + maxDistance + " from User Location (" + userLat + " , " + userLng + ")");
+        return foodTruckDao.searchTrucksByDistance(userLat, userLng, maxDistance);
+    }
 
     /**
      * send a message to all the owner's subscribers

@@ -27,6 +27,11 @@ public class ExampleEndpoint {
         return unsecureUserService.findUserByUsername(username);
     }
 
+    @GetMapping(value = "/user/searchUsers", produces = "application/json")
+    public Optional<List<UserDto>> searchUsers(String username) {
+        return unsecureUserService.searchUsers(username);
+    }
+
     @GetMapping(value = "/user/id/{id}", produces = "application/json")
     public Optional<UserDto> viewUserByID(@PathVariable("id") Long user_ID) {
         return unsecureUserService.findUserByID(user_ID);
@@ -55,6 +60,23 @@ public class ExampleEndpoint {
     @GetMapping(value = "/searchFoodTrucks", produces = "application/json")
     public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
         return unsecureFoodTruckService.searchFoodTrucks(name);
+    }
+
+    /** Search food truck by type */
+    @GetMapping(value = "/searchFoodTrucksByType", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchFoodTrucksByType(String type) {
+        return unsecureFoodTruckService.searchFoodTrucksByType(type);
+    }
+
+    @GetMapping(value = "/searchTrucksByPrice", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchTrucksByPrice(double maxPrice) {
+        return unsecureFoodTruckService.searchTrucksByPrice(maxPrice);
+    }
+
+    //TODO: search by max distance
+    @GetMapping(value = "/searchTrucksByDistance", produces = "application/json")
+    public Optional<List<FoodTruckDto>> searchTrucksByDistance(double userLat, double userLng, double maxDistance) {
+        return unsecureFoodTruckService.searchTrucksByDistance(userLat, userLng, maxDistance);
     }
 
     // Take an id, and look up the corresponding foodtruck

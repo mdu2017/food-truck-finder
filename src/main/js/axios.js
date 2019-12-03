@@ -189,6 +189,41 @@ export function searchFoodTrucks(name) {
 	});
 }
 
+export function searchFoodTrucksByType(type){
+	return axios.get('/unsecure/searchFoodTrucksByType', {
+		params: {
+			type: type
+		}
+	});
+}
+
+export function searchTrucksByPrice(maxPrice){
+	return axios.get('/unsecure/searchTrucksByPrice', {
+		params: {
+			maxPrice: maxPrice
+		}
+	});
+}
+
+//TODO: WIP
+export function searchTrucksByDistance(userLat, userLng, maxDistance){
+	return axios.get('/unsecure/searchTrucksByDistance', {
+		params: {
+			userLat: userLat,
+			userLng: userLng,
+			maxDistance: maxDistance
+		}
+	});
+}
+
+export function searchUsers(username){
+	return axios.get('/unsecure/user/searchUsers', {
+		params: {
+			username: username
+		}
+	});
+}
+
 export function getCookie(name) {
 	var nameEQ = name + '=';
 	var ca = document.cookie.split(';');
@@ -286,6 +321,31 @@ Actions.getTruckLocation = (userlat, userlong) => {
 Actions.searchFoodTrucks = name => {
 	return () => {
 		return searchFoodTrucks(name);
+	};
+};
+
+Actions.searchFoodTrucksByType = type => {
+	return () => {
+		return searchFoodTrucksByType(type);
+	};
+};
+
+Actions.searchTrucksByPrice = maxPrice => {
+	return () => {
+		return searchTrucksByPrice(maxPrice);
+	};
+};
+
+//TODO: WIP
+Actions.searchTrucksByDistance = (userLat, userLng, maxDistance) => {
+	return () => {
+		return searchTrucksByDistance(userLat, userLng, maxDistance);
+	};
+};
+
+Actions.searchUsers = username => {
+	return () => {
+		return searchUsers(username);
 	};
 };
 

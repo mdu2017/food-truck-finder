@@ -3,7 +3,7 @@ import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import MapContainer from 'js/Maps';
+import DashboardMap from 'js/DashboardMap';
 import {DropdownToggle, DropdownMenu, DropdownItem, ButtonDropdown} from 'reactstrap';
 import {
 	Badge,
@@ -509,7 +509,7 @@ export class Dashboard extends React.Component {
 				</div>
 
 				{/*Render map*/}
-				<MapContainer />
+				<DashboardMap/>
 			</div>
 		);
 	}

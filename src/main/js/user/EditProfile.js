@@ -25,10 +25,14 @@ export class EditProfile extends React.Component {
 			username: JSON.parse(Axios.getCookie('user')).username,
 			owner: JSON.parse(Axios.getCookie('user')).isOwner,
 			id: JSON.parse(Axios.getCookie('user')).id,
-			defaultDistance: null, // TODO: Set this user preferences
-			defaultPriceLow: null,
-			defaultPriceHigh: null
+			foodtypes: [],
+			selectedFoodtypes: [],
+			defaultDistance: JSON.parse(Axios.getCookie('user')).prefDistance, // TODO: Set this user preferences
+			defaultPriceLow: JSON.parse(Axios.getCookie('user')).prefLow,
+			defaultPriceHigh: JSON.parse(Axios.getCookie('user')).prefHigh
 		};
+		this.getFoodTypes();
+		console.log(JSON.parse(Axios.getCookie('user')));
 	}
 
 	setPrincipal = principal => this.setState({ principal });
@@ -48,11 +52,30 @@ export class EditProfile extends React.Component {
 				owner: this.state.owner.toString(),
 				id: this.state.id
 			});
+			this.props.setPreferences({
+				foodtypes: this.state.foodtypes
+			});
 			event.preventDefault();
 		} else {
 			window.alert('Passwords do not match!');
 		}
 	};
+
+	getFoodTypes() {
+		Axios.getFoodTypes().then(result => {
+			this.setState({ foodtypes: result });
+		});
+	}
+
+	setSelectedFoodtypes(selectedFoodtypes) {
+		let selected = [];
+		// this.state.selectedFoodtypes.forEach(function(foodtype) {
+
+		// })
+		// console.log(selectedFoodtypes);
+		selected.push(selectedFoodtypes);
+		this.setState({ selectedFoodtypes });
+	}
 
 	render() {
 		return (
@@ -165,9 +188,15 @@ export class EditProfile extends React.Component {
 								<br />
 								<span>??</span>
 								<br />
-								<span>Distance:</span>
+								<span>
+									Distance:{' '}
+									{this.state.defaultDistance * 70 + ' miles'}
+								</span>
 								<br />
-								<span>Price Range: ? - ?</span>
+								<span>
+									Price Range: ${this.state.defaultPriceLow} -{' '}
+									${this.state.defaultPriceHigh}
+								</span>
 								<br />
 								<br />
 								<Form>
@@ -180,9 +209,20 @@ export class EditProfile extends React.Component {
 											name="foodtype"
 											id="foodTypes"
 											onChange={e =>
-												this.setFoodType(e.target.value)
+												this.setSelectedFoodtypes(
+													e.target.value
+												)
 											}
-										/>
+											multiple
+										>
+											{this.state.foodtypes.map(
+												(foodtype, index) => (
+													<option key={index}>
+														{foodtype}
+													</option>
+												)
+											)}
+										</Input>
 									</FormGroup>
 									<FormGroup>
 										<Label for="distance">Distance</Label>
@@ -192,7 +232,11 @@ export class EditProfile extends React.Component {
 											name="distance"
 											id="distance"
 											step="0.01"
-											placeholder="35.0"
+											placeholder={
+												this.state.defaultDistance *
+													70 +
+												' miles'
+											}
 											onChange={e =>
 												this.setDefaultDistance(
 													e.target.value
@@ -208,7 +252,9 @@ export class EditProfile extends React.Component {
 											name="priceLow"
 											id="priceLow"
 											step="0.01"
-											placeholder="35.0"
+											placeholder={
+												'$' + this.state.defaultPriceLow
+											}
 											onChange={e =>
 												this.setDefaultPriceLow(
 													e.target.value
@@ -226,7 +272,10 @@ export class EditProfile extends React.Component {
 											name="priceHigh"
 											id="priceHigh"
 											step="0.01"
-											placeholder="35.0"
+											placeholder={
+												'$' +
+												this.state.defaultPriceHigh
+											}
 											onChange={e =>
 												this.setDefaultPriceHigh(
 													e.target.value

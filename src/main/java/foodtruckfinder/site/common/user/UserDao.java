@@ -39,7 +39,7 @@ public class UserDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	private Optional<List<FoodTruckDto.FoodType>> getUserPreferences(Long user_ID){
-		String sql = "SELECT TYPE FROM PREFERENCES WHERE USER_ID = :user_ID";
+		String sql = "SELECT FOOD_TYPE_ID FROM PREFERENCES WHERE USER_ID = :user_ID";
 		Map<String, ?> params = _Maps.map("user_ID", user_ID);
 		List<FoodTruckDto.FoodType> types = jdbcTemplate.query(sql, params, (rs, rowNum) -> FoodTruckDto.FoodType.values()[rs.getInt("FOOD_TYPE_ID")]);
 		return Optional.ofNullable(types);

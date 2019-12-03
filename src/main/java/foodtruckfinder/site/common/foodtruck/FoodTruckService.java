@@ -136,4 +136,8 @@ public class FoodTruckService {
 	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
     	return foodTruckDao.getAttendingTrucks(event_ID);
 	}
+
+	public Optional<Deal> getDeal(Long dealID) { return foodTruckDao.getDeal(dealID); }
+
+	public List<Deal> getAllDeals(Long truckID) { return foodTruckDao.getAllDeals(truckID); }
 }

@@ -12,7 +12,10 @@ import {
 	ModalHeader,
 	ModalBody,
 	ModalFooter,
-	Input
+	Input,
+	Form,
+	FormGroup,
+	Label
 } from 'reactstrap';
 
 export class OwnedFoodTrucks extends React.Component {
@@ -21,15 +24,20 @@ export class OwnedFoodTrucks extends React.Component {
 		this.state = {
 			owner_id: JSON.parse(Axios.getCookie('user')).id,
 			trucks: [],
-			modal: false,
+			notifyModal: false,
+			dealModal: false,
 			notificationMessage: null,
+			dealMessage: null,
 			foodTruckId: null
 		};
-		this.toggle = this.toggle.bind(this);
-		this.handleModalSubmit = this.handleModalSubmit.bind(this);
+		this.toggleNotify = this.toggleNotify.bind(this);
+		this.toggleDeal = this.toggleDeal.bind(this);
+		this.handleNotifyModalSubmit = this.handleNotifyModalSubmit.bind(this);
+		this.handleDealModalSubmit = this.handleDealModalSubmit.bind(this);
 	}
 
 	setMessage = notificationMessage => this.setState({ notificationMessage });
+	setDealMessage = dealMessage => this.setState({ dealMessage });
 
 	componentDidMount() {
 		Axios.getFoodTrucksByOwner(this.state.owner_id).then(result => {
@@ -40,20 +48,32 @@ export class OwnedFoodTrucks extends React.Component {
 		});
 	}
 
-	toggle(id) {
+	toggleNotify(id) {
 		this.setState({
-			modal: !this.state.modal,
+			notifyModal: !this.state.notifyModal,
 			foodTruckId: id
 		});
 	}
 
-	handleModalSubmit = event => {
-		this.toggle();
-		// console.log(this.state.foodTruckId);
+	toggleDeal(id) {
+		this.setState({
+			dealModal: !this.state.dealModal,
+			foodTruckId: id
+		});
+	}
+
+	handleNotifyModalSubmit = event => {
+		this.toggleNotify();
 		this.props.notifyUsers({
 			message: this.state.notificationMessage,
 			foodTruckId: this.state.foodTruckId
 		});
+		event.preventDefault();
+	};
+
+	handleDealModalSubmit = event => {
+		this.toggleDeal();
+		console.log('HEY');
 		event.preventDefault();
 	};
 
@@ -81,7 +101,9 @@ export class OwnedFoodTrucks extends React.Component {
 									<Button
 										color="info"
 										size="sm"
-										onClick={() => this.toggle(truck.id)}
+										onClick={() =>
+											this.toggleNotify(truck.id)
+										}
 									>
 										<img
 											src={Bell}
@@ -91,11 +113,13 @@ export class OwnedFoodTrucks extends React.Component {
 										/>
 									</Button>{' '}
 									<Button
-										color="warning"
+										color="success"
 										size="sm"
-										onClick={() => this.toggle(truck.id)}
+										onClick={() =>
+											this.toggleDeal(truck.id)
+										}
 									>
-										???
+										$$$
 									</Button>
 								</ListGroupItem>
 							</ListGroup>
@@ -113,11 +137,11 @@ export class OwnedFoodTrucks extends React.Component {
 		);
 	}
 
-	renderModal() {
+	renderNotifyModal() {
 		return (
 			<div>
-				<Modal isOpen={this.state.modal}>
-					<form onSubmit={this.handleModalSubmit}>
+				<Modal isOpen={this.state.notifyModal}>
+					<form onSubmit={this.handleNotifyModalSubmit}>
 						<ModalHeader>Notify Subscribers</ModalHeader>
 						<ModalBody>
 							<Input
@@ -137,7 +161,94 @@ export class OwnedFoodTrucks extends React.Component {
 							/>
 							<Button
 								color="danger"
-								onClick={() => this.toggle(null)}
+								onClick={() => this.toggleNotify(null)}
+							>
+								Cancel
+							</Button>
+						</ModalFooter>
+					</form>
+				</Modal>
+			</div>
+		);
+	}
+
+	renderDealModal() {
+		return (
+			<div>
+				<Modal isOpen={this.state.dealModal}>
+					<form onSubmit={this.handleDealModalSubmit}>
+						<ModalHeader>New Deal</ModalHeader>
+						<ModalBody>
+							<Form inline>
+								<FormGroup>
+									<Label for="exampleDate">Date</Label>
+									<Input
+										type="date"
+										name="date"
+										id="exampleDate"
+										placeholder="date placeholder"
+										onChange={e =>
+											console.log(
+												JSON.stringify(e.target.value)
+											)
+										}
+									/>
+								</FormGroup>
+								<FormGroup>
+									<Label for="exampleTime">Time</Label>
+									<Input
+										type="time"
+										name="time"
+										id="exampleTime"
+										placeholder="time placeholder"
+									/>
+								</FormGroup>
+							</Form>
+							<Form inline>
+								<FormGroup>
+									<Label for="exampleDate">Date</Label>
+									<Input
+										type="date"
+										name="date"
+										id="exampleDate"
+										placeholder="date placeholder"
+										onChange={e =>
+											console.log(
+												JSON.stringify(e.target.value)
+											)
+										}
+									/>
+								</FormGroup>
+								<FormGroup>
+									<Label for="exampleTime">Time</Label>
+									<Input
+										type="time"
+										name="time"
+										id="exampleTime"
+										placeholder="time placeholder"
+									/>
+								</FormGroup>
+							</Form>
+							<Input
+								type="textarea"
+								name="text"
+								id="exampleText"
+								placeholder="Limited to 300 characters."
+								onChange={e =>
+									this.setDealMessage(e.target.value)
+								}
+							/>
+						</ModalBody>
+						<ModalFooter>
+							<input
+								type="submit"
+								value="Submit"
+								color="primary"
+								className="btn btn-primary"
+							/>
+							<Button
+								color="danger"
+								onClick={() => this.toggleDeal(null)}
 							>
 								Cancel
 							</Button>
@@ -156,7 +267,8 @@ export class OwnedFoodTrucks extends React.Component {
 					<h1>Your Food Trucks</h1>
 					{this.renderFoodTrucks()}
 				</div>
-				{this.renderModal()}
+				{this.renderNotifyModal()}
+				{this.renderDealModal()}
 			</div>
 		);
 	}

@@ -54,45 +54,6 @@ export class CustomNavBar extends React.Component {
 		}
 	}
 
-	displayViewProfile() {
-		if (this.state.user) {
-			return (
-				<div>
-					<DropdownToggle nav caret>
-						Options
-					</DropdownToggle>
-					<DropdownMenu right>
-						<DropdownItem tag={Link} to="/view-profile">
-							View Profile
-						</DropdownItem>
-						<DropdownItem tag={Link} to="/edit-user">
-							Manage Account
-						</DropdownItem>
-						<DropdownItem
-							tag={Link}
-							to="/list-food-trucks"
-							hidden={this.state.user.isOwner !== true}
-						>
-							Manage Trucks
-						</DropdownItem>
-						<DropdownItem
-							tag={Link}
-							to="/create-food-truck"
-							hidden={this.state.user.isOwner !== true}
-						>
-							Add Food Truck
-						</DropdownItem>
-						<DropdownItem divider />
-						<DropdownItem onClick={this.logout}>
-							Logout
-						</DropdownItem>
-					</DropdownMenu>
-				</div>
-			);
-		}
-		return null;
-	}
-
 	displayHamburger() {
 		return (
 			<div>
@@ -128,7 +89,7 @@ export class CustomNavBar extends React.Component {
 						tag={Link}
 						to="/edit-user"
 					>
-						Manage Account
+						Edit Account
 					</DropdownItem>
 					{this.state.user && (
 						<DropdownItem
@@ -208,9 +169,6 @@ export class CustomNavBar extends React.Component {
 							</Nav>
 						) : (
 							<Nav className="ml-auto" navbar>
-								{/* <UncontrolledDropdown nav innavbar="true">
-									{this.displayViewProfile()}
-								</UncontrolledDropdown> */}
 								<UncontrolledDropdown nav innavbar="true">
 									{this.displayHamburger()}
 								</UncontrolledDropdown>

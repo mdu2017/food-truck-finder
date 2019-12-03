@@ -17,7 +17,10 @@ import {
 	Input,
 	Button,
 	ListGroup,
-	ListGroupItem
+	ListGroupItem,
+	Pagination,
+	PaginationItem,
+	PaginationLink
 } from 'reactstrap';
 import Spinner from 'js/images/spinner.gif';
 
@@ -343,29 +346,74 @@ export class Dashboard extends React.Component {
 								<Col>
 									<Row>
 										{/* md={{ size: 6, offset: 3 }} */}
-										<Col sm="12">
-											<div>
-												<Form
-													onChange={this.handleSubmit}
-													inline
-												>
-													<FormGroup inline>
-														<Input
-															type="text"
-															name="searchFT"
-															id="searchFT"
-															placeholder="Search Food Trucks"
-															onChange={e =>
-																this.setSearchFT(
-																	e.target
-																		.value
-																)
-															}
-														/>
-													</FormGroup>
-												</Form>
-												{this.renderSearchResults()}
-											</div>
+										<Form
+											onChange={this.handleSubmit}
+											inline
+										>
+											<FormGroup inline>
+												<Input
+													type="text"
+													name="searchFT"
+													id="searchFT"
+													placeholder="Search Food Trucks"
+													onChange={e =>
+														this.setSearchFT(
+															e.target.value
+														)
+													}
+												/>
+											</FormGroup>
+										</Form>
+										{this.renderSearchResults()}
+									</Row>
+									<Row>
+										<Col
+											md={{
+												size: 'auto',
+												offset: 4
+											}}
+										>
+											<Pagination>
+												<PaginationItem active>
+													<PaginationLink href="#">
+														1
+													</PaginationLink>
+												</PaginationItem>
+												<PaginationItem>
+													<PaginationLink href="#">
+														2
+													</PaginationLink>
+												</PaginationItem>
+												<PaginationItem>
+													<PaginationLink href="#">
+														3
+													</PaginationLink>
+												</PaginationItem>
+												<PaginationItem>
+													<PaginationLink href="#">
+														4
+													</PaginationLink>
+												</PaginationItem>
+												<PaginationItem>
+													<PaginationLink href="#">
+														5
+													</PaginationLink>
+												</PaginationItem>
+											</Pagination>
+										</Col>
+									</Row>
+									<Row>
+										<Col
+											style={{
+												height: '420px',
+												width: '620px'
+											}}
+											md={{
+												size: 'auto',
+												offset: 2
+											}}
+										>
+											<MapContainer />
 										</Col>
 									</Row>
 								</Col>
@@ -466,7 +514,7 @@ export class Dashboard extends React.Component {
 				</div>
 
 				{/*Render map*/}
-				<MapContainer />
+				{/* <MapContainer /> */}
 			</div>
 		);
 	}

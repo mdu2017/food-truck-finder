@@ -168,7 +168,6 @@ export class EditFoodTruck extends React.Component {
 	}
 
 	render() {
-		console.log(this.state.foodtype + ' ' + this.state.status);
 		return (
 			<div>
 				<NavBars.CustomNavBar />
@@ -192,11 +191,13 @@ export class EditFoodTruck extends React.Component {
 								</FormGroup>
 								<FormGroup>
 									<Label for="statuses">Current Status</Label>
-									<select
+									<Input
+										type="select"
 										value={this.state.status}
 										onChange={e =>
 											this.setStatus(e.target.value)
-										}>
+										}
+									>
 										{this.state.statuses.map(
 											(status, index) => (
 												<option key={index}>
@@ -204,15 +205,17 @@ export class EditFoodTruck extends React.Component {
 												</option>
 											)
 										)}
-									</select>
+									</Input>
 								</FormGroup>
 								<FormGroup>
 									<Label for="foodTypes">Food Type</Label>
-									<select
+									<Input
+										type="select"
 										value={this.state.foodtype}
 										onChange={e =>
 											this.setFoodType(e.target.value)
-										}>
+										}
+									>
 										{this.state.foodtypes.map(
 											(foodtype, index) => (
 												<option key={index}>
@@ -220,7 +223,7 @@ export class EditFoodTruck extends React.Component {
 												</option>
 											)
 										)}
-									</select>
+									</Input>
 								</FormGroup>
 							</Form>
 							<Form inline>
@@ -243,7 +246,8 @@ export class EditFoodTruck extends React.Component {
 								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 									<Label
 										for="ftHighPrice"
-										className="mr-sm-2">
+										className="mr-sm-2"
+									>
 										Price High
 									</Label>
 									<Input
@@ -319,7 +323,7 @@ EditFoodTruck = connect(
 	dispatch => ({
 		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck)),
 		removeTruck: truck_id =>
-			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function (
+			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function(
 				result
 			) {
 				if (result) {

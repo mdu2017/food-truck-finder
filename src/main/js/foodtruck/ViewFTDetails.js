@@ -28,7 +28,7 @@ export class ViewFoodTruckDetails extends React.Component {
 			averagePrice: 'N/A',
 			foodTruckId: null,
 			modal: false,
-			rating: -1,
+			rating: 1,
 			review: '',
 			notLoggedIn: false,
 			previousReviews: [],
@@ -116,7 +116,7 @@ export class ViewFoodTruckDetails extends React.Component {
 									mode="center"
 								/>
 								{individualReview.user}{' '}
-								{individualReview.rating.toFixed(2)} {'/ 5'}
+								{individualReview.rating} {'/ 5'}
 							</h6>
 							<h6>{individualReview.message}</h6>
 							<br />
@@ -231,7 +231,7 @@ export class ViewFoodTruckDetails extends React.Component {
 								</legend>
 							</Col>
 							<Col xs="auto">
-								<Button color="info" onClick={this.toggle}>
+								<Button color="info" onClick={this.toggle} disabled={this.state.user.isOwner}>
 									Write Review
 								</Button>
 							</Col>
@@ -262,7 +262,9 @@ export class ViewFoodTruckDetails extends React.Component {
 								<div className="text-left">
 									{this.state.averageRating !== 0 ? (
 										<div>
-											{this.state.averageRating}
+											{this.state.averageRating.toFixed(
+												1
+											)}
 											{' of 5'}
 										</div>
 									) : (

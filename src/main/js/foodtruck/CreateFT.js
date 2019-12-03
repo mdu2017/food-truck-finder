@@ -46,7 +46,9 @@ export class CreateFoodTruck extends React.Component {
 			selectedLatitude: 0,
 			selectedLongitude: 0,
 			buttonVisibility: true,
-			modal: false
+			modal: false,
+			statuses: [],
+			foodtypes: []
 		};
 		// Make Dynamic Page
 		window.location.href = '/?#/create-food-truck/';
@@ -80,7 +82,7 @@ export class CreateFoodTruck extends React.Component {
 				name: this.state.name,
 				description: this.state.description,
 				// menu: this.state.menu,
-				// schedule: this.state.schedule,
+				schedule: this.state.schedule,
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
@@ -107,27 +109,15 @@ export class CreateFoodTruck extends React.Component {
 
 	// Promise value return
 	getFoodTypes() {
-		var self = this;
-		Axios.getFoodTypes().then(function(result) {
-			self.setState({ foodtype: result[0] });
-			var str = '';
-			result.forEach(function(type) {
-				str += '<option>' + type + '</option>';
-			});
-			document.getElementById('foodTypes').innerHTML = str;
+		Axios.getFoodTypes().then(result => {
+			this.setState({ foodtypes: result, foodtype: result[0] });
 		});
 	}
 
-	// setState in Axios Call
 	getStatuses() {
 		var self = this;
-		Axios.getStatuses().then(function(result) {
-			self.setState({ status: result[0] });
-			var str = '';
-			result.forEach(function(status) {
-				str += '<option>' + status + '</option>';
-			});
-			document.getElementById('statuses').innerHTML = str;
+		Axios.getStatuses().then(result => {
+			self.setState({ statuses: result, status: result[0] });
 		});
 	}
 
@@ -239,7 +229,13 @@ export class CreateFoodTruck extends React.Component {
 								name="status"
 								id="statuses"
 								onChange={e => this.setStatus(e.target.value)}
-							/>
+							>
+								{
+									this.state.statuses.map((status, index) => (
+										<option key={index}>{status}</option>
+									))
+								}
+							</Input>
 						</FormGroup>
 						<FormGroup>
 							<Label for="foodTypes">Food Type</Label>
@@ -248,7 +244,13 @@ export class CreateFoodTruck extends React.Component {
 								name="foodtype"
 								id="foodTypes"
 								onChange={e => this.setFoodType(e.target.value)}
-							/>
+							>
+								{
+									this.state.foodtypes.map((foodtype, index) => (
+										<option key={index}>{foodtype}</option>
+									))
+								}
+							</Input>
 						</FormGroup>
 					</Form>
 					<Form inline>

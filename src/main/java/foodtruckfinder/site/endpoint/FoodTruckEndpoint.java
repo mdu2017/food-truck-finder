@@ -130,6 +130,11 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getEventById(event_ID);
 	}
 
+	@GetMapping(value = "getAllEvents", produces = "application/json")
+	public List<EventDto> getAllEvents(){
+		return foodTruckService.getAllEvents();
+	}
+
 	@GetMapping(value = "getAttendingTrucks", produces = "application/json")
 	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
 

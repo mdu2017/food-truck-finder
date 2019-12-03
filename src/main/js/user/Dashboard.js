@@ -455,9 +455,11 @@ export class Dashboard extends React.Component {
 												/>
 											</FormGroup>
 										</Form>
-										{this.renderSearchResults()}
 									</Row>
+									{this.renderSearchResults()}
+									&nbsp;
 									<Row>
+
 										<Col
 											md={{
 												size: 'auto',

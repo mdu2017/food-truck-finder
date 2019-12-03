@@ -98,8 +98,8 @@ public class FoodTruckEndpoint {
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
 	public void removeDeal(Long truckID) {
-        foodTruckService.removeDeal(truckID);
-    }
+		foodTruckService.removeDeal(truckID);
+	}
 
     @PostMapping(value = "/addEvent", produces = "application/json")
 	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
@@ -107,7 +107,7 @@ public class FoodTruckEndpoint {
 		return;
 	}
 
-	@PostMapping(value = "removeDeal", produces = "application/json")
+	@PostMapping(value = "/removeEvent", produces = "application/json")
 	public void removeEvent(Long event_ID){
 		foodTruckService.removeEvent(event_ID);
 		return;

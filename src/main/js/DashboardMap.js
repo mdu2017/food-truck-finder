@@ -1,7 +1,6 @@
 import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
 import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
-import ViewMarker from 'js/images/food_truck_existing.png';
 import * as Axios from 'js/axios';
 
 // Currently in dashboard and Create food truck page
@@ -10,7 +9,7 @@ const style = {
 	height: '65%',
 };
 
-export class MapContainer extends React.Component {
+export class DashboardMap extends React.Component {
 	constructor(props) {
 		super(props);
 
@@ -184,26 +183,6 @@ export class MapContainer extends React.Component {
                     {/*Current location marker*/}
                     <Marker onClick={this.onMarkerClick} name={'Current Location'}/>
 
-					{/* Marker that is added on click (separate from nearby markers) */}
-					{this.state.locations.map((location, index) => {
-						return (
-							<Marker
-								onClick={this.onMarkerClick}
-								icon={LogoMarker}
-								key={index}
-								position={{
-									lat: location.lat(),
-									lng: location.lng()
-								}}
-								name={'Your Food Truck!'}
-								draggable={true}
-								onDragend={(e, index, coord) =>
-									this.onMarkerDragend(e, index, coord)
-								}
-							/>
-						);
-					})}
-
 					{/*Display all nearby markers*/}
 					{this.state.nearbyTrucks.map((marker, index) => {
 						return (
@@ -244,4 +223,4 @@ export class MapContainer extends React.Component {
 
 export default GoogleApiWrapper({
 	apiKey: 'AIzaSyBOAgaJ1xytT1pdAuP1c8xcTr9vq6ge7e4'
-})(MapContainer);
+})(DashboardMap);

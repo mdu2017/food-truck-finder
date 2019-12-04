@@ -982,4 +982,25 @@ public class FoodTruckDao {
 		});
 		return events;
 	}
+
+	public List<EventDto> searchForEvent(String name){
+		List<EventDto> events = new ArrayList<>();
+		if (name != null && !name.isEmpty()) {
+
+			//Partial string match
+			String sql = "SELECT EVENT_ID FROM EVENT WHERE LOCATE(:name, EVENT.NAME) != 0";
+			Map<String, ?> params = _Maps.map("name", name);
+
+			events = jdbcTemplate.query(sql, params, (rs, rowNum) -> {
+				Optional<EventDto> temp = getEventById(rs.getLong("EVENT_ID"));
+				if (temp.isPresent()) {
+					return temp.get();
+				} else {
+					return null;
+				}
+			});
+		}
+
+		return events;
+	}
 }

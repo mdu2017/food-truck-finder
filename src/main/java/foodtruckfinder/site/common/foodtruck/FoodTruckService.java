@@ -80,6 +80,10 @@ public class FoodTruckService {
 		return foodTruckDao.getRecommendations(userlat, userlong, radius);
 	}
 
+	public Optional<List<FoodTruckDto>> getRecommendationsUnsecure(double userlat, double userlong, double radius) {
+		return getNearby(userlat, userlong, radius);
+	}
+
 	public Optional<List<FoodTruckDto>> getNearby(double userlat,
 												  double userlong,
 												  double radius) {
@@ -173,8 +177,5 @@ public class FoodTruckService {
     	return foodTruckDao.getAllEvents();
 	}
 
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
-    	return foodTruckDao.getAttendingTrucks(event_ID);
-	}
-
+	public List<EventDto> searchForEvent(String name){ return foodTruckDao.searchForEvent(name); }
 }

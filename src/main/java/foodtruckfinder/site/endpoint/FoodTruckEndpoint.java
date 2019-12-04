@@ -160,6 +160,6 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getAllEvents();
 	}
 
-	@PostMapping(value = "/getAllDeals", produces = "application/json")
-	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
+	@PostMapping(value = "searchForEvent", produces = "application/json")
+	public List<EventDto> searchForEvent(String name){ return foodTruckService.searchForEvent(name); }
 }

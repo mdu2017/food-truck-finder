@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
+import {Multiselect} from 'multiselect-react-dropdown';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import DashboardMap from 'js/DashboardMap';
@@ -55,9 +56,57 @@ export class Dashboard extends React.Component {
 			spinnerWidth: 60,
 
 			dropdownOpen: false,
-			dropdownValue: 'Truck Name'
+			dropdownValue: 'Truck Name',
+
+			options: ['AMERICAN',
+				'BBQ',
+				'BREAKFAST',
+				'CHINESE',
+				'DESERT',
+				'HEALTHY',
+				'INDIAN',
+				'MEDITERRANEAN',
+				'MEXICAN',
+				'PIZZA',
+				'SEAFOOD',
+				'VEGAN',
+				'VEGITARIAN',
+				'VIETNAMESE'],
+
+			choices: []
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
+	}
+
+	//Item that is selected.
+	onSelect = (optionList, selectedItem) => {
+		console.log('Selected item is ' + selectedItem);
+
+		this.setState({
+			choices: optionList,
+		});
+	}
+
+	//Item that is removed when using food type filter (*backspace removes index)
+	onRemove = (optionList, removedItem) => {
+		// console.log(optionList);
+		console.log('removed item is ' + removedItem);
+		console.log(optionList);
+
+		this.setState({
+			choices: optionList
+		});
+	}
+
+	msDropdown(){
+		return(
+			<Multiselect
+				options={this.state.options}
+				onSelect={this.onSelect} // Function will trigger on select event
+				onRemove={this.onRemove} // Function will trigger on remove event
+				isObject={false}
+			/>
+		);
 	}
 
 	//Toggle dropdown open
@@ -441,6 +490,12 @@ export class Dashboard extends React.Component {
 																</DropdownItem>
 												</DropdownMenu>
 											</ButtonDropdown>
+
+											{/* TODO: Multi select*/}
+											{this.msDropdown()}
+											{console.log('Current list: ')}
+											{console.log(this.state.choices)}
+
 
 											<FormGroup inline>
 												<Input

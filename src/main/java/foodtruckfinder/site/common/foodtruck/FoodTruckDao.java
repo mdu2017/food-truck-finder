@@ -486,33 +486,23 @@ public class FoodTruckDao {
 
         //Get all food trucks with the price range
         if (maxPrice >= 0.0) {
-            String sql = "SELECT * FROM FOOD_TRUCK WHERE FOOD_TRUCK.PRICE_HIGH <= :maxPrice";
+            String sql = "SELECT * FROM FOOD_TRUCK WHERE FOOD_TRUCK.PRICE_HIGH <= :maxPrice " +
+						 "AND NAME != {All Users} AND NAME != {All Customers} AND NAME != {All Owners}";
 
             final String badFT1 = "{All Users}";
 			final String badFT2 = "{All Customers}";
 			final String badFT3 = "{All Owners}";
 
             Map<String, ?> params = _Maps.map("maxPrice", maxPrice);
-            List<Integer> ids = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("FOOD_TRUCK_ID"));
-			List<String> names = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getString("NAME"));
+            trucks = jdbcTemplate.query(sql, params, (rs, rowNum) -> {
+            	Optional<FoodTruckDto> temp = find(rs.getLong("FOOD_TRUCK_ID") + "");
 
-            if (ids != null) {
-                trucks = new ArrayList<>();
-                for (int i = 0; i < ids.size(); i++) {
-
-                	//Checks if its not the admin trucks
-                	boolean bad = (names.get(i).equals(badFT1)
-							|| names.get(i).equals(badFT2)
-							|| names.get(i).equals(badFT3));
-
-                	if(!bad) {
-						Optional<FoodTruckDto> temp = find(ids.get(i).toString());
-						if (temp.isPresent()) {
-							trucks.add(temp.get());
-						}
-					}
-                }
-            }
+            	if(temp.isPresent()){
+            		return temp.get();
+				} else {
+					return null;
+				}
+			});
         }
 
         return Optional.ofNullable(trucks);

@@ -122,6 +122,7 @@
 
             CREATE TABLE `EVENT` (
             `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `NAME` varchar(45) NOT NULL,
             `DESCRIPTION` varchar(500) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
             PRIMARY KEY (`EVENT_ID`),

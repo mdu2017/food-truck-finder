@@ -122,14 +122,14 @@ public class FoodTruckService {
 		return foodTruckDao.getRatingByTruck(truck_ID);
 	}
 
-	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
+	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
     	Stop temp = new Stop();
     	temp.setStart(start);
     	temp.setEnd(end);
     	temp.setLog(log);
     	temp.setLat(lat);
     	Long stop_ID = foodTruckDao.insertStop(temp);
-    	foodTruckDao.addEvent(details, stop_ID);
+    	foodTruckDao.addEvent(name, details, stop_ID);
 	}
 
 	public void removeEvent(Long event_ID){

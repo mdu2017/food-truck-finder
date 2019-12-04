@@ -962,9 +962,9 @@ public class FoodTruckDao {
 		}
 	}
 
-	public void addEvent(String details, Long stop_ID){
-		String sql = "INSERT INTO EVENT (DESCRIPTION, STOP_ID) VALUES (:details, :stop_ID)";
-		Map<String, ?> params = _Maps.map("details", details, "stop_ID", stop_ID);
+	public void addEvent(String name, String details, Long stop_ID){
+		String sql = "INSERT INTO EVENT (NAME, DESCRIPTION, STOP_ID) VALUES (:name, :details, :stop_ID)";
+		Map<String, ?> params = _Maps.map("details", details, "stop_ID", stop_ID, "name", name);
 		jdbcTemplate.update(sql, params);
 		return;
 	}
@@ -996,7 +996,9 @@ public class FoodTruckDao {
 			if(rs.next()){
 				EventDto temp = new EventDto();
 				temp.setEvent_ID(event_ID);
+				temp.setName(rs.getString("NAME"));
 				temp.setDescription(rs.getString("DESCRIPTION"));
+
 				String tempSql = "SELECT * FROM TRUCK_STOP WHERE STOP_ID = :stop_id";
 				Map<String, ?> tempParams = _Maps.map("stop_id", rs.getLong("STOP_ID"));
 				jdbcTemplate.query(tempSql, tempParams, (resultSet) ->{

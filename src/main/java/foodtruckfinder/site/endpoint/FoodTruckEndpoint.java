@@ -102,8 +102,8 @@ public class FoodTruckEndpoint {
 	}
 
     @PostMapping(value = "/addEvent", produces = "application/json")
-	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
-		foodTruckService.addEvent(details, start, end, log, lat);
+	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
+		foodTruckService.addEvent(name, details, start, end, log, lat);
 		return;
 	}
 

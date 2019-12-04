@@ -7,7 +7,6 @@ import java.util.Optional;
 
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
-import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 

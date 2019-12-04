@@ -10,7 +10,6 @@ import java.util.*;
 
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
-import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;

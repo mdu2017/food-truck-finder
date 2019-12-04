@@ -185,6 +185,7 @@
             (7, 7, "{All Customers}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all customers!"),
             (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!");
 
+            <!--If there's an error, it may be associated with the fact that there's special characters in here-->
             INSERT INTO MENU
             (`ITEM_ID`, `TRUCK_ID`, `NAME`, `DESCRIPTION`, `PRICE`) VALUES
             <!--honeyyy-->

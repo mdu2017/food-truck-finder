@@ -10,6 +10,7 @@ import java.util.*;
 
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
+import jdk.jfr.Event;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -582,7 +583,7 @@ public class FoodTruckDao {
 	 * @param s the stop to insert
 	 * @return The stop's ID as set in the database
 	 */
-	private Long insertStop(Stop s){
+	public Long insertStop(Stop s){
 		if(s != null){
 			if(s.getId() != null){
 				String sql = "REPLACE INTO TRUCK_STOP " +

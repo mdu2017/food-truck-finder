@@ -122,6 +122,7 @@
 
             CREATE TABLE `EVENT` (
             `EVENT_ID` int(11) NOT NULL AUTO_INCREMENT,
+            `NAME` varchar(45) NOT NULL,
             `DESCRIPTION` varchar(500) NOT NULL,
             `STOP_ID` int(11) NOT NULL,
             PRIMARY KEY (`EVENT_ID`),
@@ -183,6 +184,34 @@
             (6, 7, "{All Users}", 0, NULL, 0, 0, "OPEN", "This is the system food truck!  All users get notifications through this truck!"),
             (7, 7, "{All Customers}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all customers!"),
             (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!");
+
+            <!--If there's an error, it may be associated with the fact that there's special characters in here-->
+            INSERT INTO MENU
+            (`ITEM_ID`, `TRUCK_ID`, `NAME`, `DESCRIPTION`, `PRICE`) VALUES
+            <!--honeyyy-->
+            (1, 1, "Honey", "The best honey you've ever had.  Sold by the spoonfull", 1.00),
+            (2, 1, "Honey By the Gallon", "The best honey you've ever had.  Sold by the GALLON!", 20.00),
+            (3, 1, "Honey ;)", "Come get your honey! Ransom accepted in cash only!", 10000000.00),
+            (4, 1, "Honey and Nutella Crepe", "Nutella crepe with a dazzle of honey and topped by strawberries", 12.00),
+            (5, 1, "Honey on bread, your style", "You tell us the kind of bread and how to cook it and we'll put some of our specialty honey on it!", 7.00),
+            <!--torchies-->
+            (6, 2, "Naughty Santa", "TACO OF THE MONTH: GRILLED SHRIMP, CHORIZO, PICKLED ONIONS, JACK CHEESE, AVOCADO, CILANTRO &amp; POBLANO SAUCE ON A FLOUR TORTILLA.", 3.00),
+            (7, 2, "Monk Special", "\"Hold the potatoes.\" EGGS, BACON, GREEN CHILIES &amp; CHESSE. SERVED ON YOUR CHOICE OF TORTILLA", 2.50),
+            (8, 2, "GREEN CHILE PORK", "PORK CARNITAS, GREEN CHILES, COTIJA CHEESE, CILANTRO, ONIONS &amp; A LIME WEDGE WITH TOMATILLO SAUCE ON A CORN TORTILLA.", 3.75),
+            (9, 2, "FRIED AVOCADO", "FRIED AVOCADOS, REFRIED PINTO BEANS, PICO DE GALLO, LETTUCE &amp; CHEDDAR JACK CHEESE WITH POBLANO SAUCE ON A CORN TORTILLA.", 3.75),
+            (10, 2, "CHICKEN FAJITA", "MARINATED &amp; GRILLED CHICKEN BREAST, GRILLED ONIONS &amp; PEPPERS, PICO DE GALLO &amp; CHEDDAR JACK CHEESE WITH TOMATILLO SAUCE ON YOUR CHOICE OF TORTILLA.", 3.50),
+            (11, 2, "BEEF FAJITA", "MARINATED &amp; GRILLED BEEF, GRILLED ONIONS &amp; PEPPERS, PICO DE GALLO &amp; CHEDDAR JACK CHEESE WITH ROJA SAUCE ON YOUR CHOICE OF TORTILLA.", 3.75),
+            (12, 2, "DEMOCRAT", "BARBACOA, AVOCADO, COTIJA CHEESE, CILANTRO, ONIONS &amp; A LIME WEDGE WITH TOMATILLO SAUCE ON A CORN TORTILLA.", 4.00),
+            (13, 2, "REPUBLICAN", "GRILLED JALAPEÑO SAUSAGE, PICO DE GALLO &amp; CHEDDAR JACK CHEESE WITH POBLANO SAUCE ON A FLOUR TORTILLA.", 3.25),
+            (14, 2, "INDEPENDENT", "FRIED PORTOBELLO MUSHROOMS, REFRIED BLACK BEANS, GRILLED CORN, ESCABECHE CARROTS, COTIJA CHEESE, CILANTRO &amp; AVOCADO WITH ANCHO AIOLI ON A FLOUR TORTILLA.", 3.50),
+            (15, 2, "LOVE PUPPIES", "DARK CHOCOLATE BROWNIES MADE FROM SCRATCH! ASK FOR AVAILABLE FLAVORS", 2.50),
+            (16, 2, "LIL NOOKIES", "FRIED CHOCOLATE CHIP COOKIE DOUGH DUSTED WITH POWDERED SUGAR &amp; TOPPED WITH CHERRIES. 3 for 2.95, 13 for 11.95!", 2.95),
+            (17, 2, "SWEET CORN", "GRILLED CORN TOPPED WITH ANCHO AIOLI, COTIJA CHEESE, CILANTRO, DUSTED WITH RED CHILE POWDER AND SERVED WITH A LIME WEDGE.", 3.95),
+            <!--misc-->
+            (18, 3, "Tank top", "It's free!!", 0.00),
+            (19, 3, "High class tank top", "Some really dope tank tops. Get 'em fast, they sell out quickly!", 20.00),
+            (20, 4, "Something that sounds good", "But we're wayyyy to far away from you for you to care :)", 3.00),
+            (21, 5, "Your favorite food", "But we're never open, sorry :/", 3.00);
 
             INSERT INTO TRUCK_STOP
             (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES

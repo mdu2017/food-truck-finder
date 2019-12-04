@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
+import FoodTypesModal from 'js/FoodTypesModal';
 import {
 	UncontrolledTooltip,
 	Button,
@@ -94,10 +95,11 @@ export class EditProfile extends React.Component {
 									>
 										This cannot be changed!
 									</UncontrolledTooltip>
-									{this.props.user && (
-										<h3>{this.props.user}</h3>
-									)}
 								</span>
+								{this.props.user && (
+									<h3>{this.props.user}</h3>
+								)}
+
 								<br />
 								<span>
 									Email:{' '}
@@ -120,29 +122,13 @@ export class EditProfile extends React.Component {
 											}
 										/>
 									</FormGroup>
-									<br />
-									<FormGroup>
-										<Label for="currPassword">
-											Current Password
-											<span style={{ color: 'red' }}>
-												{' '}
-												*{' '}
-											</span>
-										</Label>
-										<Input
-											type="password"
-											name="currentpassword"
-											id="currPassword"
-											placeholder=""
-										/>
-									</FormGroup>
 									<FormGroup>
 										<Label for="newPassword">
 											New Password
-											<span style={{ color: 'red' }}>
+											{/* <span style={{ color: 'red' }}>
 												{' '}
 												*{' '}
-											</span>
+											</span> */}
 										</Label>
 										<Input
 											type="password"
@@ -157,10 +143,10 @@ export class EditProfile extends React.Component {
 									<FormGroup>
 										<Label for="retypedPassword">
 											New Password (Retyped)
-											<span style={{ color: 'red' }}>
+											{/* <span style={{ color: 'red' }}>
 												{' '}
 												*{' '}
-											</span>
+											</span> */}
 										</Label>
 										<Input
 											type="password"
@@ -234,7 +220,7 @@ export class EditProfile extends React.Component {
 											step="0.01"
 											placeholder={
 												this.state.defaultDistance *
-													70 +
+												70 +
 												' miles'
 											}
 											onChange={e =>
@@ -288,6 +274,7 @@ export class EditProfile extends React.Component {
 						</Row>
 					</Container>
 				</div>
+				<FoodTypesModal />
 			</div>
 		);
 	}

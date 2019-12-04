@@ -13,9 +13,9 @@ public class FoodTruckDto implements Momento<Long> {
 	private Long id, ownerId;
 	private String name, description;
 	private FoodType type;
-	private List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu;
+	private List<MenuItem> menu;
 	private BufferedImage truck_image = null;
-	private List<Tuple.Pair<String, Stop>> schedule; //new change that needs to be implemented
+	private List<Tuple.Pair<String, Stop>> schedule;
 	private Double price_low, price_high;
 	private FTStatus status;
 	private List<Deal> deals;
@@ -24,7 +24,7 @@ public class FoodTruckDto implements Momento<Long> {
 	public Long getId() { return id; }
 	public String getName() { return name; }
 	public FoodType getType() { return type; }
-	public List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> getMenu() { return menu; }
+	public List<MenuItem> getMenu() { return menu; }
 	public BufferedImage getTruck_image() { return truck_image; }
 	public List<Tuple.Pair<String, Stop>> getSchedule() { return schedule; }
     public double getPrice_low() { return price_low; }
@@ -39,7 +39,7 @@ public class FoodTruckDto implements Momento<Long> {
     public void setName(String name) { this.name = name; }
     public void setType(FoodType type) { this.type = type; }
 	public void setType(String type) { this.type = FoodType.valueOf(type.toUpperCase()); }
-	public void setMenu(List<Tuple.Pair<Long, Tuple.Triple<String, String, Double>>> menu) { this.menu = menu; }
+	public void setMenu(List<MenuItem> menu) { this.menu = menu; }
 	public void setTruck_image(BufferedImage truck_image) { this.truck_image = truck_image; }
 	public void setSchedule(List<Tuple.Pair<String, Stop>> schedule) { this.schedule = schedule; }
 	public void setPrice_low(Double price_low) { this.price_low = price_low; }

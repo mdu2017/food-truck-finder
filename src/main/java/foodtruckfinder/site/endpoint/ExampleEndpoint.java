@@ -41,7 +41,7 @@ public class ExampleEndpoint {
     public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
                                                            double userlong,
                                                            double radius) {
-        return unsecureFoodTruckService.getRecommendations(userlat, userlong, radius);
+        return unsecureFoodTruckService.getRecommendationsUnsecure(userlat, userlong, radius);
     }
 
     @GetMapping(value = "/nearby", produces = "application/json")

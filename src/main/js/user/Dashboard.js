@@ -49,8 +49,10 @@ export class Dashboard extends React.Component {
 			loadingSearch: false,
 			loadingRecommended: true,
 			loadingNearby: true,
-			recommendationRadius: 0.5,
-			nearbyRadius: 0.5,
+			recommendationRadius: 0.03,
+			nearbyRadius: 0.03,
+			spinnerHeight: 60,
+			spinnerWidth: 60,
 
 			dropdownOpen: false,
 			dropdownValue: 'Truck Name'
@@ -340,8 +342,8 @@ export class Dashboard extends React.Component {
 											{this.state.loadingNearby ? (
 												<img
 													src={Spinner}
-													width={70}
-													height={70}
+													width={this.state.spinnerWidth}
+													height={this.state.spinnerHeight}
 													mode="fit"
 												/>
 											) : this.state.nearbyFoodTrucks &&
@@ -568,8 +570,8 @@ export class Dashboard extends React.Component {
 										{this.state.loadingRecommended ? (
 											<img
 												src={Spinner}
-												width={70}
-												height={70}
+												width={this.state.spinnerWidth}
+												height={this.state.spinnerHeight}
 												mode="fit"
 											/>
 										) : this.state.recommendedFoodTrucks &&

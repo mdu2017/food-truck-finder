@@ -20,10 +20,10 @@ public class FoodTruckService {
 	@Autowired
 	private FoodTruckDao foodTruckDao;
 
+	//The basic functions
 	public Optional<FoodTruckDto> find(String id) {
 		return foodTruckDao.find(id);
 	}
-
 
 	public void save(FoodTruckDto foodTruckDto) throws SQLException {
 //        foodTruckDao.testFT(foodTruckDto);
@@ -31,33 +31,14 @@ public class FoodTruckService {
 	}
 
 	/**
-	 *
-	 * @param truck_id
+	 * Removes a truck
+	 * @param truck_id the truck to remove
 	 */
 	public boolean remove(Long truck_id){
 		return foodTruckDao.remove(truck_id);
 	}
 
-	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
-		foodTruckDao.addDeal(message, truckID, start, end);
-		Optional<FoodTruckDto> ft = foodTruckDao.find(truckID + "");
-		if(ft.isPresent()){
-			String notifMessage = "[" +  ft.get().getName() + "]: " + message;
-			foodTruckDao.sendNotification(notifMessage, truckID);
-		}
-	}
-
-	public void removeDeal(Long truckID){
-		foodTruckDao.removeDeal(truckID);
-	}
-
-	/**
-	 * This function gets the list of subscribers to a particular food truck
-	 * @param id the truck id
-	 * @return the list of usernames of people who are subscribed
-	 */
-	public List<String> getSubscribers(Long id) { return foodTruckDao.getSubscribers(id); }
-
+	//get by owner function
 	/**
 	 * This returns a list of food trucks owned by the given owner id
 	 * @param owner_id the owner id
@@ -67,6 +48,8 @@ public class FoodTruckService {
 		return foodTruckDao.getByOwner(owner_id);
 	}
 
+
+	//Search by functions
 	/** Search food truck by name */
 	public Optional<List<FoodTruckDto>> searchFoodTrucks(String name) {
 		return foodTruckDao.searchFoodTrucks(name);
@@ -82,30 +65,27 @@ public class FoodTruckService {
 		return foodTruckDao.searchTrucksByPrice(maxPrice);
 	}
 
-    /** Search truck by distance */
-    public Optional<List<FoodTruckDto>> searchTrucksByDistance(double userLat, double userLng, double maxDistance) {
-        System.out.println("Max distance of " + maxDistance + " from User Location (" + userLat + " , " + userLng + ")");
-        return foodTruckDao.searchTrucksByDistance(userLat, userLng, maxDistance);
-    }
-
-    /**
-     * send a message to all the owner's subscribers
-     * @param message what you want to say
-     * @param foodTruckId The food truck id
-     */
-	public void sendNotification(String message, Long foodTruckId){
-        foodTruckDao.sendNotification(message, foodTruckId);
+	/** Search truck by distance */
+	public Optional<List<FoodTruckDto>> searchTrucksByDistance(double userLat, double userLng, double maxDistance) {
+		System.out.println("Max distance of " + maxDistance + " from User Location (" + userLat + " , " + userLng + ")");
+		return foodTruckDao.searchTrucksByDistance(userLat, userLng, maxDistance);
 	}
 
+
+	//Algorithms
 	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
 														   double userlong,
 														   double radius) {
 		return foodTruckDao.getRecommendations(userlat, userlong, radius);
 	}
 
+	public Optional<List<FoodTruckDto>> getRecommendationsUnsecure(double userlat, double userlong, double radius) {
+		return getNearby(userlat, userlong, radius);
+	}
+
 	public Optional<List<FoodTruckDto>> getNearby(double userlat,
-														   double userlong,
-														   double radius) {
+												  double userlong,
+												  double radius) {
 		return foodTruckDao.getNearby(userlat, userlong, radius);
 	}
 
@@ -114,22 +94,61 @@ public class FoodTruckService {
 	 * @param userlat, userlong
 	 * @return
 	 */
-    public Optional<List<Tuple.Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
+	public Optional<List<Tuple.Triple<Double, Double, FoodTruckDto>>> viewNearbyTrucks(double userlat, double userlong) {
 		return foodTruckDao.viewNearbyTrucks(userlat, userlong);
-    }
+	}
 
+
+	//Deal functions
+	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+		foodTruckDao.addDeal(message, truckID, start, end);
+		Optional<FoodTruckDto> ft = foodTruckDao.find(truckID + "");
+		if(ft.isPresent()){
+			String notifMessage = "[" +  ft.get().getName() + "]: " + message;
+			foodTruckDao.sendNotification(notifMessage, truckID);
+		}
+	}
+
+	public void removeDeal(Long truckID){
+		foodTruckDao.removeDeal(truckID);
+	}
+
+	public Optional<Deal> getDeal(Long dealID) { return foodTruckDao.getDeal(dealID); }
+
+	public List<Deal> getAllDeals(Long truckID) { return foodTruckDao.getAllDeals(truckID); }
+
+
+	//Ratings/notification/subscription functions (misc)
 	public List<Rating> getRatingByTruck(Long truck_ID){
 		return foodTruckDao.getRatingByTruck(truck_ID);
 	}
 
-	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
+	/**
+	 * send a message to all the owner's subscribers
+	 * @param message what you want to say
+	 * @param foodTruckId The food truck id
+	 */
+	public void sendNotification(String message, Long foodTruckId){
+		foodTruckDao.sendNotification(message, foodTruckId);
+	}
+
+	/**
+	 * This function gets the list of subscribers to a particular food truck
+	 * @param id the truck id
+	 * @return the list of usernames of people who are subscribed
+	 */
+	public List<String> getSubscribers(Long id) { return foodTruckDao.getSubscribers(id); }
+
+
+	//Event functions
+	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
     	Stop temp = new Stop();
     	temp.setStart(start);
     	temp.setEnd(end);
     	temp.setLog(log);
     	temp.setLat(lat);
     	Long stop_ID = foodTruckDao.insertStop(temp);
-    	foodTruckDao.addEvent(details, stop_ID);
+    	foodTruckDao.addEvent(name, details, stop_ID);
 	}
 
 	public void removeEvent(Long event_ID){
@@ -149,15 +168,13 @@ public class FoodTruckService {
     	return foodTruckDao.getEventById(event_ID);
 	}
 
+	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+		return foodTruckDao.getAttendingTrucks(event_ID);
+	}
+
 	public List<EventDto> getAllEvents() {
     	return foodTruckDao.getAllEvents();
 	}
 
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
-    	return foodTruckDao.getAttendingTrucks(event_ID);
-	}
-
-	public Optional<Deal> getDeal(Long dealID) { return foodTruckDao.getDeal(dealID); }
-
-	public List<Deal> getAllDeals(Long truckID) { return foodTruckDao.getAllDeals(truckID); }
+	public List<EventDto> searchForEvent(String name){ return foodTruckDao.searchForEvent(name); }
 }

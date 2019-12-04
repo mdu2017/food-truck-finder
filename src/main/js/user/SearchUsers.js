@@ -99,7 +99,7 @@ export class SearchUsers extends React.Component {
 				<div className="container padded">
 					<h1>Search Users</h1>
 					<br />
-					<Form onSubmit={this.handleSubmit}>
+					<Form onChange={this.handleSubmit}>
 						<FormGroup>
 							<Input
 								type="text"

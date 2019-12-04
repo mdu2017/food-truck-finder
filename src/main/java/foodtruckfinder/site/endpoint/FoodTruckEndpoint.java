@@ -34,6 +34,7 @@ public class FoodTruckEndpoint {
 //		return foodTruckService.find(id);
 //	}
 
+	//The basic functions
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
 	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
@@ -46,9 +47,6 @@ public class FoodTruckEndpoint {
 		return foodTruckService.remove(truck_id);
 	}
 
-	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
-	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
-
 	/**
 	 * This function returns a list of food trucks based on an owner id
 	 *
@@ -60,6 +58,44 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
 	}
 
+	//Algorithms
+	@GetMapping(value = "/recommendationsSecure", produces = "application/json")
+	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
+														   double userlong,
+														   double radius) {
+		return foodTruckService.getRecommendations(userlat, userlong, radius);
+	}
+
+	//Deal functions
+	@PostMapping(value = "/addDeal", produces = "application/json")
+	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+		foodTruckService.sendNotification(message, truckID);
+		foodTruckService.addDeal(message, truckID, start, end);
+	}
+
+	@PostMapping(value = "/removeDeal", produces = "application/json")
+	public void removeDeal(Long truckID) {
+		foodTruckService.removeDeal(truckID);
+	}
+
+	@PostMapping(value = "/getDeal", produces = "application/json")
+	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
+
+	@PostMapping(value = "/getAllDeals", produces = "application/json")
+	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
+
+
+	//Ratings/notification/subscription functions (misc)
+	@PostMapping(value = "/send-notification", produces = "application/json" )
+	public void sendNotification(String message, Long foodTruckId){
+		foodTruckService.sendNotification(message, foodTruckId);
+	}
+
+	@GetMapping(value = "/getSubscribers/{id}", produces = "application/json")
+	public List<String> getSubscribers(@PathVariable("id") Long id) { return foodTruckService.getSubscribers(id); }
+
+
+	//Get enums
 	/**
 	 * This function gets a string list of food types
 	 *
@@ -71,7 +107,6 @@ public class FoodTruckEndpoint {
 				.map(FoodTruckDto.FoodType::name)
 				.collect(Collectors.toList());
 	}
-
 
 	/**
 	 * This function gets a string list of the status
@@ -85,25 +120,11 @@ public class FoodTruckEndpoint {
 				.collect(Collectors.toList());
 	}
 
-	@PostMapping(value = "/send-notification", produces = "application/json" )
-	public void sendNotification(String message, Long foodTruckId){
-		foodTruckService.sendNotification(message, foodTruckId);
-	}
 
-	@PostMapping(value = "/addDeal", produces = "application/json")
-	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
-		foodTruckService.sendNotification(message, truckID);
-		foodTruckService.addDeal(message, truckID, start, end);
-	}
-
-	@PostMapping(value = "/removeDeal", produces = "application/json")
-	public void removeDeal(Long truckID) {
-		foodTruckService.removeDeal(truckID);
-	}
-
+	//Event functions
     @PostMapping(value = "/addEvent", produces = "application/json")
-	public void addEvent(String details, LocalDateTime start, LocalDateTime end, double log, double lat){
-		foodTruckService.addEvent(details, start, end, log, lat);
+	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
+		foodTruckService.addEvent(name, details, start, end, log, lat);
 		return;
 	}
 
@@ -130,17 +151,14 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getEventById(event_ID);
 	}
 
+	@GetMapping(value = "getAttendingTrucks", produces = "application/json")
+	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
+
 	@GetMapping(value = "getAllEvents", produces = "application/json")
 	public List<EventDto> getAllEvents(){
 		return foodTruckService.getAllEvents();
 	}
 
-	@GetMapping(value = "getAttendingTrucks", produces = "application/json")
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
-
-    @PostMapping(value = "/getDeal", produces = "application/json")
-	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
-
-	@PostMapping(value = "/getAllDeals", produces = "application/json")
-	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
+	@PostMapping(value = "searchForEvent", produces = "application/json")
+	public List<EventDto> searchForEvent(String name){ return foodTruckService.searchForEvent(name); }
 }

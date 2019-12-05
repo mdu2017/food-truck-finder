@@ -1,14 +1,14 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * If this is your first time looking at Spring Services, check out the detailed explanation in UserService first.

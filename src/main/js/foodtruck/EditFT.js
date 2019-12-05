@@ -1,18 +1,8 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import {
-	Button,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	FormText,
-	Container,
-	Col,
-	Row
-} from 'reactstrap';
+import {Button, Col, Container, Form, FormGroup, FormText, Input, Label, Row} from 'reactstrap';
 
 export class EditFoodTruck extends React.Component {
 	constructor(props) {

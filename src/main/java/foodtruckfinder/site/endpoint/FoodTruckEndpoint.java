@@ -1,22 +1,18 @@
 package foodtruckfinder.site.endpoint;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import alloy.util.Json;
-import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.foodtruck.EventDto;
-import foodtruckfinder.site.common.foodtruck.Stop;
-import foodtruckfinder.site.common.user.UserDto;
-import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.foodtruck.Deal;
+import foodtruckfinder.site.common.foodtruck.EventDto;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
+import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
-import foodtruckfinder.site.common.foodtruck.FoodTruckService;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * If this is your first time looking through this project, see the more in-depth overview of controllers in UserEndpoint.

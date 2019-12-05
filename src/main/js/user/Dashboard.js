@@ -1,32 +1,28 @@
-import React, { useState } from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import React from 'react';
+import {Link} from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import DashboardMap from 'js/DashboardMap';
 import {
-	DropdownToggle,
-	DropdownMenu,
-	DropdownItem,
-	ButtonDropdown
-} from 'reactstrap';
-import {
-	Badge,
+	Button,
+	ButtonDropdown,
 	Col,
 	Container,
-	Nav,
-	NavItem,
-	NavLink,
-	Row,
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
 	Form,
 	FormGroup,
 	Input,
-	Button,
 	ListGroup,
 	ListGroupItem,
+	Nav,
+	NavItem,
+	NavLink,
 	Pagination,
 	PaginationItem,
-	PaginationLink
+	PaginationLink,
+	Row
 } from 'reactstrap';
 import Spinner from 'js/images/spinner.gif';
 

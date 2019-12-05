@@ -1,8 +1,8 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import { Col, Row, Container, Button } from 'reactstrap';
+import {Button, Col, Container, Row} from 'reactstrap';
 
 export class ViewProfile extends React.Component {
 	constructor(props) {

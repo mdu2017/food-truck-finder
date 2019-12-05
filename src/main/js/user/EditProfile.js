@@ -1,19 +1,8 @@
-import _ from 'lodash';
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import {
-	UncontrolledTooltip,
-	Button,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	Container,
-	Row,
-	Col
-} from 'reactstrap';
+import {Button, Col, Container, Form, FormGroup, Input, Label, Row, UncontrolledTooltip} from 'reactstrap';
 
 export class EditProfile extends React.Component {
 	constructor(props) {

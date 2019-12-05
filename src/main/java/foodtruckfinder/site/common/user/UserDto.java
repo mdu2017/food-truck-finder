@@ -1,14 +1,11 @@
 package foodtruckfinder.site.common.user;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-
-import foodtruckfinder.site.common.External.Notification;
+import alloy.util.Momento;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import alloy.util.Momento;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by jlutteringer on 8/23/17.

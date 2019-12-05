@@ -19,12 +19,15 @@ import {
 } from 'reactstrap';
 import MapContainer from 'js/Maps';
 
+let menuIndex = 0;
+
 export class CreateFoodTruck extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
 			name: null,
-			menu: [],
+			menu: [
+            ],
 			description: null,
 			price_low: 0,
 			price_high: 10,
@@ -123,20 +126,20 @@ export class CreateFoodTruck extends React.Component {
 	handleMenuModalSubmit = event => {
 		this.toggleMenu();
 
-		let vals = {
-			menuItemName: this.state.menuItemName,
-			menuItemDesc: this.state.menuItemDesc,
-			menuItemPrice: this.state.menuItemPrice
-		};
-
+		// let vals = {
+		// 	menuItemName: this.state.menuItemName,
+		// 	menuItemDesc: this.state.menuItemDesc,
+		// 	menuItemPrice: this.state.menuItemPrice
+		// };
+        //
 		let mi = this.state.menuItemName;
 		let md = this.state.menuItemDesc;
 		let mp = this.state.menuItemPrice;
-
-        let tempStrMenu = JSON.stringify(vals);
-        let tempArr = JSON.parse(tempStrMenu);
-		console.log('stringified: ');
-		console.log(tempStrMenu);
+        //
+        // let tempStrMenu = JSON.stringify(vals);
+        // let tempArr = JSON.parse(tempStrMenu);
+		// console.log('stringified: ');
+		// console.log(tempStrMenu);
 
 		//Add to the list of menu items
 		// this.setState(prevState => ({
@@ -150,17 +153,53 @@ export class CreateFoodTruck extends React.Component {
         // }));
 
         this.setState({
-            menu: this.state.menu.concat([
+            menu: this.state.menu.concat(
                 {
                     menuItemName: mi,
                     menuItemDesc: md,
                     menuItemPrice: mp,
                 }
-            ])
+            )
         });
 
 		event.preventDefault();
 	}
+
+	//item name
+    handleItemNameChange = idx => evt => {
+        const newMenu = this.state.menu.map((menu, sidx) => {
+            if (idx !== sidx) return menu;
+            return {
+                ...menu,
+                menuItemName: evt.target.value
+            };
+        });
+        this.setState({ menu: newMenu });
+    };
+
+	//description
+    handleItemDescChange = idx => evt => {
+        const newMenu = this.state.menu.map((menu, sidx) => {
+            if (idx !== sidx) return menu;
+            return {
+                ...menu,
+                menuItemDesc: evt.target.value
+            };
+        });
+        this.setState({ menu: newMenu });
+    };
+
+    //price
+    handleItemPriceChange = idx => evt => {
+        const newMenu = this.state.menu.map((menu, sidx) => {
+            if (idx !== sidx) return menu;
+            return {
+                ...menu,
+                menuItemPrice: evt.target.value
+            };
+        });
+        this.setState({ menu: newMenu });
+    };
 
 	//schedule modal
 	handleModalSubmit = event => {
@@ -352,9 +391,7 @@ export class CreateFoodTruck extends React.Component {
 
 
 					{/*	Menu modal */}
-						<Container>
-							{/*TODO: Modal form submit*/}
-							<Button color="info" onClick={this.toggleMenu}>Add To Menu</Button>{' '}
+                        <Button color="info" onClick={this.toggleMenu}>Add To Menu</Button>{' '}
 							<Modal
 								isOpen={this.state.menuModal}
 								size="lg"
@@ -372,17 +409,14 @@ export class CreateFoodTruck extends React.Component {
 												<Label for='itemName'>Item Name</Label>
 												<Input type='text' name='itemName'
 													   id='itemName' placeholder="Item name"
-													   onChange={e =>
-														   this.setMenuItemName(e.target.value)
-													   }/>
+                                                onChange={e=> this.setMenuItemName(e.target.value)}
+                                                />
 											</FormGroup>
 											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 												<Label for="menuDescription">Description</Label>
 												<Input type='textarea' name='menuDescription'
 													   id='menuDescription' placeholder="Item Description"
-													   onChange={e =>
-														   this.setMenuItemDesc(e.target.value)
-													   }/>
+                                                       onChange={e=> this.setMenuItemDesc(e.target.value)}/>
 											</FormGroup>
 											<Label for='itemPrice'>Price</Label>
 											<Input
@@ -391,9 +425,7 @@ export class CreateFoodTruck extends React.Component {
 												name="itemPrice"
 												id="itemPrice"
 												step="0.10"
-												onChange={e =>
-													this.setMenuItemPrice(e.target.value)
-												}
+                                                onChange={e=> this.setMenuItemPrice(e.target.value)}
 											/>
 										</Form>
 									</ModalBody>
@@ -407,7 +439,6 @@ export class CreateFoodTruck extends React.Component {
 									</ModalFooter>
 								</form>
 							</Modal>
-						</Container>
 
 					{/*	Schedule Box */}
 					</Form>
@@ -614,7 +645,7 @@ export class CreateFoodTruck extends React.Component {
 						</div>
 					))}
 				</div>
-				{console.log(this.state.menu)}
+				{/*{console.log(this.state.menu)}*/}
 			</div>
 		);
 	}

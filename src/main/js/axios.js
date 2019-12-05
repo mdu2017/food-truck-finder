@@ -12,6 +12,7 @@ export function update(user) {
 
 //TODO: Creates a FoodTruck in the Database
 export function createFoodTruck(foodTruck) {
+	console.log(foodTruck);
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 

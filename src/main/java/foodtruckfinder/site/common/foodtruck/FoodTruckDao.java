@@ -208,10 +208,12 @@ public class FoodTruckDao {
 			//Insert schedule in database
 //			updateSchedule(foodTruck);
 
-			//TODO: Wait for weston to finish DEAL
-//			for(Deal d : foodTruck.getDeals()){
-//				insertDeal(d);
-//			}
+			//deal stuff
+			if(foodTruck.getDeals() != null) {
+				for(Deal d : foodTruck.getDeals()){
+					insertDeal(d);
+				}
+			}
 
 			//original starting example code
 //			String sql = "INSERT INTO FOOD_TRUCK (NAME, TYPE) VALUES (:name, :type)";
@@ -728,6 +730,7 @@ public class FoodTruckDao {
 		}
 	}
 
+
 	//schedule functions
 	private List<Tuple.Pair<String, Stop>> getSchedule(Long ftID){
 		Map<String, ?> parameters = _Maps.map("foodTruckId", ftID);
@@ -765,7 +768,7 @@ public class FoodTruckDao {
 
 				//update the schedule table after the stops table has been updated
 				Map<String, ?> schedparams = _Maps.map(
-						"foodTruckId", foodTruck.getId(),
+						"foodTruckid", foodTruck.getId(),
 						"day", s.getFirst(),
 						"stopid", s.getSecond().getId());
 

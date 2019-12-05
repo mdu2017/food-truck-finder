@@ -57,7 +57,7 @@ export class OwnedFoodTrucks extends React.Component {
 			result.forEach(truck => {
 				Axios.getAllDeals(truck.id).then(response => {
 					let temp = this.state.deals;
-					if (response.length != 0) {
+					if (response.length !== 0) {
 						response.forEach(deal => {
 							temp.push(deal);
 						});
@@ -79,6 +79,16 @@ export class OwnedFoodTrucks extends React.Component {
 		this.setState({
 			dealModal: !this.state.dealModal,
 			foodTruckId: id
+		});
+	}
+
+	deleteDeal(id) {
+		Axios.deleteDeal(id).then(result => {
+			this.setState({ deals: this.state.deals.filter(deal => {
+				if(deal.deal_id !== id) {
+					return deal;
+				}
+			})});
 		});
 	}
 
@@ -182,7 +192,7 @@ export class OwnedFoodTrucks extends React.Component {
 										color="danger"
 										size="sm"
 										onClick={() =>
-											this.toggleDeal(deal.truck_id)
+											this.deleteDeal(deal.deal_id)
 										}
 									>
 										Remove

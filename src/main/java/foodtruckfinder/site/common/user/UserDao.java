@@ -175,6 +175,12 @@ public class UserDao {
 	 * @return the updated authenticated user
 	 */
 	public UserAuthenticationDto save(UserAuthenticationDto userAuthentication) { // == register/update user
+		if(userAuthentication.getUser().getUsername().length() > 20){
+			userAuthentication.getUser().setUsername(userAuthentication.getUser().getUsername().substring(0, Math.min(userAuthentication.getUser().getUsername().length(), 500)));
+		}
+		if(userAuthentication.getUser().getPrincipal().length() > 255){
+			userAuthentication.getUser().setPrincipal(userAuthentication.getUser().getPrincipal().substring(0, Math.min(userAuthentication.getUser().getPrincipal().length(), 255)));
+		}
 		if(userAuthentication.getUser().getId() != null) {
 			String sql = "UPDATE USER SET " +
 					"PRINCIPAL = :principal, " +

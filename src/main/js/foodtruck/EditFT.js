@@ -1,8 +1,23 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import {Button, Col, Container, Form, FormGroup, FormText, Input, Label, Row} from 'reactstrap';
+import {
+	Button,
+	Col,
+	Container,
+	Form,
+	FormGroup,
+	FormText,
+	Input,
+	Label,
+	Row,
+	Modal,
+	ModalBody,
+	ModalHeader,
+	ModalFooter
+} from 'reactstrap';
+import MapContainer from 'js/Maps';
 
 export class EditFoodTruck extends React.Component {
 	constructor(props) {
@@ -12,16 +27,30 @@ export class EditFoodTruck extends React.Component {
 			name: null,
 			description: null,
 			// menu: null,
-			// schedule: null,
+			schedule: [
+				{
+					day: 'S',
+					startTime: null,
+					endTime: null,
+					lat: null,
+					log: null
+				}
+			],
+			selectedLatitude: 0,
+			selectedLongitude: 0,
+			buttonVisibility: true,
 			price_low: null,
 			price_high: null,
 			status: null,
 			foodtype: null,
 			truck: null,
+			modal: false,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
 			foodtypes: [],
 			statuses: []
 		};
+		this.toggle = this.toggle.bind(this);
+		this.handleModalSubmit = this.handleModalSubmit.bind(this);
 	}
 
 	setID = id => this.setState({ id });
@@ -44,12 +73,15 @@ export class EditFoodTruck extends React.Component {
 			if (this.state.price_high < 0) {
 				this.state.price_high = 0;
 			}
+			{
+				console.log(this.state.schedule);
+			}
 			this.props.editTruck({
 				id: this.state.id,
 				name: this.state.name,
 				description: this.state.description,
 				// menu: this.state.menu,
-				// schedule: this.state.schedule,
+				schedFE: this.state.schedule,
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
@@ -81,6 +113,18 @@ export class EditFoodTruck extends React.Component {
 		this.getStatuses();
 	}
 
+	toggle() {
+		this.setState({
+			modal: !this.state.modal
+		});
+	}
+
+	handleModalSubmit = event => {
+		this.toggle();
+		this.setState({ buttonVisibility: !this.state.buttonVisibility });
+		event.preventDefault();
+	};
+
 	getFoodTypes() {
 		Axios.getFoodTypes().then(result => {
 			this.setState({ foodtypes: result });
@@ -101,60 +145,77 @@ export class EditFoodTruck extends React.Component {
 		event.preventDefault();
 	};
 
-	displayDayOfTheWeek(dayofTheWeek) {
-		return (
-			<div>
-				<Container>
-					<Row>
-						<Col xs="auto">
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input type="checkbox" />
-									{dayofTheWeek}
-								</FormGroup>
-								<FormGroup>
-									<Input
-										type="time"
-										name="time"
-										id="StartTime"
-									/>
-									<Label for="EndTime"> - </Label>
-									<Input
-										type="time"
-										name="time"
-										id="EndTime"
-									/>
-								</FormGroup>
-							</Form>
-						</Col>
-						<Col>
-							<Form inline>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input
-										type="number"
-										min={0}
-										name="latitude"
-										id="latitude"
-										placeholder="latitude"
-										step="0.01"
-									/>
-								</FormGroup>
-								<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
-									<Input
-										type="number"
-										min={0}
-										name="longitude"
-										id="longitude"
-										placeholder="longitude"
-										step="0.01"
-									/>
-								</FormGroup>
-							</Form>
-						</Col>
-					</Row>
-				</Container>
-			</div>
-		);
+	handleStartTimeScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			return {
+				...schedule,
+				startTime: evt.target.value
+			};
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleEndTimeScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			return {
+				...schedule,
+				endTime: evt.target.value
+			};
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleDayScheduleChange = idx => evt => {
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			return {
+				...schedule,
+				day: evt.target.value
+			};
+		});
+		this.setState({ schedule: newSchedule });
+		console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleLocationChange = idx => evt => {
+		this.setState({ buttonVisibility: !this.state.buttonVisibility });
+		const newSchedule = this.state.schedule.map((schedule, sidx) => {
+			if (idx !== sidx) return schedule;
+			return {
+				...schedule,
+				log: this.state.selectedLongitude,
+				lat: this.state.selectedLatitude
+			};
+		});
+		this.setState({ schedule: newSchedule });
+		// console.log(JSON.stringify(newSchedule));
+		console.log(newSchedule);
+	};
+
+	handleAddStop() {
+		this.setState({
+			schedule: this.state.schedule.concat([
+				{
+					day: 'S',
+					startTime: null,
+					endTime: null,
+					lat: null,
+					log: null
+				}
+			])
+		});
+	}
+
+	handleMapSelection(latitude, longitude) {
+		this.setState({ selectedLatitude: latitude });
+		this.setState({ selectedLongitude: longitude });
 	}
 
 	render() {
@@ -275,11 +336,6 @@ export class EditFoodTruck extends React.Component {
 									<Label for="ftMenu" hidden>
 										Menu
 									</Label>
-									<Input
-										type="file"
-										name="menu"
-										id="ftMenu"
-									/>
 									<FormText color="muted">
 										This is some placeholder block-level
 										help text for the above input. It's a
@@ -290,19 +346,210 @@ export class EditFoodTruck extends React.Component {
 							</Form>
 						</div>
 					) : null}
-					<legend>Schedule / Route</legend>
-					{/* AWAITING CreateFT's Schedule to be implemented. */}
-					{/* {this.displayDayOfTheWeek('Sunday')}
-					{this.displayDayOfTheWeek('Monday')}
-					{this.displayDayOfTheWeek('Tuesday')}
-					{this.displayDayOfTheWeek('Wednesday')}
-					{this.displayDayOfTheWeek('Thursday')}
-					{this.displayDayOfTheWeek('Friday')}
-					{this.displayDayOfTheWeek('Saturday')} */}
+					<legend>Schedule</legend>
+					<FormText color="muted">
+						If no time is selected for an individual day, it is
+						assumed to be closed.
+					</FormText>
+					<Container>
+						<Row>
+							<Col md={{ offset: 3 }}>Time at Location:</Col>
+						</Row>
+						{this.state.schedule.map((schedule, idx) => (
+							<div className="schedule">
+								<Row>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+												<span>
+													{'Stop '}
+													{idx + 1}
+													{': '}
+												</span>
+												<Input
+													required
+													type="select"
+													name="DotW"
+													id="DotW"
+													onChange={this.handleDayScheduleChange(
+														idx
+													)}
+												>
+													<option value="S">
+														Sunday
+													</option>
+													<option value="M">
+														Monday
+													</option>
+													<option value="T">
+														Tuesday
+													</option>
+													<option value="W">
+														Wednesday
+													</option>
+													<option value="R">
+														Thursday
+													</option>
+													<option value="F">
+														Friday
+													</option>
+													<option value="U">
+														Saturday
+													</option>
+												</Input>
+											</FormGroup>
+										</Form>
+									</Col>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup className="text-center">
+												<Input
+													required
+													type="time"
+													name="time"
+													id="StartTime"
+													onChange={this.handleStartTimeScheduleChange(
+														idx
+													)}
+												/>
+												<Label for="EndTime"> - </Label>
+												<Input
+													required
+													type="time"
+													name="time"
+													id="EndTime"
+													onChange={this.handleEndTimeScheduleChange(
+														idx
+													)}
+												/>
+											</FormGroup>
+										</Form>
+									</Col>
+									<Col xs="auto">
+										<Form inline>
+											<FormGroup>
+												<Button
+													outline
+													hidden={
+														!this.state
+															.buttonVisibility
+													}
+													color="primary"
+													id="AddLocation"
+													onClick={this.toggle}
+												>
+													Add Location
+												</Button>
+												<Button
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													outline
+													color="primary"
+													onClick={this.handleLocationChange(
+														idx
+													)}
+												>
+													Confirm Location for Stop{' '}
+													{idx + 1} ?
+												</Button>
+												<Input
+													disabled
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													type="number"
+													name="latitude"
+													id="latitude"
+													value={
+														this.state
+															.selectedLatitude
+													}
+												/>
+												<Input
+													disabled
+													hidden={
+														this.state
+															.buttonVisibility
+													}
+													type="number"
+													name="longitude"
+													id="longitude"
+													value={
+														this.state
+															.selectedLongitude
+													}
+												/>
+											</FormGroup>
+										</Form>
+									</Col>
+								</Row>
+							</div>
+						))}
+					</Container>
+					<Col sm="12" md={{ size: 6, offset: 2 }}>
+						<Form inline>
+							<FormGroup>
+								<Button
+									type="submit"
+									hidden={!this.state.buttonVisibility}
+									color="primary"
+									size="sm"
+									onClick={() => this.handleAddStop()}
+								>
+									Add Stop
+								</Button>
+							</FormGroup>
+						</Form>
+					</Col>
 					<Button onClick={this.handleSubmit}>Submit</Button>{' '}
 					<Button color="danger" onClick={this.handleRemoveTruck}>
 						Delete Food Truck
 					</Button>
+					<div>
+						{this.state.schedule.map(schedule => (
+							<div className="schedule">
+								<Modal
+									isOpen={this.state.modal}
+									size="lg"
+									scrollable="true"
+									style={{ height: '400px', width: '425px' }}
+								>
+									<form onSubmit={this.handleModalSubmit}>
+										<ModalHeader>Google Maps</ModalHeader>
+										<ModalBody
+											style={{
+												height: '400px',
+												width: '600px'
+											}}
+										>
+											<MapContainer
+												handleMapSelection={this.handleMapSelection.bind(
+													this
+												)}
+											/>
+										</ModalBody>
+										<ModalFooter>
+											<input
+												type="submit"
+												value="Submit"
+												color="primary"
+												className="btn btn-primary"
+											/>
+											<Button
+												color="danger"
+												onClick={this.toggle}
+											>
+												Cancel
+											</Button>
+										</ModalFooter>
+									</form>
+								</Modal>
+							</div>
+						))}
+					</div>
 				</div>
 			</div>
 		);

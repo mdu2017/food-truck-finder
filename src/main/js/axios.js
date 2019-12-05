@@ -101,6 +101,18 @@ export function getRecommendations(userlat, userlong, radius) {
 	});
 }
 
+export function getAllEvents() {
+	return axios.get('/api/food-truck/getAllEvents');
+}
+
+export function getEventByID(id) {
+	return axios.get('/api/food-truck/getEventById?event_ID=' + id);
+}
+
+export function getAttendingTrucks(id) {
+	return axios.get('/api/food-truck/getAttendingTrucks?event_ID=' + id);
+}
+
 export function getSecuredRecommendations(userID, userlat, userlong) {
 	return axios.get('/api/user/recommendations', {
 		params: {

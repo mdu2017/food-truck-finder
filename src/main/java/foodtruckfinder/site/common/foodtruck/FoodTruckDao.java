@@ -102,8 +102,10 @@ public class FoodTruckDao {
 			int typeid = getFoodTypeId(foodTruck.getType());
 
 			//deal stuff
-			for(Deal d : foodTruck.getDeals()){
-				insertDeal(d);
+			if(foodTruck.getDeals() != null) {
+				for(Deal d : foodTruck.getDeals()){
+					insertDeal(d);
+				}
 			}
 
 			//overall update in database

@@ -734,7 +734,7 @@ public class FoodTruckDao {
 			if(d.getDeal_id() != null){
 				String sql = "REPLACE INTO DEAL " +
 						"(DEAL_ID, TRUCK_ID, MESSAGE, START, END) VALUES " +
-						"(:dealID, :truckID, :message, :startTime, :endTime);";
+						"(:dealID, :truckID, :message, :start, :end);";
 
 				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
 						"message", d.getMessage(),
@@ -747,7 +747,7 @@ public class FoodTruckDao {
 			} else {
 				String sql = "INSERT INTO DEAL " +
 						"(TRUCK_ID, MESSAGE, START, END) VALUES " +
-						"(:truckID, :message, :startTime, :endTime);";
+						"(:truckID, :message, :start, :end);";
 
 
 				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
@@ -829,10 +829,7 @@ public class FoodTruckDao {
 
 		List<String> subscribers = getSubscribers(foodTruckId);
 		for (String subscriber : subscribers) {
-			sent = LocalDateTime.now();
-//			Optional<UserDto> curUser = users.findUserByUsername(subscriber);
-//			userID = curUser.get().getId();
-			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
+			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);
 			jdbcTemplate.update(sql, params);
 		}
 	}
@@ -915,17 +912,17 @@ public class FoodTruckDao {
 		return Optional.ofNullable(curDto);
 	}
 
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){
 		String sql = "SELECT TRUCK_ID FROM ATTENDING_EVENT WHERE EVENT_ID = :event_ID";
 		Map<String, ?> params = _Maps.map("event_ID", event_ID);
-		List<Long> ids = new ArrayList<>();
+		List<Optional<FoodTruckDto>> ids = new ArrayList<>();
 		jdbcTemplate.query(sql, params, (rs) -> {
 			if(rs.next()){
-				ids.add(rs.getLong("TRUCK_ID"));
+				ids.add(find("" + rs.getLong("TRUCK_ID")));
 			}
 		});
 		if(ids.size() > 0){
-			return Optional.ofNullable(ids);
+			return Optional.of(ids);
 		}
 		else{
 			return null;

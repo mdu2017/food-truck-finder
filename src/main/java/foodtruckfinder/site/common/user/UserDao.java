@@ -54,6 +54,10 @@ public class UserDao {
 				userDto.setPrincipal(rs.getString("PRINCIPAL"));
 				userDto.setUsername(rs.getString("USERNAME"));
 				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
+				userDto.setPrefDistance(rs.getDouble("PREF_DISTANCE"));
+				userDto.setPrefLow(rs.getDouble("PREF_LOW"));
+				userDto.setPrefHigh(rs.getDouble("PREF_HIGH"));
+				userDto.setPrefFoodTypes(getUserPreferences(userDto.getId()).get());
                 //Need this for stuffy stuff
 				userDto.setRoles(_Lists.list("ROLE_USER"));
 				return userAuthenticationDto;
@@ -158,7 +162,7 @@ public class UserDao {
 		//Add the new food type preferences
 		for(FoodTruckDto.FoodType favorite : favorites){
 			sql = "INSERT IGNORE INTO PREFERENCES (FOOD_TYPE_ID, USER_ID) VALUES (:favorite, :userID)";
-			params = _Maps.map("favorite", favorite, "userID", userID);
+			params = _Maps.map("favorite", favorite.ordinal(), "userID", userID);
 			jdbcTemplate.update(sql, params);
 		}
 	}
@@ -176,9 +180,9 @@ public class UserDao {
 					"PRINCIPAL = :principal, " +
 					"PASSWORD = :password, " +
 					"USERNAME = :username, " +
-					"IS_OWNER = :owner " +
-					"PREF_DISTANCE = :prefDistance " +
-					"PREF_HIGH = :prefHigh " +
+					"IS_OWNER = :owner, " +
+					"PREF_DISTANCE = :prefDistance, " +
+					"PREF_HIGH = :prefHigh, " +
 					"PREF_LOW = :prefLow " +
 					"WHERE USER_ID = :userId";
 
@@ -195,7 +199,9 @@ public class UserDao {
 			jdbcTemplate.update(sql, parameters);
 		}
 		else {
-			String sql = "INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER, PREF_DISTANCE, PREF_HIGH, PREF_LOW) VALUES (:principal, :username, :password, :isOwner, :prefDistance, :prefHigh, :prefLow)";
+			String sql = "INSERT INTO USER " +
+					"(PRINCIPAL, USERNAME, PASSWORD, IS_OWNER, PREF_DISTANCE, PREF_HIGH, PREF_LOW) VALUES " +
+					"(:principal, :username, :password, :isOwner, :prefDistance, :prefHigh, :prefLow)";
 
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("principal", userAuthentication.getUser().getPrincipal()),
@@ -204,7 +210,7 @@ public class UserDao {
 					new Tuple.Tuple2<>("prefDistance", userAuthentication.getUser().getPrefDistance()),
 					new Tuple.Tuple2<>("prefHigh", userAuthentication.getUser().getPrefHigh()),
 					new Tuple.Tuple2<>("prefLow", userAuthentication.getUser().getPrefLow()),
-					new Tuple.Tuple2<>("owner", userAuthentication.getUser().getIsOwner()));
+					new Tuple.Tuple2<>("isOwner", userAuthentication.getUser().getIsOwner()));
 
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 

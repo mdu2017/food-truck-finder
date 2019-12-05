@@ -156,7 +156,7 @@ export class CreateFoodTruck extends React.Component {
 			};
 		});
 		this.setState({ schedule: newSchedule });
-		// console.log(JSON.stringify(newSchedule));
+		console.log(JSON.stringify(newSchedule));
 		console.log(newSchedule);
 	};
 
@@ -230,11 +230,9 @@ export class CreateFoodTruck extends React.Component {
 								id="statuses"
 								onChange={e => this.setStatus(e.target.value)}
 							>
-								{
-									this.state.statuses.map((status, index) => (
-										<option key={index}>{status}</option>
-									))
-								}
+								{this.state.statuses.map((status, index) => (
+									<option key={index}>{status}</option>
+								))}
 							</Input>
 						</FormGroup>
 						<FormGroup>
@@ -245,11 +243,9 @@ export class CreateFoodTruck extends React.Component {
 								id="foodTypes"
 								onChange={e => this.setFoodType(e.target.value)}
 							>
-								{
-									this.state.foodtypes.map((foodtype, index) => (
-										<option key={index}>{foodtype}</option>
-									))
-								}
+								{this.state.foodtypes.map((foodtype, index) => (
+									<option key={index}>{foodtype}</option>
+								))}
 							</Input>
 						</FormGroup>
 					</Form>
@@ -336,7 +332,8 @@ export class CreateFoodTruck extends React.Component {
 													id="DotW"
 													onChange={this.handleDayScheduleChange(
 														idx
-													)}>
+													)}
+												>
 													<option value="S">
 														Sunday
 													</option>
@@ -398,7 +395,8 @@ export class CreateFoodTruck extends React.Component {
 													}
 													color="primary"
 													id="AddLocation"
-													onClick={this.toggle}>
+													onClick={this.toggle}
+												>
 													Add Location
 												</Button>
 												<Button
@@ -410,7 +408,8 @@ export class CreateFoodTruck extends React.Component {
 													color="primary"
 													onClick={this.handleLocationChange(
 														idx
-													)}>
+													)}
+												>
 													Confirm Location for Stop{' '}
 													{idx + 1} ?
 												</Button>
@@ -457,7 +456,8 @@ export class CreateFoodTruck extends React.Component {
 									hidden={!this.state.buttonVisibility}
 									color="primary"
 									size="sm"
-									onClick={() => this.handleAddStop()}>
+									onClick={() => this.handleAddStop()}
+								>
 									Add Stop
 								</Button>
 							</FormGroup>
@@ -473,14 +473,16 @@ export class CreateFoodTruck extends React.Component {
 								isOpen={this.state.modal}
 								size="lg"
 								scrollable="true"
-								style={{ height: '400px', width: '425px' }}>
+								style={{ height: '400px', width: '425px' }}
+							>
 								<form onSubmit={this.handleModalSubmit}>
 									<ModalHeader>Google Maps</ModalHeader>
 									<ModalBody
 										style={{
 											height: '400px',
 											width: '600px'
-										}}>
+										}}
+									>
 										<MapContainer
 											handleMapSelection={this.handleMapSelection.bind(
 												this
@@ -496,7 +498,8 @@ export class CreateFoodTruck extends React.Component {
 										/>
 										<Button
 											color="danger"
-											onClick={this.toggle}>
+											onClick={this.toggle}
+										>
 											Cancel
 										</Button>
 									</ModalFooter>

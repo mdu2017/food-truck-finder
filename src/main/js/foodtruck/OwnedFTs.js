@@ -82,10 +82,10 @@ export class OwnedFoodTrucks extends React.Component {
 	handleDealModalSubmit = () => {
 		this.toggleDeal();
 		console.log('HEY');
-		this.state.dealDate.preventDefault();
-		this.state.dealEndTime.preventDefault();
-		this.state.dealStartTime.preventDefault();
-		this.state.dealMessage.preventDefault();
+		Axios.addDeal(this.state.dealMessage, this.state.foodTruckId,
+			this.state.dealStartDate + 'T' + this.state.dealStartTime,
+			this.state.dealEndDate + 'T' + this.state.dealEndTime).then(result => console.log(result));
+
 	};
 
 	renderFoodTrucks() {

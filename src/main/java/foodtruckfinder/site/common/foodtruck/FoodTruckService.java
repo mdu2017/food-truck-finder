@@ -38,6 +38,12 @@ public class FoodTruckService {
 	 * @param truck_id the truck to remove
 	 */
 	public boolean remove(Long truck_id){
+		Optional<FoodTruckDto> ft = find(truck_id + "");
+		if(ft.isPresent()){
+			String mess = "The food truck \"" + ft.get().getName() + "\" that you subscribed to has been removed.";
+			this.sendNotification(mess, truck_id);
+		}
+
 		return foodTruckDao.remove(truck_id);
 	}
 
@@ -132,11 +138,6 @@ public class FoodTruckService {
 	//Deal functions
 	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
 		foodTruckDao.addDeal(message, truckID, start, end);
-		Optional<FoodTruckDto> ft = foodTruckDao.find(truckID + "");
-		if(ft.isPresent()){
-			String notifMessage = "[" +  ft.get().getName() + "]: " + message;
-			foodTruckDao.sendNotification(notifMessage, truckID);
-		}
 	}
 
 	public void removeDeal(Long truckID){
@@ -198,7 +199,7 @@ public class FoodTruckService {
     	return foodTruckDao.getEventById(event_ID);
 	}
 
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){
 		return foodTruckDao.getAttendingTrucks(event_ID);
 	}
 

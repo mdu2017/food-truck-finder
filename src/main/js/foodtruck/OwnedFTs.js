@@ -196,10 +196,8 @@ export class OwnedFoodTrucks extends React.Component {
 					</div>
 				) : (
 					<div>
-						<h6>No Food Trucks Created.</h6>
-						<Link to={'/create-food-truck'}>
-							<h6>Create One!</h6>
-						</Link>
+						<h6>No Current Deals Created.</h6>
+						<h6>Create one above!</h6>
 					</div>
 				)}
 			</div>

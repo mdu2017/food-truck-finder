@@ -163,9 +163,35 @@ export class ViewFoodTruckDetails extends React.Component {
 		render.push(<legend>Weekly Schedule</legend>);
 		{
 			this.state.schedule.map(sched => {
+				let day = sched.day;
+				switch (sched.day) {
+					case 'F':
+						day = 'Friday';
+						break;
+					case 'H':
+						day = 'Thursday';
+						break;
+					case 'M':
+						day = 'Monday';
+						break;
+					case 'S':
+						day = 'Saturday';
+						break;
+					case 'T':
+						day = 'Tuesday';
+						break;
+					case 'U':
+						day = 'Sunday';
+						break;
+					case 'W':
+						day = 'Wednesday';
+						break;
+					default:
+				}
+
 				render.push(
 					<Row>
-						<Col xs="3">{sched.day}</Col>
+						<Col xs="3">{day}</Col>
 						<Col>
 							{sched.startTime} - {sched.endTime}
 						</Col>

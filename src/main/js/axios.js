@@ -239,11 +239,7 @@ export function searchFoodTrucks(name) {
 }
 
 export function searchFoodTrucksByType(type) {
-	return axios.get('/unsecure/searchFoodTrucksByType', {
-		params: {
-			type: type
-		}
-	});
+	return axios.get('/unsecure/searchFoodTrucksByType?type=' + type);
 }
 
 export function searchTrucksByPrice(maxPrice) {

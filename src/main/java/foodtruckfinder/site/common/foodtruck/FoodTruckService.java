@@ -140,8 +140,8 @@ public class FoodTruckService {
 		foodTruckDao.addDeal(message, truckID, start, end);
 	}
 
-	public void removeDeal(Long truckID){
-		foodTruckDao.removeDeal(truckID);
+	public void removeDeal(Long dealID){
+		foodTruckDao.removeDeal(dealID);
 	}
 
 	public Optional<Deal> getDeal(Long dealID) { return foodTruckDao.getDeal(dealID); }

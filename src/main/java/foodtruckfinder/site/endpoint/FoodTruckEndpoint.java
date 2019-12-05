@@ -66,8 +66,8 @@ public class FoodTruckEndpoint {
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
-	public void removeDeal(Long truckID) {
-		foodTruckService.removeDeal(truckID);
+	public void removeDeal(Long dealID) {
+		foodTruckService.removeDeal(dealID);
 	}
 
 	@PostMapping(value = "/getDeal", produces = "application/json")

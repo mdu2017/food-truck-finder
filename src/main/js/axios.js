@@ -29,6 +29,19 @@ export function rateFT(user_ID, truck_ID, message, rating) {
 	);
 }
 
+export function addDeal(message, truckID, start, end) {
+	return axios.post(
+		'api/food-truck/addDeal?message=' +
+			message +
+			'&truckID=' +
+			truckID +
+			'&start=' +
+			start +
+			'&end=' +
+			end
+	);
+}
+
 export function getRatingByUser(user_ID) {
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
 }
@@ -43,7 +56,6 @@ export function getRatingByTruck(truck_ID) {
 
 // Multivalue axios post
 export function sendNotification(message, foodTruckId) {
-	console.log(message);
 	return axios.post(
 		'api/food-truck/send-notification?message=' +
 			message +
@@ -86,6 +98,16 @@ export function getRecommendations(userlat, userlong, radius) {
 	});
 }
 
+export function getSecuredRecommendations(userID, userlat, userlong) {
+	return axios.get('/api/user/recommendations', {
+		params: {
+			userID: userID,
+			userlat: userlat,
+			userlong: userlong
+		}
+	});
+}
+
 export function getNearby(userlat, userlong, radius) {
 	return axios.get('/unsecure/nearby', {
 		params: {
@@ -110,13 +132,25 @@ export function getNotifications(userId) {
 }
 
 export function changeNotificationStatus(userId, truckId, sent) {
-	return axios.post('/api/user/notificationStatus?user_ID=' + userId +
-		'&truck_ID=' + truckId + '&sent=' + sent);
+	return axios.post(
+		'/api/user/notificationStatus?user_ID=' +
+			userId +
+			'&truck_ID=' +
+			truckId +
+			'&sent=' +
+			sent
+	);
 }
 
 export function removeNotification(userId, truckId, sent) {
-	return axios.post('/api/user/removeNotification?user_ID=' + userId +
-		'&truck_ID=' + truckId + '&sent=' + sent);
+	return axios.post(
+		'/api/user/removeNotification?user_ID=' +
+			userId +
+			'&truck_ID=' +
+			truckId +
+			'&sent=' +
+			sent
+	);
 }
 
 export function subscribe(foodtruckId, userId) {
@@ -189,7 +223,7 @@ export function searchFoodTrucks(name) {
 	});
 }
 
-export function searchFoodTrucksByType(type){
+export function searchFoodTrucksByType(type) {
 	return axios.get('/unsecure/searchFoodTrucksByType', {
 		params: {
 			type: type
@@ -197,7 +231,7 @@ export function searchFoodTrucksByType(type){
 	});
 }
 
-export function searchTrucksByPrice(maxPrice){
+export function searchTrucksByPrice(maxPrice) {
 	return axios.get('/unsecure/searchTrucksByPrice', {
 		params: {
 			maxPrice: maxPrice
@@ -206,7 +240,7 @@ export function searchTrucksByPrice(maxPrice){
 }
 
 //TODO: WIP
-export function searchTrucksByDistance(userLat, userLng, maxDistance){
+export function searchTrucksByDistance(userLat, userLng, maxDistance) {
 	return axios.get('/unsecure/searchTrucksByDistance', {
 		params: {
 			userLat: userLat,
@@ -216,7 +250,7 @@ export function searchTrucksByDistance(userLat, userLng, maxDistance){
 	});
 }
 
-export function searchUsers(username){
+export function searchUsers(username) {
 	return axios.get('/unsecure/user/searchUsers', {
 		params: {
 			username: username

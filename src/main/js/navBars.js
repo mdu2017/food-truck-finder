@@ -116,8 +116,12 @@ export class CustomNavBar extends React.Component {
 					</DropdownItem>
 					<DropdownItem href="#/about">About Us</DropdownItem>
 					<DropdownItem href="#/page-1">Page 1</DropdownItem>
-					<DropdownItem divider />
-					<DropdownItem onClick={this.logout}>Logout</DropdownItem>
+					{this.state.user && <DropdownItem divider />}
+					{this.state.user && (
+						<DropdownItem onClick={this.logout}>
+							Logout
+						</DropdownItem>
+					)}
 				</DropdownMenu>
 			</div>
 		);
@@ -193,18 +197,18 @@ export class SidebarNav extends React.Component {
 		};
 	}
 
-	showPosition(position) {
-		Axios.getRecommendations(
-			position.coords.latitude,
-			position.coords.longitude
-		).then(function(result) {
-			document.cookie =
-				'recommendations=' + JSON.stringify(result) + '; path=/';
-		});
-	}
+	// showPosition(position) {
+	// 	Axios.getRecommendations(
+	// 		position.coords.latitude,
+	// 		position.coords.longitude
+	// 	).then(function(result) {
+	// 		document.cookie =
+	// 			'recommendations=' + JSON.stringify(result) + '; path=/';
+	// 	});
+	// }
 
 	componentDidMount() {
-		navigator.geolocation.getCurrentPosition(this.showPosition);
+		// navigator.geolocation.getCurrentPosition(this.showPosition);
 
 		this.setState({
 			foodtrucks: JSON.parse(Axios.getCookie('recommendations'))

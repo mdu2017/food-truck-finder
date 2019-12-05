@@ -1,30 +1,31 @@
 import React from 'react';
-import {HashRouter, Route} from 'react-router-dom';
+import { HashRouter, Route } from 'react-router-dom';
 import * as Pages from './TestingPages';
+
 // User Pages
-import {ViewProfile} from './user/ViewProfile';
-import {Dashboard} from './user/Dashboard';
-import {EditProfile} from './user/EditProfile';
-import {CreateAccount} from './user/CreateAccount';
-import {ForgotPassword} from './user/ForgotPassword';
-import {Login} from './user/Login';
-import {Notifications} from './user/Notifications';
-import {SearchFoodTrucks} from './SearchTrucks';
-import {SearchUsers} from './user/SearchUsers';
-import {ViewOtherProfile} from 'js/user/ViewOtherProfile';
+import { ViewProfile } from './user/ViewProfile';
+import { Dashboard } from './user/Dashboard';
+import { EditProfile } from './user/EditProfile';
+import { CreateAccount } from './user/CreateAccount';
+import { ForgotPassword } from './user/ForgotPassword';
+import { Login } from './user/Login';
+import { Notifications } from './user/Notifications';
+import { SearchFoodTrucks } from './SearchTrucks';
+import { SearchUsers } from './user/SearchUsers';
+import { ViewOtherProfile } from 'js/user/ViewOtherProfile';
 // Food Truck Pages
-import {Events} from './foodtruck/Events';
-import {CreateFoodTruck} from './foodtruck/CreateFT';
-import {OwnedFoodTrucks} from './foodtruck/OwnedFTs';
-import {EditFoodTruck} from './foodtruck/EditFT';
-import {EditRouteSchedule} from './foodtruck/EditRouteSchedule';
-import {CreateEvent} from './foodtruck/CreateEvent';
-import {CreateSpecial} from './foodtruck/CreateSpecial';
-import {ViewFoodTruckDetails} from './foodtruck/ViewFTDetails';
+import { Events } from './Events';
+import { CreateFoodTruck } from './foodtruck/CreateFT';
+import { OwnedFoodTrucks } from './foodtruck/OwnedFTs';
+import { EditFoodTruck } from './foodtruck/EditFT';
+import { EditRouteSchedule } from './foodtruck/EditRouteSchedule';
+import { CreateEvent } from './foodtruck/CreateEvent';
+import { CreateSpecial } from './foodtruck/CreateSpecial';
+import { ViewFoodTruckDetails } from './foodtruck/ViewFTDetails';
 // System Pages
-import {HelpPage} from './HelpPage';
-import {AboutUs} from './AboutUs';
-import {EventDetails} from 'js/EventDetails';
+import { HelpPage } from './HelpPage';
+import { AboutUs } from './AboutUs';
+import { EventDetails } from 'js/EventDetails';
 
 export default class Index extends React.Component {
 	render() {

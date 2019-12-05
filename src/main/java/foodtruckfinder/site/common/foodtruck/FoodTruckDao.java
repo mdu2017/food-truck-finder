@@ -91,6 +91,12 @@ public class FoodTruckDao {
 	 * @return the updated food truck DTO (if added, an id will now be associated with it)
 	 */
 	public FoodTruckDto save(FoodTruckDto foodTruck) { //== add/update FT
+		if(foodTruck.getName().length() > 45){
+			foodTruck.setName(foodTruck.getName().substring(0, Math.min(foodTruck.getName().length(), 500)));
+		}
+		if(foodTruck.getDescription().length() > 255){
+			foodTruck.setDescription(foodTruck.getDescription().substring(0, Math.min(foodTruck.getDescription().length(), 500)));
+		}
 		if (foodTruck.getId() != null && find(foodTruck.getId() + "").isPresent()) {//also need todo::schedule, image
 			//Add the menu to the database
 			updateMenu(foodTruck);
@@ -659,6 +665,9 @@ public class FoodTruckDao {
 	 */
 	private Long insertMenuItem(MenuItem m, Long truckid){
 		if(m != null){
+			if(m.getName().length() > 45){
+				m.setName(m.getName().substring(0, Math.min(m.getName().length(), 10)));
+			}
 			if(m.getItemid() != null){
 				String sql = "REPLACE INTO MENU " +
 						"(ITEM_ID, NAME, DESCRIPTION, PRICE, TRUCK_ID) VALUES " +
@@ -781,6 +790,9 @@ public class FoodTruckDao {
 		Deal d = new Deal();
 		d.setStart(start);
 		d.setEnd(end);
+		if(message.length() > 500){
+			message = message.substring(0, Math.min(message.length(), 500));
+		}
 		d.setMessage(message);
 		d.setTruck_id(truckID);
 
@@ -881,6 +893,9 @@ public class FoodTruckDao {
 	}
 
 	public void sendNotification(String message, Long foodTruckId) {
+		if(message.length() > 300){
+			message = message.substring(0, Math.min(message.length(), 300));
+		}
 		LocalDateTime sent;
 		Long userID;
 		String sql = "INSERT INTO NOTIFICATION " +
@@ -911,6 +926,12 @@ public class FoodTruckDao {
 
 	//Event functions
 	public void addEvent(String name, String details, Long stop_ID){
+		if(details.length() > 500){
+			details = details.substring(0, Math.min(details.length(), 500));
+		}
+		if(name.length() > 45){
+			name = name.substring(0, Math.min(name.length(), 45));
+		}
 		String sql = "INSERT INTO EVENT (NAME, DESCRIPTION, STOP_ID) VALUES (:name, :details, :stop_ID)";
 		Map<String, ?> params = _Maps.map("details", details, "stop_ID", stop_ID, "name", name);
 		jdbcTemplate.update(sql, params);

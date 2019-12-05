@@ -195,7 +195,9 @@ public class UserDao {
 			jdbcTemplate.update(sql, parameters);
 		}
 		else {
-			String sql = "INSERT INTO USER (PRINCIPAL, USERNAME, PASSWORD, IS_OWNER, PREF_DISTANCE, PREF_HIGH, PREF_LOW) VALUES (:principal, :username, :password, :isOwner, :prefDistance, :prefHigh, :prefLow)";
+			String sql = "INSERT INTO USER " +
+					"(PRINCIPAL, USERNAME, PASSWORD, IS_OWNER, PREF_DISTANCE, PREF_HIGH, PREF_LOW) VALUES " +
+					"(:principal, :username, :password, :isOwner, :prefDistance, :prefHigh, :prefLow)";
 
 			Map<String, ?> parameters = _Maps.mapPairs(
 					new Tuple.Tuple2<>("principal", userAuthentication.getUser().getPrincipal()),
@@ -204,7 +206,7 @@ public class UserDao {
 					new Tuple.Tuple2<>("prefDistance", userAuthentication.getUser().getPrefDistance()),
 					new Tuple.Tuple2<>("prefHigh", userAuthentication.getUser().getPrefHigh()),
 					new Tuple.Tuple2<>("prefLow", userAuthentication.getUser().getPrefLow()),
-					new Tuple.Tuple2<>("owner", userAuthentication.getUser().getIsOwner()));
+					new Tuple.Tuple2<>("isOwner", userAuthentication.getUser().getIsOwner()));
 
 			KeyHolder keyHolder = new GeneratedKeyHolder();
 

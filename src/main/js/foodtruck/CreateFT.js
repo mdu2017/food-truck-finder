@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import {
@@ -26,21 +26,18 @@ export class CreateFoodTruck extends React.Component {
 			name: null,
 			// menu: null,
 			description: null,
-			price_low: null,
-			price_high: null,
+			price_low: 0,
+			price_high: 0,
 			status: null,
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
 			schedule: [
 				{
 					day: 'S',
-					stop: [
-						{
-							startTime: null,
-							endTime: null,
-							location: [{ lat: null, long: null }]
-						}
-					]
+					startTime: null,
+					endTime: null,
+					lat: null,
+					log: null
 				}
 			],
 			selectedLatitude: 0,
@@ -82,7 +79,7 @@ export class CreateFoodTruck extends React.Component {
 				name: this.state.name,
 				description: this.state.description,
 				// menu: this.state.menu,
-				schedule: this.state.schedule,
+				schedFE: this.state.schedule,
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
@@ -124,10 +121,10 @@ export class CreateFoodTruck extends React.Component {
 	handleStartTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map(stop => {
-				return { ...stop, startTime: evt.target.value };
-			});
-			return { ...schedule, stop: newStop };
+			return {
+				...schedule,
+				startTime: evt.target.value
+			};
 		});
 		this.setState({ schedule: newSchedule });
 		// console.log(JSON.stringify(newSchedule));
@@ -137,10 +134,10 @@ export class CreateFoodTruck extends React.Component {
 	handleEndTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map(stop => {
-				return { ...stop, endTime: evt.target.value };
-			});
-			return { ...schedule, stop: newStop };
+			return {
+				...schedule,
+				endTime: evt.target.value
+			};
 		});
 		this.setState({ schedule: newSchedule });
 		// console.log(JSON.stringify(newSchedule));
@@ -164,18 +161,11 @@ export class CreateFoodTruck extends React.Component {
 		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map(stop => {
-				// if (idx !== sidx) return stop;
-				const newLocation = stop.location.map(location => {
-					return {
-						...location,
-						long: this.state.selectedLongitude,
-						lat: this.state.selectedLatitude
-					};
-				});
-				return { ...stop, location: newLocation };
-			});
-			return { ...schedule, stop: newStop };
+			return {
+				...schedule,
+				log: this.state.selectedLongitude,
+				lat: this.state.selectedLatitude
+			};
 		});
 		this.setState({ schedule: newSchedule });
 		// console.log(JSON.stringify(newSchedule));
@@ -187,13 +177,10 @@ export class CreateFoodTruck extends React.Component {
 			schedule: this.state.schedule.concat([
 				{
 					day: 'S',
-					stop: [
-						{
-							startTime: null,
-							endTime: null,
-							location: [{ lat: null, long: null }]
-						}
-					]
+					startTime: null,
+					endTime: null,
+					lat: null,
+					log: null
 				}
 			])
 		});

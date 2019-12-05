@@ -26,7 +26,6 @@ public class FoodTruckService {
 	}
 
 	public void save(FoodTruckDto foodTruckDto) throws SQLException {
-//        foodTruckDao.testFT(foodTruckDto);
 		foodTruckDao.save(foodTruckDto);
 	}
 

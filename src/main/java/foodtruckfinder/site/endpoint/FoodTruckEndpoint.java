@@ -1,9 +1,6 @@
 package foodtruckfinder.site.endpoint;
 
-import foodtruckfinder.site.common.foodtruck.Deal;
-import foodtruckfinder.site.common.foodtruck.EventDto;
-import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
-import foodtruckfinder.site.common.foodtruck.FoodTruckService;
+import foodtruckfinder.site.common.foodtruck.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -34,6 +31,12 @@ public class FoodTruckEndpoint {
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
 	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+
+		for(MenuItem m : foodTruckDto.getMenu()){
+			System.out.println("===============" + m.toString() + "========================");
+		}
+
+		System.out.println(foodTruckDto);
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;
 	}

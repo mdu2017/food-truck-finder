@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {Fragment} from 'react';
 import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
@@ -24,7 +24,7 @@ export class CreateFoodTruck extends React.Component {
 		super(props);
 		this.state = {
 			name: null,
-			// menu: null,
+			menu: [],
 			description: null,
 			price_low: null,
 			price_high: null,
@@ -34,13 +34,12 @@ export class CreateFoodTruck extends React.Component {
 			schedule: [
 				{
 					day: 'S',
-					stop: [
-						{
-							startTime: null,
-							endTime: null,
-							location: [{ lat: null, long: null }]
-						}
-					]
+					stop: {
+						startTime: null,
+						endTime: null,
+						lat: null,
+						log: null
+					}
 				}
 			],
 			selectedLatitude: 0,
@@ -48,29 +47,44 @@ export class CreateFoodTruck extends React.Component {
 			buttonVisibility: true,
 			modal: false,
 			statuses: [],
-			foodtypes: []
+			foodtypes: [],
+			menuModal: false,
+
+			//Menu items
+			menuItemName: null,
+			menuItemDesc: null,
+			menuItemPrice: null,
 		};
 		// Make Dynamic Page
 		window.location.href = '/?#/create-food-truck/';
 		this.toggle = this.toggle.bind(this);
-		this.handleModalSubmit = this.handleModalSubmit.bind(this);
+		this.toggleMenu = this.toggleMenu.bind(this); //menu toggle
 		this.getFoodTypes();
 		this.getStatuses();
 	}
 
+	//Menu items
+	setMenuItemName = menuItemName => this.setState({ menuItemName });
+	setMenuItemDesc = menuItemDesc => this.setState({ menuItemDesc });
+	setMenuItemPrice = menuItemPrice => this.setState({ menuItemPrice });
+
 	setName = name => this.setState({ name });
 	setDescription = description => this.setState({ description });
 	// setMenu = menu => this.setState({ menu });
-	setSchedule = schedule => this.setState({ schedule });
+	// setSchedule = schedule => this.setState({ schedule });
 	setPriceLow = price_low => this.setState({ price_low });
 	setPriceHigh = price_high => this.setState({ price_high });
 	setStatus = status => this.setState({ status });
 	setFoodType = foodtype => this.setState({ foodtype });
 	setownerId = ownerId => this.setState({ ownerId });
 
+
 	handleSubmit = event => {
 		// The price_high is not lower than price_low
-		if (this.state.price_high >= this.state.price_low) {
+		let priceHighDbl = Number(this.state.price_high);
+		let priceLowDbl = Number(this.state.price_low);
+
+		if (priceHighDbl >= priceLowDbl) {
 			// Check if Prices are lower than zero
 			if (this.state.price_low < 0) {
 				this.state.price_low = 0;
@@ -78,34 +92,67 @@ export class CreateFoodTruck extends React.Component {
 			if (this.state.price_high < 0) {
 				this.state.price_high = 0;
 			}
-			this.props.createFT({
+
+			//PASS EVERYTHING
+			this.props.createFoodTruck({
 				name: this.state.name,
 				description: this.state.description,
-				// menu: this.state.menu,
-				schedule: this.state.schedule,
+				menu: this.state.menu,
+				// schedule: this.state.schedule,
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
 				type: this.state.foodtype,
-				ownerId: this.state.ownerId
+				ownerId: this.state.ownerId,
 			});
+
 			event.preventDefault();
 		} else {
 			window.alert('Error: Price High cannot be lower than Price Low!');
 		}
 	};
 
+	//Toggle schedule modal
 	toggle() {
 		this.setState({
 			modal: !this.state.modal
 		});
 	}
 
+	//Toggle menu modal
+	toggleMenu(){
+		this.setState({
+			menuModal: !this.state.menuModal
+		});
+	}
+
+	//Menu modal TODO: WIP
+	handleMenuModalSubmit = event => {
+		this.toggleMenu();
+
+		let vals = {
+			menuItemName: this.state.menuItemName,
+			menuItemDesc: this.state.menuItemDesc,
+			menuItemPrice: this.state.menuItemPrice
+		};
+
+		let tempArr = JSON.parse(JSON.stringify(vals));
+		console.log(tempArr);
+
+		//Add to the list of menu items
+		this.setState(prevState => ({
+			menu: [...prevState.menu, tempArr]
+		}));
+
+		event.preventDefault();
+	}
+
+	//schedule modal
 	handleModalSubmit = event => {
 		this.toggle();
 		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		event.preventDefault();
-	};
+	}
 
 	// Promise value return
 	getFoodTypes() {
@@ -211,6 +258,8 @@ export class CreateFoodTruck extends React.Component {
 				<div className="container padded">
 					<h1>Create a Food Truck</h1>
 					<br />
+
+					{/* Name, status, food type boxes */}
 					<Form>
 						<FormGroup>
 							<Label for="ftName">Name</Label>
@@ -253,6 +302,8 @@ export class CreateFoodTruck extends React.Component {
 							</Input>
 						</FormGroup>
 					</Form>
+
+					{/* Price boxes */}
 					<Form inline>
 						<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
 							<Label for="ftLowPrice" className="mr-sm-2">
@@ -283,6 +334,8 @@ export class CreateFoodTruck extends React.Component {
 							/>
 						</FormGroup>
 					</Form>
+
+					{/*Description Box*/}
 					<Form>
 						<FormGroup>
 							<Label for="ftDescription">Description</Label>
@@ -296,18 +349,67 @@ export class CreateFoodTruck extends React.Component {
 								}
 							/>
 						</FormGroup>
-						<FormGroup>
-							<legend>Menu</legend>
-							<Label for="ftMenu" hidden>
-								Menu
-							</Label>
-							<Input type="file" name="menu" id="ftMenu" />
-							<FormText color="muted">
-								This is some placeholder block-level help text
-								for the above input. It's a bit lighter and
-								easily wraps to a new line.
-							</FormText>
-						</FormGroup>
+
+
+					{/*	Menu modal */}
+						<Container>
+							{/*TODO: Modal form submit*/}
+							<Button color="info" onClick={this.toggleMenu}>Add To Menu</Button>{' '}
+							<Modal
+								isOpen={this.state.menuModal}
+								size="lg"
+								scrollable="true"
+								style={{ height: '300px', width: '500px' }}>
+								<form onSubmit={this.handleMenuModalSubmit}>
+									<ModalHeader>Add Menu Item</ModalHeader>
+									<ModalBody
+										style={{
+											height: '500px',
+											width: '500px'
+										}}>
+										<Form>
+											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+												<Label for='itemName'>Item Name</Label>
+												<Input type='text' name='itemName'
+													   id='itemName' placeholder="Item name"
+													   onChange={e =>
+														   this.setMenuItemName(e.target.value)
+													   }/>
+											</FormGroup>
+											<FormGroup className="mb-2 mr-sm-2 mb-sm-0">
+												<Label for="menuDescription">Description</Label>
+												<Input type='textarea' name='menuDescription'
+													   id='menuDescription' placeholder="Item Description"
+													   onChange={e =>
+														   this.setMenuItemDesc(e.target.value)
+													   }/>
+											</FormGroup>
+											<Label for='itemPrice'>Price</Label>
+											<Input
+												type="number"
+												min={0}
+												name="itemPrice"
+												id="itemPrice"
+												step="0.10"
+												onChange={e =>
+													this.setMenuItemPrice(e.target.value)
+												}
+											/>
+										</Form>
+									</ModalBody>
+									<ModalFooter>
+										<Button color="success" onClick={this.handleMenuModalSubmit}>Submit</Button>
+										<Button
+											color="danger"
+											onClick={this.toggleMenu}>
+											Cancel
+										</Button>
+									</ModalFooter>
+								</form>
+							</Modal>
+						</Container>
+
+					{/*	Schedule Box */}
 					</Form>
 					<legend>Schedule</legend>
 					<FormText color="muted">
@@ -505,6 +607,7 @@ export class CreateFoodTruck extends React.Component {
 						</div>
 					))}
 				</div>
+				{console.log(this.state.menu)}
 			</div>
 		);
 	}
@@ -512,8 +615,8 @@ export class CreateFoodTruck extends React.Component {
 CreateFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		createFT: foodTruck =>
-			dispatch(Axios.Actions.createFT(foodTruck))
+		createFoodTruck: foodTruck =>
+			dispatch(Axios.Actions.createFoodTruck(foodTruck))
 				// Success
 				.then(function() {
 					window.location.href = '/#/list-food-trucks';

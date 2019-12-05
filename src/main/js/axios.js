@@ -10,10 +10,22 @@ export function update(user) {
 	return axios.post('/api/user/update', user);
 }
 
-// Creates a FoodTruck in the Database
+//TODO: Creates a FoodTruck in the Database
 export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
+
+//TODO: remove
+// export function addMenuItem(foodTruck, itemName, itemDesc, itemPrice){
+// 	return axios.post('/api/food-truck/addMenuItem', {
+// 		params: {
+// 			foodTruck: foodTruck,
+// 			itemName: itemName,
+// 			itemDesc: itemDesc,
+// 			itemPrice: itemPrice
+// 		}
+// 	});
+// }
 
 // Rates a FoodTruck in the Database
 export function rateFT(user_ID, truck_ID, message, rating) {
@@ -239,7 +251,6 @@ export function searchTrucksByPrice(maxPrice) {
 	});
 }
 
-//TODO: WIP
 export function searchTrucksByDistance(userLat, userLng, maxDistance) {
 	return axios.get('/unsecure/searchTrucksByDistance', {
 		params: {
@@ -300,12 +311,19 @@ Actions.register = user => {
 	};
 };
 
-//Create food truck
-Actions.createFT = foodTruck => {
+//TODO: Create Food Truck
+Actions.createFoodTruck = foodTruck => {
 	return () => {
 		return createFoodTruck(foodTruck);
 	};
 };
+
+//TODO: remove
+// Actions.addMenuItem = (foodTruck, itemName, itemDesc, itemPrice) => {
+// 	return () => {
+// 		return addMenuItem(foodTruck, itemName, itemDesc, itemPrice);
+// 	};
+// };
 
 Actions.sendNotification = (message, foodTruckId) => {
 	return () => {
@@ -317,13 +335,6 @@ Actions.sendNotification = (message, foodTruckId) => {
 Actions.removeFoodFT = truck_id => {
 	return () => {
 		return removeFoodTruck(truck_id);
-	};
-};
-
-// Save food truck
-Actions.saveFoodFT = foodTruck => {
-	return () => {
-		return createFoodTruck(foodTruck);
 	};
 };
 
@@ -370,7 +381,6 @@ Actions.searchTrucksByPrice = maxPrice => {
 	};
 };
 
-//TODO: WIP
 Actions.searchTrucksByDistance = (userLat, userLng, maxDistance) => {
 	return () => {
 		return searchTrucksByDistance(userLat, userLng, maxDistance);

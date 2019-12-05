@@ -1,6 +1,7 @@
 package foodtruckfinder.site.endpoint;
 
 import foodtruckfinder.site.common.foodtruck.*;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,7 +37,7 @@ public class FoodTruckEndpoint {
 		System.out.println(foodTruckDto.getMenu());
 
 		System.out.println(foodTruckDto);
-		foodTruckDto.setSchedule(foodTruckService.mapSchedule(foodTruckDto.getSchedFE()));
+
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;
 	}

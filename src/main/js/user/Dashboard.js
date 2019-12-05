@@ -89,9 +89,7 @@ export class Dashboard extends React.Component {
 
 	//Item that is removed when using food type filter (*backspace removes index)
 	onRemove = (optionList, removedItem) => {
-		// console.log(optionList);
 		console.log('removed item is ' + removedItem);
-		console.log(optionList);
 
 		this.setState({
 			choices: optionList
@@ -100,11 +98,12 @@ export class Dashboard extends React.Component {
 
 	msDropdown(){
 		return(
-			<Multiselect
+			<Multiselect id={'dashboardMS'}
 				options={this.state.options}
 				onSelect={this.onSelect} // Function will trigger on select event
 				onRemove={this.onRemove} // Function will trigger on remove event
 				isObject={false}
+				placeholder={'Select Food Type'}
 			/>
 		);
 	}

@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as NavBars from 'js/navBars';
 import User from 'js/images/user_icon.png';
 import {
@@ -141,13 +141,17 @@ export class ViewFoodTruckDetails extends React.Component {
 
 	handleModalSubmit = event => {
 		this.toggle();
-		this.props.rateFT({
-			userId: JSON.parse(Axios.getCookie('user')).id,
-			truckId: this.state.truck.id,
-			review: this.state.review,
-			rating: this.state.rating
-		});
-		event.preventDefault();
+		if (this.state.review.length > 0) {
+			this.props.rateFT({
+				userId: JSON.parse(Axios.getCookie('user')).id,
+				truckId: this.state.truck.id,
+				review: this.state.review,
+				rating: this.state.rating
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Error: Review cannot be left blank!');
+		}
 	};
 
 	subscribe() {
@@ -232,7 +236,11 @@ export class ViewFoodTruckDetails extends React.Component {
 								</legend>
 							</Col>
 							<Col xs="auto">
-								<Button color="info" onClick={this.toggle} disabled={this.state.user.isOwner}>
+								<Button
+									color="info"
+									onClick={this.toggle}
+									disabled={this.state.user.isOwner}
+								>
 									Write Review
 								</Button>
 							</Col>

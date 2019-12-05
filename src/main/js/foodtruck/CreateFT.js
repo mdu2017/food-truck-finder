@@ -27,7 +27,7 @@ export class CreateFoodTruck extends React.Component {
 			// menu: null,
 			description: null,
 			price_low: 0,
-			price_high: 0,
+			price_high: 10,
 			status: null,
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
@@ -66,15 +66,15 @@ export class CreateFoodTruck extends React.Component {
 	setownerId = ownerId => this.setState({ ownerId });
 
 	handleSubmit = event => {
+		// Check if Prices are lower than zero
+		if (this.state.price_low < 0) {
+			this.state.price_low = 0;
+		}
+		if (this.state.price_high < 0) {
+			this.state.price_high = 0;
+		}
 		// The price_high is not lower than price_low
 		if (this.state.price_high >= this.state.price_low) {
-			// Check if Prices are lower than zero
-			if (this.state.price_low < 0) {
-				this.state.price_low = 0;
-			}
-			if (this.state.price_high < 0) {
-				this.state.price_high = 0;
-			}
 			this.props.createFT({
 				name: this.state.name,
 				description: this.state.description,

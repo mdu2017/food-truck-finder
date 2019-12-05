@@ -155,6 +155,28 @@ public class FoodTruckDao {
 					(foodTruck.getDescription() != null ? ", :desc" : " ") +
 					")";
 
+
+			List<MenuItem> menu = foodTruck.getMenu();
+			double max, min;
+			if(menu != null && menu.size() > 0){
+				max = -1;
+				min = menu.get(0).getPrice();
+				for(MenuItem m : menu){
+					if(m.getPrice() > max){
+						max = m.getPrice();
+					}
+					if(m.getPrice() < min){
+						min = m.getPrice();
+					}
+				}
+			} else {
+				max = 1000;
+				min = 0;
+			}
+
+			foodTruck.setPrice_high(max);
+			foodTruck.setPrice_low(min);
+
 			Map<String, ?> parameters;
 			if (foodTruck.getDescription() != null) {
 				parameters = _Maps.mapPairs(

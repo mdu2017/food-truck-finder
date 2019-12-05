@@ -245,11 +245,12 @@ public class UserService {
 		userDto.setPrefDistance(request.getPrefDistance());
 		userDto.setPrefHigh(request.getPrefHigh());
 		userDto.setPrefLow(request.getPrefLow());
+		userDto.setPrefFoodTypes(request.getPrefFoodTypes());
 
 		UserAuthenticationDto userAuthenticationDto = new UserAuthenticationDto();
 		userAuthenticationDto.setUser(userDto);
-		userAuthenticationDto.setPassword(passwordEncoder.encode(request.getPassword()));
 
+		userAuthenticationDto.setPassword(passwordEncoder.encode(request.getPassword()));
 		userAuthenticationDto = userDao.save(userAuthenticationDto);
 
 		return userAuthenticationDto.getUser();

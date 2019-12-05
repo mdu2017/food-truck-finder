@@ -54,6 +54,10 @@ public class UserDao {
 				userDto.setPrincipal(rs.getString("PRINCIPAL"));
 				userDto.setUsername(rs.getString("USERNAME"));
 				userDto.setIsOwner(rs.getBoolean("IS_OWNER"));
+				userDto.setPrefDistance(rs.getDouble("PREF_DISTANCE"));
+				userDto.setPrefLow(rs.getDouble("PREF_LOW"));
+				userDto.setPrefHigh(rs.getDouble("PREF_HIGH"));
+				userDto.setPrefFoodTypes(getUserPreferences(userDto.getId()).get());
                 //Need this for stuffy stuff
 				userDto.setRoles(_Lists.list("ROLE_USER"));
 				return userAuthenticationDto;
@@ -158,7 +162,7 @@ public class UserDao {
 		//Add the new food type preferences
 		for(FoodTruckDto.FoodType favorite : favorites){
 			sql = "INSERT IGNORE INTO PREFERENCES (FOOD_TYPE_ID, USER_ID) VALUES (:favorite, :userID)";
-			params = _Maps.map("favorite", favorite, "userID", userID);
+			params = _Maps.map("favorite", favorite.ordinal(), "userID", userID);
 			jdbcTemplate.update(sql, params);
 		}
 	}
@@ -179,7 +183,7 @@ public class UserDao {
 					"IS_OWNER = :owner, " +
 					"PREF_DISTANCE = :prefDistance, " +
 					"PREF_HIGH = :prefHigh, " +
-					"PREF_LOW = :prefLow, " +
+					"PREF_LOW = :prefLow " +
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.mapPairs(

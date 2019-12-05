@@ -66,7 +66,6 @@ export function sendNotification(message, foodTruckId) {
 
 // Deletes a FoodTruck in the Database
 export function removeFoodTruck(truck_id) {
-	console.log(truck_id);
 	return axios.post(
 		'/api/food-truck/removeTruck/?truck_id=' + truck_id.truck_id
 	);

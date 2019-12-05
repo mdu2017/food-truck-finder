@@ -4,7 +4,6 @@ import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import { Multiselect } from 'multiselect-react-dropdown';
-import FoodTypesModal from 'js/FoodTypesModal';
 import {
 	UncontrolledTooltip,
 	Button,
@@ -71,32 +70,13 @@ export class EditProfile extends React.Component {
 				id: this.state.id,
 				prefDistance: this.state.defaultDistance,
 				prefHigh: this.state.defaultPriceHigh,
-				prefLow: this.state.prefLow,
-				prefFoodTypes: this.state.defaultFoodTypes
+				prefLow: this.state.defaultPriceLow,
+				prefFoodTypes: this.state.choices
 			});
 			event.preventDefault();
 		} else {
 			window.alert('Passwords do not match!');
 		}
-
-		// if (
-		// 	this.state.defaultFoodTypes !=
-		// 		JSON.parse(Axios.getCookie('user')).prefFoodTypes ||
-		// 	this.state.defaultDistance !=
-		// 		JSON.parse(Axios.getCookie('user')).prefDistance ||
-		// 	this.state.defaultPriceLow !=
-		// 		JSON.parse(Axios.getCookie('user')).prefLow ||
-		// 	this.state.defaultPriceHigh !=
-		// 		JSON.parse(Axios.getCookie('user')).prefHigh
-		// ) {
-		// 	this.props.setPreferences({
-		// 		id: this.state.id,
-		// 		foodtypes: this.state.defaultFoodTypes,
-		// 		distance: this.state.defaultDistance,
-		// 		priceLow: this.state.defaultPriceLow,
-		// 		priceHigh: this.state.defaultPriceHigh
-		// 	});
-		// }
 	};
 
 	//Item that is selected.
@@ -133,7 +113,7 @@ export class EditProfile extends React.Component {
 	renderFavoriteFoodTypes() {
 		let render = [];
 		this.state.defaultFoodTypes.forEach(type => {
-			render.push(<div>type </div>);
+			render.push(<div>{type},</div>);
 		});
 		if (this.state.defaultFoodTypes.length == 0) {
 			render.push(<div>None yet. =(</div>);
@@ -186,10 +166,6 @@ export class EditProfile extends React.Component {
 									<FormGroup>
 										<Label for="newPassword">
 											New Password
-											{/* <span style={{ color: 'red' }}>
-												{' '}
-												*{' '}
-											</span> */}
 										</Label>
 										<Input
 											type="password"
@@ -204,10 +180,6 @@ export class EditProfile extends React.Component {
 									<FormGroup>
 										<Label for="retypedPassword">
 											New Password (Retyped)
-											{/* <span style={{ color: 'red' }}>
-												{' '}
-												*{' '}
-											</span> */}
 										</Label>
 										<Input
 											type="password"
@@ -269,7 +241,7 @@ export class EditProfile extends React.Component {
 											}
 											onChange={e =>
 												this.setDefaultDistance(
-													e.target.value
+													e.target.value / 70
 												)
 											}
 										/>
@@ -318,7 +290,6 @@ export class EditProfile extends React.Component {
 						</Row>
 					</Container>
 				</div>
-				<FoodTypesModal />
 			</div>
 		);
 	}
@@ -330,8 +301,6 @@ EditProfile = connect(
 		email: JSON.parse(Axios.getCookie('user')).principal
 	}),
 	dispatch => ({
-		update: user => dispatch(Axios.Actions.update(user)),
-		setPreferences: preferences =>
-			dispatch(Axios.Actions.setPreferences(preferences))
+		update: user => dispatch(Axios.Actions.update(user))
 	})
 )(EditProfile);

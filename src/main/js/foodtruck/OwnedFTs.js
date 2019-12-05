@@ -1,6 +1,6 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
-import {connect} from 'react-redux';
+import { Link } from 'react-router-dom';
+import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import Bell from 'js/images/notificationBell.png';
@@ -24,6 +24,7 @@ export class OwnedFoodTrucks extends React.Component {
 		this.state = {
 			owner_id: JSON.parse(Axios.getCookie('user')).id,
 			trucks: [],
+			deals: [],
 			notifyModal: false,
 			dealModal: false,
 			notificationMessage: null,
@@ -42,7 +43,7 @@ export class OwnedFoodTrucks extends React.Component {
 
 	setMessage = notificationMessage => this.setState({ notificationMessage });
 	setDealMessage = dealMessage => this.setState({ dealMessage });
-	setDealStartTime = dealStartTime => this.setState({dealStartTime});
+	setDealStartTime = dealStartTime => this.setState({ dealStartTime });
 	setDealEndTime = dealEndTime => this.setState({ dealEndTime });
 	setDealStartDate = dealStartDate => this.setState({ dealStartDate });
 	setDealEndDate = dealEndDate => this.setState({ dealEndDate });
@@ -53,6 +54,17 @@ export class OwnedFoodTrucks extends React.Component {
 			result.map((truck, index) => (
 				<li key={index}>{this.setState({ foodTruckId: truck.id })}</li>
 			));
+			result.forEach(truck => {
+				Axios.getAllDeals(truck.id).then(response => {
+					let temp = this.state.deals;
+					if (response.length != 0) {
+						response.forEach(deal => {
+							temp.push(deal);
+						});
+					}
+					this.setState({ deals: temp });
+				});
+			});
 		});
 	}
 
@@ -82,10 +94,12 @@ export class OwnedFoodTrucks extends React.Component {
 	handleDealModalSubmit = () => {
 		this.toggleDeal();
 		console.log('HEY');
-		Axios.addDeal(this.state.dealMessage, this.state.foodTruckId,
+		Axios.addDeal(
+			this.state.dealMessage,
+			this.state.foodTruckId,
 			this.state.dealStartDate + 'T' + this.state.dealStartTime,
-			this.state.dealEndDate + 'T' + this.state.dealEndTime).then(result => console.log(result));
-
+			this.state.dealEndDate + 'T' + this.state.dealEndTime
+		).then(result => console.log(result));
 	};
 
 	renderFoodTrucks() {
@@ -143,6 +157,47 @@ export class OwnedFoodTrucks extends React.Component {
 						<Link to={'/create-food-truck'}>
 							<h6>Create One!</h6>
 						</Link>
+					</div>
+				)}
+			</div>
+		);
+	}
+
+	renderDeals() {
+		return (
+			<div>
+				{this.state.deals.length > 0 ? (
+					<div>
+						{this.state.deals.map((deal, index) => (
+							<ListGroup key={index} flush>
+								<ListGroupItem>
+									<Link
+										to={`/food-truck-details/${deal.truck_id}`}
+									>
+										<Button color="primary" size="sm">
+											View Truck
+										</Button>
+									</Link>{' '}
+									<Button
+										color="danger"
+										size="sm"
+										onClick={() =>
+											this.toggleDeal(deal.truck_id)
+										}
+									>
+										Remove
+									</Button>
+									&nbsp;
+									<strong>Message: </strong>
+									{deal.message}
+								</ListGroupItem>
+							</ListGroup>
+						))}
+					</div>
+				) : (
+					<div>
+						<h6>No Current Deals Created.</h6>
+						<h6>Create one above!</h6>
 					</div>
 				)}
 			</div>
@@ -211,7 +266,9 @@ export class OwnedFoodTrucks extends React.Component {
 										id="startDate"
 										placeholder="date placeholder"
 										onChange={e =>
-											this.setDealStartDate(e.target.value)
+											this.setDealStartDate(
+												e.target.value
+											)
 										}
 									/>
 								</FormGroup>
@@ -222,7 +279,11 @@ export class OwnedFoodTrucks extends React.Component {
 										name="time"
 										id="startTime"
 										placeholder="time placeholder"
-										onChange={e => this.setDealStartTime(e.target.value)}
+										onChange={e =>
+											this.setDealStartTime(
+												e.target.value
+											)
+										}
 									/>
 								</FormGroup>
 							</Form>
@@ -247,7 +308,9 @@ export class OwnedFoodTrucks extends React.Component {
 										name="time"
 										id="endTime"
 										placeholder="time placeholder"
-										onChange={e => this.setDealEndTime(e.target.value)}
+										onChange={e =>
+											this.setDealEndTime(e.target.value)
+										}
 									/>
 								</FormGroup>
 							</Form>
@@ -281,6 +344,7 @@ export class OwnedFoodTrucks extends React.Component {
 					{this.renderFoodTrucks()}
 					<br />
 					<h1>Current Deals</h1>
+					{this.renderDeals()}
 				</div>
 				{this.renderNotifyModal()}
 				{this.renderDealModal()}

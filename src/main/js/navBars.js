@@ -1,5 +1,5 @@
 import React from 'react';
-import {Link} from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import Logo from 'js/images/foodtruck.png';
 import Hamburger from 'js/images/hamburger.png';
 import * as Axios from 'js/axios';
@@ -20,7 +20,7 @@ import {
 	Row,
 	UncontrolledDropdown
 } from 'reactstrap';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 
 export class CustomNavBar extends React.Component {
 	constructor(props) {
@@ -115,7 +115,7 @@ export class CustomNavBar extends React.Component {
 						Search Users
 					</DropdownItem>
 					<DropdownItem href="#/about">About Us</DropdownItem>
-					<DropdownItem href="#/page-1">Page 1</DropdownItem>
+					{/* <DropdownItem href="#/page-1">Page 1</DropdownItem> */}
 					{this.state.user && <DropdownItem divider />}
 					{this.state.user && (
 						<DropdownItem onClick={this.logout}>
@@ -259,9 +259,9 @@ export class SidebarNav extends React.Component {
 								<NavItem>
 									<NavLink href="#/about">About Us</NavLink>
 								</NavItem>
-								<NavItem>
+								{/* <NavItem>
 									<NavLink href="#/page-1">Page 1</NavLink>
-								</NavItem>
+								</NavItem> */}
 							</Nav>
 							<div>
 								<h4>Recommendations</h4>

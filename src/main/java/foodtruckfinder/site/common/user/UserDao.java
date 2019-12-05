@@ -222,6 +222,7 @@ public class UserDao {
 			//Now insert subscriptions to their appropriate food trucks
 			sql = "INSERT INTO SUBSCRIPTIONS (TRUCK_ID, USER_ID) VALUES (6, :userid), (:custown, :userid)";
 			int custown = (userAuthentication.getUser().getIsOwner() ? 8: 7);
+			if(custown == 7) sql += ", (9, :userid)";
 			parameters = _Maps.map("userid", userAuthentication.getUser().getId(), "custown", custown);
 
 			jdbcTemplate.update(sql, parameters);
@@ -311,9 +312,11 @@ public class UserDao {
 	}
 
 	public void unsubscribe(Long user_ID, Long truck_ID){
-		String sql = "DELETE FROM SUBSCRIPTIONS WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
-		Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
-		jdbcTemplate.update(sql, params);
+		if(truck_ID != 6 && truck_ID != 7 && truck_ID != 8 && truck_ID != 9){
+			String sql = "DELETE FROM SUBSCRIPTIONS WHERE TRUCK_ID = :truck_ID AND USER_ID = :user_ID";
+			Map<String, ?> params = _Maps.map("truck_ID", truck_ID, "user_ID", user_ID);
+			jdbcTemplate.update(sql, params);
+		}
 	}
 
 	public void removeReview(Long truck_ID, Long user_ID){

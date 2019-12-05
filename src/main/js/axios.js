@@ -42,6 +42,10 @@ export function addDeal(message, truckID, start, end) {
 	);
 }
 
+export function getAllDeals(truck_ID) {
+	return axios.get('api/food-truck/getAllDeals?truckID=' + truck_ID);
+}
+
 export function getRatingByUser(user_ID) {
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
 }
@@ -235,11 +239,7 @@ export function searchFoodTrucks(name) {
 }
 
 export function searchFoodTrucksByType(type) {
-	return axios.get('/unsecure/searchFoodTrucksByType', {
-		params: {
-			type: type
-		}
-	});
+	return axios.get('/unsecure/searchFoodTrucksByType?type=' + type);
 }
 
 export function searchTrucksByPrice(maxPrice) {

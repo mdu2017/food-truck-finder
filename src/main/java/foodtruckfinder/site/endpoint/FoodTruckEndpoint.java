@@ -34,6 +34,7 @@ public class FoodTruckEndpoint {
 	// Take a JSON representation of a food truck and save it to the database
 	@PostMapping(value = "/save", produces = "application/json")
 	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
+		foodTruckDto.setSchedule(foodTruckService.mapSchedule(foodTruckDto.getSchedFE()));
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;
 	}
@@ -72,7 +73,7 @@ public class FoodTruckEndpoint {
 	@PostMapping(value = "/getDeal", produces = "application/json")
 	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
 
-	@PostMapping(value = "/getAllDeals", produces = "application/json")
+	@GetMapping(value = "/getAllDeals", produces = "application/json")
 	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
 
 

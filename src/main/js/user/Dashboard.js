@@ -86,6 +86,8 @@ export class Dashboard extends React.Component {
 		this.setState({
 			choices: optionList
 		});
+
+		this.handleSubmit();
 	};
 
 	//Item that is removed when using food type filter (*backspace removes index)
@@ -95,6 +97,8 @@ export class Dashboard extends React.Component {
 		this.setState({
 			choices: optionList
 		});
+
+		this.handleSubmit();
 	};
 
 	msDropdown() {
@@ -159,6 +163,7 @@ export class Dashboard extends React.Component {
 
 	//Search feature
 	handleSubmit = event => {
+		console.log('testing testing this is called');
 		this.setState({ loadingSearch: true });
 
 		//Truck name filter
@@ -166,33 +171,44 @@ export class Dashboard extends React.Component {
 			setTimeout(
 				function() {
 					this.setState({ loadingSearch: true }, () => {
-						Axios.searchFoodTrucks(this.state.searchFT).then(
-							result => {
-								this.setState({
-									loadingSearch: false,
-									searchResults: result
-								});
-								//TODO: This is for new page for search result
-								// window.location.href = '/#/search-trucks';
-							}
-						);
-					});
+							Axios.searchFoodTrucks(this.state.searchFT).then(
+								result => {
+									this.setState({
+										loadingSearch: false,
+										searchResults: result });
+									//TODO: This is for new page for search result
+									// window.location.href = '/#/search-trucks';
+								}
+							);
+						});
 				}.bind(this),
 				250
 			);
+
+			event.preventDefault();
 		} else if (this.state.dropdownValue === 'Food Type') {
 			setTimeout(
 				function() {
-					this.setState({ loadingSearch: true }, () => {
-						Axios.searchFoodTrucksByType(this.state.searchFT).then(
+					this.setState({ loadingSearch: true, searchResults: [] });
+
+					this.state.choices.forEach((choice) => {
+						Axios.searchFoodTrucksByType(choice).then(
 							result => {
-								this.setState({
-									loadingSearch: false,
-									searchResults: result
-								});
+								result.forEach((truck) =>
+									this.setState(state => {
+										const searchResults = state.searchResults.concat(truck);
+
+										return {
+											searchResults
+										};
+									})
+								);
 							}
 						);
 					});
+
+					this.setState({ loadingSearch: false });
+
 				}.bind(this),
 				250
 			);
@@ -212,6 +228,8 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
+
+			event.preventDefault();
 		} else if (this.state.dropdownValue === 'Distance') {
 			setTimeout(
 				function() {
@@ -232,9 +250,9 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
-		}
 
-		event.preventDefault();
+			event.preventDefault();
+		}
 	};
 
 	displayCustomWelcome() {
@@ -296,6 +314,7 @@ export class Dashboard extends React.Component {
 
 	//Display search results
 	renderSearchResults() {
+		console.log(this.state.searchResults);
 		if (this.state.searchResults != null) {
 			this.state.numberOfPages = this.state.searchResults.length / 5;
 			if (!(this.state.numberOfPages < 1)) {
@@ -323,7 +342,7 @@ export class Dashboard extends React.Component {
 												>
 													<h6>{truck.name}</h6>
 												</Link>
-												<h8>{truck.description}</h8>
+												<h6>{truck.description}</h6>
 											</ListGroupItem>
 										</ListGroup>
 									)
@@ -393,13 +412,13 @@ export class Dashboard extends React.Component {
 											>
 												-
 											</Button>{' '}
-											<h8>
+											<h6>
 												Radius:{' '}
 												{(
 													this.state.nearbyRadius * 70
 												).toFixed(0)}{' '}
 												mi
-											</h8>{' '}
+											</h6>{' '}
 											<Button
 												color="info"
 												size="sm"
@@ -543,7 +562,7 @@ export class Dashboard extends React.Component {
 														Distance
 													</DropdownItem>
 												</DropdownMenu>
-												{this.state.dropdownValue ==
+												{this.state.dropdownValue ===
 													'Food Type' &&
 													this.msDropdown()}
 											</ButtonDropdown>
@@ -553,19 +572,23 @@ export class Dashboard extends React.Component {
 											{console.log('Current list: ')}
 											{console.log(this.state.choices)}
 
-											<FormGroup inline>
-												<Input
-													type="text"
-													name="searchFT"
-													id="searchFT"
-													placeholder="Search"
-													onChange={e =>
-														this.setSearchFT(
-															e.target.value
-														)
-													}
-												/>
-											</FormGroup>
+											{this.state.dropdownValue !==
+											'Food Type' && (
+												<FormGroup inline>
+													<Input
+														type="text"
+														name="searchFT"
+														id="searchFT"
+														placeholder="Search"
+														onChange={e =>
+															this.setSearchFT(
+																e.target.value
+															)
+														}
+													/>
+												</FormGroup>
+											)
+											}
 										</Form>
 									</Row>
 									{this.renderSearchResults()}

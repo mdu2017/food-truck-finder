@@ -176,14 +176,15 @@
 
             INSERT INTO FOOD_TRUCK (FOOD_TRUCK_ID, OWNER_ID, NAME, TYPE, TRUCK_IMAGE, PRICE_LOW, PRICE_HIGH, STATUS, DESCRIPTION)
             VALUES
-            (1, 1, "Baylor honey", 5, NULL, 2, 10, "OPEN", "honey here"),
-            (2, 1, "Torchies", 8, NULL, 1, 5, "OPEN", "Your favorite taco food truck"),
-            (3, 1, "Free tank tops!", 12, NULL, 0.99, 3, "OPEN", "Free tank tops for first 100 visitors"),
+            (1, 1, "Baylor honey", 5, NULL, 1, 20, "OPEN", "honey here"),
+            (2, 1, "Torchies", 8, NULL, 2.5, 4, "OPEN", "Your favorite taco food truck"),
+            (3, 1, "Free tank tops!", 12, NULL, 0, 20, "OPEN", "Free tank tops for first 100 visitors"),
             (4, 1, "Far away truck", 13, NULL, 100, 300, "OPEN", "Really far away, don't come"),
             (5, 1, "Closed truck", 0, NULL, 10000, 30000, "CLOSED", "good luck getting here"),
             (6, 7, "{All Users}", 0, NULL, 0, 0, "OPEN", "This is the system food truck!  All users get notifications through this truck!"),
             (7, 7, "{All Customers}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all customers!"),
-            (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!");
+            (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!"),
+            (9, 7, "{Marketing}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver marketing messages to all customers!");
 
             <!--If there's an error, it may be associated with the fact that there's special characters in here-->
             INSERT INTO MENU (ITEM_ID, TRUCK_ID, NAME, DESCRIPTION, PRICE) VALUES

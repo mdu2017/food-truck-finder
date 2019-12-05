@@ -6,9 +6,8 @@ import alloy.util.Tuple.Tuple2;
 import alloy.util.Tuple.Tuple3;
 import alloy.util._Maps;
 import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.External.scoreComparator;
+//import foodtruckfinder.site.common.External.scoreComparator;
 import foodtruckfinder.site.common.user.UserDto;
-import jdk.internal.net.http.common.Pair;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -141,7 +140,6 @@ public class FoodTruckDao {
 
 			//Do it!
 			jdbcTemplate.update(sql, parameters);
-			return foodTruck;
 		} else { //new food truck
 			//todo:: check if the owner exists
 
@@ -156,6 +154,28 @@ public class FoodTruckDao {
 					"(:owner_id, :name, :type, :price_low, :price_high, :status" +
 					(foodTruck.getDescription() != null ? ", :desc" : " ") +
 					")";
+
+
+			List<MenuItem> menu = foodTruck.getMenu();
+			double max, min;
+			if(menu != null && menu.size() > 0){
+				max = -1;
+				min = menu.get(0).getPrice();
+				for(MenuItem m : menu){
+					if(m.getPrice() > max){
+						max = m.getPrice();
+					}
+					if(m.getPrice() < min){
+						min = m.getPrice();
+					}
+				}
+			} else {
+				max = 1000;
+				min = 0;
+			}
+
+			foodTruck.setPrice_high(max);
+			foodTruck.setPrice_low(min);
 
 			Map<String, ?> parameters;
 			if (foodTruck.getDescription() != null) {
@@ -209,8 +229,8 @@ public class FoodTruckDao {
 //
 //			BigInteger key = (BigInteger) keyHolder.getKey();
 //			foodTruck.setId(key.longValue());
-			return foodTruck;
 		}
+		return foodTruck;
 	}
 
     /**
@@ -330,8 +350,13 @@ public class FoodTruckDao {
 
 			String sql = "SELECT * FROM FOOD_TRUCK, " +
                     "(SELECT TYPE_ID FROM FOOD_TYPE WHERE :fType = FOOD_TYPE.TYPE) AS TRUCKTYPE " +
-                    "WHERE TRUCKTYPE.TYPE_ID = FOOD_TRUCK.TYPE";
-			Map<String, ?> params = _Maps.map("fType", fType);
+                    "WHERE TRUCKTYPE.TYPE_ID = FOOD_TRUCK.TYPE " +
+					"AND NAME != :auser AND NAME != :cuser AND NAME != :ouser AND NAME != :muser";
+			Map<String, ?> params = _Maps.map("fType", fType,
+											  "auser", "{All Users}",
+											  "cuser", "{All Customers}",
+											  "ouser", "{All Owners}",
+											  "muser", "{Marketing}");
 			List<Integer> truckIDs = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getInt("FOOD_TRUCK_ID"));
 			System.out.println(truckIDs);
 
@@ -359,13 +384,17 @@ public class FoodTruckDao {
         //Get all food trucks with the price range
         if (maxPrice >= 0.0) {
             String sql = "SELECT * FROM FOOD_TRUCK WHERE FOOD_TRUCK.PRICE_HIGH <= :maxPrice " +
-						 "AND NAME != {All Users} AND NAME != {All Customers} AND NAME != {All Owners}";
+						 "AND NAME != :auser AND NAME != :cuser AND NAME != :ouser AND NAME != :muser";
 
             final String badFT1 = "{All Users}";
 			final String badFT2 = "{All Customers}";
 			final String badFT3 = "{All Owners}";
 
-            Map<String, ?> params = _Maps.map("maxPrice", maxPrice);
+            Map<String, ?> params = _Maps.map("maxPrice", maxPrice,
+											"auser", "{All Users}",
+											"cuser", "{All Customers}",
+											"ouser", "{All Owners}",
+											"muser", "{Marketing}");
             trucks = jdbcTemplate.query(sql, params, (rs, rowNum) -> {
             	Optional<FoodTruckDto> temp = find(rs.getLong("FOOD_TRUCK_ID") + "");
 
@@ -395,8 +424,22 @@ public class FoodTruckDao {
                 "AND ((POW(st.LATITUDE - :userLat, 2) + POW(st.LONGITUDE - " +
                 ":userLng, 2)) < :maxDistance)";
 
-        Map<String, ?> params = _Maps.map("userLat", userLat,
-                "userLng", userLng, "day", "T", "maxDistance", maxDistance);
+		String currDay = "U";
+		Calendar calendar = Calendar.getInstance();
+		switch(Calendar.DAY_OF_WEEK){
+			case 1: currDay = "U"; break;
+			case 2: currDay = "M"; break;
+			case 3: currDay = "T"; break;
+			case 4: currDay = "W"; break;
+			case 5: currDay = "H"; break;
+			case 6: currDay = "F"; break;
+			case 7: currDay = "S"; break;
+		}
+
+        Map<String, ?> params = _Maps.mapPairs(new Tuple.Tuple2<>("userLat", userLat),
+				new Tuple.Tuple2<>("userLng", userLng),
+				new Tuple.Tuple2<>("day", currDay),
+				new Tuple.Tuple2<>("maxDistance", maxDistance));
         List<Long> ids = jdbcTemplate.query(sql, params,
                 (rs, rowNum) -> rs.getLong("TRUCK_ID"));
 
@@ -425,7 +468,10 @@ public class FoodTruckDao {
             for (Long ft : goodTruckIDs) {
                 //get each food truck
                 Optional<FoodTruckDto> temp = this.find(ft.toString());
-                if (temp.isPresent()) {
+                if (temp.isPresent() && !temp.get().getName().equals("{All Users}") &&
+						!temp.get().getName().equals("{All Customers}") &&
+						!temp.get().getName().equals("{All Owners}") &&
+						!temp.get().getName().equals("{Marketing}")) {
                     trucks.add(temp.get());
                 }
             }
@@ -442,6 +488,18 @@ public class FoodTruckDao {
                                                            double radiusInMiles) {
         List<FoodTruckDto> trucks = null;
 
+		String currDay = "U";
+		Calendar calendar = Calendar.getInstance();
+		switch(Calendar.DAY_OF_WEEK){
+			case 1: currDay = "U"; break;
+			case 2: currDay = "M"; break;
+			case 3: currDay = "T"; break;
+			case 4: currDay = "W"; break;
+			case 5: currDay = "H"; break;
+			case 6: currDay = "F"; break;
+			case 7: currDay = "S"; break;
+		}
+
         String sql = "SELECT sch.TRUCK_ID " +
                 "FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
                 "WHERE sch.STOP_ID = st.STOP_ID " +
@@ -451,7 +509,7 @@ public class FoodTruckDao {
                 ":userlong, 2)) < :radius)";
 
         Map<String, ?> params = _Maps.map("userlat", userlat,
-                "userlong", userlong, "day", "T", "radius", radiusInMiles);
+                "userlong", userlong, "day", currDay, "radius", radiusInMiles);
         List<Long> ids = jdbcTemplate.query(sql, params, (rs, rowNum) -> rs.getLong("TRUCK_ID"));
 
         if (ids != null) {
@@ -472,6 +530,18 @@ public class FoodTruckDao {
 		/** Grab all nearby food trucks **/
 		List<FoodTruckDto> nearbyTrucks = null;
 
+		String currDay = "U";
+		Calendar calendar = Calendar.getInstance();
+		switch(Calendar.DAY_OF_WEEK){
+			case 1: currDay = "U"; break;
+			case 2: currDay = "M"; break;
+			case 3: currDay = "T"; break;
+			case 4: currDay = "W"; break;
+			case 5: currDay = "H"; break;
+			case 6: currDay = "F"; break;
+			case 7: currDay = "S"; break;
+		}
+
 		String nearbySQL = "SELECT sch.TRUCK_ID " +
 				"FROM schedule AS sch, truck_stop AS st " +
 				"WHERE sch.STOP_ID = st.STOP_ID " +
@@ -481,7 +551,7 @@ public class FoodTruckDao {
 				":userlong, 2)) < 1)";
 
 		Map<String, ?> nearbyParams = _Maps.map("userlat", userlat,
-				"userlong", userlong, "day", "T");
+				"userlong", userlong, "day", currDay);
 		List<Long> ids = jdbcTemplate.query(nearbySQL, nearbyParams, (rs, rowNum) -> rs.getLong("TRUCK_ID"));
 
 		if (ids != null) {
@@ -509,17 +579,7 @@ public class FoodTruckDao {
 					"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
 					"AND (TIME(st.end) > TIME(NOW()))";
 
-			String currDay = "U";
-			Calendar calendar = Calendar.getInstance();
-			switch(Calendar.DAY_OF_WEEK){
-				case 1: currDay = "U"; break;
-				case 2: currDay = "M"; break;
-				case 3: currDay = "T"; break;
-				case 4: currDay = "W"; break;
-				case 5: currDay = "H"; break;
-				case 6: currDay = "F"; break;
-				case 7: currDay = "S"; break;
-			}
+
 
 			Map<String, ?> params = _Maps.map("day", currDay, "truckid", truckid);
 			Optional<Tuple.Triple<Double, Double, FoodTruckDto>> location = jdbcTemplate.query(sql, params, rs -> {
@@ -1077,19 +1137,19 @@ public class FoodTruckDao {
 			case 6: currDay = "F"; break;
 			case 7: currDay = "S"; break;
 		}
-		List<Pair<Double, Double>> locations = new ArrayList<>();
+		List<Tuple.Tuple2<Double, Double>> locations = new ArrayList<>();
 		params = _Maps.map("day", currDay, "truckid", truck_ID);
-		Optional<Pair<Double, Double>> location = jdbcTemplate.query(sql, params, rs -> {
-			Pair<Double, Double> loc = null;
+		Optional<Tuple.Tuple2<Double, Double>> location = jdbcTemplate.query(sql, params, rs -> {
+			Tuple.Tuple2<Double, Double> loc = null;
 			if(rs.next()) {
-				loc = new Pair<>(
+				loc = new Tuple.Tuple2<>(
 						rs.getDouble("LATITUDE"), rs.getDouble("LONGITUDE"));
 				locations.add(loc);
 			}
 			return Optional.ofNullable(loc);
 		});
 
-		actualDistance = Math.pow((Math.pow((location.get().first - lat), 2.0) + Math.pow((location.get().second - log), 2.0)), 0.5);
+		actualDistance = Math.pow((Math.pow((location.get().getFirst() - lat), 2.0) + Math.pow((location.get().getSecond() - log), 2.0)), 0.5);
 		double diff = (actualDistance - prefDistance);
 		if(diff <= 0){
 			score = 10;

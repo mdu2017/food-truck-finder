@@ -829,8 +829,8 @@ public class FoodTruckDao {
 	}
 
 	public void removeDeal(Long dealID){
-		String sql = "DELETE * FROM DEAL WHERE DEAL_ID = :dealID";
-		Map<String, ?> params = _Maps.map("truckID", dealID);
+		String sql = "DELETE FROM DEAL WHERE DEAL_ID = :dealID";
+		Map<String, ?> params = _Maps.map("dealID", dealID);
 		jdbcTemplate.update(sql, params);
 	}
 

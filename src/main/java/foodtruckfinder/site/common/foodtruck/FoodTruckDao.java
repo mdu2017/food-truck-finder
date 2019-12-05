@@ -28,7 +28,7 @@ public class FoodTruckDao {
 	private NamedParameterJdbcTemplate jdbcTemplate;
 
 	//The basic functions
-	/**
+	/**a
 	 * This function returns the first successful match (a food truck object) of the string id to a food truck in the database.
 	 *
 	 * @param id the id to search for

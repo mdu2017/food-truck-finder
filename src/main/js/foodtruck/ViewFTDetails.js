@@ -1,5 +1,5 @@
 import React from 'react';
-import {connect} from 'react-redux';
+import { connect } from 'react-redux';
 import * as NavBars from 'js/navBars';
 import User from 'js/images/user_icon.png';
 import {
@@ -33,6 +33,7 @@ export class ViewFoodTruckDetails extends React.Component {
 			review: '',
 			notLoggedIn: false,
 			previousReviews: [],
+			schedule: [],
 			averageRating: 0,
 			alreadySubscribed: false
 		};
@@ -129,6 +130,44 @@ export class ViewFoodTruckDetails extends React.Component {
 		return render;
 	}
 
+	// renderTruckSchedule() {
+	// 	let render = [];
+	// 	{
+	// 		this.state.schedule.map(sched => {
+	// 			sched.forEach(time => {
+	// 				render.push(
+	// 					<div>
+	// 						<h6
+	// 							style={{
+	// 								fontWeight: 'bold',
+	// 								fontSize: 'small'
+	// 							}}
+	// 						>
+	// 							{time.date_month}
+	// 							{'/'}
+	// 							{time.date_day}
+	// 							{'/'}
+	// 							{time.date_year}
+	// 						</h6>
+	// 						<h6>
+	// 							<img
+	// 								src={User}
+	// 								width={20}
+	// 								height={20}
+	// 								mode="center"
+	// 							/>
+	// 							{time.user} {individualReview.rating} {'/ 5'}
+	// 						</h6>
+	// 						<h6>{individualReview.message}</h6>
+	// 						<br />
+	// 					</div>
+	// 				);
+	// 			});
+	// 		});
+	// 	}
+	// 	return render;
+	// }
+
 	toggle() {
 		if (JSON.parse(Axios.getCookie('user') === null)) {
 			this.setState({ notLoggedIn: true });
@@ -141,13 +180,17 @@ export class ViewFoodTruckDetails extends React.Component {
 
 	handleModalSubmit = event => {
 		this.toggle();
-		this.props.rateFT({
-			userId: JSON.parse(Axios.getCookie('user')).id,
-			truckId: this.state.truck.id,
-			review: this.state.review,
-			rating: this.state.rating
-		});
-		event.preventDefault();
+		if (this.state.review.length > 0) {
+			this.props.rateFT({
+				userId: JSON.parse(Axios.getCookie('user')).id,
+				truckId: this.state.truck.id,
+				review: this.state.review,
+				rating: this.state.rating
+			});
+			event.preventDefault();
+		} else {
+			window.alert('Error: Review cannot be left blank!');
+		}
 	};
 
 	subscribe() {
@@ -232,9 +275,19 @@ export class ViewFoodTruckDetails extends React.Component {
 								</legend>
 							</Col>
 							<Col xs="auto">
-								<Button color="info" onClick={this.toggle} disabled={this.state.user.isOwner}>
-									Write Review
-								</Button>
+								{this.state.user ? (
+									<Button
+										color="info"
+										onClick={this.toggle}
+										disabled={this.state.user.isOwner}
+									>
+										Write Review
+									</Button>
+								) : (
+									<Button color="info" onClick={this.toggle}>
+										Write Review
+									</Button>
+								)}
 							</Col>
 						</Row>
 						<br />

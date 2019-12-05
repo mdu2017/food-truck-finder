@@ -5,7 +5,7 @@ import org.junit.runners.Suite;
 import org.junit.runners.Suite.SuiteClasses;
 
 @RunWith(Suite.class)
-@SuiteClasses({FoodTruckTester.class, UserTester.class, StopTester.class, RecommendationTestSuite.class})
-public class FoodTruckFinderSuite {
+@SuiteClasses({testDistanceScore.class, testHighScore.class, testLowScore.class, testSubscribedScore.class})
+public class RecommendationTestSuite {
 
 }

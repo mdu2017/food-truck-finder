@@ -6,6 +6,7 @@ import alloy.util.Tuple.Tuple2;
 import alloy.util.Tuple.Tuple3;
 import alloy.util._Maps;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -909,7 +910,7 @@ public class FoodTruckDao {
 	public Optional<EventDto> getEventById(Long event_ID){
 		String sql = "SELECT * FROM EVENT WHERE EVENT_ID = :event_ID";
 		Map<String, ?> params = _Maps.map("event_ID", event_ID);
-		jdbcTemplate.query(sql, params, (rs) -> {
+		EventDto curDto = jdbcTemplate.query(sql, params, (rs) -> {
 			if(rs.next()){
 				EventDto temp = new EventDto();
 				temp.setEvent_ID(event_ID);
@@ -938,7 +939,7 @@ public class FoodTruckDao {
 				return null;
 			}
 		});
-		return null;
+		return Optional.ofNullable(curDto);
 	}
 
 	public Optional<List<Long>> getAttendingTrucks(Long event_ID){

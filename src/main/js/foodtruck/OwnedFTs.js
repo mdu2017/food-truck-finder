@@ -73,7 +73,6 @@ export class OwnedFoodTrucks extends React.Component {
 
 	handleDealModalSubmit = event => {
 		this.toggleDeal();
-		console.log('HEY');
 		event.preventDefault();
 	};
 
@@ -83,9 +82,8 @@ export class OwnedFoodTrucks extends React.Component {
 				{this.state.trucks.length > 0 ? (
 					<div>
 						{this.state.trucks.map((truck, index) => (
-							<ListGroup key={index}>
+							<ListGroup key={index} flush>
 								<ListGroupItem>
-									{truck.name}{' '}
 									<Link
 										to={`/food-truck-details/${truck.id}`}
 									>
@@ -121,6 +119,8 @@ export class OwnedFoodTrucks extends React.Component {
 									>
 										$$$
 									</Button>
+									&nbsp;
+									{truck.name}
 								</ListGroupItem>
 							</ListGroup>
 						))}
@@ -179,65 +179,68 @@ export class OwnedFoodTrucks extends React.Component {
 					<form onSubmit={this.handleDealModalSubmit}>
 						<ModalHeader>New Deal</ModalHeader>
 						<ModalBody>
-							<Form inline>
-								<FormGroup>
-									<Label for="exampleDate">Date</Label>
-									<Input
-										type="date"
-										name="date"
-										id="exampleDate"
-										placeholder="date placeholder"
-										onChange={e =>
-											console.log(
-												JSON.stringify(e.target.value)
-											)
-										}
-									/>
-								</FormGroup>
-								<FormGroup>
-									<Label for="exampleTime">Time</Label>
-									<Input
-										type="time"
-										name="time"
-										id="exampleTime"
-										placeholder="time placeholder"
-									/>
-								</FormGroup>
-							</Form>
-							<Form inline>
-								<FormGroup>
-									<Label for="exampleDate">Date</Label>
-									<Input
-										type="date"
-										name="date"
-										id="exampleDate"
-										placeholder="date placeholder"
-										onChange={e =>
-											console.log(
-												JSON.stringify(e.target.value)
-											)
-										}
-									/>
-								</FormGroup>
-								<FormGroup>
-									<Label for="exampleTime">Time</Label>
-									<Input
-										type="time"
-										name="time"
-										id="exampleTime"
-										placeholder="time placeholder"
-									/>
-								</FormGroup>
-							</Form>
+							<Label for="message">Message</Label>
 							<Input
 								type="textarea"
 								name="text"
-								id="exampleText"
+								id="message"
 								placeholder="Limited to 300 characters."
 								onChange={e =>
 									this.setDealMessage(e.target.value)
 								}
 							/>
+							<br />
+							<Label for="startDate">Start Date {'&'} Time</Label>
+							<Form inline>
+								<FormGroup>
+									<Input
+										type="date"
+										name="date"
+										id="startDate"
+										placeholder="date placeholder"
+										onChange={e =>
+											console.log(
+												JSON.stringify(e.target.value)
+											)
+										}
+									/>
+								</FormGroup>
+								&nbsp;
+								<FormGroup>
+									<Input
+										type="time"
+										name="time"
+										id="startTime"
+										placeholder="time placeholder"
+									/>
+								</FormGroup>
+							</Form>
+							&nbsp;
+							<Label for="endDate">End Date {'&'} Time</Label>
+							<Form inline>
+								<FormGroup>
+									<Input
+										type="date"
+										name="date"
+										id="endDate"
+										placeholder="date placeholder"
+										onChange={e =>
+											console.log(
+												JSON.stringify(e.target.value)
+											)
+										}
+									/>
+								</FormGroup>
+								&nbsp;
+								<FormGroup>
+									<Input
+										type="time"
+										name="time"
+										id="endTime"
+										placeholder="time placeholder"
+									/>
+								</FormGroup>
+							</Form>
 						</ModalBody>
 						<ModalFooter>
 							<input
@@ -266,6 +269,8 @@ export class OwnedFoodTrucks extends React.Component {
 				<div className="container padded">
 					<h1>Your Food Trucks</h1>
 					{this.renderFoodTrucks()}
+					<br />
+					<h1>Current Deals</h1>
 				</div>
 				{this.renderNotifyModal()}
 				{this.renderDealModal()}
@@ -288,6 +293,19 @@ OwnedFoodTrucks = connect(
 					window.alert('Notification was sent successfully!');
 				})
 				// Failed
-				.catch(error => window.alert('Failed to send notification!'))
+				.catch(error => window.alert('Failed to send notification!')),
+		addDeal: deal =>
+			dispatch(
+				Axios.Actions.addDeal(
+					deal.message,
+					deal.foodTruckId,
+					deal.startTime,
+					deal.endTime
+				)
+			)
+				.then(function(result) {
+					window.alert('Deal was created successfully!');
+				})
+				.catch(error => window.alert('Failed to create deal!'))
 	})
 )(OwnedFoodTrucks);

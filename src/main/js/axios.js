@@ -43,12 +43,17 @@ export function getRatingByTruck(truck_ID) {
 
 // Multivalue axios post
 export function sendNotification(message, foodTruckId) {
-	console.log(message);
 	return axios.post(
 		'api/food-truck/send-notification?message=' +
 			message +
 			'&foodTruckId=' +
 			foodTruckId
+	);
+}
+
+export function addDeal(message, foodTruckId, startTime, endTime) {
+	return axios.post(
+		'api/food-truck/addDeal?message=' + message + '&truckID=' + foodTruckId
 	);
 }
 
@@ -110,13 +115,25 @@ export function getNotifications(userId) {
 }
 
 export function changeNotificationStatus(userId, truckId, sent) {
-	return axios.post('/api/user/notificationStatus?user_ID=' + userId +
-		'&truck_ID=' + truckId + '&sent=' + sent);
+	return axios.post(
+		'/api/user/notificationStatus?user_ID=' +
+			userId +
+			'&truck_ID=' +
+			truckId +
+			'&sent=' +
+			sent
+	);
 }
 
 export function removeNotification(userId, truckId, sent) {
-	return axios.post('/api/user/removeNotification?user_ID=' + userId +
-		'&truck_ID=' + truckId + '&sent=' + sent);
+	return axios.post(
+		'/api/user/removeNotification?user_ID=' +
+			userId +
+			'&truck_ID=' +
+			truckId +
+			'&sent=' +
+			sent
+	);
 }
 
 export function subscribe(foodtruckId, userId) {
@@ -189,7 +206,7 @@ export function searchFoodTrucks(name) {
 	});
 }
 
-export function searchFoodTrucksByType(type){
+export function searchFoodTrucksByType(type) {
 	return axios.get('/unsecure/searchFoodTrucksByType', {
 		params: {
 			type: type
@@ -197,7 +214,7 @@ export function searchFoodTrucksByType(type){
 	});
 }
 
-export function searchTrucksByPrice(maxPrice){
+export function searchTrucksByPrice(maxPrice) {
 	return axios.get('/unsecure/searchTrucksByPrice', {
 		params: {
 			maxPrice: maxPrice
@@ -206,7 +223,7 @@ export function searchTrucksByPrice(maxPrice){
 }
 
 //TODO: WIP
-export function searchTrucksByDistance(userLat, userLng, maxDistance){
+export function searchTrucksByDistance(userLat, userLng, maxDistance) {
 	return axios.get('/unsecure/searchTrucksByDistance', {
 		params: {
 			userLat: userLat,
@@ -216,7 +233,7 @@ export function searchTrucksByDistance(userLat, userLng, maxDistance){
 	});
 }
 
-export function searchUsers(username){
+export function searchUsers(username) {
 	return axios.get('/unsecure/user/searchUsers', {
 		params: {
 			username: username

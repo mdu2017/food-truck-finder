@@ -7,7 +7,10 @@ import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import foodtruckfinder.site.common.user.UserDto;
 import foodtruckfinder.site.common.user.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RestController;
 
 import java.util.List;
 import java.util.Optional;

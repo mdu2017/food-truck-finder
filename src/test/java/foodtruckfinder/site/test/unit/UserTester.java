@@ -4,7 +4,8 @@ import foodtruckfinder.site.common.user.UserDao;
 import foodtruckfinder.site.common.user.UserDto;
 import org.junit.Test;
 
-import static org.junit.Assert.*;
+import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNull;
 
 
 public class UserTester {

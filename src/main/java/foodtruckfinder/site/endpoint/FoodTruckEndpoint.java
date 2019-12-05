@@ -1,22 +1,18 @@
 package foodtruckfinder.site.endpoint;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.*;
-import java.util.stream.Collectors;
-
-import alloy.util.Json;
-import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.foodtruck.EventDto;
-import foodtruckfinder.site.common.foodtruck.Stop;
-import foodtruckfinder.site.common.user.UserDto;
-import foodtruckfinder.site.common.user.UserService;
 import foodtruckfinder.site.common.foodtruck.Deal;
+import foodtruckfinder.site.common.foodtruck.EventDto;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
+import foodtruckfinder.site.common.foodtruck.FoodTruckService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
-import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
-import foodtruckfinder.site.common.foodtruck.FoodTruckService;
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 /**
  * If this is your first time looking through this project, see the more in-depth overview of controllers in UserEndpoint.
@@ -68,9 +64,12 @@ public class FoodTruckEndpoint {
 
 	//Deal functions
 	@PostMapping(value = "/addDeal", produces = "application/json")
-	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+	public void addDeal(String message, Long truckID, String start,
+						String end) {
+		LocalDateTime startDT = LocalDateTime.parse(start);
+		LocalDateTime endDT = LocalDateTime.parse(end);
 		foodTruckService.sendNotification(message, truckID);
-		foodTruckService.addDeal(message, truckID, start, end);
+		foodTruckService.addDeal(message, truckID, startDT, endDT);
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
@@ -123,8 +122,12 @@ public class FoodTruckEndpoint {
 
 	//Event functions
     @PostMapping(value = "/addEvent", produces = "application/json")
-	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
-		foodTruckService.addEvent(name, details, start, end, log, lat);
+	public void addEvent(String name, String details, Integer[] start, Integer[] end, double log, double lat){
+		LocalDateTime startTime = LocalDateTime.of(start[0], start[1], start[2],
+				start[3], start[4], start[5]);
+		LocalDateTime endTime = LocalDateTime.of(end[0], end[1], end[2],
+				end[3], end[4], end[5]);
+		foodTruckService.addEvent(name, details, startTime, endTime, log, lat);
 		return;
 	}
 

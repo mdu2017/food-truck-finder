@@ -1,14 +1,6 @@
 package foodtruckfinder.site.common.user;
 
-import java.time.LocalDateTime;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-// import javax.jws.soap.SOAPBinding.Use;
-
-import alloy.util.Tuple;
+import alloy.util._Lists;
 import foodtruckfinder.site.common.External.Notification;
 import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
@@ -16,7 +8,13 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import alloy.util._Lists;
+import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
+// import javax.jws.soap.SOAPBinding.Use;
 
 /**
  * Services are Spring concepts for classes which manage the application's business logic.

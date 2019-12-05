@@ -1,14 +1,14 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.sql.SQLException;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
+import java.sql.SQLException;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * If this is your first time looking at Spring Services, check out the detailed explanation in UserService first.
@@ -35,6 +35,12 @@ public class FoodTruckService {
 	 * @param truck_id the truck to remove
 	 */
 	public boolean remove(Long truck_id){
+		Optional<FoodTruckDto> ft = find(truck_id + "");
+		if(ft.isPresent()){
+			String mess = "The food truck \"" + ft.get().getName() + "\" that you subscribed to has been removed.";
+			this.sendNotification(mess, truck_id);
+		}
+
 		return foodTruckDao.remove(truck_id);
 	}
 
@@ -102,11 +108,6 @@ public class FoodTruckService {
 	//Deal functions
 	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
 		foodTruckDao.addDeal(message, truckID, start, end);
-		Optional<FoodTruckDto> ft = foodTruckDao.find(truckID + "");
-		if(ft.isPresent()){
-			String notifMessage = "[" +  ft.get().getName() + "]: " + message;
-			foodTruckDao.sendNotification(notifMessage, truckID);
-		}
 	}
 
 	public void removeDeal(Long truckID){

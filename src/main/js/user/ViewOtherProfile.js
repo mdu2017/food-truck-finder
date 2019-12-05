@@ -1,7 +1,7 @@
 import React from 'react';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import { Col, Row, Container } from 'reactstrap';
+import {Col, Container, Row} from 'reactstrap';
 
 export class ViewOtherProfile extends React.Component {
 	constructor(props) {

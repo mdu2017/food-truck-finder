@@ -1,15 +1,12 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import java.util.*;
-
 import alloy.util.Tuple;
+import alloy.util.Tuple.Triple;
+import alloy.util.Tuple.Tuple2;
+import alloy.util.Tuple.Tuple3;
+import alloy.util._Maps;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
 import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
@@ -17,11 +14,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import alloy.util.Tuple.Pair;
-import alloy.util.Tuple.Triple;
-import alloy.util.Tuple.Tuple2;
-import alloy.util.Tuple.Tuple3;
-import alloy.util._Maps;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Created by jlutteringer on 8/23/17.
@@ -769,7 +763,7 @@ public class FoodTruckDao {
 			if(d.getDeal_id() != null){
 				String sql = "REPLACE INTO DEAL " +
 						"(DEAL_ID, TRUCK_ID, MESSAGE, START, END) VALUES " +
-						"(:dealID, :truckID, :message, :startTime, :endTime);";
+						"(:dealID, :truckID, :message, :start, :end);";
 
 				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
 						"message", d.getMessage(),
@@ -782,7 +776,7 @@ public class FoodTruckDao {
 			} else {
 				String sql = "INSERT INTO DEAL " +
 						"(TRUCK_ID, MESSAGE, START, END) VALUES " +
-						"(:truckID, :message, :startTime, :endTime);";
+						"(:truckID, :message, :start, :end);";
 
 
 				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
@@ -864,10 +858,7 @@ public class FoodTruckDao {
 
 		List<String> subscribers = getSubscribers(foodTruckId);
 		for (String subscriber : subscribers) {
-			sent = LocalDateTime.now();
-//			Optional<UserDto> curUser = users.findUserByUsername(subscriber);
-//			userID = curUser.get().getId();
-			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
+			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);
 			jdbcTemplate.update(sql, params);
 		}
 	}
@@ -918,7 +909,7 @@ public class FoodTruckDao {
 	public Optional<EventDto> getEventById(Long event_ID){
 		String sql = "SELECT * FROM EVENT WHERE EVENT_ID = :event_ID";
 		Map<String, ?> params = _Maps.map("event_ID", event_ID);
-		jdbcTemplate.query(sql, params, (rs) -> {
+		EventDto curDto = jdbcTemplate.query(sql, params, (rs) -> {
 			if(rs.next()){
 				EventDto temp = new EventDto();
 				temp.setEvent_ID(event_ID);
@@ -947,7 +938,7 @@ public class FoodTruckDao {
 				return null;
 			}
 		});
-		return null;
+		return Optional.ofNullable(curDto);
 	}
 
 	public Optional<List<Long>> getAttendingTrucks(Long event_ID){

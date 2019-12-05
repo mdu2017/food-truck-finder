@@ -1,27 +1,26 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
+import {Link} from 'react-router-dom';
 import Logo from 'js/images/foodtruck.png';
 import Hamburger from 'js/images/hamburger.png';
 import * as Axios from 'js/axios';
 import {
+	Badge,
+	Col,
 	Collapse,
-	Navbar,
-	NavbarToggler,
-	NavbarBrand,
+	Container,
+	DropdownItem,
+	DropdownMenu,
+	DropdownToggle,
 	Nav,
+	Navbar,
+	NavbarBrand,
+	NavbarToggler,
 	NavItem,
 	NavLink,
-	UncontrolledDropdown,
-	DropdownToggle,
-	DropdownMenu,
-	DropdownItem,
-	Container,
 	Row,
-	Col,
-	Badge,
-	toggleNavbar
+	UncontrolledDropdown
 } from 'reactstrap';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 
 export class CustomNavBar extends React.Component {
 	constructor(props) {

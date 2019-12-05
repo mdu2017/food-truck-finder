@@ -1,21 +1,21 @@
 import React from 'react';
-import { Link } from 'react-router-dom';
-import { connect } from 'react-redux';
+import {Link} from 'react-router-dom';
+import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import Bell from 'js/images/notificationBell.png';
 import {
-	ListGroup,
-	ListGroupItem,
 	Button,
-	Modal,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
-	Input,
 	Form,
 	FormGroup,
-	Label
+	Input,
+	Label,
+	ListGroup,
+	ListGroupItem,
+	Modal,
+	ModalBody,
+	ModalFooter,
+	ModalHeader
 } from 'reactstrap';
 
 export class OwnedFoodTrucks extends React.Component {
@@ -82,10 +82,10 @@ export class OwnedFoodTrucks extends React.Component {
 	handleDealModalSubmit = () => {
 		this.toggleDeal();
 		console.log('HEY');
-		this.state.dealDate.preventDefault();
-		this.state.dealEndTime.preventDefault();
-		this.state.dealStartTime.preventDefault();
-		this.state.dealMessage.preventDefault();
+		Axios.addDeal(this.state.dealMessage, this.state.foodTruckId,
+			this.state.dealStartDate + 'T' + this.state.dealStartTime,
+			this.state.dealEndDate + 'T' + this.state.dealEndTime).then(result => console.log(result));
+
 	};
 
 	renderFoodTrucks() {

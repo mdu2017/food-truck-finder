@@ -1,20 +1,19 @@
 package foodtruckfinder.site.endpoint;
 
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Optional;
-
-import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.External.Notification;
+import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
+import foodtruckfinder.site.common.user.UserDto;
+import foodtruckfinder.site.common.user.UserService;
+import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
+import foodtruckfinder.site.common.user.UserService.UpdateRequest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.web.bind.annotation.*;
 
-import foodtruckfinder.site.common.user.UserService;
-import foodtruckfinder.site.common.user.UserService.RegistrationRequest;
-import foodtruckfinder.site.common.user.UserService.UpdateRequest;
-import foodtruckfinder.site.common.user.UserDto;
+import java.time.LocalDateTime;
+import java.util.List;
+import java.util.Optional;
 
 /**
  * This is a controller endpoint which is intended to manage users and their association with food trucks. Because the class

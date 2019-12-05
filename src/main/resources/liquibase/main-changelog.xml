@@ -186,12 +186,10 @@
             (8, 7, "{All Owners}", 0, NULL, 0, 0, "OPEN", "This is the food truck to deliver notifications to all owners!");
 
             <!--If there's an error, it may be associated with the fact that there's special characters in here-->
-            INSERT INTO MENU
-            (`ITEM_ID`, `TRUCK_ID`, `NAME`, `DESCRIPTION`, `PRICE`) VALUES
+            INSERT INTO MENU (ITEM_ID, TRUCK_ID, NAME, DESCRIPTION, PRICE) VALUES
             <!--honeyyy-->
             (1, 1, "Honey", "The best honey you've ever had.  Sold by the spoonfull", 1.00),
             (2, 1, "Honey By the Gallon", "The best honey you've ever had.  Sold by the GALLON!", 20.00),
-            (3, 1, "Honey ;)", "Come get your honey! Ransom accepted in cash only!", 10000000.00),
             (4, 1, "Honey and Nutella Crepe", "Nutella crepe with a dazzle of honey and topped by strawberries", 12.00),
             (5, 1, "Honey on bread, your style", "You tell us the kind of bread and how to cook it and we'll put some of our specialty honey on it!", 7.00),
             <!--torchies-->
@@ -213,8 +211,7 @@
             (20, 4, "Something that sounds good", "But we're wayyyy to far away from you for you to care :)", 3.00),
             (21, 5, "Your favorite food", "But we're never open, sorry :/", 3.00);
 
-            INSERT INTO TRUCK_STOP
-            (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES
+            INSERT INTO TRUCK_STOP (STOP_ID, START, END, LATITUDE, LONGITUDE) VALUES
             (1, "2019-10-29 0:00:48", "2019-10-29 23:56:48", 31.549605, -97.114995),
             (2, "2019-10-29 0:00:12", "2019-10-29 23:58:12", 31.553196, -97.124797),
             (3, "2019-10-29 0:00:46", "2019-10-29 23:58:46", 31.264332, -95.880037),
@@ -227,7 +224,11 @@
             (10, "2019-10-29 0:00:48", "2019-10-29 23:56:48", 31.549605, -97.114995),
             (11, "2019-10-29 0:00:12", "2019-10-29 23:58:12", 31.553196, -97.124797),
             (12, "2019-10-29 0:00:46", "2019-10-29 23:58:46", 31.264332, -95.880037),
-            (13, "2019-10-29 0:00:42", "2019-10-29 23:03:42", 31.545743, -97.117805);
+            (13, "2019-10-29 0:00:42", "2019-10-29 23:03:42", 31.545743, -97.117805),
+            <!--Christmas on fifth stop-->
+            (14, "2019-12-05 17:00:48", "2019-12-06 00:00:00", 31.547857, -97.121268),
+            <!--Graduation-->
+            (15, "2019-12-21 08:00:48", "2019-12-22 02:00:00", 31.547383, -97.106178);
 
             INSERT INTO SCHEDULE (TRUCK_ID, DAY, STOP_ID) VALUES
             (1, "T", 1), (2, "T", 2), (3, "T", 4), (4, "T", 3), (5, "T", 5),
@@ -260,6 +261,17 @@
             (6, 6, "Cool tank tops bro", 5, "2019-11-14 23:50:24"),
             (3, 3, "Cuz, you know, what good city doesn't have a food truck that sells tank tops?", 4, "2019-11-14 23:50:24"),
             (2, 2, "It's trucks like this that take away from local businesses!", 0, "2019-11-14 23:50:24");
+
+            INSERT INTO EVENT (EVENT_ID, NAME, DESCRIPTION, STOP_ID) VALUES
+            (1, "Christmas on 5th", "Not for comp sci majors: \"You're here to get an education, not to go to Christmas on 5th\"", 14),
+            (2, "Graduation", "We'll all be on the front lawn of the Ferrel Center!", 14);
+
+            INSERT INTO ATTENDING_EVENT (TRUCK_ID, EVENT_ID) VALUES
+            <!--Christmas on 5th-->
+            (1, 1), (2, 1), (3, 1),
+            <!--Graduation-->
+            (1, 2), (2, 2);
+
 
         </sql>
     </changeSet>

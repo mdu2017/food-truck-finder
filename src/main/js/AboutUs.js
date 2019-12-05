@@ -1,7 +1,7 @@
 import React from 'react';
 import * as NavBars from 'js/navBars';
 import AboutUsPhoto from 'js/images/about_us.png';
-import { Media } from 'reactstrap';
+import {Media} from 'reactstrap';
 
 export class AboutUs extends React.Component {
 	render() {

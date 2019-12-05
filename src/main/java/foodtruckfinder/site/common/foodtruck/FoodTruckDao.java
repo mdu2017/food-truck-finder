@@ -941,17 +941,17 @@ public class FoodTruckDao {
 		return Optional.ofNullable(curDto);
 	}
 
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){
 		String sql = "SELECT TRUCK_ID FROM ATTENDING_EVENT WHERE EVENT_ID = :event_ID";
 		Map<String, ?> params = _Maps.map("event_ID", event_ID);
-		List<Long> ids = new ArrayList<>();
+		List<Optional<FoodTruckDto>> ids = new ArrayList<>();
 		jdbcTemplate.query(sql, params, (rs) -> {
 			if(rs.next()){
-				ids.add(rs.getLong("TRUCK_ID"));
+				ids.add(find("" + rs.getLong("TRUCK_ID")));
 			}
 		});
 		if(ids.size() > 0){
-			return Optional.ofNullable(ids);
+			return Optional.of(ids);
 		}
 		else{
 			return null;

@@ -169,7 +169,7 @@ public class FoodTruckService {
     	return foodTruckDao.getEventById(event_ID);
 	}
 
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){
+	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){
 		return foodTruckDao.getAttendingTrucks(event_ID);
 	}
 

@@ -155,7 +155,7 @@ public class FoodTruckEndpoint {
 	}
 
 	@GetMapping(value = "/getAttendingTrucks", produces = "application/json")
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
+	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
 
 	@GetMapping(value = "/getAllEvents", produces = "application/json")
 	public List<EventDto> getAllEvents(){

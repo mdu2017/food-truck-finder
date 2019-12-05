@@ -59,6 +59,10 @@ export function getAllDeals(truck_ID) {
 	return axios.get('api/food-truck/getAllDeals?truckID=' + truck_ID);
 }
 
+export function deleteDeal(deal_id) {
+	return axios.post('/api/food-truck/removeDeal?dealID=' + deal_id);
+}
+
 export function getRatingByUser(user_ID) {
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
 }

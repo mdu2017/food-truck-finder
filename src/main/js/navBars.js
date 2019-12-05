@@ -117,8 +117,12 @@ export class CustomNavBar extends React.Component {
 					</DropdownItem>
 					<DropdownItem href="#/about">About Us</DropdownItem>
 					<DropdownItem href="#/page-1">Page 1</DropdownItem>
+					{this.state.user && (
 					<DropdownItem divider />
-					<DropdownItem onClick={this.logout}>Logout</DropdownItem>
+					)}
+					{this.state.user && (
+						<DropdownItem onClick={this.logout}>Logout</DropdownItem>
+					)}
 				</DropdownMenu>
 			</div>
 		);

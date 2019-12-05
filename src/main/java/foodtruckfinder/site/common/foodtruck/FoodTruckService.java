@@ -35,6 +35,12 @@ public class FoodTruckService {
 	 * @param truck_id the truck to remove
 	 */
 	public boolean remove(Long truck_id){
+		Optional<FoodTruckDto> ft = find(truck_id + "");
+		if(ft.isPresent()){
+			String mess = "The food truck \"" + ft.get().getName() + "\" that you subscribed to has been removed.";
+			this.sendNotification(mess, truck_id);
+		}
+
 		return foodTruckDao.remove(truck_id);
 	}
 

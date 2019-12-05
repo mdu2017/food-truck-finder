@@ -858,8 +858,6 @@ public class FoodTruckDao {
 		List<String> subscribers = getSubscribers(foodTruckId);
 		for (String subscriber : subscribers) {
 			sent = LocalDateTime.now();
-//			Optional<UserDto> curUser = users.findUserByUsername(subscriber);
-//			userID = curUser.get().getId();
 			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
 			jdbcTemplate.update(sql, params);
 		}

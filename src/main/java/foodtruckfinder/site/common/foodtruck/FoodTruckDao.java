@@ -218,8 +218,10 @@ public class FoodTruckDao {
 			updateSchedule(foodTruck);
 
 			//deal stuff
-			for(Deal d : foodTruck.getDeals()){
-				insertDeal(d);
+			if(foodTruck.getDeals() != null) {
+				for(Deal d : foodTruck.getDeals()){
+					insertDeal(d);
+				}
 			}
 
 			//original starting example code
@@ -708,7 +710,7 @@ public class FoodTruckDao {
 	private void updateMenu(FoodTruckDto foodTruck){
 		//Need to remove any stops not still present -- do this by removing all tuples associated with the
 		// food truck then adding them all back :)
-		String deleteSql = "DELETE * FROM MENU WHERE TRUCK_ID = :truckid";
+		String deleteSql = "DELETE FROM MENU WHERE TRUCK_ID = :truckid";
 		Map<String, ?> deleteparams = _Maps.map("truckid", foodTruck.getId());
 		jdbcTemplate.update(deleteSql, deleteparams);
 
@@ -775,7 +777,7 @@ public class FoodTruckDao {
 
 				//update the schedule table after the stops table has been updated
 				Map<String, ?> schedparams = _Maps.map(
-						"foodTruckId", foodTruck.getId(),
+						"foodTruckid", foodTruck.getId(),
 						"day", s.getFirst(),
 						"stopid", s.getSecond().getId());
 
@@ -838,9 +840,9 @@ public class FoodTruckDao {
 		}
 	}
 
-	public void removeDeal(Long truckID){
-		String sql = "DELETE * FROM DEAL WHERE TRUCK_ID = :truckID";
-		Map<String, ?> params = _Maps.map("truckID", truckID);
+	public void removeDeal(Long dealID){
+		String sql = "DELETE FROM DEAL WHERE DEAL_ID = :dealID";
+		Map<String, ?> params = _Maps.map("dealID", dealID);
 		jdbcTemplate.update(sql, params);
 	}
 

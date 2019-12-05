@@ -17,6 +17,7 @@ import {
 	Row
 } from 'reactstrap';
 import * as Axios from 'js/axios';
+import { ItemDescription } from 'semantic-ui-react';
 
 // import SampleMenu from 'js/images/MenuSample.png';
 
@@ -31,9 +32,10 @@ export class ViewFoodTruckDetails extends React.Component {
 			modal: false,
 			rating: 1,
 			review: '',
+			schedule: [],
+			menu: [],
 			notLoggedIn: false,
 			previousReviews: [],
-			schedule: [],
 			averageRating: 0,
 			alreadySubscribed: false
 		};
@@ -49,12 +51,15 @@ export class ViewFoodTruckDetails extends React.Component {
 		// Object Destruction
 		var { foodtruckID: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
+			console.log(result);
 			this.setState({
 				truck: result,
 				averagePrice: (
 					(result.price_high + result.price_low) /
 					2.0
-				).toFixed(2)
+				).toFixed(2),
+				schedule: result.schedFE,
+				menu: result.menu
 			});
 		});
 		Axios.getRatingByTruck(id).then(result => {
@@ -130,43 +135,72 @@ export class ViewFoodTruckDetails extends React.Component {
 		return render;
 	}
 
-	// renderTruckSchedule() {
-	// 	let render = [];
-	// 	{
-	// 		this.state.schedule.map(sched => {
-	// 			sched.forEach(time => {
-	// 				render.push(
-	// 					<div>
-	// 						<h6
-	// 							style={{
-	// 								fontWeight: 'bold',
-	// 								fontSize: 'small'
-	// 							}}
-	// 						>
-	// 							{time.date_month}
-	// 							{'/'}
-	// 							{time.date_day}
-	// 							{'/'}
-	// 							{time.date_year}
-	// 						</h6>
-	// 						<h6>
-	// 							<img
-	// 								src={User}
-	// 								width={20}
-	// 								height={20}
-	// 								mode="center"
-	// 							/>
-	// 							{time.user} {individualReview.rating} {'/ 5'}
-	// 						</h6>
-	// 						<h6>{individualReview.message}</h6>
-	// 						<br />
-	// 					</div>
-	// 				);
-	// 			});
-	// 		});
-	// 	}
-	// 	return render;
-	// }
+	renderTruckMenu() {
+		let render = [];
+		render.push(<legend>Menu</legend>);
+		{
+			this.state.menu.map(item => {
+				render.push(
+					<div>
+						<hr />
+						<Row>
+							<Col xs="10">
+								<h6>
+									{item.name} ${item.price}
+								</h6>
+								<h11>{item.description}</h11>
+							</Col>
+						</Row>
+					</div>
+				);
+			});
+		}
+		return render;
+	}
+
+	renderTruckSchedule() {
+		let render = [];
+		render.push(<legend>Weekly Schedule</legend>);
+		{
+			this.state.schedule.map(sched => {
+				let day = sched.day;
+				switch (sched.day) {
+					case 'F':
+						day = 'Friday';
+						break;
+					case 'H':
+						day = 'Thursday';
+						break;
+					case 'M':
+						day = 'Monday';
+						break;
+					case 'S':
+						day = 'Saturday';
+						break;
+					case 'T':
+						day = 'Tuesday';
+						break;
+					case 'U':
+						day = 'Sunday';
+						break;
+					case 'W':
+						day = 'Wednesday';
+						break;
+					default:
+				}
+
+				render.push(
+					<Row>
+						<Col xs="3">{day}</Col>
+						<Col>
+							{sched.startTime} - {sched.endTime}
+						</Col>
+					</Row>
+				);
+			});
+		}
+		return render;
+	}
 
 	toggle() {
 		if (JSON.parse(Axios.getCookie('user') === null)) {
@@ -335,7 +369,7 @@ export class ViewFoodTruckDetails extends React.Component {
 						<br />
 						<Row>
 							<Col>
-								<legend>Menu</legend>
+								{this.renderTruckMenu()}
 								{/* <Media left href={SampleMenu}>
 									<Media
 										object
@@ -344,49 +378,20 @@ export class ViewFoodTruckDetails extends React.Component {
 										height={300}
 									/>
 								</Media> */}
-								{'Coming Soon'}
 							</Col>
 							<Col xs="6">
-								<legend>Weekly Schedule</legend>
-								<Row>
-									<Col xs="3">Sunday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
-								<Row>
-									<Col xs="3">Monday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
-								<Row>
-									<Col xs="3">Tuesday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
-								<Row>
-									<Col xs="3">Wednesday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
-								<Row>
-									<Col xs="3">Thursday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
-								<Row>
-									<Col xs="3">Friday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
-								<Row>
-									<Col xs="3">Saturday</Col>
-									<Col>7pm - 8 pm</Col>
-								</Row>
+								{this.renderTruckSchedule()}
+								<br />
+								<legend>Ratings {'&'} Reviews</legend>
+								{this.renderTruckReviews()}
 							</Col>
 						</Row>
 						<br />
 						<Row>
-							<Col xs="6">
+							{/* <Col xs="6">
 								<legend>Route</legend>
-							</Col>
-							<Col xs="6">
-								<legend>Ratings {'&'} Reviews</legend>
-								{this.renderTruckReviews()}
-							</Col>
+							</Col> */}
+							<Col xs="6"></Col>
 						</Row>
 					</div>
 				) : null}

@@ -64,9 +64,13 @@ public class FoodTruckEndpoint {
 
 	//Deal functions
 	@PostMapping(value = "/addDeal", produces = "application/json")
-	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+	public void addDeal(String message, Long truckID, Integer[] start, Integer[] end){//LocalDateTime start, LocalDateTime end){
 		foodTruckService.sendNotification(message, truckID);
-		foodTruckService.addDeal(message, truckID, start, end);
+		LocalDateTime startTime = LocalDateTime.of(start[0], start[1], start[2],
+				start[3], start[4], start[5]);
+		LocalDateTime endTime = LocalDateTime.of(end[0], end[1], end[2],
+				end[3], end[4], end[5]);
+		foodTruckService.addDeal(message, truckID, startTime, endTime);
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
@@ -119,8 +123,12 @@ public class FoodTruckEndpoint {
 
 	//Event functions
     @PostMapping(value = "/addEvent", produces = "application/json")
-	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
-		foodTruckService.addEvent(name, details, start, end, log, lat);
+	public void addEvent(String name, String details, Integer[] start, Integer[] end, double log, double lat){
+		LocalDateTime startTime = LocalDateTime.of(start[0], start[1], start[2],
+				start[3], start[4], start[5]);
+		LocalDateTime endTime = LocalDateTime.of(end[0], end[1], end[2],
+				end[3], end[4], end[5]);
+		foodTruckService.addEvent(name, details, startTime, endTime, log, lat);
 		return;
 	}
 

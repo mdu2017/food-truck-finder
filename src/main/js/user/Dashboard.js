@@ -171,16 +171,17 @@ export class Dashboard extends React.Component {
 			setTimeout(
 				function() {
 					this.setState({ loadingSearch: true }, () => {
-							Axios.searchFoodTrucks(this.state.searchFT).then(
-								result => {
-									this.setState({
-										loadingSearch: false,
-										searchResults: result });
-									//TODO: This is for new page for search result
-									// window.location.href = '/#/search-trucks';
-								}
-							);
-						});
+						Axios.searchFoodTrucks(this.state.searchFT).then(
+							result => {
+								this.setState({
+									loadingSearch: false,
+									searchResults: result
+								});
+								//TODO: This is for new page for search result
+								// window.location.href = '/#/search-trucks';
+							}
+						);
+					});
 				}.bind(this),
 				250
 			);
@@ -191,24 +192,23 @@ export class Dashboard extends React.Component {
 				function() {
 					this.setState({ loadingSearch: true, searchResults: [] });
 
-					this.state.choices.forEach((choice) => {
-						Axios.searchFoodTrucksByType(choice).then(
-							result => {
-								result.forEach((truck) =>
-									this.setState(state => {
-										const searchResults = state.searchResults.concat(truck);
+					this.state.choices.forEach(choice => {
+						Axios.searchFoodTrucksByType(choice).then(result => {
+							result.forEach(truck =>
+								this.setState(state => {
+									const searchResults = state.searchResults.concat(
+										truck
+									);
 
-										return {
-											searchResults
-										};
-									})
-								);
-							}
-						);
+									return {
+										searchResults
+									};
+								})
+							);
+						});
 					});
 
 					this.setState({ loadingSearch: false });
-
 				}.bind(this),
 				250
 			);
@@ -412,13 +412,11 @@ export class Dashboard extends React.Component {
 											>
 												-
 											</Button>{' '}
-											<h6>
-												Radius:{' '}
-												{(
-													this.state.nearbyRadius * 70
-												).toFixed(0)}{' '}
-												mi
-											</h6>{' '}
+											Radius:{' '}
+											{(
+												this.state.nearbyRadius * 70
+											).toFixed(0)}{' '}
+											mi{' '}
 											<Button
 												color="info"
 												size="sm"
@@ -573,7 +571,7 @@ export class Dashboard extends React.Component {
 											{console.log(this.state.choices)}
 
 											{this.state.dropdownValue !==
-											'Food Type' && (
+												'Food Type' && (
 												<FormGroup inline>
 													<Input
 														type="text"
@@ -587,8 +585,7 @@ export class Dashboard extends React.Component {
 														}
 													/>
 												</FormGroup>
-											)
-											}
+											)}
 										</Form>
 									</Row>
 									{this.renderSearchResults()}

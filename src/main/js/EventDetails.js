@@ -33,6 +33,7 @@ export class EventDetails extends React.Component {
 	            {this.state.event ? (
                 <div className="container padded">
                     <h1>Event: {this.state.event.name}</h1>
+					<h2>Description: {this.state.event.description}</h2>
                     <h3>Attending Food Trucks</h3>
 	                {this.state.trucks.length > 0 ? (
 		                this.state.trucks.map((truck, index) => (

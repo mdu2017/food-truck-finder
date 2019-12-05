@@ -284,7 +284,6 @@ export class CreateFoodTruck extends React.Component {
 							<Label for="ftMenu" hidden>
 								Menu
 							</Label>
-							<Input type="file" name="menu" id="ftMenu" />
 							<FormText color="muted">
 								This is some placeholder block-level help text
 								for the above input. It's a bit lighter and

@@ -54,14 +54,6 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
 	}
 
-	//Algorithms
-	@GetMapping(value = "/recommendationsSecure", produces = "application/json")
-	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-														   double userlong,
-														   double radius) {
-		return foodTruckService.getRecommendations(userlat, userlong, radius);
-	}
-
 	//Deal functions
 	@PostMapping(value = "/addDeal", produces = "application/json")
 	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
@@ -157,4 +149,14 @@ public class FoodTruckEndpoint {
 
 	@PostMapping(value = "searchForEvent", produces = "application/json")
 	public List<EventDto> searchForEvent(String name){ return foodTruckService.searchForEvent(name); }
+
+	//Algorithms
+	@GetMapping(value = "/recommendationsSecure", produces = "application/json")
+	public List<FoodTruckDto> getRecommendations(double userlat,
+												 double userlong,
+												 Long user_ID) {
+		return foodTruckService.getRecommendations(userlat, userlong, user_ID);
+	}
+
+
 }

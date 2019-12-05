@@ -2,11 +2,14 @@ package foodtruckfinder.site.common.foodtruck;
 
 import alloy.util.Tuple;
 import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.External.scoreComparator;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.sql.SQLException;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -73,10 +76,37 @@ public class FoodTruckService {
 
 
 	//Algorithms
-	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-														   double userlong,
-														   double radius) {
-		return foodTruckDao.getRecommendations(userlat, userlong, radius);
+	public List<FoodTruckDto> getRecommendations(double userlat,
+												 double userlong,
+												 Long user_ID) {
+		List<scoreComparator> trucks = new ArrayList<>();
+		List<Long> truckIds = new ArrayList<>();
+		truckIds = foodTruckDao.getAllTrucks();
+		for(Long curTruck : truckIds){
+			scoreComparator truckScore = new scoreComparator();
+			truckScore.setId(curTruck);
+
+			double curScore = 0.0;
+			curScore += foodTruckDao.getLowScore(user_ID, curTruck);
+			curScore += foodTruckDao.getHighScore(user_ID, curTruck) * 2.0;
+			curScore += foodTruckDao.getFoodTypeScore(user_ID, curTruck) * 3.0;
+			curScore += foodTruckDao.getRatingScore(curTruck) * 3.5;
+			curScore += foodTruckDao.getDistanceScore(user_ID, curTruck, userlat, userlong) * 4.0;
+			curScore += foodTruckDao.getSubscribedScore(user_ID, curTruck) * 5.0;
+			truckScore.setScore(curScore);
+			trucks.add(truckScore);
+		}
+
+		Collections.sort(trucks, Collections.reverseOrder());
+		List<FoodTruckDto> truckDtos = new ArrayList<>();
+		for(int i=0; i<15 && i<trucks.size(); i++){
+			Long curId = trucks.get(i).getId();
+			Optional<FoodTruckDto> newTruck = foodTruckDao.find(curId.toString());
+			if(newTruck.isPresent()){
+				truckDtos.add(newTruck.get());
+			}
+		}
+		return truckDtos;
 	}
 
 	public Optional<List<FoodTruckDto>> getRecommendationsUnsecure(double userlat, double userlong, double radius) {

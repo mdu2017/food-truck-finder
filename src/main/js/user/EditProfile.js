@@ -3,6 +3,7 @@ import React from 'react';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
+import { Multiselect } from 'multiselect-react-dropdown';
 import FoodTypesModal from 'js/FoodTypesModal';
 import {
 	UncontrolledTooltip,
@@ -27,12 +28,28 @@ export class EditProfile extends React.Component {
 			owner: JSON.parse(Axios.getCookie('user')).isOwner,
 			id: JSON.parse(Axios.getCookie('user')).id,
 			foodtypes: [],
-			selectedFoodtypes: [],
-			defaultDistance: JSON.parse(Axios.getCookie('user')).prefDistance, // TODO: Set this user preferences
+			options: [
+				'AMERICAN',
+				'BBQ',
+				'BREAKFAST',
+				'CHINESE',
+				'DESERT',
+				'HEALTHY',
+				'INDIAN',
+				'MEDITERRANEAN',
+				'MEXICAN',
+				'PIZZA',
+				'SEAFOOD',
+				'VEGAN',
+				'VEGITARIAN',
+				'VIETNAMESE'
+			],
+			choices: [],
+			defaultFoodTypes: JSON.parse(Axios.getCookie('user')).prefFoodTypes,
+			defaultDistance: JSON.parse(Axios.getCookie('user')).prefDistance,
 			defaultPriceLow: JSON.parse(Axios.getCookie('user')).prefLow,
 			defaultPriceHigh: JSON.parse(Axios.getCookie('user')).prefHigh
 		};
-		this.getFoodTypes();
 		console.log(JSON.parse(Axios.getCookie('user')));
 	}
 
@@ -51,31 +68,77 @@ export class EditProfile extends React.Component {
 				password: this.state.password,
 				username: this.state.username,
 				owner: this.state.owner.toString(),
-				id: this.state.id
-			});
-			this.props.setPreferences({
-				foodtypes: this.state.foodtypes
+				id: this.state.id,
+				prefDistance: this.state.defaultDistance,
+				prefHigh: this.state.defaultPriceHigh,
+				prefLow: this.state.prefLow,
+				prefFoodTypes: this.state.defaultFoodTypes
 			});
 			event.preventDefault();
 		} else {
 			window.alert('Passwords do not match!');
 		}
+
+		// if (
+		// 	this.state.defaultFoodTypes !=
+		// 		JSON.parse(Axios.getCookie('user')).prefFoodTypes ||
+		// 	this.state.defaultDistance !=
+		// 		JSON.parse(Axios.getCookie('user')).prefDistance ||
+		// 	this.state.defaultPriceLow !=
+		// 		JSON.parse(Axios.getCookie('user')).prefLow ||
+		// 	this.state.defaultPriceHigh !=
+		// 		JSON.parse(Axios.getCookie('user')).prefHigh
+		// ) {
+		// 	this.props.setPreferences({
+		// 		id: this.state.id,
+		// 		foodtypes: this.state.defaultFoodTypes,
+		// 		distance: this.state.defaultDistance,
+		// 		priceLow: this.state.defaultPriceLow,
+		// 		priceHigh: this.state.defaultPriceHigh
+		// 	});
+		// }
 	};
 
-	getFoodTypes() {
-		Axios.getFoodTypes().then(result => {
-			this.setState({ foodtypes: result });
+	//Item that is selected.
+	onSelect = (optionList, selectedItem) => {
+		console.log('Selected item is ' + selectedItem);
+
+		this.setState({
+			choices: optionList
 		});
+	};
+
+	//Item that is removed when using food type filter (*backspace removes index)
+	onRemove = (optionList, removedItem) => {
+		console.log('removed item is ' + removedItem);
+
+		this.setState({
+			choices: optionList
+		});
+	};
+
+	msDropdown() {
+		return (
+			<Multiselect
+				id={'dashboardMS'}
+				options={this.state.options}
+				onSelect={this.onSelect} // Function will trigger on select event
+				onRemove={this.onRemove} // Function will trigger on remove event
+				isObject={false}
+				placeholder={'Select Food Types'}
+			/>
+		);
 	}
 
-	setSelectedFoodtypes(selectedFoodtypes) {
-		let selected = [];
-		// this.state.selectedFoodtypes.forEach(function(foodtype) {
-
-		// })
-		// console.log(selectedFoodtypes);
-		selected.push(selectedFoodtypes);
-		this.setState({ selectedFoodtypes });
+	renderFavoriteFoodTypes() {
+		let render = [];
+		this.state.defaultFoodTypes.forEach(type => {
+			render.push(<div>type </div>);
+		});
+		if (this.state.defaultFoodTypes.length == 0) {
+			render.push(<div>None yet. =(</div>);
+		}
+		return render;
 	}
 
 	render() {
@@ -96,9 +159,7 @@ export class EditProfile extends React.Component {
 										This cannot be changed!
 									</UncontrolledTooltip>
 								</span>
-								{this.props.user && (
-									<h3>{this.props.user}</h3>
-								)}
+								{this.props.user && <h3>{this.props.user}</h3>}
 
 								<br />
 								<span>
@@ -170,10 +231,11 @@ export class EditProfile extends React.Component {
 							</Col>
 							<Col>
 								<h2>Edit Preferences</h2>
-								<span>Favorite Food Types:</span>
-								<br />
-								<span>??</span>
-								<br />
+								<span>
+									Favorite Food Types:{' '}
+									{this.renderFavoriteFoodTypes()}
+								</span>
+
 								<span>
 									Distance:{' '}
 									{this.state.defaultDistance * 70 + ' miles'}
@@ -190,25 +252,7 @@ export class EditProfile extends React.Component {
 										<Label for="foodTypes">
 											Food Type(s)
 										</Label>
-										<Input
-											type="select"
-											name="foodtype"
-											id="foodTypes"
-											onChange={e =>
-												this.setSelectedFoodtypes(
-													e.target.value
-												)
-											}
-											multiple
-										>
-											{this.state.foodtypes.map(
-												(foodtype, index) => (
-													<option key={index}>
-														{foodtype}
-													</option>
-												)
-											)}
-										</Input>
+										{this.msDropdown()}
 									</FormGroup>
 									<FormGroup>
 										<Label for="distance">Distance</Label>
@@ -220,7 +264,7 @@ export class EditProfile extends React.Component {
 											step="0.01"
 											placeholder={
 												this.state.defaultDistance *
-												70 +
+													70 +
 												' miles'
 											}
 											onChange={e =>
@@ -286,6 +330,8 @@ EditProfile = connect(
 		email: JSON.parse(Axios.getCookie('user')).principal
 	}),
 	dispatch => ({
-		update: user => dispatch(Axios.Actions.update(user))
+		update: user => dispatch(Axios.Actions.update(user)),
+		setPreferences: preferences =>
+			dispatch(Axios.Actions.setPreferences(preferences))
 	})
 )(EditProfile);

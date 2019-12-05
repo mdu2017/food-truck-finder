@@ -146,19 +146,19 @@ public class FoodTruckEndpoint {
 		return;
 	}
 
-	@GetMapping(value = "getEventById", produces = "application/json")
+	@GetMapping(value = "/getEventById", produces = "application/json")
 	public Optional<EventDto> getEventById(Long event_ID){
 		return foodTruckService.getEventById(event_ID);
 	}
 
-	@GetMapping(value = "getAttendingTrucks", produces = "application/json")
+	@GetMapping(value = "/getAttendingTrucks", produces = "application/json")
 	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
 
-	@GetMapping(value = "getAllEvents", produces = "application/json")
+	@GetMapping(value = "/getAllEvents", produces = "application/json")
 	public List<EventDto> getAllEvents(){
 		return foodTruckService.getAllEvents();
 	}
 
-	@PostMapping(value = "searchForEvent", produces = "application/json")
+	@PostMapping(value = "/searchForEvent", produces = "application/json")
 	public List<EventDto> searchForEvent(String name){ return foodTruckService.searchForEvent(name); }
 }

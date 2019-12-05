@@ -209,9 +209,9 @@ public class FoodTruckService {
 
 	public List<EventDto> searchForEvent(String name){ return foodTruckDao.searchForEvent(name); }
 
-	public List<Tuple.Pair<String, Stop>> mapSchedule(List<FoodTruckDto.ScheduleFE> scheds){
+	public List<Tuple.Pair<String, Stop>> mapSchedule(List<ScheduleFE> scheds){
 		List<Tuple.Pair<String, Stop>> toret = new ArrayList<>();
-		for (FoodTruckDto.ScheduleFE e : scheds) {
+		for (ScheduleFE e : scheds) {
 			toret.add(e.getSchedule());
 		}
 		return toret;

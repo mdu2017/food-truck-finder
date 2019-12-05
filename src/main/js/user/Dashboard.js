@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import { Link } from 'react-router-dom';
-import {Multiselect} from 'multiselect-react-dropdown';
+import { Multiselect } from 'multiselect-react-dropdown';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import DashboardMap from 'js/DashboardMap';
@@ -57,8 +57,8 @@ export class Dashboard extends React.Component {
 			spinnerWidth: 60,
 			dropdownOpen: false,
 			dropdownValue: 'Truck Name',
-
-			options: ['AMERICAN',
+			options: [
+				'AMERICAN',
 				'BBQ',
 				'BREAKFAST',
 				'CHINESE',
@@ -71,7 +71,8 @@ export class Dashboard extends React.Component {
 				'SEAFOOD',
 				'VEGAN',
 				'VEGITARIAN',
-				'VIETNAMESE'],
+				'VIETNAMESE'
+			],
 
 			choices: []
 		};
@@ -83,9 +84,11 @@ export class Dashboard extends React.Component {
 		console.log('Selected item is ' + selectedItem);
 
 		this.setState({
-			choices: optionList,
+			choices: optionList
 		});
-	}
+
+		this.handleSubmit();
+	};
 
 	//Item that is removed when using food type filter (*backspace removes index)
 	onRemove = (optionList, removedItem) => {
@@ -94,11 +97,14 @@ export class Dashboard extends React.Component {
 		this.setState({
 			choices: optionList
 		});
-	}
 
-	msDropdown(){
-		return(
-			<Multiselect id={'dashboardMS'}
+		this.handleSubmit();
+	};
+
+	msDropdown() {
+		return (
+			<Multiselect
+				id={'dashboardMS'}
 				options={this.state.options}
 				onSelect={this.onSelect} // Function will trigger on select event
 				onRemove={this.onRemove} // Function will trigger on remove event
@@ -157,6 +163,7 @@ export class Dashboard extends React.Component {
 
 	//Search feature
 	handleSubmit = event => {
+		console.log('testing testing this is called');
 		this.setState({ loadingSearch: true });
 
 		//Truck name filter
@@ -164,33 +171,44 @@ export class Dashboard extends React.Component {
 			setTimeout(
 				function() {
 					this.setState({ loadingSearch: true }, () => {
-						Axios.searchFoodTrucks(this.state.searchFT).then(
-							result => {
-								this.setState({
-									loadingSearch: false,
-									searchResults: result
-								});
-								//TODO: This is for new page for search result
-								// window.location.href = '/#/search-trucks';
-							}
-						);
-					});
+							Axios.searchFoodTrucks(this.state.searchFT).then(
+								result => {
+									this.setState({
+										loadingSearch: false,
+										searchResults: result });
+									//TODO: This is for new page for search result
+									// window.location.href = '/#/search-trucks';
+								}
+							);
+						});
 				}.bind(this),
 				250
 			);
+
+			event.preventDefault();
 		} else if (this.state.dropdownValue === 'Food Type') {
 			setTimeout(
 				function() {
-					this.setState({ loadingSearch: true }, () => {
-						Axios.searchFoodTrucksByType(this.state.searchFT).then(
+					this.setState({ loadingSearch: true, searchResults: [] });
+
+					this.state.choices.forEach((choice) => {
+						Axios.searchFoodTrucksByType(choice).then(
 							result => {
-								this.setState({
-									loadingSearch: false,
-									searchResults: result
-								});
+								result.forEach((truck) =>
+									this.setState(state => {
+										const searchResults = state.searchResults.concat(truck);
+
+										return {
+											searchResults
+										};
+									})
+								);
 							}
 						);
 					});
+
+					this.setState({ loadingSearch: false });
+
 				}.bind(this),
 				250
 			);
@@ -210,6 +228,8 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
+
+			event.preventDefault();
 		} else if (this.state.dropdownValue === 'Distance') {
 			setTimeout(
 				function() {
@@ -230,9 +250,9 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
-		}
 
-		event.preventDefault();
+			event.preventDefault();
+		}
 	};
 
 	displayCustomWelcome() {
@@ -294,6 +314,7 @@ export class Dashboard extends React.Component {
 
 	//Display search results
 	renderSearchResults() {
+		console.log(this.state.searchResults);
 		if (this.state.searchResults != null) {
 			this.state.numberOfPages = this.state.searchResults.length / 5;
 			if (!(this.state.numberOfPages < 1)) {
@@ -321,7 +342,7 @@ export class Dashboard extends React.Component {
 												>
 													<h6>{truck.name}</h6>
 												</Link>
-												<h8>{truck.description}</h8>
+												<h6>{truck.description}</h6>
 											</ListGroupItem>
 										</ListGroup>
 									)
@@ -391,13 +412,13 @@ export class Dashboard extends React.Component {
 											>
 												-
 											</Button>{' '}
-											<h8>
+											<h6>
 												Radius:{' '}
 												{(
 													this.state.nearbyRadius * 70
 												).toFixed(0)}{' '}
 												mi
-											</h8>{' '}
+											</h6>{' '}
 											<Button
 												color="info"
 												size="sm"
@@ -455,10 +476,56 @@ export class Dashboard extends React.Component {
 											) : (
 												<span>No Results</span>
 											)}
+											<h4>Recommended</h4>
+											<hr />
+											{this.state.loadingRecommended ? (
+												<img
+													src={Spinner}
+													width={
+														this.state.spinnerWidth
+													}
+													height={
+														this.state.spinnerHeight
+													}
+													mode="fit"
+												/>
+											) : this.state
+													.recommendedFoodTrucks &&
+											  this.state.recommendedFoodTrucks
+													.length > 0 ? (
+												<Nav>
+													<NavItem>
+														{this.state.recommendedFoodTrucks.map(
+															(
+																foodtruck,
+																index
+															) => {
+																return (
+																	<NavLink
+																		key={
+																			index
+																		}
+																		href={
+																			'/#/food-truck-details/' +
+																			foodtruck.id
+																		}
+																	>
+																		{
+																			foodtruck.name
+																		}
+																	</NavLink>
+																);
+															}
+														)}
+													</NavItem>
+												</Nav>
+											) : (
+												<span>No Results</span>
+											)}
 										</div>
 									</Row>
 								</Col>
-								<Col>
+								<Col xs="4.7">
 									<Row>
 										{/* md={{ size: 6, offset: 3 }} */}
 										<Form
@@ -482,7 +549,7 @@ export class Dashboard extends React.Component {
 													<DropdownItem
 														onClick={this.select}
 													>
-														Food Type
+														Food Type{' '}
 													</DropdownItem>
 													<DropdownItem
 														onClick={this.select}
@@ -495,148 +562,48 @@ export class Dashboard extends React.Component {
 														Distance
 													</DropdownItem>
 												</DropdownMenu>
+												{this.state.dropdownValue ===
+													'Food Type' &&
+													this.msDropdown()}
 											</ButtonDropdown>
 
 											{/* TODO: Multi select*/}
-											{this.msDropdown()}
+
 											{console.log('Current list: ')}
 											{console.log(this.state.choices)}
 
-
-											<FormGroup inline>
-												<Input
-													type="text"
-													name="searchFT"
-													id="searchFT"
-													placeholder="Search"
-													onChange={e =>
-														this.setSearchFT(
-															e.target.value
-														)
-													}
-												/>
-											</FormGroup>
+											{this.state.dropdownValue !==
+											'Food Type' && (
+												<FormGroup inline>
+													<Input
+														type="text"
+														name="searchFT"
+														id="searchFT"
+														placeholder="Search"
+														onChange={e =>
+															this.setSearchFT(
+																e.target.value
+															)
+														}
+													/>
+												</FormGroup>
+											)
+											}
 										</Form>
 									</Row>
 									{this.renderSearchResults()}
-									&nbsp;
-									<Row>
-										<Col
-											md={{
-												size: 'auto',
-												offset: 4
-											}}
-										>
-											{this.renderPageNumbers()}
-										</Col>
-									</Row>
-									<Row>
-										<Col
-											style={{
-												height: '420px',
-												width: '620px'
-											}}
-											md={{
-												size: 'auto',
-												offset: 2
-											}}
-										>
-											<DashboardMap />
-										</Col>
-									</Row>
 								</Col>
-								<Col xs="3">
-									<div>
-										<h4>Recommended</h4>
-										<hr />
-										<Container>
-											<Col md={{ offset: 1 }}>
-												<Button
-													color="info"
-													size="sm"
-													onClick={() => {
-														if (
-															this.state
-																.recommendationRadius -
-																0.143 <
-															0
-														) {
-															this.setRecommendationRadius(
-																0
-															);
-														} else {
-															this.setRecommendationRadius(
-																this.state
-																	.recommendationRadius -
-																	0.143
-															);
-														}
-													}}
-												>
-													-
-												</Button>{' '}
-												<h8>
-													Radius:{' '}
-													{(
-														this.state
-															.recommendationRadius *
-														70
-													).toFixed(0)}{' '}
-													mi
-												</h8>{' '}
-												<Button
-													color="info"
-													size="sm"
-													onClick={() =>
-														this.setRecommendationRadius(
-															this.state
-																.recommendationRadius +
-																0.143
-														)
-													}
-												>
-													+
-												</Button>
-											</Col>
-											<br />
-										</Container>
-										{this.state.loadingRecommended ? (
-											<img
-												src={Spinner}
-												width={this.state.spinnerWidth}
-												height={
-													this.state.spinnerHeight
-												}
-												mode="fit"
-											/>
-										) : this.state.recommendedFoodTrucks &&
-										  this.state.recommendedFoodTrucks
-												.length > 0 ? (
-											<Nav>
-												<NavItem>
-													{this.state.recommendedFoodTrucks.map(
-														(foodtruck, index) => {
-															return (
-																<NavLink
-																	key={index}
-																	href={
-																		'/#/food-truck-details/' +
-																		foodtruck.id
-																	}
-																>
-																	{
-																		foodtruck.name
-																	}
-																</NavLink>
-															);
-														}
-													)}
-												</NavItem>
-											</Nav>
-										) : (
-											<span>No Results</span>
-										)}
-									</div>
+								&nbsp; &nbsp; &nbsp;
+								<Col
+									style={{
+										height: '420px',
+										width: '620px'
+									}}
+									// md={{
+									// 	size: 'auto'
+									// }}
+								>
+									<DashboardMap />
 								</Col>
 							</Row>
 						</Container>

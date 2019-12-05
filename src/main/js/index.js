@@ -94,7 +94,7 @@ export default class Index extends React.Component {
 						path="/user/:username"
 						component={ViewOtherProfile}
 					/>
-					<Route exact path="/events/:eventname" component={EventDetails}/>
+					<Route exact path="/events/:event_ID" component={EventDetails}/>
 				</div>
 			</HashRouter>
 		);

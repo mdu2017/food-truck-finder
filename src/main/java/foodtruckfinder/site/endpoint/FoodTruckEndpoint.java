@@ -32,11 +32,11 @@ public class FoodTruckEndpoint {
 	@PostMapping(value = "/save", produces = "application/json")
 	public FoodTruckDto saveFoodTruck(@RequestBody FoodTruckDto foodTruckDto) throws SQLException {
 
-		for(MenuItem m : foodTruckDto.getMenu()){
-			System.out.println("===============" + m.toString() + "========================");
-		}
+		System.out.print("============MENU====================");
+		System.out.println(foodTruckDto.getMenu());
 
 		System.out.println(foodTruckDto);
+		foodTruckDto.setSchedule(foodTruckService.mapSchedule(foodTruckDto.getSchedFE()));
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;
 	}
@@ -57,19 +57,14 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getFoodTrucksByOwner(owner_id);
 	}
 
-	//Algorithms
-	@GetMapping(value = "/recommendationsSecure", produces = "application/json")
-	public Optional<List<FoodTruckDto>> getRecommendations(double userlat,
-														   double userlong,
-														   double radius) {
-		return foodTruckService.getRecommendations(userlat, userlong, radius);
-	}
-
 	//Deal functions
 	@PostMapping(value = "/addDeal", produces = "application/json")
-	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
+	public void addDeal(String message, Long truckID, String start,
+						String end) {
+		LocalDateTime startDT = LocalDateTime.parse(start);
+		LocalDateTime endDT = LocalDateTime.parse(end);
 		foodTruckService.sendNotification(message, truckID);
-		foodTruckService.addDeal(message, truckID, start, end);
+		foodTruckService.addDeal(message, truckID, startDT, endDT);
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")
@@ -80,7 +75,7 @@ public class FoodTruckEndpoint {
 	@PostMapping(value = "/getDeal", produces = "application/json")
 	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
 
-	@PostMapping(value = "/getAllDeals", produces = "application/json")
+	@GetMapping(value = "/getAllDeals", produces = "application/json")
 	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
 
 
@@ -122,8 +117,12 @@ public class FoodTruckEndpoint {
 
 	//Event functions
     @PostMapping(value = "/addEvent", produces = "application/json")
-	public void addEvent(String name, String details, LocalDateTime start, LocalDateTime end, double log, double lat){
-		foodTruckService.addEvent(name, details, start, end, log, lat);
+	public void addEvent(String name, String details, Integer[] start, Integer[] end, double log, double lat){
+		LocalDateTime startTime = LocalDateTime.of(start[0], start[1], start[2],
+				start[3], start[4], start[5]);
+		LocalDateTime endTime = LocalDateTime.of(end[0], end[1], end[2],
+				end[3], end[4], end[5]);
+		foodTruckService.addEvent(name, details, startTime, endTime, log, lat);
 		return;
 	}
 
@@ -145,19 +144,29 @@ public class FoodTruckEndpoint {
 		return;
 	}
 
-	@GetMapping(value = "getEventById", produces = "application/json")
+	@GetMapping(value = "/getEventById", produces = "application/json")
 	public Optional<EventDto> getEventById(Long event_ID){
 		return foodTruckService.getEventById(event_ID);
 	}
 
-	@GetMapping(value = "getAttendingTrucks", produces = "application/json")
-	public Optional<List<Long>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
+	@GetMapping(value = "/getAttendingTrucks", produces = "application/json")
+	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
 
-	@GetMapping(value = "getAllEvents", produces = "application/json")
+	@GetMapping(value = "/getAllEvents", produces = "application/json")
 	public List<EventDto> getAllEvents(){
 		return foodTruckService.getAllEvents();
 	}
 
-	@PostMapping(value = "searchForEvent", produces = "application/json")
+	@PostMapping(value = "/searchForEvent", produces = "application/json")
 	public List<EventDto> searchForEvent(String name){ return foodTruckService.searchForEvent(name); }
+
+	//Algorithms
+	@GetMapping(value = "/recommendationsSecure", produces = "application/json")
+	public List<FoodTruckDto> getRecommendations(double userlat,
+												 double userlong,
+												 Long user_ID) {
+		return foodTruckService.getRecommendations(userlat, userlong, user_ID);
+	}
+
+
 }

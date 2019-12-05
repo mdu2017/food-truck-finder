@@ -1,5 +1,5 @@
-import React, {Fragment} from 'react';
-import {connect} from 'react-redux';
+import React from 'react';
+import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import {
@@ -26,20 +26,18 @@ export class CreateFoodTruck extends React.Component {
 			name: null,
 			menu: [],
 			description: null,
-			price_low: null,
-			price_high: null,
+			price_low: 0,
+			price_high: 10,
 			status: null,
 			foodtype: null,
 			ownerId: JSON.parse(Axios.getCookie('user')).id,
 			schedule: [
 				{
 					day: 'S',
-					stop: {
-						startTime: null,
-						endTime: null,
-						lat: null,
-						log: null
-					}
+					startTime: null,
+					endTime: null,
+					lat: null,
+					log: null
 				}
 			],
 			selectedLatitude: 0,
@@ -80,25 +78,20 @@ export class CreateFoodTruck extends React.Component {
 
 
 	handleSubmit = event => {
+		// Check if Prices are lower than zero
+		if (this.state.price_low < 0) {
+			this.state.price_low = 0;
+		}
+		if (this.state.price_high < 0) {
+			this.state.price_high = 0;
+		}
 		// The price_high is not lower than price_low
-		let priceHighDbl = Number(this.state.price_high);
-		let priceLowDbl = Number(this.state.price_low);
-
-		if (priceHighDbl >= priceLowDbl) {
-			// Check if Prices are lower than zero
-			if (this.state.price_low < 0) {
-				this.state.price_low = 0;
-			}
-			if (this.state.price_high < 0) {
-				this.state.price_high = 0;
-			}
-
-			//PASS EVERYTHING
+		if (Number(this.state.price_high) >= Number(this.state.price_low)) {
 			this.props.createFoodTruck({
 				name: this.state.name,
 				description: this.state.description,
 				menu: this.state.menu,
-				// schedule: this.state.schedule,
+				schedFE: this.state.schedule,
 				price_low: this.state.price_low,
 				price_high: this.state.price_high,
 				status: this.state.status,
@@ -136,8 +129,10 @@ export class CreateFoodTruck extends React.Component {
 			menuItemPrice: this.state.menuItemPrice
 		};
 
-		let tempArr = JSON.parse(JSON.stringify(vals));
-		console.log(tempArr);
+        let tempStrMenu = JSON.stringify(vals);
+        let tempArr = JSON.parse(tempStrMenu);
+		console.log('stringified: ');
+		console.log(tempStrMenu);
 
 		//Add to the list of menu items
 		this.setState(prevState => ({
@@ -171,10 +166,10 @@ export class CreateFoodTruck extends React.Component {
 	handleStartTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map(stop => {
-				return { ...stop, startTime: evt.target.value };
-			});
-			return { ...schedule, stop: newStop };
+			return {
+				...schedule,
+				startTime: evt.target.value
+			};
 		});
 		this.setState({ schedule: newSchedule });
 		// console.log(JSON.stringify(newSchedule));
@@ -184,13 +179,12 @@ export class CreateFoodTruck extends React.Component {
 	handleEndTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map(stop => {
-				return { ...stop, endTime: evt.target.value };
-			});
-			return { ...schedule, stop: newStop };
+			return {
+				...schedule,
+				endTime: evt.target.value
+			};
 		});
 		this.setState({ schedule: newSchedule });
-		// console.log(JSON.stringify(newSchedule));
 		console.log(newSchedule);
 	};
 
@@ -203,7 +197,7 @@ export class CreateFoodTruck extends React.Component {
 			};
 		});
 		this.setState({ schedule: newSchedule });
-		// console.log(JSON.stringify(newSchedule));
+		console.log(JSON.stringify(newSchedule));
 		console.log(newSchedule);
 	};
 
@@ -211,18 +205,11 @@ export class CreateFoodTruck extends React.Component {
 		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
-			const newStop = schedule.stop.map(stop => {
-				// if (idx !== sidx) return stop;
-				const newLocation = stop.location.map(location => {
-					return {
-						...location,
-						long: this.state.selectedLongitude,
-						lat: this.state.selectedLatitude
-					};
-				});
-				return { ...stop, location: newLocation };
-			});
-			return { ...schedule, stop: newStop };
+			return {
+				...schedule,
+				log: this.state.selectedLongitude,
+				lat: this.state.selectedLatitude
+			};
 		});
 		this.setState({ schedule: newSchedule });
 		// console.log(JSON.stringify(newSchedule));
@@ -234,13 +221,10 @@ export class CreateFoodTruck extends React.Component {
 			schedule: this.state.schedule.concat([
 				{
 					day: 'S',
-					stop: [
-						{
-							startTime: null,
-							endTime: null,
-							location: [{ lat: null, long: null }]
-						}
-					]
+					startTime: null,
+					endTime: null,
+					lat: null,
+					log: null
 				}
 			])
 		});
@@ -279,11 +263,9 @@ export class CreateFoodTruck extends React.Component {
 								id="statuses"
 								onChange={e => this.setStatus(e.target.value)}
 							>
-								{
-									this.state.statuses.map((status, index) => (
-										<option key={index}>{status}</option>
-									))
-								}
+								{this.state.statuses.map((status, index) => (
+									<option key={index}>{status}</option>
+								))}
 							</Input>
 						</FormGroup>
 						<FormGroup>
@@ -294,11 +276,9 @@ export class CreateFoodTruck extends React.Component {
 								id="foodTypes"
 								onChange={e => this.setFoodType(e.target.value)}
 							>
-								{
-									this.state.foodtypes.map((foodtype, index) => (
-										<option key={index}>{foodtype}</option>
-									))
-								}
+								{this.state.foodtypes.map((foodtype, index) => (
+									<option key={index}>{foodtype}</option>
+								))}
 							</Input>
 						</FormGroup>
 					</Form>
@@ -438,7 +418,8 @@ export class CreateFoodTruck extends React.Component {
 													id="DotW"
 													onChange={this.handleDayScheduleChange(
 														idx
-													)}>
+													)}
+												>
 													<option value="S">
 														Sunday
 													</option>
@@ -500,7 +481,8 @@ export class CreateFoodTruck extends React.Component {
 													}
 													color="primary"
 													id="AddLocation"
-													onClick={this.toggle}>
+													onClick={this.toggle}
+												>
 													Add Location
 												</Button>
 												<Button
@@ -512,7 +494,8 @@ export class CreateFoodTruck extends React.Component {
 													color="primary"
 													onClick={this.handleLocationChange(
 														idx
-													)}>
+													)}
+												>
 													Confirm Location for Stop{' '}
 													{idx + 1} ?
 												</Button>
@@ -559,7 +542,8 @@ export class CreateFoodTruck extends React.Component {
 									hidden={!this.state.buttonVisibility}
 									color="primary"
 									size="sm"
-									onClick={() => this.handleAddStop()}>
+									onClick={() => this.handleAddStop()}
+								>
 									Add Stop
 								</Button>
 							</FormGroup>
@@ -575,14 +559,16 @@ export class CreateFoodTruck extends React.Component {
 								isOpen={this.state.modal}
 								size="lg"
 								scrollable="true"
-								style={{ height: '400px', width: '425px' }}>
+								style={{ height: '400px', width: '425px' }}
+							>
 								<form onSubmit={this.handleModalSubmit}>
 									<ModalHeader>Google Maps</ModalHeader>
 									<ModalBody
 										style={{
 											height: '400px',
 											width: '600px'
-										}}>
+										}}
+									>
 										<MapContainer
 											handleMapSelection={this.handleMapSelection.bind(
 												this
@@ -598,7 +584,8 @@ export class CreateFoodTruck extends React.Component {
 										/>
 										<Button
 											color="danger"
-											onClick={this.toggle}>
+											onClick={this.toggle}
+										>
 											Cancel
 										</Button>
 									</ModalFooter>
@@ -615,7 +602,7 @@ export class CreateFoodTruck extends React.Component {
 CreateFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		createFoodTruck: foodTruck =>
+        createFoodTruck: foodTruck =>
 			dispatch(Axios.Actions.createFoodTruck(foodTruck))
 				// Success
 				.then(function() {

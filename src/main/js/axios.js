@@ -54,6 +54,10 @@ export function addDeal(message, truckID, start, end) {
 	);
 }
 
+export function getAllDeals(truck_ID) {
+	return axios.get('api/food-truck/getAllDeals?truckID=' + truck_ID);
+}
+
 export function getRatingByUser(user_ID) {
 	return axios.get('api/user/getRatingByUser?user_ID=' + user_ID);
 }
@@ -78,7 +82,6 @@ export function sendNotification(message, foodTruckId) {
 
 // Deletes a FoodTruck in the Database
 export function removeFoodTruck(truck_id) {
-	console.log(truck_id);
 	return axios.post(
 		'/api/food-truck/removeTruck/?truck_id=' + truck_id.truck_id
 	);
@@ -108,6 +111,18 @@ export function getRecommendations(userlat, userlong, radius) {
 			radius: radius
 		}
 	});
+}
+
+export function getAllEvents() {
+	return axios.get('/api/food-truck/getAllEvents');
+}
+
+export function getEventByID(id) {
+	return axios.get('/api/food-truck/getEventById?event_ID=' + id);
+}
+
+export function getAttendingTrucks(id) {
+	return axios.get('/api/food-truck/getAttendingTrucks?event_ID=' + id);
 }
 
 export function getSecuredRecommendations(userID, userlat, userlong) {
@@ -236,11 +251,7 @@ export function searchFoodTrucks(name) {
 }
 
 export function searchFoodTrucksByType(type) {
-	return axios.get('/unsecure/searchFoodTrucksByType', {
-		params: {
-			type: type
-		}
-	});
+	return axios.get('/unsecure/searchFoodTrucksByType?type=' + type);
 }
 
 export function searchTrucksByPrice(maxPrice) {

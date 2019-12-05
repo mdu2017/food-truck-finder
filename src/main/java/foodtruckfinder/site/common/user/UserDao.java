@@ -176,10 +176,10 @@ public class UserDao {
 					"PRINCIPAL = :principal, " +
 					"PASSWORD = :password, " +
 					"USERNAME = :username, " +
-					"IS_OWNER = :owner " +
-					"PREF_DISTANCE = :prefDistance " +
-					"PREF_HIGH = :prefHigh " +
-					"PREF_LOW = :prefLow " +
+					"IS_OWNER = :owner, " +
+					"PREF_DISTANCE = :prefDistance, " +
+					"PREF_HIGH = :prefHigh, " +
+					"PREF_LOW = :prefLow, " +
 					"WHERE USER_ID = :userId";
 
 			Map<String, ?> parameters = _Maps.mapPairs(

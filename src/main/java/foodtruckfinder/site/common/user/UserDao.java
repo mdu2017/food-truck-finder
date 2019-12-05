@@ -1,5 +1,18 @@
 package foodtruckfinder.site.common.user;
 
+import alloy.util.Tuple;
+import alloy.util._Lists;
+import alloy.util._Maps;
+import foodtruckfinder.site.common.External.Notification;
+import foodtruckfinder.site.common.External.Rating;
+import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
+import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
+import org.springframework.jdbc.support.GeneratedKeyHolder;
+import org.springframework.jdbc.support.KeyHolder;
+import org.springframework.stereotype.Repository;
+
 import java.math.BigInteger;
 import java.sql.Timestamp;
 import java.time.LocalDateTime;
@@ -7,26 +20,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
-import java.util.stream.Collectors;
-
-import alloy.util.Tuple;
-import com.google.common.collect.Maps;
-import foodtruckfinder.site.common.External.Rating;
-import foodtruckfinder.site.common.External.Notification;
-import foodtruckfinder.site.common.foodtruck.FoodTruckDto;
-import foodtruckfinder.site.common.foodtruck.FoodTruckService;
-import org.elasticsearch.index.query.QueryBuilders;
-import org.elasticsearch.search.builder.SearchSourceBuilder;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Primary;
-import org.springframework.jdbc.core.namedparam.MapSqlParameterSource;
-import org.springframework.jdbc.core.namedparam.NamedParameterJdbcTemplate;
-import org.springframework.jdbc.support.GeneratedKeyHolder;
-import org.springframework.jdbc.support.KeyHolder;
-import org.springframework.stereotype.Repository;
-
-import alloy.util._Lists;
-import alloy.util._Maps;
 
 /**
  * Created by jlutteringer on 8/23/17.

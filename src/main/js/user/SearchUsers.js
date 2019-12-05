@@ -1,23 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
-import { Link } from 'react-router-dom';
+import {connect} from 'react-redux';
+import {Link} from 'react-router-dom';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import {
-	Badge,
-	Col,
-	Container,
-	Nav,
-	NavItem,
-	NavLink,
-	Row,
-	Form,
-	FormGroup,
-	Input,
-	Button,
-	ListGroup,
-	ListGroupItem
-} from 'reactstrap';
+import {Form, FormGroup, Input, ListGroup, ListGroupItem} from 'reactstrap';
 import Spinner from 'js/images/spinner.gif';
 
 export class SearchUsers extends React.Component {

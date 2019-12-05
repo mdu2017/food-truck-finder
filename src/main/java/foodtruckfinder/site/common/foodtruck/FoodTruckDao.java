@@ -1,14 +1,10 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.sql.Timestamp;
-import java.time.LocalDateTime;
-import java.util.List;
-import java.util.Map;
-import java.util.Optional;
-
-import java.util.*;
-
 import alloy.util.Tuple;
+import alloy.util.Tuple.Triple;
+import alloy.util.Tuple.Tuple2;
+import alloy.util.Tuple.Tuple3;
+import alloy.util._Maps;
 import foodtruckfinder.site.common.External.Rating;
 import foodtruckfinder.site.common.user.UserDto;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,11 +14,8 @@ import org.springframework.jdbc.support.GeneratedKeyHolder;
 import org.springframework.jdbc.support.KeyHolder;
 import org.springframework.stereotype.Repository;
 
-import alloy.util.Tuple.Pair;
-import alloy.util.Tuple.Triple;
-import alloy.util.Tuple.Tuple2;
-import alloy.util.Tuple.Tuple3;
-import alloy.util._Maps;
+import java.time.LocalDateTime;
+import java.util.*;
 
 /**
  * Created by jlutteringer on 8/23/17.

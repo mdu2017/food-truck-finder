@@ -1,21 +1,21 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
 import {
 	Button,
+	Col,
+	Container,
 	Form,
 	FormGroup,
-	Label,
-	Input,
 	FormText,
-	Container,
-	Col,
-	Row,
+	Input,
+	Label,
 	Modal,
-	ModalHeader,
 	ModalBody,
-	ModalFooter
+	ModalFooter,
+	ModalHeader,
+	Row
 } from 'reactstrap';
 import MapContainer from 'js/Maps';
 

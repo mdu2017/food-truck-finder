@@ -30,7 +30,16 @@ export function rateFT(user_ID, truck_ID, message, rating) {
 }
 
 export function addDeal(message, truckID, start, end) {
-	return axios.post('api/food-truck/addDeal?message=' + message + '&truckID=' + truckID + '&start=' + start + '&end=' + end);
+	return axios.post(
+		'api/food-truck/addDeal?message=' +
+			message +
+			'&truckID=' +
+			truckID +
+			'&start=' +
+			start +
+			'&end=' +
+			end
+	);
 }
 
 export function getRatingByUser(user_ID) {
@@ -85,6 +94,16 @@ export function getRecommendations(userlat, userlong, radius) {
 			userlat: userlat,
 			userlong: userlong,
 			radius: radius
+		}
+	});
+}
+
+export function getSecuredRecommendations(userID, userlat, userlong) {
+	return axios.get('/api/user/recommendations', {
+		params: {
+			userID: userID,
+			userlat: userlat,
+			userlong: userlong
 		}
 	});
 }

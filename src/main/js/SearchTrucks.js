@@ -1,17 +1,9 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 import * as NavBars from 'js/navBars';
-import {
-	Button,
-	Form,
-	FormGroup,
-	Label,
-	Input,
-	ListGroup,
-	ListGroupItem
-} from 'reactstrap';
-import { Link } from 'react-router-dom';
+import {Form, FormGroup, Input, ListGroup, ListGroupItem} from 'reactstrap';
+import {Link} from 'react-router-dom';
 import Spinner from 'js/images/spinner.gif';
 
 export class SearchFoodTrucks extends React.Component {

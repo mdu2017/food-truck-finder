@@ -1,6 +1,6 @@
 import _ from 'lodash';
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 
 // import { createStore, applyMiddleware, compose} from "redux";

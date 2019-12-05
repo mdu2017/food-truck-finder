@@ -1,7 +1,5 @@
 package foodtruckfinder.site.common.foodtruck;
 
-import java.util.Map;
-
 public class EventDto {
     private Long event_ID;
     //public Map<Long, String> attendingFTs;

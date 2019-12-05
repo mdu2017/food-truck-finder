@@ -1,4 +1,4 @@
-import { GoogleApiWrapper, Map, Marker, InfoWindow } from 'google-maps-react';
+import {GoogleApiWrapper, InfoWindow, Map, Marker} from 'google-maps-react';
 import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import * as Axios from 'js/axios';

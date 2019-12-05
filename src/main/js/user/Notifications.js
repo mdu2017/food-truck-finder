@@ -1,14 +1,7 @@
 import React from 'react';
 import * as NavBars from 'js/navBars';
 import * as Axios from 'js/axios';
-import {
-	Button,
-	ListGroup,
-	ListGroupItem,
-	Row,
-	Col,
-	Container
-} from 'reactstrap';
+import {Button, Col, Container, ListGroup, ListGroupItem, Row} from 'reactstrap';
 
 export class Notifications extends React.Component {
 	constructor(props) {

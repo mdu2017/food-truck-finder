@@ -1,22 +1,23 @@
 import React from 'react';
-import { connect } from 'react-redux';
+import {connect} from 'react-redux';
 import * as NavBars from 'js/navBars';
 import User from 'js/images/user_icon.png';
 import {
-	Progress,
-	Row,
-	Col,
 	Button,
-	Modal,
-	ModalHeader,
-	ModalBody,
-	ModalFooter,
+	Col,
 	Form,
 	FormGroup,
 	Input,
-	Label
+	Label,
+	Modal,
+	ModalBody,
+	ModalFooter,
+	ModalHeader,
+	Progress,
+	Row
 } from 'reactstrap';
 import * as Axios from 'js/axios';
+
 // import SampleMenu from 'js/images/MenuSample.png';
 
 export class ViewFoodTruckDetails extends React.Component {

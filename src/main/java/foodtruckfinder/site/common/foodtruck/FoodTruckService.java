@@ -108,11 +108,6 @@ public class FoodTruckService {
 	//Deal functions
 	public void addDeal(String message, Long truckID, LocalDateTime start, LocalDateTime end){
 		foodTruckDao.addDeal(message, truckID, start, end);
-		Optional<FoodTruckDto> ft = foodTruckDao.find(truckID + "");
-		if(ft.isPresent()){
-			String notifMessage = "[" +  ft.get().getName() + "]: " + message;
-			foodTruckDao.sendNotification(notifMessage, truckID);
-		}
 	}
 
 	public void removeDeal(Long truckID){

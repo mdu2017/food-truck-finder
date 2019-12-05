@@ -64,13 +64,12 @@ public class FoodTruckEndpoint {
 
 	//Deal functions
 	@PostMapping(value = "/addDeal", produces = "application/json")
-	public void addDeal(String message, Long truckID, Integer[] start, Integer[] end){//LocalDateTime start, LocalDateTime end){
+	public void addDeal(String message, Long truckID, String start,
+						String end) {
+		LocalDateTime startDT = LocalDateTime.parse(start);
+		LocalDateTime endDT = LocalDateTime.parse(end);
 		foodTruckService.sendNotification(message, truckID);
-		LocalDateTime startTime = LocalDateTime.of(start[0], start[1], start[2],
-				start[3], start[4], start[5]);
-		LocalDateTime endTime = LocalDateTime.of(end[0], end[1], end[2],
-				end[3], end[4], end[5]);
-		foodTruckService.addDeal(message, truckID, startTime, endTime);
+		foodTruckService.addDeal(message, truckID, startDT, endDT);
 	}
 
 	@PostMapping(value = "/removeDeal", produces = "application/json")

@@ -763,7 +763,7 @@ public class FoodTruckDao {
 			if(d.getDeal_id() != null){
 				String sql = "REPLACE INTO DEAL " +
 						"(DEAL_ID, TRUCK_ID, MESSAGE, START, END) VALUES " +
-						"(:dealID, :truckID, :message, :startTime, :endTime);";
+						"(:dealID, :truckID, :message, :start, :end);";
 
 				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
 						"message", d.getMessage(),
@@ -776,7 +776,7 @@ public class FoodTruckDao {
 			} else {
 				String sql = "INSERT INTO DEAL " +
 						"(TRUCK_ID, MESSAGE, START, END) VALUES " +
-						"(:truckID, :message, :startTime, :endTime);";
+						"(:truckID, :message, :start, :end);";
 
 
 				Map<String, ?> params = _Maps.map("truckID", d.getTruck_id(),
@@ -858,8 +858,7 @@ public class FoodTruckDao {
 
 		List<String> subscribers = getSubscribers(foodTruckId);
 		for (String subscriber : subscribers) {
-			sent = LocalDateTime.now();
-			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);//, "sent", Timestamp.valueOf(sent));
+			Map<String, ?> params = _Maps.map("foodTruckId", foodTruckId, "username", subscriber, "message", message);
 			jdbcTemplate.update(sql, params);
 		}
 	}

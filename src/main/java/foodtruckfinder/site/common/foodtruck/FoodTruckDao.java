@@ -329,7 +329,7 @@ public class FoodTruckDao {
 			String sql = "SELECT * FROM FOOD_TRUCK, " +
                     "(SELECT TYPE_ID FROM FOOD_TYPE WHERE :fType = FOOD_TYPE.TYPE) AS TRUCKTYPE " +
                     "WHERE TRUCKTYPE.TYPE_ID = FOOD_TRUCK.TYPE " +
-					"AND NAME != auser AND NAME != cuser AND NAME != ouser AND NAME != muser";
+					"AND NAME != :auser AND NAME != :cuser AND NAME != :ouser AND NAME != :muser";
 			Map<String, ?> params = _Maps.map("fType", fType,
 											  "auser", "{All Users}",
 											  "cuser", "{All Customers}",
@@ -362,7 +362,7 @@ public class FoodTruckDao {
         //Get all food trucks with the price range
         if (maxPrice >= 0.0) {
             String sql = "SELECT * FROM FOOD_TRUCK WHERE FOOD_TRUCK.PRICE_HIGH <= :maxPrice " +
-						 "AND NAME != auser AND NAME != cuser AND NAME != ouser AND NAME != muser";
+						 "AND NAME != :auser AND NAME != :cuser AND NAME != :ouser AND NAME != :muser";
 
             final String badFT1 = "{All Users}";
 			final String badFT2 = "{All Customers}";
@@ -400,8 +400,7 @@ public class FoodTruckDao {
                 "AND sch.DAY = :day  AND (TIME(st.START) < TIME(NOW())) " +
                 "AND (TIME(st.END) > TIME(NOW())) " +
                 "AND ((POW(st.LATITUDE - :userLat, 2) + POW(st.LONGITUDE - " +
-                ":userLng, 2)) < :maxDistance) " +
-				"AND NAME != auser AND NAME != cuser AND NAME != ouser AND NAME != muser";
+                ":userLng, 2)) < :maxDistance)";
 
 		String currDay = "U";
 		Calendar calendar = Calendar.getInstance();
@@ -418,11 +417,7 @@ public class FoodTruckDao {
         Map<String, ?> params = _Maps.mapPairs(new Tuple.Tuple2<>("userLat", userLat),
 				new Tuple.Tuple2<>("userLng", userLng),
 				new Tuple.Tuple2<>("day", currDay),
-				new Tuple.Tuple2<>("maxDistance", maxDistance),
-				new Tuple.Tuple2<>("auser", "{All Users}"),
-				new Tuple.Tuple2<>("cuser", "{All Customers}"),
-				new Tuple.Tuple2<>("ouser", "{All Owners}"),
-				new Tuple.Tuple2<>("muser", "{Marketing}"));
+				new Tuple.Tuple2<>("maxDistance", maxDistance));
         List<Long> ids = jdbcTemplate.query(sql, params,
                 (rs, rowNum) -> rs.getLong("TRUCK_ID"));
 
@@ -451,7 +446,10 @@ public class FoodTruckDao {
             for (Long ft : goodTruckIDs) {
                 //get each food truck
                 Optional<FoodTruckDto> temp = this.find(ft.toString());
-                if (temp.isPresent()) {
+                if (temp.isPresent() && !temp.get().getName().equals("{All Users}") &&
+						!temp.get().getName().equals("{All Customers}") &&
+						!temp.get().getName().equals("{All Owners}") &&
+						!temp.get().getName().equals("{Marketing}")) {
                     trucks.add(temp.get());
                 }
             }

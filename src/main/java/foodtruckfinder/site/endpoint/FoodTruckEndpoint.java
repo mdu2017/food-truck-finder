@@ -76,6 +76,7 @@ public class FoodTruckEndpoint {
 	@PostMapping(value = "/getDeal", produces = "application/json")
 	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
 
+	//Get all deals
 	@GetMapping(value = "/getAllDeals", produces = "application/json")
 	public List<Deal> getAllDeals(Long truckID) { return foodTruckService.getAllDeals(truckID); }
 

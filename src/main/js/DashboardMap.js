@@ -92,7 +92,7 @@ export class DashboardMap extends React.Component {
 		}
 	}
 
-	//Sets user coordinates (WORKS)
+	//Sets user coordinates
 	setUserCoord = position => {
 		let lat = parseFloat(position.coords.latitude);
 		let lng = parseFloat(position.coords.longitude);
@@ -112,7 +112,6 @@ export class DashboardMap extends React.Component {
 		const location = coord.latLng;
 
 		//Click location works
-		// {console.log(lat + ' | ' + lng);}
 		this.handleSelection(lat, lng);
 
 		//If map clicked, dont show info window
@@ -131,8 +130,6 @@ export class DashboardMap extends React.Component {
 				ftLat: lat,
 				ftLng: lng
 			}));
-		} else {
-			console.log('You have already added a location');
 		}
 
 		// Update click status
@@ -146,25 +143,6 @@ export class DashboardMap extends React.Component {
 			activeMarker: marker,
 			showingInfoWindow: true
 		});
-	};
-
-	// TODO: Set location when marker is dragged (modify for multiple markers??)
-	onMarkerDragend = (e, index, coord) => {
-		let { latLng } = coord;
-		let lat = latLng.lat();
-		let lng = latLng.lng();
-		const location = coord.latLng;
-
-		// console.log('New location: ' + lat + ' | ' + lng);
-		this.handleSelection(lat, lng);
-
-		// TODO: (Update new location of marker -- only works for 1 FT)
-		this.setState(prevState => ({
-			// -1 resets array
-			locations: [...(prevState.locations - 1), location],
-			ftLat: lat,
-			ftLng: lng
-		}));
 	};
 
 	render() {

@@ -12,7 +12,9 @@ export class SearchUsers extends React.Component {
 		this.state = {
 			searchUser: null,
 			searchResults: [],
-			loadingSearch: false
+			loadingSearch: false,
+			spinnerHeight: 60,
+			spinnerWidth: 60
 		};
 		this.handleSubmit = this.handleSubmit.bind(this);
 	}
@@ -35,8 +37,6 @@ export class SearchUsers extends React.Component {
 			}.bind(this),
 			250
 		);
-
-
 		event.preventDefault();
 	};
 
@@ -45,7 +45,7 @@ export class SearchUsers extends React.Component {
 		return (
 			<div>
 				{this.state.loadingSearch ? (
-					<img src={Spinner} width={70} height={70} mode="fit" />
+					<img src={Spinner} width={this.state.spinnerWidth} height={this.state.spinnerHeight} mode="fit" />
 				) : (
 					<div>
 						<br />

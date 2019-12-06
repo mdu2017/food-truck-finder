@@ -3,28 +3,6 @@ import React from 'react';
 import {connect} from 'react-redux';
 import * as Axios from 'js/axios';
 
-// import { createStore, applyMiddleware, compose} from "redux";
-// import { persistStore, autoRehydrate } from 'redux-persist';
-// import { AsyncStorage } from 'react-native';
-// import {logger} from "redux-logger/src";
-
-// export default function configureStore(){
-//
-// 	const store = createStore(reducers, getInitialState(), compose(
-// 		applyMiddleware([
-// 			thunk,
-// 			localStorageMiddleware,
-// 			logger
-// 		]),
-// 		autoRehydrate()
-// 		)
-// 	);
-//
-// 	persistStore(store, { storage: AsyncStorage });
-//
-// 	return store;
-// };
-
 export class Page1 extends React.Component {
 	constructor(props) {
 		super(props);

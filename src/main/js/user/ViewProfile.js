@@ -113,6 +113,7 @@ export class ViewProfile extends React.Component {
 		return render;
 	}
 
+	//Renders the subscription list
 	renderSubscriptionList() {
 		let render = [];
 		{

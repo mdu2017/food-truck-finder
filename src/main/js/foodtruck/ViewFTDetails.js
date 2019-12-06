@@ -43,12 +43,13 @@ export class ViewFoodTruckDetails extends React.Component {
 	setRating = rating => this.setState({ rating });
 	setReview = review => this.setState({ review });
 
+	//Runs when page is loaded
 	componentDidMount() {
 		const URLObject = this.props.match.params;
+
 		// Object Destruction
 		var { foodtruckID: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
-			console.log(result);
 			this.setState({
 				truck: result,
 				averagePrice: (
@@ -59,13 +60,19 @@ export class ViewFoodTruckDetails extends React.Component {
 				menu: result.menu
 			});
 		});
+
+		//Gets ratings for each truck
 		Axios.getRatingByTruck(id).then(result => {
 			let individualReview = this.state.previousReviews;
 			let avg = this.state.averageRating;
 			let reviewCount = 0;
+
+			//For each review, display its user and review info
 			result.forEach(review => {
 				reviewCount++;
 				avg += review.rating;
+
+				//Grab user of the review
 				Axios.viewUserByID(review.user).then(user => {
 					individualReview.push([
 						{
@@ -80,10 +87,14 @@ export class ViewFoodTruckDetails extends React.Component {
 					this.setState({ previousReviews: individualReview });
 				});
 			});
+
+			//Calculate average rating
 			if (reviewCount > 0) {
 				this.setState({ averageRating: avg / reviewCount });
 			}
 		});
+
+		//Grab user subscriptions
 		if (this.state.user) {
 			Axios.getSubscriptions(this.state.user.id).then(result => {
 				if (result.indexOf(this.state.truck.id) !== -1) {
@@ -93,6 +104,7 @@ export class ViewFoodTruckDetails extends React.Component {
 		}
 	}
 
+	//Render truck reviews
 	renderTruckReviews() {
 		let render = [];
 		{
@@ -132,6 +144,7 @@ export class ViewFoodTruckDetails extends React.Component {
 		return render;
 	}
 
+	//Render truck menu
 	renderTruckMenu() {
 		let render = [];
 		render.push(<legend>Menu</legend>);
@@ -155,6 +168,7 @@ export class ViewFoodTruckDetails extends React.Component {
 		return render;
 	}
 
+	//Render truck schedule
 	renderTruckSchedule() {
 		let render = [];
 		render.push(<legend>Weekly Schedule</legend>);
@@ -199,6 +213,7 @@ export class ViewFoodTruckDetails extends React.Component {
 		return render;
 	}
 
+	//Toggle logged in state
 	toggle() {
 		if (JSON.parse(Axios.getCookie('user') === null)) {
 			this.setState({ notLoggedIn: true });
@@ -367,14 +382,6 @@ export class ViewFoodTruckDetails extends React.Component {
 						<Row>
 							<Col>
 								{this.renderTruckMenu()}
-								{/* <Media left href={SampleMenu}>
-									<Media
-										object
-										src={SampleMenu}
-										width={300}
-										height={300}
-									/>
-								</Media> */}
 							</Col>
 							<Col xs="6">
 								{this.renderTruckSchedule()}
@@ -385,9 +392,6 @@ export class ViewFoodTruckDetails extends React.Component {
 						</Row>
 						<br />
 						<Row>
-							{/* <Col xs="6">
-								<legend>Route</legend>
-							</Col> */}
 							<Col xs="6"></Col>
 						</Row>
 					</div>

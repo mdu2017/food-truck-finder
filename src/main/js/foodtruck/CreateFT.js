@@ -127,16 +127,15 @@ export class CreateFoodTruck extends React.Component {
 	handleMenuModalSubmit = event => {
 		this.toggleMenu();
 
-		// let vals = {
-		// 	menuItemName: this.state.menuItemName,
-		// 	menuItemDesc: this.state.menuItemDesc,
-		// 	menuItemPrice: this.state.menuItemPrice
-		// };
-        //
 		let mi = this.state.menuItemName;
 		let md = this.state.menuItemDesc;
 		let mp = this.state.menuItemPrice;
-        //
+
+		let tempArr = [];
+		tempArr.concat(mi);
+		tempArr.concat(md);
+		tempArr.concat(mp);
+
         // let tempStrMenu = JSON.stringify(vals);
         // let tempArr = JSON.parse(tempStrMenu);
 		// console.log('stringified: ');
@@ -153,15 +152,9 @@ export class CreateFoodTruck extends React.Component {
         //
         // }));
 
-        this.setState({
-            menu: this.state.menu.concat(
-                {
-                    menuItemName: mi,
-                    menuItemDesc: md,
-                    menuItemPrice: mp,
-                }
-            )
-        });
+        tempArr.forEach(elem => {
+        	console.log(elem);
+		})
 
 		event.preventDefault();
 	}

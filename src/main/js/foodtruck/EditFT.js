@@ -63,19 +63,22 @@ export class EditFoodTruck extends React.Component {
 	setStatus = status => this.setState({ status });
 	setFoodType = foodtype => this.setState({ foodtype });
 
+	//Handle event when form is submitted
 	handleSubmit = event => {
+
+		//Non-zero values for prices
+		if (this.state.price_low < 0) {
+			this.state.price_low = 0;
+		}
+		if (this.state.price_high < 0) {
+			this.state.price_high = 0;
+		}
+
 		// The price_high is not lower than price_low
-		if (this.state.price_high >= this.state.price_low) {
-			// Check if Prices are lower than zero
-			if (this.state.price_low < 0) {
-				this.state.price_low = 0;
-			}
-			if (this.state.price_high < 0) {
-				this.state.price_high = 0;
-			}
-			{
-				console.log(this.state.schedule);
-			}
+		if (Number(this.state.price_high) >= Number(this.state.price_low)) {
+
+
+			//Axios call to edit food truck
 			this.props.editTruck({
 				id: this.state.id,
 				name: this.state.name,
@@ -94,8 +97,10 @@ export class EditFoodTruck extends React.Component {
 		}
 	};
 
+	//When component mounts (first loads)
 	componentDidMount() {
 		const URLObject = this.props.match.params;
+
 		// Object Destruction
 		var { foodtruckId: id } = URLObject;
 		Axios.getFoodTruckDetails(id).then(result => {
@@ -113,24 +118,28 @@ export class EditFoodTruck extends React.Component {
 		this.getStatuses();
 	}
 
+	//Toggle modal for schedule
 	toggle() {
 		this.setState({
 			modal: !this.state.modal
 		});
 	}
 
+	//Handler for submitting modal form
 	handleModalSubmit = event => {
 		this.toggle();
 		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		event.preventDefault();
 	};
 
+	//Return all food types
 	getFoodTypes() {
 		Axios.getFoodTypes().then(result => {
 			this.setState({ foodtypes: result });
 		});
 	}
 
+	//Return all statuses
 	getStatuses() {
 		var self = this;
 		Axios.getStatuses().then(result => {
@@ -138,6 +147,7 @@ export class EditFoodTruck extends React.Component {
 		});
 	}
 
+	//Handler to remove truck from database
 	handleRemoveTruck = event => {
 		this.props.removeTruck({
 			truck_id: this.state.id
@@ -145,6 +155,7 @@ export class EditFoodTruck extends React.Component {
 		event.preventDefault();
 	};
 
+	//Handler for adjusting start time of schedule
 	handleStartTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
@@ -158,6 +169,7 @@ export class EditFoodTruck extends React.Component {
 		console.log(newSchedule);
 	};
 
+	//Handler for adjusting end time of schedule
 	handleEndTimeScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
@@ -171,6 +183,7 @@ export class EditFoodTruck extends React.Component {
 		console.log(newSchedule);
 	};
 
+	//Handler for adjusting day of schedule
 	handleDayScheduleChange = idx => evt => {
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
 			if (idx !== sidx) return schedule;
@@ -184,6 +197,7 @@ export class EditFoodTruck extends React.Component {
 		console.log(newSchedule);
 	};
 
+	//Handler for adjusting location of schedule
 	handleLocationChange = idx => evt => {
 		this.setState({ buttonVisibility: !this.state.buttonVisibility });
 		const newSchedule = this.state.schedule.map((schedule, sidx) => {
@@ -199,6 +213,7 @@ export class EditFoodTruck extends React.Component {
 		console.log(newSchedule);
 	};
 
+	//Handler for adding of schedule
 	handleAddStop() {
 		this.setState({
 			schedule: this.state.schedule.concat([
@@ -213,6 +228,7 @@ export class EditFoodTruck extends React.Component {
 		});
 	}
 
+	//Handler for adding location on map
 	handleMapSelection(latitude, longitude) {
 		this.setState({ selectedLatitude: latitude });
 		this.setState({ selectedLongitude: longitude });
@@ -532,16 +548,16 @@ export class EditFoodTruck extends React.Component {
 											/>
 										</ModalBody>
 										<ModalFooter>
-											<input
-												type="submit"
-												value="Submit"
-												color="primary"
-												className="btn btn-primary"
-											/>
-											<Button
-												color="danger"
-												onClick={this.toggle}
-											>
+                                            <input
+                                                type="submit"
+                                                value="Submit"
+                                                color="primary"
+                                                className="btn btn-primary"
+                                            />
+                                            <Button
+                                                color="danger"
+                                                onClick={this.toggle}
+                                            >
 												Cancel
 											</Button>
 										</ModalFooter>

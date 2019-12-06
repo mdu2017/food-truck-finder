@@ -17,9 +17,6 @@ import {
 	Row
 } from 'reactstrap';
 import * as Axios from 'js/axios';
-import { ItemDescription } from 'semantic-ui-react';
-
-// import SampleMenu from 'js/images/MenuSample.png';
 
 export class ViewFoodTruckDetails extends React.Component {
 	constructor(props) {

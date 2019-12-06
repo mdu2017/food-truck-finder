@@ -244,7 +244,8 @@ public class FoodTruckDao {
 		return foodTruck;
 	}
 
-	//menu functions
+	/** MENU FUNCTIONS */
+
 	/**
 	 * This functions is a utility function for internal use only.  It inserts a stop into the database
 	 * <p>
@@ -305,7 +306,8 @@ public class FoodTruckDao {
 
 		List<MenuItem> menu = foodTruck.getMenu();
 		if(menu != null){
-			for(MenuItem m : menu){//add each item to the database
+			for(MenuItem m : menu){
+				//add each item to the database
 				//update the menu table
 				insertMenuItem(m, foodTruck.getId());
 			}

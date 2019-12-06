@@ -36,8 +36,6 @@ public class FoodTruckEndpoint {
 		System.out.print("============MENU====================");
 		System.out.println(foodTruckDto.getMenu());
 
-		System.out.println(foodTruckDto);
-
 		foodTruckService.save(foodTruckDto);
 		return foodTruckDto;
 	}

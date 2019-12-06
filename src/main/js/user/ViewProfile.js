@@ -37,6 +37,8 @@ export class ViewProfile extends React.Component {
 				});
 			});
 		});
+
+		//Get subscriptions for user
 		Axios.getSubscriptions(this.state.userId).then(result => {
 			let sub = this.state.subscriptions;
 			result.forEach(truck_id => {

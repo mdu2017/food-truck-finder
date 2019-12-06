@@ -146,6 +146,7 @@ public class FoodTruckEndpoint {
 		return;
 	}
 
+	//Get event by id
 	@GetMapping(value = "/getEventById", produces = "application/json")
 	public Optional<EventDto> getEventById(Long event_ID){
 		return foodTruckService.getEventById(event_ID);

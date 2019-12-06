@@ -30,7 +30,6 @@ export class SearchUsers extends React.Component {
 							loadingSearch: false,
 							searchResults: result
 						});
-						console.log(result);
 					});
 				});
 			}.bind(this),

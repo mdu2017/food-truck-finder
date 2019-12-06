@@ -152,6 +152,7 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getEventById(event_ID);
 	}
 
+	//Get attending trucks
 	@GetMapping(value = "/getAttendingTrucks", produces = "application/json")
 	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){ return foodTruckService.getAttendingTrucks(event_ID); }
 
@@ -160,6 +161,7 @@ public class FoodTruckEndpoint {
 		return foodTruckService.getAllEvents();
 	}
 
+	//Search event by name
 	@PostMapping(value = "/searchForEvent", produces = "application/json")
 	public List<EventDto> searchForEvent(String name){ return foodTruckService.searchForEvent(name); }
 

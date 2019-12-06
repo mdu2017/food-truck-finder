@@ -8,6 +8,7 @@ export class HelpPage extends React.Component {
 				<NavBars.CustomNavBar />
 				<div className="container padded">
 					<h1>Help Page</h1>
+					<p>To use our application, please consult the User Manual</p>
 				</div>
 			</div>
 		);

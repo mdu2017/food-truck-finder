@@ -55,6 +55,7 @@ export class ViewProfile extends React.Component {
 		});
 	}
 
+	//Removes review
 	removeReview(foodtruckId) {
 		Axios.removeReview(foodtruckId, this.state.userId).then(result => {
 			window.alert('Rating & Review Submission was successful removed!');

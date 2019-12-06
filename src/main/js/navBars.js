@@ -208,14 +208,10 @@ export class SidebarNav extends React.Component {
 	// }
 
 	componentDidMount() {
-		// navigator.geolocation.getCurrentPosition(this.showPosition);
 
 		this.setState({
 			foodtrucks: JSON.parse(Axios.getCookie('recommendations'))
 		});
-
-		console.log(this.state.foodtrucks);
-		console.log(JSON.parse(Axios.getCookie('recommendations')));
 	}
 
 	render() {

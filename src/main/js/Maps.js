@@ -97,7 +97,6 @@ export class MapContainer extends React.Component {
 	setUserCoord = position => {
 		let lat = parseFloat(position.coords.latitude);
 		let lng = parseFloat(position.coords.longitude);
-		// console.log('Current location: ' + lat + ' | ' + lng);
 
 		this.setState({
 			centerLat: lat,
@@ -113,7 +112,6 @@ export class MapContainer extends React.Component {
 		const location = coord.latLng;
 
 		//Click location works
-		// {console.log(lat + ' | ' + lng);}
 		this.handleSelection(lat, lng);
 
 		//If map clicked, dont show info window
@@ -132,8 +130,6 @@ export class MapContainer extends React.Component {
 				ftLat: lat,
 				ftLng: lng
 			}));
-		} else {
-			console.log('You have already added a location');
 		}
 
 		// Update click status
@@ -149,17 +145,16 @@ export class MapContainer extends React.Component {
 		});
 	};
 
-	// TODO: Set location when marker is dragged (modify for multiple markers??)
+	// Set location for food truck when dragged
 	onMarkerDragend = (e, index, coord) => {
 		let { latLng } = coord;
 		let lat = latLng.lat();
 		let lng = latLng.lng();
 		const location = coord.latLng;
 
-		// console.log('New location: ' + lat + ' | ' + lng);
 		this.handleSelection(lat, lng);
 
-		// TODO: (Update new location of marker -- only works for 1 FT)
+		// Update new location of marker -- only for 1 FT
 		this.setState(prevState => ({
 			// -1 resets array
 			locations: [...(prevState.locations - 1), location],

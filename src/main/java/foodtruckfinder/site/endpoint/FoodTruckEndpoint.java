@@ -66,11 +66,13 @@ public class FoodTruckEndpoint {
 		foodTruckService.addDeal(message, truckID, startDT, endDT);
 	}
 
+	//Remove Deal
 	@PostMapping(value = "/removeDeal", produces = "application/json")
 	public void removeDeal(Long dealID) {
 		foodTruckService.removeDeal(dealID);
 	}
 
+	//Get Deal
 	@PostMapping(value = "/getDeal", produces = "application/json")
 	public Optional<Deal> getDeal(Long dealID) { return foodTruckService.getDeal(dealID); }
 

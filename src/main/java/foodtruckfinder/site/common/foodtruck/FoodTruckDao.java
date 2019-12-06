@@ -639,7 +639,7 @@ public class FoodTruckDao {
 		}
 
 		String nearbySQL = "SELECT sch.TRUCK_ID " +
-				"FROM schedule AS sch, truck_stop AS st " +
+				"FROM SCHEDULE AS sch, TRUCK_STOP AS st " +
 				"WHERE sch.STOP_ID = st.STOP_ID " +
 				"AND sch.DAY = :day  AND (TIME(st.start) < TIME(NOW())) " +
 				"AND (TIME(st.end) > TIME(NOW())) " +

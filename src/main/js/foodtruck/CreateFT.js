@@ -390,7 +390,6 @@ export class CreateFoodTruck extends React.Component {
 							/>
 						</FormGroup>
 
-
 					{/*	Menu modal */}
                         <Button color="info" onClick={this.toggleMenu}>Add To Menu</Button>{' '}
 							<Modal
@@ -440,9 +439,10 @@ export class CreateFoodTruck extends React.Component {
 									</ModalFooter>
 								</form>
 							</Modal>
+					</Form>
+
 
 					{/*	Schedule Box */}
-					</Form>
 					<legend>Schedule</legend>
 					<FormText color="muted">
 						If no time is selected for an individual day, it is
@@ -601,9 +601,10 @@ export class CreateFoodTruck extends React.Component {
 							</FormGroup>
 						</Form>
 					</Col>
-
-					<Button onClick={this.handleSubmit}>Create Truck</Button>
+						<Button onClick={this.handleSubmit}>Create Truck</Button>
 				</div>
+
+				{/*Map part of schedule location*/}
 				<div>
 					{this.state.schedule.map(schedule => (
 						<div className="schedule">
@@ -628,16 +629,8 @@ export class CreateFoodTruck extends React.Component {
 										/>
 									</ModalBody>
 									<ModalFooter>
-										<input
-											type="submit"
-											value="Submit"
-											color="primary"
-											className="btn btn-primary"
-										/>
-										<Button
-											color="danger"
-											onClick={this.toggle}
-										>
+										<input type="submit" value="Submit" color="primary" className="btn btn-primary"/>
+										<Button color="danger" onClick={this.toggle}>
 											Cancel
 										</Button>
 									</ModalFooter>
@@ -646,7 +639,7 @@ export class CreateFoodTruck extends React.Component {
 						</div>
 					))}
 				</div>
-				{/*{console.log(this.state.menu)}*/}
+
 			</div>
 		);
 	}

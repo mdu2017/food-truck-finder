@@ -1,4 +1,3 @@
-import _ from 'lodash';
 import React from 'react';
 import { connect } from 'react-redux';
 import * as Axios from 'js/axios';
@@ -40,7 +39,7 @@ export class EditProfile extends React.Component {
 				'PIZZA',
 				'SEAFOOD',
 				'VEGAN',
-				'VEGITARIAN',
+				'VEGETARIAN',
 				'VIETNAMESE'
 			],
 			choices: [],
@@ -49,7 +48,6 @@ export class EditProfile extends React.Component {
 			defaultPriceLow: JSON.parse(Axios.getCookie('user')).prefLow,
 			defaultPriceHigh: JSON.parse(Axios.getCookie('user')).prefHigh
 		};
-		console.log(JSON.parse(Axios.getCookie('user')));
 	}
 
 	setPrincipal = principal => this.setState({ principal });
@@ -81,8 +79,6 @@ export class EditProfile extends React.Component {
 
 	//Item that is selected.
 	onSelect = (optionList, selectedItem) => {
-		console.log('Selected item is ' + selectedItem);
-
 		this.setState({
 			choices: optionList
 		});
@@ -90,13 +86,12 @@ export class EditProfile extends React.Component {
 
 	//Item that is removed when using food type filter (*backspace removes index)
 	onRemove = (optionList, removedItem) => {
-		console.log('removed item is ' + removedItem);
-
 		this.setState({
 			choices: optionList
 		});
 	};
 
+	//Multiselect dropdown for food types
 	msDropdown() {
 		return (
 			<Multiselect

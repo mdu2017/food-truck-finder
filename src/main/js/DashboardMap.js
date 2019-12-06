@@ -3,7 +3,6 @@ import React from 'react';
 import LogoMarker from 'js/images/food_truck_marker.png';
 import * as Axios from 'js/axios';
 
-// Currently in dashboard and Create food truck page
 const style = {
 	width: '65%',
 	height: '65%',

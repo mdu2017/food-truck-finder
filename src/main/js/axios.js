@@ -16,18 +16,6 @@ export function createFoodTruck(foodTruck) {
 	return axios.post('/api/food-truck/save', foodTruck);
 }
 
-//TODO: remove
-// export function addMenuItem(foodTruck, itemName, itemDesc, itemPrice){
-// 	return axios.post('/api/food-truck/addMenuItem', {
-// 		params: {
-// 			foodTruck: foodTruck,
-// 			itemName: itemName,
-// 			itemDesc: itemDesc,
-// 			itemPrice: itemPrice
-// 		}
-// 	});
-// }
-
 // Rates a FoodTruck in the Database
 export function rateFT(user_ID, truck_ID, message, rating) {
 	return axios.post(
@@ -333,13 +321,6 @@ Actions.createFoodTruck = foodTruck => {
 		return createFoodTruck(foodTruck);
 	};
 };
-
-//TODO: remove
-// Actions.addMenuItem = (foodTruck, itemName, itemDesc, itemPrice) => {
-// 	return () => {
-// 		return addMenuItem(foodTruck, itemName, itemDesc, itemPrice);
-// 	};
-// };
 
 Actions.sendNotification = (message, foodTruckId) => {
 	return () => {

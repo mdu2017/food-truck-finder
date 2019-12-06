@@ -10,7 +10,6 @@ export class SearchFoodTrucks extends React.Component {
 	constructor(props) {
 		super(props);
 		this.state = {
-			// owner_id: JSON.parse(Axios.getCookie('user')).id,
 			searchResults: [],
 			loadingSearch: false
 		};
@@ -19,9 +18,7 @@ export class SearchFoodTrucks extends React.Component {
 
 	setSearchFT = searchFT => this.setState({ searchFT });
 
-	// TODO: Get details page working with searches
-	// Search functionality not working if user isn't logged in (401 error unauthorized)
-	//Submit handler
+	//Searches food trucks
 	handleSubmit = event => {
 		this.setState({ loadingSearch: true });
 		setTimeout(
@@ -34,7 +31,6 @@ export class SearchFoodTrucks extends React.Component {
 								loadingSearch: false,
 								searchResults: result
 							});
-							//window.location.href = '/#/search-trucks';
 						});
 				});
 			}.bind(this),
@@ -113,11 +109,3 @@ SearchFoodTrucks = connect(
 			dispatch(Axios.Actions.searchFoodTrucks(searchFT))
 	})
 )(SearchFoodTrucks);
-
-// this.props.searchFoodTrucks({
-//     name: this.state.name,
-// });
-
-// Axios.searchFoodTrucks(this.state.name).then(result => {
-//     this.setState({ trucks: result });
-// });

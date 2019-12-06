@@ -206,6 +206,7 @@ public class FoodTruckService {
     	return foodTruckDao.getAllEvents();
 	}
 
+	//Search for events
 	public List<EventDto> searchForEvent(String name){ return foodTruckDao.searchForEvent(name); }
 
 	public List<Tuple.Pair<String, Stop>> mapSchedule(List<ScheduleFE> scheds){

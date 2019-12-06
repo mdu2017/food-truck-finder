@@ -19,8 +19,6 @@ import {
 } from 'reactstrap';
 import MapContainer from 'js/Maps';
 
-let menuIndex = 0;
-
 export class CreateFoodTruck extends React.Component {
 	constructor(props) {
 		super(props);

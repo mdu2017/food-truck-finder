@@ -80,23 +80,17 @@ export class Dashboard extends React.Component {
 
 	//Item that is selected.
 	onSelect = (optionList, selectedItem) => {
-		console.log('Selected item is ' + selectedItem);
-
 		this.setState({
 			choices: optionList
 		});
-
 		this.handleSubmit();
 	};
 
 	//Item that is removed when using food type filter (*backspace removes index)
 	onRemove = (optionList, removedItem) => {
-		console.log('removed item is ' + removedItem);
-
 		this.setState({
 			choices: optionList
 		});
-
 		this.handleSubmit();
 	};
 

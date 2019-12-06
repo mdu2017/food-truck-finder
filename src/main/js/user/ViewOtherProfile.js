@@ -35,7 +35,6 @@ export class ViewOtherProfile extends React.Component {
 			var self = this;
 			Axios.viewUser(username).then(result => {
 				document.cookie = 'search=' + JSON.stringify(result) + '; path=/';
-				// window.parent.location = window.parent.location.href;
 				window.location.reload();
 			});
 

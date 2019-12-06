@@ -574,7 +574,7 @@ export class EditFoodTruck extends React.Component {
 EditFoodTruck = connect(
 	() => ({}),
 	dispatch => ({
-		editTruck: foodTruck => dispatch(Axios.Actions.saveFoodFT(foodTruck)),
+		editTruck: foodTruck => dispatch(Axios.Actions.createFoodTruck(foodTruck)),
 		removeTruck: truck_id =>
 			dispatch(Axios.Actions.removeFoodFT(truck_id)).then(function(
 				result

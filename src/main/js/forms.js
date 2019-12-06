@@ -73,13 +73,14 @@ export class RegistrationForm extends React.Component {
 	setUsername = username => this.setState({ username });
 	setOwner = () => this.setState({ owner: !this.state.owner });
 
+	// Add registration
 	handleSubmit = event => {
 		this.props.register({
 			principal: this.state.principal,
 			password: this.state.password,
 			username: this.state.username,
 			owner: this.state.owner.toString()
-		}); // Add registration
+		});
 		event.preventDefault();
 	};
 

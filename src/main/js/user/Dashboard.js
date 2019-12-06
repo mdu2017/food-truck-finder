@@ -94,6 +94,7 @@ export class Dashboard extends React.Component {
 		this.handleSubmit();
 	};
 
+	//Multiselect dropdown for food type search
 	msDropdown() {
 		return (
 			<Multiselect
@@ -156,7 +157,6 @@ export class Dashboard extends React.Component {
 
 	//Search feature
 	handleSubmit = event => {
-		console.log('testing testing this is called');
 		this.setState({ loadingSearch: true });
 
 		//Truck name filter
@@ -178,9 +178,11 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
-
 			event.preventDefault();
-		} else if (this.state.dropdownValue === 'Food Type') {
+		}
+
+		//Food Type Filter
+		else if (this.state.dropdownValue === 'Food Type') {
 			setTimeout(
 				function() {
 					this.setState({ loadingSearch: true, searchResults: [] });
@@ -205,7 +207,9 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
-		} else if (this.state.dropdownValue === 'Price') {
+		}
+		//Price filter
+		else if (this.state.dropdownValue === 'Price') {
 			setTimeout(
 				function() {
 					this.setState({ loadingSearch: true }, () => {
@@ -223,7 +227,9 @@ export class Dashboard extends React.Component {
 			);
 
 			event.preventDefault();
-		} else if (this.state.dropdownValue === 'Distance') {
+		}
+		//Distance filter
+		else if (this.state.dropdownValue === 'Distance') {
 			setTimeout(
 				function() {
 					this.setState({ loadingSearch: true }, () => {
@@ -243,7 +249,6 @@ export class Dashboard extends React.Component {
 				}.bind(this),
 				250
 			);
-
 			event.preventDefault();
 		}
 	};
@@ -307,19 +312,16 @@ export class Dashboard extends React.Component {
 
 	//Display search results
 	renderSearchResults() {
-		console.log(this.state.searchResults);
 		if (this.state.searchResults != null) {
 			this.state.numberOfPages = this.state.searchResults.length / 5;
 			if (!(this.state.numberOfPages < 1)) {
 				this.state.numberOfPages += this.state.searchResults.length % 5;
 			}
-
-			console.log(this.state.numberOfPages);
 		}
 		return (
 			<div>
 				{this.state.loadingSearch ? (
-					<img src={Spinner} width={60} height={60} mode="fit" />
+					<img src={Spinner} width={this.state.spinnerWidth} height={this.state.spinnerHeight} mode="fit" />
 				) : (
 					<div>
 						<br />
@@ -553,16 +555,14 @@ export class Dashboard extends React.Component {
 														Distance
 													</DropdownItem>
 												</DropdownMenu>
+
+												{/* Multiselect dropdown if food type filter is on */}
 												{this.state.dropdownValue ===
 													'Food Type' &&
 													this.msDropdown()}
 											</ButtonDropdown>
 
-											{/* TODO: Multi select*/}
-
-											{console.log('Current list: ')}
-											{console.log(this.state.choices)}
-
+											{/* Regular search bar if food type filter not on*/}
 											{this.state.dropdownValue !==
 												'Food Type' && (
 												<FormGroup inline>

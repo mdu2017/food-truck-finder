@@ -19,6 +19,7 @@ export class ViewProfile extends React.Component {
 		};
 	}
 
+	//Grab ratings by user when page loads
 	componentDidMount() {
 		Axios.getRatingByUser(this.state.userId).then(result => {
 			let individualReview = this.state.reviews;

@@ -131,30 +131,10 @@ export class CreateFoodTruck extends React.Component {
 		let md = this.state.menuItemDesc;
 		let mp = this.state.menuItemPrice;
 
-		let tempArr = [];
-		tempArr.concat(mi);
-		tempArr.concat(md);
-		tempArr.concat(mp);
+		//Storing menu items as giant string
+		let itemStr = mi + ',' + md + ',' + mp;
 
-        // let tempStrMenu = JSON.stringify(vals);
-        // let tempArr = JSON.parse(tempStrMenu);
-		// console.log('stringified: ');
-		// console.log(tempStrMenu);
-
-		//Add to the list of menu items
-		// this.setState(prevState => ({
-		// 	menu: [...prevState.menu, tempArr]
-        //
-		// }));
-
-        // this.setState(prevState => ({
-        //     menu: [...prevState.menu, tempArr]
-        //
-        // }));
-
-        tempArr.forEach(elem => {
-        	console.log(elem);
-		})
+		this.state.menu += itemStr;
 
 		event.preventDefault();
 	}

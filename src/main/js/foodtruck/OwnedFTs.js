@@ -48,12 +48,17 @@ export class OwnedFoodTrucks extends React.Component {
 	setDealStartDate = dealStartDate => this.setState({ dealStartDate });
 	setDealEndDate = dealEndDate => this.setState({ dealEndDate });
 
+	//Runs when page is loaded
 	componentDidMount() {
+
+		//Gets all food trucks by their owner
 		Axios.getFoodTrucksByOwner(this.state.owner_id).then(result => {
 			this.setState({ trucks: result });
 			result.map((truck, index) => (
 				<li key={index}>{this.setState({ foodTruckId: truck.id })}</li>
 			));
+
+			//For each truck in the result, get all deals
 			result.forEach(truck => {
 				Axios.getAllDeals(truck.id).then(response => {
 					let temp = this.state.deals;
@@ -68,6 +73,7 @@ export class OwnedFoodTrucks extends React.Component {
 		});
 	}
 
+	//Toggle for notifications
 	toggleNotify(id) {
 		this.setState({
 			notifyModal: !this.state.notifyModal,
@@ -75,6 +81,7 @@ export class OwnedFoodTrucks extends React.Component {
 		});
 	}
 
+	//Toggle for deal
 	toggleDeal(id) {
 		this.setState({
 			dealModal: !this.state.dealModal,
@@ -82,6 +89,7 @@ export class OwnedFoodTrucks extends React.Component {
 		});
 	}
 
+	//Removes a deal
 	deleteDeal(id) {
 		Axios.deleteDeal(id).then(result => {
 			this.setState({ deals: this.state.deals.filter(deal => {
@@ -103,7 +111,6 @@ export class OwnedFoodTrucks extends React.Component {
 
 	handleDealModalSubmit = () => {
 		this.toggleDeal();
-		console.log('HEY');
 		Axios.addDeal(
 			this.state.dealMessage,
 			this.state.foodTruckId,
@@ -173,6 +180,7 @@ export class OwnedFoodTrucks extends React.Component {
 		);
 	}
 
+	//Renders the deals
 	renderDeals() {
 		return (
 			<div>
@@ -214,6 +222,7 @@ export class OwnedFoodTrucks extends React.Component {
 		);
 	}
 
+	//Renders the notifications modal
 	renderNotifyModal() {
 		return (
 			<div>
@@ -249,6 +258,7 @@ export class OwnedFoodTrucks extends React.Component {
 		);
 	}
 
+	//Renders the deal modals
 	renderDealModal() {
 		return (
 			<div>

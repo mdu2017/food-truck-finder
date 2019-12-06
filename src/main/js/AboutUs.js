@@ -24,7 +24,7 @@ export class AboutUs extends React.Component {
 						start our own business. We hope you enjoy our app as
 						much as we enjoy offering it to you. If you have any
 						questions or comments, please don't hesitate to contact
-						us.
+						us!
 					</p>
 					<h4>
 						Sincerely,

@@ -81,6 +81,7 @@ public class FoodTruckDto implements Momento<Long> {
 		return id;
 	}
 
+	//Statuses for FT
 	public enum FTStatus {
 		OPEN, CLOSED, IN_TRANSIT
 	}

@@ -181,6 +181,7 @@ public class FoodTruckService {
     	foodTruckDao.addEvent(name, details, stop_ID);
 	}
 
+	//Remove event by id
 	public void removeEvent(Long event_ID){
     	foodTruckDao.removeEvent(event_ID);
 	}
@@ -194,6 +195,7 @@ public class FoodTruckService {
     	return;
 	}
 
+	//Search events by ID
 	public Optional<EventDto> getEventById(Long event_ID){
     	return foodTruckDao.getEventById(event_ID);
 	}

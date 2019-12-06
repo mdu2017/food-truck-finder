@@ -15,7 +15,6 @@ export class Notifications extends React.Component {
 
 	componentDidMount() {
 		Axios.getNotifications(this.state.user.id).then(result => {
-			console.log(result);
 			result.sort(function(a, b) {
 				if(a.sent[0] === b.sent[0]) {
 					if(a.sent[1] === b.sent[1]) {

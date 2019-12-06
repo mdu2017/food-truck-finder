@@ -12,7 +12,6 @@ import {
 	ButtonDropdown
 } from 'reactstrap';
 import {
-	Badge,
 	Col,
 	Container,
 	Nav,
@@ -70,7 +69,7 @@ export class Dashboard extends React.Component {
 				'PIZZA',
 				'SEAFOOD',
 				'VEGAN',
-				'VEGITARIAN',
+				'VEGETARIAN',
 				'VIETNAMESE'
 			],
 

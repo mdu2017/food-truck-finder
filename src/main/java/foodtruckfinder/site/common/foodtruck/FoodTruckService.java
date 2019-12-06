@@ -198,10 +198,12 @@ public class FoodTruckService {
     	return foodTruckDao.getEventById(event_ID);
 	}
 
+	//Get all attending trucks for an event
 	public Optional<List<Optional<FoodTruckDto>>> getAttendingTrucks(Long event_ID){
 		return foodTruckDao.getAttendingTrucks(event_ID);
 	}
 
+	//Get all events available
 	public List<EventDto> getAllEvents() {
     	return foodTruckDao.getAllEvents();
 	}

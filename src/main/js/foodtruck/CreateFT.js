@@ -102,6 +102,7 @@ export class CreateFoodTruck extends React.Component {
 				ownerId: this.state.ownerId,
 			});
 
+			console.log(this.state.menu);
 			event.preventDefault();
 		} else {
 			window.alert('Error: Price High cannot be lower than Price Low!');

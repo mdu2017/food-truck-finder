@@ -107,15 +107,12 @@ public class FoodTruckDao {
 			//type stuff
 			int typeid = getFoodTypeId(foodTruck.getType());
 
-<<<<<<< HEAD
-=======
 			//deal stuff
 			if(foodTruck.getDeals() != null) {
 				for(Deal d : foodTruck.getDeals()){
 					insertDeal(d);
 				}
 			}
->>>>>>> a6ca4d94acf4ef8a9a641f9c54d5434344bd6135
 
 			//overall update in database
 			String sql = "UPDATE FOOD_TRUCK SET " +
@@ -746,94 +743,6 @@ public class FoodTruckDao {
 	}
 
 
-<<<<<<< HEAD
-=======
-	//menu functions
-	/**
-	 * This functions is a utility function for internal use only.  It inserts a stop into the database
-	 * <p>
-	 * Assumes the stop doesn't exist and inserts it as such
-	 *
-	 * @param m the stop to insert
-	 * @param truckid the truck id to insert for
-	 * @return The stop's ID as set in the database
-	 */
-	private Long insertMenuItem(MenuItem m, Long truckid){
-		if(m != null){
-			if(m.getName().length() > 45){
-				m.setName(m.getName().substring(0, Math.min(m.getName().length(), 10)));
-			}
-			if(m.getItemid() != null){
-				String sql = "REPLACE INTO MENU " +
-						"(ITEM_ID, NAME, DESCRIPTION, PRICE, TRUCK_ID) VALUES " +
-						"(:itemid, :name, :desc, :price, :truckid)";
-
-				Map<String, ?> params = _Maps.map(
-						"itemid", m.getItemid(),
-						"name", m.getName(),
-						"desc", m.getDescription(),
-						"price", m.getPrice(),
-						"truckid", truckid);
-
-				jdbcTemplate.update(sql, new MapSqlParameterSource(params));
-				return m.getItemid();
-			} else {
-				String sql = "INSERT INTO MENU " +
-						"(NAME, DESCRIPTION, PRICE, TRUCK_ID) VALUES " +
-						"(:name, :desc, :price, :truckid)";
-
-				Map<String, ?> params = _Maps.map(
-						"name", m.getName(),
-						"desc", m.getDescription(),
-						"price", m.getPrice(),
-						"truckid", truckid);
-
-				KeyHolder keyHolder = new GeneratedKeyHolder();
-				jdbcTemplate.update(sql, new MapSqlParameterSource(params), keyHolder);
-
-				m.setItemid(keyHolder.getKey().longValue());
-				return keyHolder.getKey().longValue();
-			}
-
-		} else {
-			return (long) -1;
-		}
-	}
-
-	private void updateMenu(FoodTruckDto foodTruck){
-		//Need to remove any stops not still present -- do this by removing all tuples associated with the
-		// food truck then adding them all back :)
-		String deleteSql = "DELETE FROM MENU WHERE TRUCK_ID = :truckid";
-		Map<String, ?> deleteparams = _Maps.map("truckid", foodTruck.getId());
-		jdbcTemplate.update(deleteSql, deleteparams);
-
-		List<MenuItem> menu = foodTruck.getMenu();
-		if(menu != null){
-			for(MenuItem m : menu){//add each item to the database
-				//update the menu table
-				insertMenuItem(m, foodTruck.getId());
-			}
-		}
-	}
-
-	private List<MenuItem> getMenu(Long truckid){
-		String menusql = "SELECT ITEM_ID, NAME, DESCRIPTION, PRICE FROM MENU WHERE TRUCK_ID = :truckid";
-
-		Map<String, ?> params = _Maps.map("truckid", truckid);
-
-		List<MenuItem> menu = jdbcTemplate.query(menusql, params, (rs, rowNum) -> {
-			MenuItem item = new MenuItem();
-			item.setItemid(rs.getLong("ITEM_ID"));
-			item.setDescription(rs.getString("DESCRIPTION"));
-			item.setName(rs.getString("NAME"));
-			item.setPrice(rs.getDouble("PRICE"));
-			return item;
-		});
-		return menu;
-	}
-
-
->>>>>>> a6ca4d94acf4ef8a9a641f9c54d5434344bd6135
 	//schedule functions
 	private List<Tuple.Pair<String, Stop>> getSchedule(Long ftID){
 		Map<String, ?> parameters = _Maps.map("foodTruckId", ftID);
@@ -934,15 +843,9 @@ public class FoodTruckDao {
 		}
 	}
 
-<<<<<<< HEAD
-	public void removeDeal(Long truckID){
-		String sql = "DELETE FROM DEAL WHERE TRUCK_ID = :truckID";
-		Map<String, ?> params = _Maps.map("truckID", truckID);
-=======
 	public void removeDeal(Long dealID){
 		String sql = "DELETE FROM DEAL WHERE DEAL_ID = :dealID";
 		Map<String, ?> params = _Maps.map("dealID", dealID);
->>>>>>> a6ca4d94acf4ef8a9a641f9c54d5434344bd6135
 		jdbcTemplate.update(sql, params);
 	}
 

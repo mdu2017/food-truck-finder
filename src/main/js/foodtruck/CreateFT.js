@@ -78,6 +78,8 @@ export class CreateFoodTruck extends React.Component {
 	setownerId = ownerId => this.setState({ ownerId });
 
 
+
+	//Handler for submitting form
 	handleSubmit = event => {
 		// Check if Prices are lower than zero
 		if (this.state.price_low < 0) {

@@ -69,7 +69,7 @@
     "font-awesome": "^4.7.0",
     "google-map-react": "^1.1.5",
     "google-maps-react": "^2.0.2",
-    "lodash": "^4.17.4",
+    "lodash": "^4.17.19",
     "multiselect-react-dropdown": "^1.2.6",
     "react": "^16.8.0",
     "react-dom": "^16.8.0",

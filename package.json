@@ -51,7 +51,7 @@
     "glob": "^7.1.2",
     "install": "^0.8.7",
     "jest": "^19.0.2",
-    "node-sass": "^4.5.2",
+    "node-sass": "^4.13.1",
     "postcss-loader": "^1.2.2",
     "precss": "^1.4.0",
     "react-addons-test-utils": "^15.5.1",
